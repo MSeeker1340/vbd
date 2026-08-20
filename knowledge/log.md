@@ -1,0 +1,11 @@
+# Knowledge Bundle Update Log
+
+## 2026-08-20
+
+* **Correction**: Adopted hierarchy-scoped [`log.md`](https://okf.md/spec/#7-log-files-optional) histories and removed the custom standalone worklog concept scheme.
+* **Refactor**: Consolidated project-management concepts under [project](./project/) and removed redundant snapshot, scope, and policy concepts.
+* **Tooling**: Added a strict `okflint` manifest and repository-managed pre-commit hook.
+* **Governance**: Reduced `AGENTS.md` to always-on project context, bundle-maintenance rules, core formalization invariants, and current repository state.
+* **Initialization**: Converted the original project charter and initial research into an OKF bundle covering mathematics, Lean formalization, references, and project management.
+
+This curated scope history complements Git history; it does not replace commit-level attribution or diffs.

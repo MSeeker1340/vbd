@@ -1,0 +1,32 @@
+okf_version: "0.1"
+
+base:
+  name: VBD Formalization Knowledge Bundle
+  roots:
+    - path: "."
+  reserved_files:
+    index: index.md
+    log: log.md
+
+profile:
+  types:
+    Architecture Decision: &concept_fields
+      required: [type, title, description, timestamp]
+      optional: [resource, tags]
+    Dependency Decision Record: *concept_fields
+    Library Inventory: *concept_fields
+    Mathematical Specification: *concept_fields
+    Module Plan: *concept_fields
+    Paper Transcript: *concept_fields
+    Project Backlog: *concept_fields
+    Project Roadmap: *concept_fields
+    Research Reference: *concept_fields
+    Software Reference: *concept_fields
+    Tooling Guide: *concept_fields
+  date_fields: []
+
+hygiene:
+  broken_links: error
+  reserved_files: error
+  unknown_fields: error
+  split_candidates: off

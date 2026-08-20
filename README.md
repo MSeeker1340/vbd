@@ -1,5 +1,18 @@
 # vbd
 
+## Development checks
+
+Install the OKF linter and enable the repository-managed Git hooks once per checkout:
+
+```bash
+uv tool install okflint
+git config core.hooksPath .githooks
+```
+
+Run the knowledge-base check manually with:
+
+`okflint validate --manifest knowledge/okf-base.yaml knowledge/`
+
 ## GitHub configuration
 
 To set up your new GitHub repository, follow these steps:
