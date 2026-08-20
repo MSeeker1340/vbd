@@ -2,6 +2,9 @@ name = "vbd"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["Vbd"]
+lintDriver = "batteries/runLinter"
+lintDriverArgs = ["Vbd"]
+builtinLint = true
 
 [leanOptions]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`

@@ -36,12 +36,13 @@ Detailed mathematical specifications and roadmap ordering live in `knowledge/mat
 
 ## Current repository state
 
-The repository is an initialized Lean library pinned to Lean and Mathlib `v4.34.0-rc1`; no VBD definitions or proofs have been added yet. The next planned implementation is the state-space and mass-operator skeleton in `Integrator/ImplicitEulerEnergy.lean`. The `knowledge/` bundle is validated by the repository-managed pre-commit hook.
+The repository is an initialized Lean library pinned to Lean and Mathlib `v4.34.0-rc1`; no VBD definitions or proofs have been added yet. The next planned implementation is the state-space and mass-operator skeleton in `Integrator/ImplicitEulerEnergy.lean`. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
 
 ## Development workflow
 
 - Keep edits scoped and preserve unrelated user changes.
 - Compile affected Lean modules and run the narrowest relevant checks before handing off work.
+- Use `lake build` for the full project, `lake build <Module>` or `lake lean <file>` while iterating, and `lake lint` for the configured package linter.
 - When dependencies, toolchains, module layout, or public theorem interfaces change, update the corresponding knowledge concepts and tracking state.
 - Do not build generic numerical-ODE or simulation infrastructure unless an accepted target theorem requires it.
 - Use a concise one-line commit subject. If a commit has a body, it may contain only `Log: knowledge/<scope>/log.md` references and, for work substantially produced by an agent, an `Assisted-by: <agent name>` trailer.

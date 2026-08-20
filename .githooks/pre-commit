@@ -10,4 +10,11 @@ if ! command -v okflint >/dev/null 2>&1; then
   exit 1
 fi
 
-exec okflint validate --manifest knowledge/okf-base.yaml knowledge/
+if ! command -v lake >/dev/null 2>&1; then
+  echo "pre-commit: lake is required to build the Lean project." >&2
+  echo "Install elan from: https://lean-lang.org/lean4/doc/setup.html" >&2
+  exit 1
+fi
+
+okflint validate --manifest knowledge/okf-base.yaml knowledge/
+lake build

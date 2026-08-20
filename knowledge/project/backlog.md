@@ -22,6 +22,7 @@ timestamp: 2026-08-20T00:00:00Z
 | KB-02 | done | Configure strict OKF pre-commit validation | Versioned manifest and executable hook exist, this checkout uses `.githooks`, and an end-to-end hook run passes |
 | KB-03 | done | Simplify bundle project management | Project plans and backlog share one directory; redundant snapshot, scope, and policy concepts and the incorrect Optlib reference are removed |
 | KB-04 | done | Adopt scoped OKF update logs | Every indexed scope has a conformant `log.md`, standalone worklog concepts are removed, and strict reserved-file linting passes |
+| KB-05 | done | Complete Lean development checks | The versioned pre-commit hook runs strict OKF validation and `lake build`; package linting and verified narrow-development commands are documented |
 
 # Initial implementation sequence
 
