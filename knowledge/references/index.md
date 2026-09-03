@@ -5,7 +5,7 @@ Reference notes:
 - [Vertex Block Descent](./vbd-paper.md) - Primary mechanics and algorithm reference.
 - [Tseng 2001](./tseng-2001.md) - Classical block-coordinate convergence assumptions and conclusions.
 - [Mathlib](./mathlib.md) - Primary Lean 4 mathematical foundation.
-- [Lean 4 optsuite/optlib](./optlib-lean4.md) - Newly discovered block-optimization formalization candidate.
+- [Lean 4 optsuite/optlib](./optlib-lean4.md) - Assessed descent/KL reference outside the current fixed-point route.
 - [CvxLean](./cvxlean.md) - Lean 4 verified convex-modeling and reduction framework.
 
 Agent-readable paper text:

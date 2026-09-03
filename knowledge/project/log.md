@@ -1,5 +1,16 @@
 # Project Management Update Log
 
+## 2026-09-03
+
+* **Architecture**: Replaced the descent-centered Phase 2/2B sequence with three independent foundations—implicit Euler, block-operator algebra, and contractive fixed-point iteration—three pairwise bridges, and a final production VBD synthesis.
+* **Planning**: Made local contraction of the actual unsafeguarded serial or colored sweep, with finite-sweep error bounds, the main production-facing target; descent and KL routes are now secondary and deferred.
+* **Scope**: Restricted Phase 2 to objective-independent block sums, schedules, simultaneous updates, dependencies, and coloring; moved finite-support physical interactions and curvature/coupling estimates to bridge and synthesis phases.
+* **Notation**: Reserved `X` for a total space, named the heterogeneous block family `B : ι → Type*`, and selected `BlockSum B := PiLp 2 B` as the single Phase 2 state representation.
+* **Refactor**: Merged the standalone Phase 2 results plan into the central roadmap and made the roadmap a current-state document; historical rationale remains in scoped logs and decision records.
+* **Decision**: Began Phase 2 with a Mathlib-only core, using dependent products for algebraic locality and `PiLp 2` for analytic block geometry; Optlib remains a convergence proof-pattern reference.
+* **Planning**: Added the detailed Phase 2 results roadmap with theorem families, dependency order, module boundaries, acceptance gates, and explicit exclusions.
+* **Backlog**: Closed the Optlib assessment gate, added derivative and quantitative convergence deliverables, and removed the resolved representation and dependency questions.
+
 ## 2026-08-21
 
 * **Correction**: Removed the source-local Hessian representation concept from project management and clarified that only project-wide architecture decisions belong in OKF; module-local choices belong in Lean source documentation.

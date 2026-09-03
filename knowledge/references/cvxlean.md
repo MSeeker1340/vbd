@@ -13,7 +13,10 @@ CvxLean is a Lean 4 convex-optimization modeling framework based on Mathlib. It 
 
 # Relevance to VBD
 
-CvxLean is useful for studying modern Lean 4 representations of optimization problems and verified transformations. It is not an obvious foundation for the initial VBD proof layer, which needs derivative identities, exact local/global objective changes, sequential update semantics, and convergence properties rather than solver-backed DCP modeling.
+CvxLean is useful for studying modern Lean 4 representations of optimization problems and verified
+transformations. It is not an obvious foundation for the current VBD route, which needs
+objective-independent block composition, contractive fixed-point estimates, and concrete
+cross-block coupling rather than solver-backed DCP modeling.
 
 Consult its definitions when choosing an optimization-problem vocabulary, but avoid importing its solver and modeling stack unless a specific theorem benefits.
 

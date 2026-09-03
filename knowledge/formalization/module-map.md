@@ -1,43 +1,67 @@
 ---
 type: Module Plan
 title: Lean Module Map
-description: Maps the mathematical roadmap to small Lean modules and explicit dependency boundaries.
+description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-09-02T00:00:00Z
+timestamp: 2026-09-03T00:00:00Z
 ---
 
-# Planned modules
+# Foundation modules
 
-| Module | Responsibility | Direct project dependencies |
-|---|---|---|
-| `Optimization/LocalObjective.lean` | Factor supports, locality witnesses, affected factors, exact change identity | none |
-| `Optimization/BlockCoordinate.lean` | One-block updates, descent predicates, stationarity bridges | `LocalObjective` |
-| `Optimization/GaussSeidel.lean` | Sequential sweeps and monotone descent | `BlockCoordinate` |
-| `Optimization/BlockNewton.lean` | Positive-definite block systems, descent direction, line-search interface | `BlockCoordinate` |
-| `Optimization/Coloring.lean` | Conflict relation, proper colors, commutation, color-class updates | `LocalObjective`, `BlockCoordinate` |
-| `Optimization/Convergence.lean` | Nonconvex, convex, and strongly convex convergence results | stable generic modules |
-| `Optimization/Curvature.lean` | Quadratic derivatives, Hessian bounds, strong convexity | generic analysis only |
-| `Integrator/ImplicitEulerEnergy.lean` | Implemented: incremental objective, gradient/Hessian formulas, stationarity equivalence | Mathlib analysis only; no VBD |
-| `Integrator/VBD.lean` | Vertex blocks, incident force factors, VBD instantiations | optimization modules, `ImplicitEulerEnergy` |
+| Phase | Module | Responsibility | Direct project dependencies |
+|---|---|---|---|
+| P1 | `Integrator/ImplicitEulerEnergy.lean` | Implemented incremental objective, gradient/residual, and Hessian identities | none |
+| P2 | `Block/Basic.lean` | `BlockSum B`, coordinate projections, injections, and replacements | none |
+| P2 | `Block/Update.lean` | One-block maps, ordered schedules, folds, and simultaneous coordinate updates | `Block/Basic` |
+| P2 | `Block/Coloring.lean` | Abstract read-dependencies, conflicts, proper colors, commutation, and color-class maps | `Block/Update` |
+| P3 | `Dynamics/Contraction.lean` | Thin wrappers for local invariant contractions, finite-iterate bounds, derivative criteria, and perturbations | none |
+
+# Bridge and synthesis modules
+
+| Phase | Module | Responsibility | Direct project dependencies |
+|---|---|---|---|
+| P4 | `Integrator/LocalInteractions.lean` | Finite-support physical interactions, induced dependencies, and concrete coloring conditions | `ImplicitEulerEnergy`, `Block/Coloring` |
+| P5 | `Integrator/FixedPoint.lean` | Solver-independent convergence from a contractive map to a known implicit-Euler stationary fixed point | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
+| P6 | `Block/Contraction.lean` | Cross-block sensitivity, serial and colored composition bounds, and weak-conflict perturbations | `Block/Coloring`, `Dynamics/Contraction` |
+| P7 | `Integrator/VBD.lean` | Production block-Newton map, skip-free region, sweep derivative, inertia/coupling bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
+
+These paths are the current module boundaries. Split a module only when implementation reveals a
+stable reusable boundary; record any split in the central [roadmap](/project/roadmap.md) and
+[backlog](/project/backlog.md).
 
 # Initial build order
 
-Although generic optimization is architecturally upstream of the mechanics specialization, the required implementation order begins with `ImplicitEulerEnergy` to stabilize derivative and state-space choices, then builds `LocalObjective`, `BlockCoordinate`, `GaussSeidel`, and `Coloring`. This does not authorize `ImplicitEulerEnergy` assumptions to enter generic modules.
+Phase 1 is complete. The next implementation is `Block/Basic.lean`, followed by `Block/Update.lean`
+and `Block/Coloring.lean`. Phase 3 can begin once the pinned Mathlib contraction API has been
+confirmed, but it must remain independent of the block modules.
 
-Phase 1 retains a real Hilbert-space state because the calculus identities are basis-free. VBD's
-particle algorithms operate after spatial discretization on a finite coordinate space, so Phase 2
-must decide whether its block layer starts from that finite state space or preserves the Hilbert
-abstraction through block maps. The abstraction has value only if an accepted target theorem
-applies before spatial discretization or is reused beyond particle coordinates.
+The three foundations may be implemented independently:
+
+```text
+Integrator/ImplicitEulerEnergy
+Block/Basic -> Block/Update -> Block/Coloring
+Dynamics/Contraction
+```
+
+Only the bridge modules introduce cross-foundation imports. In particular, no objective, gradient,
+stationarity, or mechanics declaration belongs in `Block/*`, and no block declaration belongs in
+`Dynamics/Contraction`.
+
+# Representation and norm boundary
+
+Phase 1 retains `X` as an abstract real Hilbert-space parameter. Phase 2 uses `B : ι → Type*` and
+`BlockSum B := PiLp 2 B`. Coordinate algebra adds no Hilbert requirement. P6 selects whatever norm
+is stated by its contraction theorem; the existing finite `ℓ²` structure is the initial candidate,
+while weighted or energy norms remain theorem-local options.
 
 # Documentation boundary
 
 Document module APIs, assumptions, representation choices, and proof details in the corresponding
-Lean source, attaching local material to the closest declaration and reserving module docstrings
-for module-wide context. Keep this bundle focused on cross-module plans, reusable mathematical
-specifications, dependency assessments, external references, and project management; do not mirror
-the source tree with one OKF concept per module.
+Lean source. Keep this bundle focused on cross-module architecture, current roadmap state,
+mathematical specifications, dependency assessments, and external references.
 
 # Implementation status
 
-The first implementation spike grew into the complete Phase 1 module. Its `ImplicitEulerStep` record holds one timestep's physical data and proofs for a self-adjoint mass operator, twice-differentiable potential, and positive timestep. Its VBD-facing interface exports the incremental-energy definitions, global differentiability, gradient identity, and Hessian identity; derivative certificates used to prove these results remain module-private. A generic stationary-point predicate belongs in the optimization layer. It uses Mathlib's canonical potential gradient and a derivative-of-gradient Hessian representation documented in the source module. Curvature bounds remain a later VBD specialization target.
+Only `Integrator/ImplicitEulerEnergy.lean` is currently implemented. Its `ImplicitEulerStep` record
+holds one timestep's physical data and the proofs needed for the basis-free energy, gradient, and
+Hessian identities. All P2–P7 modules in this map are planned; `Block/Basic.lean` is next.

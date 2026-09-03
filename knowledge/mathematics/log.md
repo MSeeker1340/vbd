@@ -1,5 +1,13 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-03
+
+* **Analysis route**: Replaced per-block energy descent as the main convergence premise with local contraction of the actual serial or colored sweep around an implicit-Euler root.
+* **Block theory**: Recast one-block results as objective-independent update algebra and cross-block sensitivity composition; isolated energy cancellation and coordinate stationarity as helper facts rather than milestones.
+* **Parallelism**: Distinguished exact sequential equivalence for proper colors from Jacobi-within-color contraction or perturbation bounds when live collisions introduce same-color coupling.
+* **Curvature**: Redirected inertia and Hessian bounds toward block invertibility, normalized coupling, a nonlinear contraction neighborhood, and finite-sweep error instead of qualitative conditioning alone.
+* **Notation**: Distinguished the heterogeneous block family `B : ι → Type*` from the total space `X` and adopted `BlockSum B` for the Phase 2 product construction.
+
 ## 2026-09-02
 
 * **API**: Made twice differentiability of the potential an `ImplicitEulerStep` invariant and exported the canonical potential Hessian and Hessian-sum identity; curvature bounds remain deferred.

@@ -25,7 +25,7 @@ Use the official `okf-open-knowledge-format` skill whenever creating, restructur
 
 - Use Mathlib as the primary Lean 4 foundation. Search Mathlib and relevant optimization formalizations before reproving standard results.
 - Evaluate any new Lean 4 dependency explicitly before adding it.
-- Preserve the dependency direction: generic optimization theory → implicit-Euler specialization → VBD specialization. Do not let mechanics- or implementation-specific assumptions leak upward.
+- Preserve three independent foundations—implicit-Euler mathematics, block-operator algebra, and contractive fixed-point iteration—and combine them only in the explicit bridge layers defined by the roadmap. Do not let mechanics- or implementation-specific assumptions leak into either generic foundation.
 - Keep locality/sparsity separate from positive-curvature assumptions.
 - Use stationary points as the generic solution concept. Do not claim minimization, uniqueness, convergence, or rates without the additional hypotheses that justify them.
 - Keep nonconvex, convex, and strongly convex results separate; state assumptions explicitly and as weakly as practical.
@@ -36,7 +36,7 @@ Detailed mathematical specifications and roadmap ordering live in `knowledge/mat
 
 ## Current repository state
 
-The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase 1 is implemented in `Integrator/ImplicitEulerEnergy.lean`: the basis-free energy, gradient, and Hessian identities compile without VBD-specific types. The next planned implementation is the generic finite block/factor structure in `Optimization/LocalObjective.lean`. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
+The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase 1 is implemented in `Integrator/ImplicitEulerEnergy.lean`: the basis-free energy, gradient, and Hessian identities compile without VBD-specific types. Phase 2 is active and now contains only objective-independent block sums and update algebra; its next implementation is `Block/Basic.lean` with heterogeneous `BlockSum B := PiLp 2 B` coordinate operations. Phase 3 will be a thin, block-independent layer over Mathlib's contractive fixed-point results. Later bridge phases combine these foundations before the production VBD synthesis derives serial and colored contraction bounds. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
 
 ## Development workflow
 

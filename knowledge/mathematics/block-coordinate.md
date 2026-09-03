@@ -1,54 +1,64 @@
 ---
 type: Mathematical Specification
-title: Generic Block-Coordinate Descent
-description: Specifies block updates, Gauss–Seidel sweeps, local Newton descent, and separated convergence regimes.
-tags: [block-coordinate-descent, gauss-seidel, newton, convergence]
-timestamp: 2026-08-20T00:00:00Z
+title: Block Update Operators and Contraction
+description: Specifies objective-independent block composition and the cross-block bounds used to prove sweep contraction.
+tags: [block-operators, gauss-seidel, fixed-point, contraction]
+timestamp: 2026-09-03T00:00:00Z
 ---
 
-# Update hierarchy
+# Block update algebra
 
-Build the theory in increasing strength:
+For heterogeneous blocks `B : ι → Type*`, the total state is `BlockSum B`. A one-block map `Uᵢ`
+may change coordinate `i` and must leave every other coordinate unchanged. An ordered schedule
+defines a serial sweep by composition. A finite set of distinct blocks also has a simultaneous
+update semantics used for a parallel color class.
 
-1. A block update changes one coordinate and leaves all others fixed.
-2. A locally descending update does not increase the global objective by the [local/global identity](/mathematics/local-decomposition.md).
-3. A finite sequential fold of descending updates is a Gauss–Seidel sweep and is globally monotone.
-4. A local Newton direction gives descent only under explicit assumptions on the block derivative, block Hessian, and step selection.
+These definitions are independent of objectives, residuals, gradients, and descent. See the
+[roadmap](/project/roadmap.md) for the Phase 2 boundary.
 
-The basic sweep theorem should accept an abstract update rule satisfying a descent predicate. Exact block minimization and Newton/line-search updates should be later instances, not baked into the sweep definition.
+# Cross-block sensitivity
 
-# Stationarity notions
-
-Keep these distinct:
-
-- **Blockwise minimum**: no single-block replacement lowers the objective.
-- **Coordinatewise stationarity**: every block derivative is zero or has no feasible descending direction.
-- **Stationarity**: the full derivative vanishes, or all directional derivatives are nonnegative in a nonsmooth formulation.
-- **Global minimum**: the objective is no larger than at any state.
-
-For differentiable objectives on a product space whose block injections span the full space, vanishing of all block derivatives should imply full stationarity. For nonsmooth objectives, Tseng requires a regularity bridge; see the [Tseng notes](/references/tseng-2001.md).
-
-# Local Newton descent
-
-For block gradient `gᵢ` and self-adjoint positive-definite block Hessian `Hᵢ`, the Newton direction `pᵢ = -Hᵢ⁻¹gᵢ` satisfies
+A one-block map is the identity on untouched coordinates, so it is not generally a strict
+contraction of the total space. The useful local data instead bounds the changed output block in
+terms of every input block:
 
 $$
-\langle g_i,p_i\rangle<0
+\|\pi_i(U_i(x)-U_i(y))\|
+\le \sum_j C_{ij}\|\pi_j(x-y)\|.
 $$
 
-when `gᵢ ≠ 0`. Turning that direction into objective decrease additionally needs a line-search or local model theorem. The VBD implementation's choice to skip an update when its local Hessian is unsuitable is an algorithmic specialization, not a generic analytical theorem.
+The nonnegative coefficients `Cᵢⱼ` form a comparison or coupling operator. Schedule composition
+must propagate these bounds in the same order as the actual updates. A global contraction theorem
+requires a stated product norm and an induced bound `q < 1`; it does not follow merely from a
+collection of isolated per-block facts.
 
-# Convergence strata
+# Serial and colored sweeps
 
-Formalize convergence claims in separate layers:
+For serial execution, the composed comparison bound has Gauss-Seidel structure: later blocks see
+the already updated values of earlier blocks. For colored execution, blocks within a color read the
+same pre-color state and are Jacobi-like, while colors remain sequential.
 
-- **Nonconvex**: under compactness/level-boundedness, continuity, selection fairness, sufficient decrease, and a stationarity bridge, prove cluster-point stationarity where justified.
-- **Convex**: add convexity to turn suitable stationary points into global minimizers.
-- **Strongly convex**: add positive modulus to obtain uniqueness and then rates only with the further smoothness/error-bound assumptions actually used.
+When blocks in a color are independent, their cross-dependencies vanish, their updates commute,
+and the simultaneous color map equals any sequential ordering of that class. When live interactions
+couple same-color blocks, the actual color map remains valid but needs its own comparison bound or a
+perturbation theorem.
 
-Do not infer whole-sequence convergence or a rate from monotone objective values alone.
+# Fixed-point iteration
 
-# Citations
+The main convergence interface is local contraction of the complete sweep `S` on a
+forward-invariant neighborhood of a known fixed point `x*`:
 
-[1] [Tseng, Convergence of a Block Coordinate Descent Method for Nondifferentiable Minimization](https://www.mit.edu/~dimitrib/PTseng/papers/archive/bcr_jota.pdf)
-[2] [Formalization of Algorithms for Optimization with Block Structures](https://arxiv.org/abs/2503.18806)
+$$
+\|S(x)-S(y)\|\le q\|x-y\|,
+\qquad q<1.
+$$
+
+Generic fixed-point theory then gives geometric finite-sweep bounds. Identifying `x*` with an
+implicit-Euler solution and proving the concrete VBD sensitivity bounds belong to later bridge and
+synthesis layers.
+
+# Secondary energy route
+
+Energy monotonicity, line search, convex minimization, and KL arguments are not foundations of the
+production analysis. They may be added later for a named solver variant or theorem, but the
+production full block-Newton step is not assumed to descend.

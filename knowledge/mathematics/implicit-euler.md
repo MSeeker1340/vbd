@@ -21,7 +21,7 @@ G_{\mathrm{IE}}(x)
 =\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+E(x).
 $$
 
-The derivative identity requires self-adjointness of `M` to simplify the derivative of the quadratic term to `M(x-y)/h²`. Positive definiteness is not needed for this identity; it belongs to [curvature strengthening](/mathematics/curvature.md).
+The derivative identity requires self-adjointness of `M` to simplify the derivative of the quadratic term to `M(x-y)/h²`. Positive definiteness is not needed for this identity; quantitative lower bounds belong to the later [curvature and coupling analysis](/mathematics/curvature.md).
 
 # Classical-mechanics origin
 
@@ -135,9 +135,9 @@ $$
 
 # Formalization notes
 
-The Lean interface records one timestep problem and its constraints in an `ImplicitEulerStep` value: mass operator, twice-differentiable potential energy, timestep, predicted state, self-adjointness proof, and timestep-positivity proof. The module calls the objective `energy`, proves that it is globally differentiable, and identifies Mathlib's canonical `∇ ie.energy` with `ie.energyGradient`. Its Hessian is the inertia Hessian plus the canonical potential Hessian. The generic stationary-point predicate belongs in the optimization layer. The API does not accept separate gradient or Hessian functions. The local particle-mass formula belongs in VBD specialization, not here.
+The Lean interface records one timestep problem and its constraints in an `ImplicitEulerStep` value: mass operator, twice-differentiable potential energy, timestep, predicted state, self-adjointness proof, and timestep-positivity proof. The module calls the objective `energy`, proves that it is globally differentiable, and identifies Mathlib's canonical `∇ ie.energy` with `ie.energyGradient`. Its Hessian is the inertia Hessian plus the canonical potential Hessian. The later implicit-Euler fixed-point bridge uses this gradient as its nonlinear residual. The API does not accept separate gradient or Hessian functions. The local particle-mass formula belongs in VBD synthesis, not here.
 
-The implemented Phase 1 module, `Vbd/Integrator/ImplicitEulerEnergy.lean`, selects the Fréchet derivative of the gradient as its Hessian representation. It establishes Hessian existence without curvature bounds. Quantitative lower bounds from the inertia term, including their dependence on `h`, belong to the VBD specialization and curvature layers. API details and the representation rationale live in the source documentation.
+The implemented Phase 1 module, `Vbd/Integrator/ImplicitEulerEnergy.lean`, selects the Fréchet derivative of the gradient as its Hessian representation. It establishes Hessian existence without curvature bounds. Quantitative lower bounds from the inertia term, including their dependence on `h`, belong to the final VBD synthesis. API details and the representation rationale live in the source documentation.
 
 # Citations
 

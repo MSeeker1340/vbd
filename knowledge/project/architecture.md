@@ -1,39 +1,85 @@
 ---
 type: Architecture Decision
 title: Mathematical and Module Architecture
-description: Preserves the separation between generic optimization, implicit Euler, and VBD specialization.
-tags: [architecture, dependencies, locality, curvature]
-timestamp: 2026-08-20T00:00:00Z
+description: Separates implicit-Euler physics, block-operator algebra, contraction theory, and their explicit bridge layers.
+tags: [architecture, dependencies, locality, contraction]
+timestamp: 2026-09-03T00:00:00Z
 ---
 
-# Dependency direction
+# Independent foundations
 
-```text
-generic optimization theory
-        ↓
-implicit-Euler specialization
-        ↓
-VBD-specific theory
-```
+The project has three self-contained foundations:
 
-Generic modules may know about finite blocks, local factors, updates, descent, derivatives, curvature, and independence. They must not know about particles, timesteps, mass matrices, force elements, or spatial dimension.
+1. **Implicit-Euler mathematics** defines the incremental objective, its gradient as the nonlinear
+   residual, and its Hessian. It knows nothing about block schedules or convergence.
+2. **Block-operator algebra** defines heterogeneous block sums, coordinate updates, schedules,
+   dependencies, coloring, and sequential or simultaneous composition. It knows nothing about
+   objectives, mechanics, or convergence.
+3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, derivative,
+   and perturbation results for arbitrary self-maps. It knows nothing about mechanics or blocks.
 
-The implicit-Euler layer instantiates a scalar objective with inertia plus potential energy. The VBD layer then chooses vertex blocks and connects the generic block theory to the mechanics-specific local energy described in the [VBD reference](/references/vbd-paper.md).
+Pairwise bridge layers combine implicit Euler with local interactions, implicit Euler with generic
+fixed-point results, and block composition with contraction bounds. Production VBD is the first
+layer that may depend on all three foundations. The central [roadmap](/project/roadmap.md) gives the
+complete dependency graph and current status.
 
-# Two independent structures
+# Production-facing solution concept
 
-The project must keep these concepts distinct:
+The generic target remains a stationary point of the implicit-Euler incremental objective,
+equivalently a root of its gradient. The main solver property is local contraction of the actual
+unsafeguarded serial or colored sweep around such a root. Energy descent, minimization, convexity,
+and line search are secondary routes and are not prerequisites for the production theorem.
 
-- **Locality/sparsity**: a factor depends only on selected blocks. This supports local objective evaluation, local derivatives, commuting updates, and parallel color classes.
-- **Positive curvature**: a quadratic or Hessian lower bound. This supports descent directions, strong convexity, uniqueness, conditioning, and stronger convergence claims.
+Do not claim convergence from a fixed-point characterization alone. Do not treat scalar energy
+monotonicity as sufficient for convergence. Quantitative results must state a contraction or other
+stability hypothesis strong enough for their conclusion.
 
-Neither implies the other. The generic [local decomposition](/mathematics/local-decomposition.md) must work without curvature assumptions, while [curvature strengthening](/mathematics/curvature.md) must not assume diagonal or local operators unless a specialization requires it.
+# Locality and curvature
+
+Keep these structures distinct:
+
+- **Locality/sparsity** records which blocks an update or physical interaction reads. It supports
+  conflict graphs, commuting independent updates, proper colors, and sparse cross-block
+  sensitivity bounds.
+- **Curvature and coupling** control block invertibility and the sensitivity of one updated block
+  to the others. Together with a chosen schedule or coloring, they can establish contraction.
+
+Neither implies the other. In particular, positive definiteness or a favorable condition number
+does not by itself determine the contraction factor of a Gauss-Seidel or colored splitting; the
+off-diagonal coupling and the chosen block norm must appear.
+
+# Interaction boundary
+
+Physical interactions are represented by arbitrary finite block supports. These supports form a
+hypergraph, covering pairwise forces as well as triangle, tetrahedron, bending, and other
+multi-vertex elements. A conflict graph is derived from shared hyperedges only when graph coloring
+is needed.
+
+Static proper coloring makes independent same-color updates equivalent to sequential execution.
+Dynamic collision interactions may create same-color coupling; the corresponding update remains a
+real simultaneous map whose convergence requires a separate hybrid or perturbation bound.
 
 # Representation boundary
 
-The first representation decision should support finite, possibly heterogeneous blocks. Two viable Lean designs remain open:
+Reserve `X` for a total space. Let `B : ι → Type*` denote heterogeneous block spaces and define
 
-1. A dependent product `∀ i, X i`, with block replacement by `Function.update`.
-2. An abstract global Hilbert space with block injections and projections.
+```lean
+abbrev BlockSum {ι : Type*} (B : ι → Type*) := PiLp 2 B
+```
 
-The dependent-product design is the leading candidate for the initial locality and descent lemmas because it makes “other blocks unchanged” definitional. Before fixing it, test whether the pinned Mathlib gives the required normed and inner-product instances without excessive transport overhead. See the [module map](/formalization/module-map.md).
+Use `BlockSum B` throughout the block layers. Merely forming the type does not impose normed or
+inner-product structure. Coordinate algebra adds only the instances it uses. Contraction modules
+may require finite `ι`, complete normed block spaces, and a selected product norm.
+
+The existing finite `ℓ²` norm is the first representation candidate, not a commitment that every
+useful contraction estimate must use it. A weighted maximum or system-dependent energy norm may be
+introduced locally if it is required to turn a coupling or spectral condition into a contraction.
+Finite dimensionality of every block is added only by matrix-native or compactness results that
+need it.
+
+# Documentation boundary
+
+Keep the current phase ordering and accepted theorem targets in the [roadmap](/project/roadmap.md).
+Keep item status and acceptance criteria in the [backlog](/project/backlog.md). Source-local API,
+representation, and proof details belong beside the Lean declarations rather than in additional
+project-management concepts.

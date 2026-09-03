@@ -1,64 +1,78 @@
 ---
 type: Mathematical Specification
-title: Curvature Strengthening
-description: Separates quadratic positive curvature from locality and records strong-convexity theorem targets.
-tags: [curvature, strong-convexity, positive-definite, hessian]
-timestamp: 2026-08-20T00:00:00Z
+title: Curvature, Coupling, and VBD Contraction
+description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
+tags: [curvature, coupling, hessian, contraction]
+timestamp: 2026-09-03T00:00:00Z
 ---
 
-# Quadratic-plus-remainder model
+# Implicit-Euler Hessian
 
-Let
-
-$$
-G(x)=Q(x)+R(x),\qquad
-Q(x)=\frac12\langle x-y,A(x-y)\rangle,
-$$
-
-where `A` is self-adjoint. Under the needed differentiability assumptions,
+For
 
 $$
-\nabla Q(x)=A(x-y),\qquad
-\nabla^2G(x)=A+\nabla^2R(x).
+G(x)=\frac12\langle x-y,A(x-y)\rangle+P(x),
 $$
 
-# Lower-bound theorem target
-
-Represent the Loewner-order hypotheses as nonnegativity of quadratic forms (or Mathlib's matrix/operator positivity API):
+Phase 1 gives
 
 $$
-\nabla^2R(x)\succeq-B,
-\qquad
-A-B\succ0.
+\nabla^2G(x)=A+\nabla^2P(x).
 $$
 
-Then
+In the standard implicit-Euler specialization, `A = M / h²`. This identity becomes analytically
+useful only after the VBD block splitting, interaction supports, schedule, and norm have been fixed.
+
+# Block inverse bounds
+
+A lower bound
 
 $$
-\nabla^2G(x)
-=A+\nabla^2R(x)
-\succeq A-B\succ0.
+H_{ii}(x)\succeq \mu_i I,
+\qquad \mu_i>0,
 $$
 
-The desired consequence is a strong-convexity statement with an explicit modulus. A qualitative `PosDef` fact alone may not expose a numerical modulus; in finite dimensions one may need a coercivity constant `m > 0` satisfying `m‖v‖² ≤ ⟨v,(A-B)v⟩`.
+establishes invertibility of the local Newton system and controls `‖Hᵢᵢ(x)⁻¹‖`. A sufficiently
+strong inertia contribution may therefore define a neighborhood in which the production
+singular-Hessian skip cannot occur.
 
-# Consequence ledger
+# Coupling, not condition number alone
 
-| Curvature hypothesis | Intended consequence |
-|---|---|
-| Hessian positive semidefinite | convexity, given the required domain and smoothness theorem |
-| Hessian bounded below by `m I`, `m > 0` | `StrongConvexOn` with modulus `m` |
-| Strong convexity with `m > 0` | strict convexity |
-| Strict convexity plus two minimizers | the minimizers are equal |
-| Strong convexity plus existence/coercivity | unique minimizer |
+The derivative of a block-Newton update contains normalized off-diagonal blocks such as
 
-# Formalization strategy
+$$
+H_{ii}(x)^{-1}H_{ij}(x).
+$$
 
-Mathlib already provides `StrongConvexOn`, its characterization by subtracting `m/2 * ‖x‖²`, and strict-convexity consequences. It also provides `Matrix.PosDef`, `Matrix.PosSemidef`, closure under sums for semidefinite matrices, positive-definite principal submatrices, and invertibility results. Decide early whether the main theorem is basis-free for continuous linear operators, with matrix corollaries, or matrix-native for finite coordinates.
+The contraction factor of a serial or colored sweep depends on these terms and on the chosen
+splitting. Positive definiteness or a favorable global condition number alone is not reported as a
+Gauss-Seidel contraction theorem.
 
-No theorem in this layer should assume that `A` is diagonal. Locality-preserving sparsity of `A` is a separate VBD specialization question.
+The intended quantitative argument bounds the diagonal inverses and off-diagonal interaction
+coupling separately, composes them according to the actual schedule, and proves `q < 1` in a stated
+block norm.
+
+# Nonlinear neighborhood
+
+A contraction bound for the derivative at one stationary point does not by itself provide a
+certified radius in the original norm. Control of Hessian or sweep-derivative variation on a
+neighborhood should yield
+
+$$
+\sup_{x\in N}\|DS(x)\|\le q<1.
+$$
+
+Together with invariance of `N`, generic fixed-point theory then supplies local convergence and
+finite-sweep error bounds.
+
+# Secondary consequences
+
+The same lower curvature bounds may imply convexity, strong convexity, uniqueness, or a descent
+direction under their usual extra hypotheses. Full-step energy decrease additionally needs control
+of Hessian variation or a line search. These are optional consequences rather than the main
+production-analysis route.
 
 # Citations
 
-[1] [Mathlib strong convexity](https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/Convex/Strong.html)
+[1] [Mathlib contractive-map API](https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/Topology/MetricSpace/Contracting.lean)
 [2] [Mathlib positive-definite matrices](https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/LinearAlgebra/Matrix/PosDef.lean)

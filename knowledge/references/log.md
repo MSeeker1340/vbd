@@ -1,5 +1,12 @@
 # Curated References Update Log
 
+## 2026-09-03
+
+* **Correction**: Recorded that evaluated VBD runs use the unsafeguarded full block-Newton step; local line search is optional and was disabled in the reported experiments.
+* **Relevance**: Moved Optlib's descent/KL development outside the main fixed-point contraction route while retaining the completed dependency assessment.
+* **Foundation**: Added Mathlib's contractive-map and Banach fixed-point support to its current project role; CvxLean remains outside the block-composition route.
+* **Research**: Completed the Optlib BCD assessment at commit `5da27c5`, documenting its toolchain, two-block PALM model, convergence theorem stack, licensing, and reference-only role in Phase 2.
+
 ## 2026-08-20
 
 * **Resources**: Added agent-readable full-text Markdown for VBD, Tseng 2001, and the Lean 4 block-optimization formalization paper, with source checksums and conversion limitations.

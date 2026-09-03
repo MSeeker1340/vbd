@@ -1,5 +1,14 @@
 # Lean Formalization Update Log
 
+## 2026-09-03
+
+* **Module plan**: Replaced the planned `Optimization/*` descent stack with independent `Block/*` and `Dynamics/Contraction` foundations, pairwise `Integrator` bridges, and a final production `Integrator/VBD` synthesis module.
+* **Library reuse**: Confirmed that pinned Mathlib already provides `ContractingWith`, restricted contractions, Banach fixed points, iterate convergence, and a priori estimates; the project will add only local-neighborhood, derivative, and perturbation bridges.
+* **Notation**: Standardized Phase 2 on `B : ι → Type*`, `B i`, and `BlockSum B := PiLp 2 B`, keeping `X` reserved for total spaces and eliminating a representation change at the analytic boundary.
+* **Decision**: Rejected a direct Optlib dependency for Phase 2 after assessing its 4.13.0 toolchain and two-block PALM-specific interface; retained its convergence proof decomposition as a later reference.
+* **Architecture**: Selected a raw dependent product for exact locality and Mathlib's `PiLp 2` type synonym for derivative, Newton, and convergence results.
+* **Planning**: Added `BlockDerivative` to the module map and separated algebraic, analytic, Newton, coloring, and convergence dependencies.
+
 ## 2026-09-02
 
 * **API**: Removed the tautological energy-gradient/stationarity equivalence; a generic stationary-point predicate belongs in the optimization layer.
