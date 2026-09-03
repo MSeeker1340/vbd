@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the ordered proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-08-20T00:00:00Z
+timestamp: 2026-09-02T00:00:00Z
 ---
 
 # Status vocabulary
@@ -28,14 +28,14 @@ timestamp: 2026-08-20T00:00:00Z
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| IE-01 | next | State-space and mass-operator skeleton | none | Compiles with basis-free real inner-product assumptions and no VBD types |
-| IE-02 | planned | Define inertia and `G_IE` | IE-01 | Definition documents `h ≠ 0`, self-adjointness, and differentiability boundaries |
-| IE-03 | planned | Gradient of inertia | IE-02 | `HasGradientAt` theorem with simplified `M(x-y)/h²` result |
-| IE-04 | planned | Gradient of `G_IE` | IE-03 | Sum rule proved from an abstract gradient witness for `E` |
-| IE-05 | planned | Residual iff stationary | IE-04 | Bidirectional theorem is a direct, reusable equivalence |
-| IE-06 | research | Select Hessian representation | IE-04 | Decision compares derivative-of-gradient, second Fréchet derivative, and bilinear/operator forms |
-| IE-07 | planned | Hessian of `G_IE` | IE-06 | Sum formula proved under explicit twice-differentiability assumptions |
-| LO-01 | planned | Finite block/factor structure | IE-01 representation feedback | Supports finite factors, support sets, and extensional locality |
+| IE-01 | done | State-space and mass-operator skeleton | none | Compiles with basis-free real inner-product assumptions and no VBD types |
+| IE-02 | done | Define inertia and `G_IE` | IE-01 | Definition carries positive-timestep and self-adjoint-mass constraints |
+| IE-03 | done | Gradient of inertia | IE-02 | `HasGradientAt` theorem with simplified `M(x-y)/h²` result |
+| IE-04 | done | Gradient of `G_IE` | IE-03 | Sum rule proved from an abstract gradient witness for `E` |
+| IE-05 | done | Energy-gradient identity | IE-04 | `gradient_energy` identifies the explicit energy gradient with Mathlib's canonical gradient; a generic stationary-point predicate belongs in the optimization layer |
+| IE-06 | done | Select Hessian representation | IE-04 | Source documentation explains the derivative-of-gradient choice and deferred alternatives |
+| IE-07 | done | Hessian of `G_IE` | IE-06 | Sum formula proved under explicit twice-differentiability assumptions |
+| LO-01 | next | Finite block/factor structure | IE-01 representation feedback | Supports finite factors, support sets, and extensional locality |
 | LO-02 | planned | One-block replacement and affected factors | LO-01 | Other-block equality and support lemmas compile cleanly |
 | LO-03 | planned | Exact local/global change identity | LO-02 | Equality theorem has no derivative or curvature assumptions |
 | LO-04 | planned | Local descent corollaries | LO-03 | Non-strict, strict, and equality variants are small lemmas |
@@ -83,10 +83,9 @@ timestamp: 2026-08-20T00:00:00Z
 
 # Open decisions
 
-1. Dependent finite product versus abstract global Hilbert space with block maps.
+1. Whether Phase 2 begins from VBD's finite spatially discretized state space or retains an abstract global Hilbert space with block maps; keep the latter only when an accepted target theorem benefits from it.
 2. Continuous linear operator versus matrix as the primary mass representation.
-3. Project Hessian representation.
-4. Whether `optsuite/optlib` should be imported, selectively adapted, or only cited.
-5. The first convergence theorem whose assumptions genuinely match VBD updates.
+3. Whether `optsuite/optlib` should be imported, selectively adapted, or only cited.
+4. The first convergence theorem whose assumptions genuinely match VBD updates.
 
-Every resolved decision should become an Architecture Decision concept and be removed from this list in the same change.
+Every resolved project-wide architecture decision should become an Architecture Decision concept and be removed from this list in the same change. Source-local representation choices belong in the relevant Lean module documentation.

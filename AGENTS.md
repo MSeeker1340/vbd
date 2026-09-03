@@ -8,7 +8,7 @@ The project-local `knowledge/` directory is the detailed source of project conte
 
 - Before substantial research, planning, proof, review, or implementation, start at `knowledge/index.md` and read the indexes and concepts relevant to the task.
 - Consult `knowledge/project/backlog.md` before selecting or extending roadmap work. Explicit user direction may reprioritize it.
-- Treat this file as durable, always-on operating guidance; keep detailed mathematics, roadmap material, reference notes, module documentation, design decisions, and historical context in `knowledge/`.
+- Treat this file as durable, always-on operating guidance; keep detailed mathematics, cross-module architecture, roadmap material, reference notes, project decisions, and historical context in `knowledge/`.
 - When this file and the bundle disagree, explicit user direction takes precedence, then this file, then the bundle. Correct stale bundle content as part of the work when appropriate.
 
 ## Maintain the knowledge bundle
@@ -19,7 +19,7 @@ Use the official `okf-open-knowledge-format` skill whenever creating, restructur
 - Record meaningful knowledge changes as concise, newest-first entries in the `log.md` nearest to their scope; use `knowledge/log.md` only for bundle-wide changes. These curated update notes complement rather than replace Git history.
 - Update relevant project, mathematics, formalization, or reference concepts when work changes the corresponding durable knowledge.
 - Keep indexes useful for progressive disclosure, preserve cross-links, and validate OKF conformance after bundle edits.
-- Do not pad the bundle with empty or speculative concepts. Create module documentation when the corresponding source module or concrete design exists.
+- Do not pad the bundle with empty, speculative, or source-mirroring concepts. Keep source-local APIs, assumptions, representation choices, and proof notes in Lean source documentation, placing them on the closest declaration and reserving module docstrings for module-wide context; reserve the bundle for reusable mathematics and cross-cutting project knowledge.
 
 ## Core formalization invariants
 
@@ -36,7 +36,7 @@ Detailed mathematical specifications and roadmap ordering live in `knowledge/mat
 
 ## Current repository state
 
-The repository is an initialized Lean library pinned to Lean and Mathlib `v4.34.0-rc1`; no VBD definitions or proofs have been added yet. The next planned implementation is the state-space and mass-operator skeleton in `Integrator/ImplicitEulerEnergy.lean`. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
+The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase 1 is implemented in `Integrator/ImplicitEulerEnergy.lean`: the basis-free energy, gradient, and Hessian identities compile without VBD-specific types. The next planned implementation is the generic finite block/factor structure in `Optimization/LocalObjective.lean`. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
 
 ## Development workflow
 

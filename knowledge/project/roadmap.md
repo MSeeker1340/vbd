@@ -3,12 +3,14 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the phased theorem program and the required initial implementation order.
 tags: [roadmap, implicit-euler, block-coordinate, vbd]
-timestamp: 2026-08-20T00:00:00Z
+timestamp: 2026-08-21T00:00:00Z
 ---
 
 # Phase 1 — Implicit Euler as optimization
 
 Define the [implicit-Euler objective](/mathematics/implicit-euler.md), prove its gradient and second-derivative identities, and prove that the implicit-Euler residual equation is equivalent to stationarity. Use stationary points as the default solution concept; add minimum or uniqueness conclusions only under stated curvature hypotheses.
+
+Status: complete. The implementation and its assumptions are documented in `Vbd/Integrator/ImplicitEulerEnergy.lean`.
 
 # Phase 2 — Generic local block optimization
 
