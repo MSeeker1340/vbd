@@ -11,13 +11,12 @@ timestamp: 2026-09-04T00:00:00Z
 The project has three self-contained foundations:
 
 1. **Implicit-Euler mathematics** defines the incremental objective, its gradient as the nonlinear
-   residual, and its Hessian. It knows nothing about block schedules or convergence.
+   residual, and its Hessian.
 2. **Block-operator algebra** defines heterogeneous block sums, coordinate replacement, block
    entries of continuous linear operators, reconstruction, arithmetic, and ordered or colored
-   operator splittings. It knows nothing about objectives, mechanics, solver execution, or
-   convergence.
+   operator splittings.
 3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, derivative,
-   and perturbation results for arbitrary self-maps. It knows nothing about mechanics or blocks.
+   and perturbation results for arbitrary self-maps.
 
 Pairwise bridge layers combine implicit Euler with local interactions, implicit Euler with generic
 fixed-point results, and block operators with contraction bounds. Production VBD is the first
@@ -26,14 +25,14 @@ complete dependency graph and current status.
 
 # Production-facing solution concept
 
-The generic target remains a stationary point of the implicit-Euler incremental objective,
-equivalently a root of its gradient. The main solver property is local contraction of the actual
-unsafeguarded serial or colored sweep around such a root. Energy descent, minimization, convexity,
-and line search are secondary routes and are not prerequisites for the production theorem.
+The generic target is a stationary point of the implicit-Euler incremental objective, equivalently
+a root of its gradient. The main solver property is local contraction of the actual unsafeguarded
+serial or colored sweep around such a root. Energy descent, minimization, convexity, and line search
+form secondary routes for compatible theorem targets.
 
-Do not claim convergence from a fixed-point characterization alone. Do not treat scalar energy
-monotonicity as sufficient for convergence. Quantitative results must state a contraction or other
-stability hypothesis strong enough for their conclusion.
+Convergence results state a contraction or another stability hypothesis that entails their
+conclusion. Fixed-point characterization and scalar energy monotonicity serve as separate
+properties.
 
 # Locality and curvature
 
@@ -44,16 +43,16 @@ Keep these structures distinct:
 - **Curvature and coupling** control block invertibility and the derivative of a complete sweep.
   Together with its ordered or colored block splitting, they can establish contraction.
 
-Neither implies the other. In particular, positive definiteness or a favorable condition number
-does not by itself determine the contraction factor of a Gauss-Seidel or colored splitting; the
-off-diagonal coupling and the chosen block norm must appear.
+These structures are independent. A contraction factor for a Gauss-Seidel or colored splitting is
+derived from positive diagonal control together with off-diagonal coupling in the chosen block
+norm.
 
 # Interaction boundary
 
 Physical interactions are represented by arbitrary finite block supports. These supports form a
 hypergraph, covering pairwise forces as well as triangle, tetrahedron, bending, and other
-multi-vertex elements. A conflict graph is derived from shared hyperedges only when graph coloring
-is needed.
+multi-vertex elements. Theorems involving graph coloring derive a conflict graph from shared
+hyperedges.
 
 The production VBD layer proves how a static proper coloring relates its concrete buffered sweep to
 serial execution. Dynamic collision interactions may create same-color coupling; the corresponding
@@ -67,19 +66,17 @@ Reserve `X` for a total space. Let `B : ι → Type*` denote heterogeneous block
 abbrev BlockSum {ι : Type*} (B : ι → Type*) := PiLp 2 B
 ```
 
-Use `BlockSum B` throughout the block layers. Merely forming the type does not impose normed or
-inner-product structure. Coordinate algebra adds only the instances it uses. Contraction modules
-may require finite `ι`, complete normed block spaces, and a selected product norm.
+Use `BlockSum B` throughout the block layers. The type exists for an arbitrary block family.
+Coordinate algebra states its required instances locally. Contraction modules may require finite
+`ι`, complete normed block spaces, and a selected product norm.
 
-The existing finite `ℓ²` norm is the first representation candidate, not a commitment that every
-useful contraction estimate must use it. A weighted maximum or system-dependent energy norm may be
-introduced locally if it is required to turn a coupling or spectral condition into a contraction.
-Finite dimensionality of every block is added only by matrix-native or compactness results that
-need it.
+The existing finite `ℓ²` norm is the first representation candidate. A weighted maximum or
+system-dependent energy norm may be introduced locally when it turns a coupling or spectral
+condition into a contraction. Matrix-native and compactness results introduce finite-dimensional
+block assumptions at their declaration sites.
 
 # Documentation boundary
 
 Keep the current phase ordering and accepted theorem targets in the [roadmap](/project/roadmap.md).
-Keep item status and acceptance criteria in the [backlog](/project/backlog.md). Source-local API,
-representation, and proof details belong beside the Lean declarations rather than in additional
-project-management concepts.
+Keep item status and acceptance criteria in the [backlog](/project/backlog.md). Place source-local
+API, representation, and proof details beside the Lean declarations.

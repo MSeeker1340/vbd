@@ -15,6 +15,7 @@ The project-local `knowledge/` directory is the detailed source of project conte
 
 Use the official `okf-open-knowledge-format` skill whenever creating, restructuring, validating, or materially updating the bundle.
 
+- Write every non-log knowledge concept as an affirmative, standalone description of the accepted current state. Keep conversational rationale, corrections, rejected alternatives, and chronological commentary in the nearest scoped `log.md`. Use negative phrasing in a non-log concept only when it is essential to state a precise mathematical, API, dependency, or safety boundary.
 - Keep project management material together under `knowledge/project/`: durable plans, the backlog, and decisions.
 - Record meaningful knowledge changes as concise, newest-first entries in the `log.md` nearest to their scope; use `knowledge/log.md` only for bundle-wide changes. These curated update notes complement rather than replace Git history.
 - Update relevant project, mathematics, formalization, or reference concepts when work changes the corresponding durable knowledge.

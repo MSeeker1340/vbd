@@ -9,7 +9,8 @@ timestamp: 2026-09-04T00:00:00Z
 
 # Audit basis
 
-This inventory was checked against the local Mathlib revision locked by `lake-manifest.json`, not only against moving online documentation. Names still need compile-time confirmation when first used.
+This inventory was checked against the local Mathlib revision locked by `lake-manifest.json`.
+Each first use receives compile-time confirmation.
 
 # Differentiation and gradients
 
@@ -23,7 +24,9 @@ This inventory was checked against the local Mathlib revision locked by `lake-ma
 
 The total `gradient` is zero at nondifferentiable points, so derivative hypotheses should remain explicit in correctness theorems.
 
-For second derivatives, Mathlib has `fderiv`, differentiability of continuous-linear and bilinear maps, and `iteratedFDeriv`. No project-level `Hessian` abstraction was found in the initial audit. A Hessian representation is therefore an explicit design task.
+For second derivatives, Mathlib has `fderiv`, differentiability of continuous-linear and bilinear
+maps, and `iteratedFDeriv`. The project represents a Hessian as the Fréchet derivative of the
+gradient.
 
 # Convexity and extrema
 
@@ -39,14 +42,15 @@ For second derivatives, Mathlib has `fderiv`, differentiability of continuous-li
 
 `Mathlib/LinearAlgebra/Matrix/PosDef.lean` provides `Matrix.PosSemidef` and `Matrix.PosDef`, including Hermitian content, sums of semidefinite matrices, positive-definite principal submatrices, and invertibility/unit consequences. `Mathlib/Analysis/Matrix/PosDef.lean` and `Mathlib/Analysis/InnerProductSpace/Positive.lean` connect matrix positivity and positive continuous linear maps in analytic settings.
 
-Potential mismatch: qualitative `PosDef` is not itself a chosen coercivity modulus. Strong-convexity statements may require deriving or assuming an explicit positive lower bound.
+`PosDef` supplies qualitative positivity. Quantitative strong-convexity statements additionally
+use an explicit positive lower bound.
 
 # Finite products and sums
 
 The project defines `BlockSum B := PiLp 2 B`, where `B : ι → Type*` is the heterogeneous block
 family and `X` remains reserved for a total space. `PiLp 2 B` is a type copy of the dependent
-function space `(i : ι) → B i`; it can be formed without norm or topology instances and coerces
-back to a function for native coordinate application. Block replacement is `WithLp.toLp 2` applied
+function space `(i : ι) → B i`; its type formation accepts an arbitrary block family, and it
+coerces back to a function for native coordinate application. Block replacement is `WithLp.toLp 2` applied
 to `Function.update` of `WithLp.ofLp`; its same-coordinate and other-coordinate laws simplify
 directly. Mathlib's `Function.update_self`, `Function.update_of_ne`, and update commutation lemmas
 provide the underlying API.
@@ -55,21 +59,21 @@ For analytic results, `Mathlib.Analysis.InnerProductSpace.PiL2` gives `BlockSum 
 normed-additive, inner-product, and completeness instances when `ι` is finite and every `B i` has
 the corresponding structure. `PiLp.proj` is the continuous coordinate projection. A continuous
 single-coordinate inclusion can be formed by composing `ContinuousLinearMap.single` with the
-inverse of `PiLp.continuousLinearEquiv`; `PiLp.single` is its pointwise value-level counterpart. No
-representation conversion is required at the analytic boundary, and exact finite-factor results
-do not require finite-dimensional blocks.
+inverse of `PiLp.continuousLinearEquiv`; `PiLp.single` is its pointwise value-level counterpart. The
+analytic boundary retains the same representation. Exact finite-factor results support
+infinite-dimensional blocks.
 
 # Contractive fixed points
 
 `Mathlib/Topology/MetricSpace/Contracting.lean` defines `ContractingWith K f` as `K < 1` together
 with `LipschitzWith K f`. It provides Banach fixed points on complete metric spaces, convergence of
-iterates, a priori distance estimates, and restriction to forward-invariant subsets. Phase 3 should
-wrap these declarations only where the project needs a more convenient local-ball,
-derivative-bound, or perturbation interface.
+iterates, a priori distance estimates, and restriction to forward-invariant subsets. Phase 3 wraps
+the declarations needed for the project's local-ball, derivative-bound, and perturbation
+interfaces.
 
-The existing API is norm-agnostic. A spectral-radius bound for a linearized sweep is not directly a
-`ContractingWith` proof in the current norm; the later block-contraction layer must establish a
-direct norm bound, choose an appropriate equivalent norm, or prove a suitable iterate result.
+The existing API is norm-agnostic. The later block-contraction layer turns a spectral-radius bound
+into a convergence result through a direct norm bound, an appropriate equivalent norm, or a
+suitable iterate result.
 
 # Citations
 

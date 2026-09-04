@@ -14,7 +14,8 @@ state that is zero away from `i`, while `BlockSum.replace x i b` writes `b` at `
 every other coordinate.
 
 Replacement is the state-modification primitive. The block value supplied to it is computed by the
-concrete algorithm; the generic block foundation does not impose a universal update-rule type.
+concrete algorithm. The generic block foundation supplies the state and operator vocabulary used
+by those computations.
 
 # Block entries
 
@@ -41,9 +42,9 @@ A finite order on blocks partitions entries into diagonal, earlier-block, and la
 Their sum reconstructs the original operator. This is the algebraic splitting needed to state a
 Gauss-Seidel derivative, independently of how a nonlinear sweep computes its intermediate values.
 
-A finite coloring similarly partitions entries into same-color and cross-color parts. This is only
-an operator decomposition. Equality between concrete serial and buffered colored execution is a
-property of the actual VBD maps and is proved in the production layer.
+A finite coloring similarly partitions entries into same-color and cross-color parts. The
+production layer combines this operator decomposition with the actual VBD maps to establish the
+relationship between serial and buffered colored execution.
 
 # Cross-block bounds
 
@@ -55,8 +56,8 @@ $$
 
 define a nonnegative comparison operator. An induced bound `q < 1` in a stated block norm yields a
 local contraction criterion. Ordered and colored splittings expose the coupling terms relevant to
-serial and buffered parallel execution; sparsity or favorable diagonal blocks alone do not imply
-contraction.
+serial and buffered parallel execution. A contraction certificate combines diagonal control,
+off-diagonal coupling, and the selected norm.
 
 # Fixed-point iteration
 
@@ -74,6 +75,6 @@ synthesis layers.
 
 # Secondary energy route
 
-Energy monotonicity, line search, convex minimization, and KL arguments are not foundations of the
-production analysis. They may be added later for a named solver variant or theorem, but the
-production full block-Newton step is not assumed to descend.
+Energy monotonicity, line search, convex minimization, and KL arguments apply to compatible solver
+variants and theorem targets. The production analysis proceeds through direct sweep-operator
+bounds.

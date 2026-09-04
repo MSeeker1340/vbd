@@ -24,8 +24,8 @@ The [backlog](/project/backlog.md) is authoritative for item-level status and ac
 
 The production-facing target is a quantitative theorem for the actual unsafeguarded VBD sweep:
 on an explicitly described neighborhood of an implicit-Euler solution, the serial or colored sweep
-is contractive with factor `q < 1`, giving a finite-sweep error bound. Energy descent is not a
-foundation of this route because the production block-Newton step does not guarantee it.
+is contractive with factor `q < 1`, giving a finite-sweep error bound. The main route uses direct
+operator estimates; energy-descent results form a secondary route for compatible solver variants.
 
 ```text
 P1 implicit Euler          P2 block algebra          P3 contraction theory
@@ -54,8 +54,8 @@ F_{IE}(x)=\nabla G_{IE}(x),
 DF_{IE}(x)=\frac{M}{h^2}+\nabla^2P(x).
 $$
 
-Its solution concept is stationarity of `G_IE`, equivalently a root of `F_IE`. It contains no
-block schedules, coloring, iteration maps, or convergence theory.
+Its solution concept is stationarity of `G_IE`, equivalently a root of `F_IE`. Its scope consists of
+the objective and its differential identities.
 
 # Phase 2 — Block sums and linear operator algebra
 
@@ -77,21 +77,20 @@ operators:
 5. diagonal, earlier-block, and later-block splitting relative to a finite order;
 6. same-color and cross-color splitting relative to a finite coloring.
 
-Phase 2 does not mention objectives, energy, gradients, Hessians, Newton steps, stationarity,
-implicit Euler, solver execution, or convergence. `BlockSum.replace` is the primitive coordinate
-write. Phase 2 does not prescribe a universal interface for computing replacement values or define
-the concrete serial and colored VBD sweeps. It adds algebraic or analytic assumptions only to the
-declarations that require them; finite-dimensional blocks are not a phase-wide requirement.
+`BlockSum.replace` is the primitive coordinate write. The phase vocabulary consists of block
+states and continuous linear operators. Concrete replacement-value computations and complete
+serial or colored VBD sweeps enter in Phase 7. Algebraic and analytic assumptions remain local to
+the declarations that use them, and the core results support infinite-dimensional blocks.
 
 Acceptance gate: later derivative and contraction proofs can express a linearized sweep as a
-finite heterogeneous block matrix and recover its ordered or colored splitting without importing
-an objective or mechanics module.
+finite heterogeneous block matrix and recover its ordered or colored splitting using the block
+foundation alone.
 
 # Phase 3 — Contractive fixed-point iteration
 
 Status: planned. Module: `Vbd/Dynamics/Contraction.lean`.
 
-Reuse Mathlib's `ContractingWith` and Banach fixed-point results. Add only the project-relevant
+Reuse Mathlib's `ContractingWith` and Banach fixed-point results. Add the project-relevant
 bridges that are absent or awkward at the call site:
 
 1. contraction on a forward-invariant complete subset or closed ball;
@@ -100,12 +99,11 @@ bridges that are absent or awkward at the call site:
 4. local convergence to a known fixed point;
 5. persistent, vanishing, and summable perturbation bounds.
 
-Use direct Lipschitz or operator-norm bounds first. A spectral-radius hypothesis requires an
-appropriate equivalent norm or an iterate theorem and is not silently interchangeable with
-contraction in the existing norm.
+Use direct Lipschitz or operator-norm bounds first. A spectral-radius hypothesis enters through an
+appropriate equivalent norm or an iterate theorem.
 
 Acceptance gate: the results apply to an arbitrary self-map of a complete metric or normed space
-and import neither Phase 1 nor Phase 2.
+using the generic dynamics layer and Mathlib.
 
 # Phase 4 — Local interactions and coloring
 
@@ -123,8 +121,7 @@ collision interactions may invalidate a static coloring and must remain visible 
 colored-sweep proof.
 
 Acceptance gate: at least one pairwise and one multi-vertex example has a proved valid coloring,
-and the effect of adding a live interaction is stated exactly. No execution-equivalence or
-convergence claim is made.
+and the effect of adding a live interaction is stated exactly.
 
 # Phase 5 — Implicit-Euler fixed-point goals
 
@@ -141,10 +138,10 @@ $$
 $$
 
 Where quantitative regularity of `F_IE` is available, transport distance bounds to residual
-bounds. Phase 5 does not construct a block solver or assert that an arbitrary solver has the right
-fixed point; those obligations are discharged only in the final synthesis.
+bounds. Phase 5 takes the solver map and its designated fixed point as parameters. Phase 7 supplies
+the concrete VBD map and its fixed-point identification.
 
-Acceptance gate: the theorem is solver-independent and imports no Phase 2 declarations.
+Acceptance gate: the theorem is solver-independent and uses the Phase 1 and Phase 3 interfaces.
 
 # Phase 6 — Contraction from block-operator bounds
 
@@ -168,7 +165,7 @@ The nonnegative family `C` is a comparison operator. Prove:
 5. perturbation bounds for approximate derivatives or execution maps.
 
 Acceptance gate: explicit block-entry bounds for an arbitrary differentiable self-map produce a
-`q < 1` contraction certificate. No objective, mechanics, or solver-execution concept is imported.
+`q < 1` contraction certificate using the block and dynamics foundations.
 
 # Phase 7 — Production VBD synthesis
 
@@ -189,7 +186,7 @@ including the production skip behavior when a block Hessian is judged singular. 
 is exposed as a map on `BlockSum B`; implementation-local scheduling and buffer data may remain
 encapsulated by its definition. The required result chain is:
 
-1. identify regular states where every block update is defined and no skip occurs;
+1. identify regular states where every block update follows the nonsingular branch;
 2. show that a regular fixed point of a complete sweep is an implicit-Euler solution;
 3. differentiate the complete serial sweep and identify its derivative with the
    schedule-dependent block Gauss-Seidel error operator;
@@ -211,8 +208,8 @@ smaller timestep / stronger mass term
   -> smaller error after a fixed number of sweeps
 ```
 
-Positive definiteness or a better condition number alone is not reported as a convergence result;
-the chosen serial or colored splitting and its off-diagonal coupling must appear in the theorem.
+Each convergence theorem includes the chosen serial or colored splitting and its off-diagonal
+coupling in addition to any positive-definiteness or condition-number assumptions.
 
 Acceptance gate: at least one concrete finite-support implicit-Euler system instantiates the whole
 chain for the production full-step update, with all regularity, coloring, and neighborhood
@@ -221,11 +218,10 @@ hypotheses explicit.
 # Secondary and deferred routes
 
 Energy-change identities, local or sweep monotonicity, line search, convex minimization, and KL
-arguments are not part of the main dependency chain. Add them only when a named target theorem or
-solver variant needs them.
+arguments form secondary routes activated by a named target theorem or compatible solver variant.
 
-Deferred work includes global behavior outside a certified contractive neighborhood, a
-probabilistic theory without an identified source of randomness, fully dynamic collision
-scheduling, floating-point and GPU execution error, optimization-error accumulation across time
-steps, discretization error, and generalized mass-matrix specializations beyond the first accepted
+Deferred work includes global behavior beyond a certified contractive neighborhood, probabilistic
+convergence after a concrete randomness model is selected, fully dynamic collision scheduling,
+floating-point and GPU execution error, optimization-error accumulation across time steps,
+discretization error, and generalized mass-matrix specializations beyond the first accepted
 production theorem.

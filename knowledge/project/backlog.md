@@ -23,13 +23,13 @@ timestamp: 2026-09-04T00:00:00Z
 | KB-03 | done | Simplify bundle project management | Project plans and backlog share one directory; redundant snapshot, scope, and policy concepts are removed |
 | KB-04 | done | Adopt scoped OKF update logs | Every indexed scope has a conformant `log.md`, and strict reserved-file linting passes |
 | KB-05 | done | Complete Lean development checks | The versioned pre-commit hook runs strict OKF validation and `lake build`; narrow-development commands are documented |
-| RS-01 | done | Assess `optsuite/optlib` | Mathlib remains the only dependency; Optlib's descent-oriented two-block PALM layer is reference-only and is not on the current contraction route |
+| RS-01 | done | Assess `optsuite/optlib` | Mathlib is the sole direct dependency; Optlib serves as a reference for descent-oriented two-block PALM arguments |
 
 # Phase 1 — implicit Euler mathematics
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| IE-01 | done | State-space and mass-operator skeleton | none | Compiles with basis-free real inner-product assumptions and no VBD types |
+| IE-01 | done | State-space and mass-operator skeleton | none | Compiles as a basis-free real inner-product construction using generic Mathlib types |
 | IE-02 | done | Define inertia and `G_IE` | IE-01 | Definition carries positive-timestep and self-adjoint-mass constraints |
 | IE-03 | done | Gradient of inertia | IE-02 | `HasGradientAt` theorem gives `M(x-y)/h²` |
 | IE-04 | done | Gradient of `G_IE` | IE-03 | Sum rule identifies the canonical gradient under explicit assumptions |
@@ -41,12 +41,12 @@ timestamp: 2026-09-04T00:00:00Z
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| BS-01 | done | `BlockSum B` and coordinate operations | none | Heterogeneous product, native coordinate access, injections, and replacement laws compile without objective or mechanics imports |
+| BS-01 | done | `BlockSum B` and coordinate operations | none | Heterogeneous product, native coordinate access, injections, and replacement laws compile using Mathlib |
 | BS-02 | next | Continuous block inclusions and operator entries | BS-01 | For finite heterogeneous normed blocks, the `(i,j)` entry of a continuous linear endomorphism is defined by Mathlib's coordinate projection and a continuous single-coordinate inclusion, with application lemmas |
 | BS-03 | planned | Block-matrix reconstruction and extensionality | BS-02 | Finite families of blockwise continuous linear maps assemble into an operator; extracting entries is inverse to assembly, and entrywise equality implies operator equality |
 | BS-04 | planned | Block-operator arithmetic | BS-03 | Entries of zero, identity, addition, scalar multiplication, and composition obey the expected finite block-matrix formulas |
 | BS-05 | planned | Ordered block splitting | BS-04 | A finite block order gives diagonal, earlier-block, and later-block parts whose sum reconstructs the operator |
-| BS-06 | planned | Colored block splitting | BS-04 | A finite coloring separates same-color and cross-color entries and reconstructs the operator without asserting an execution semantics |
+| BS-06 | planned | Colored block splitting | BS-04 | A finite coloring separates same-color and cross-color entries and reconstructs the operator; execution semantics remain a production-layer property |
 
 # Phase 3 — contractive fixed-point iteration
 
@@ -62,7 +62,7 @@ timestamp: 2026-09-04T00:00:00Z
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| LI-01 | planned | Finite-support interaction hypergraph | IE-07, BS-01 | Multi-block interactions expose supports without restricting them to pairs |
+| LI-01 | planned | Finite-support interaction hypergraph | IE-07, BS-01 | Multi-block interactions expose arbitrary finite supports, including pairwise and higher-arity elements |
 | LI-02 | planned | Physical conflict graph and proper coloring | LI-01 | Shared live interactions induce a symmetric conflict graph and a proper-color predicate |
 | LI-03 | planned | Pairwise and multi-vertex examples | LI-02 | One pairwise and one triangle/tetrahedron-style system has a proved valid coloring |
 | LI-04 | planned | Static-color validity boundary | LI-02 | New collision interactions are shown to preserve or invalidate the static independence premise explicitly |

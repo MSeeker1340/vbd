@@ -17,7 +17,7 @@ P(x)=\sum_{e\in\mathcal E}P_e(x).
 $$
 
 Supports form a hypergraph. Pairwise forces have two-element supports; triangle, tetrahedron,
-bending, and other multi-vertex elements use larger supports without changing the abstraction.
+bending, and other multi-vertex elements use larger supports within the same abstraction.
 
 # Conflict and coloring role
 
@@ -32,14 +32,13 @@ coupling must appear in the concrete buffered sweep or be removed by recoloring.
 
 For a replacement of block `i`, unaffected interactions cancel from the energy difference. The
 resulting equality between global and incident-interaction energy changes is an elementary helper
-lemma. It is not a convergence principle and is not part of the main fixed-point dependency chain.
+lemma used for local energy bookkeeping.
 
 # VBD connection
 
 VBD's elastic force elements instantiate finite-support interactions. Their supports justify the
-static vertex conflict graph. The production collision path may introduce interactions not
-represented by that static graph and is therefore handled separately in the final colored-sweep
-analysis.
+static vertex conflict graph. The production collision path may augment that graph; the final
+colored-sweep analysis includes the complete live interaction set.
 
 # Citations
 

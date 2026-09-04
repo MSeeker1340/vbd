@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Implicit Euler as Optimization
 description: Derives the implicit-Euler incremental potential and specifies its derivatives, stationarity equation, and numerical character.
 tags: [implicit-euler, classical-mechanics, gradient, hessian, stationary-point, numerical-analysis]
-timestamp: 2026-09-02T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Data
@@ -21,7 +21,9 @@ G_{\mathrm{IE}}(x)
 =\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+E(x).
 $$
 
-The derivative identity requires self-adjointness of `M` to simplify the derivative of the quadratic term to `M(x-y)/h²`. Positive definiteness is not needed for this identity; quantitative lower bounds belong to the later [curvature and coupling analysis](/mathematics/curvature.md).
+Self-adjointness of `M` simplifies the derivative of the quadratic term to `M(x-y)/h²`.
+Quantitative positive lower bounds enter later in the
+[curvature and coupling analysis](/mathematics/curvature.md).
 
 # Classical-mechanics origin
 
@@ -63,9 +65,9 @@ $$
 \frac1{h^2}M(q_{n+1}-y)+\nabla E(q_{n+1})=0.
 $$
 
-This is exactly the stationarity equation `∇G_IE(q_{n+1})=0`. Thus `G_IE` is not an
-independent physical energy: it is an *incremental potential* whose critical points encode a
-backward-Euler step. If external acceleration is treated explicitly, it can be absorbed into the
+This is exactly the stationarity equation `∇G_IE(q_{n+1})=0`. Thus `G_IE` is an *incremental
+potential* whose critical points encode a backward-Euler step. If external acceleration is treated
+explicitly, it can be absorbed into the
 prediction, for example `y=q_n+h v_n+h²a_ext`, as in the VBD formulation [1]. This variational
 form of backward Euler is standard in optimization-based simulation [2, 3].
 
@@ -78,18 +80,18 @@ form of backward Euler is standard in optimization-based simulation [2, 3].
 - **Stiff stability.** On the linear test equation `u' = λu`, its amplification factor is
   `R(z)=1/(1-z)`, where `z=hλ`. Hence `|R(z)|≤1` throughout the closed left half-plane and
   `R(z)→0` as `|z|→∞` there: backward Euler is A-stable and L-stable. Strongly decaying modes
-  therefore do not impose the explicit Euler stability restriction, though large steps can still
-  have poor accuracy.
-- **Numerical dissipation.** For conservative oscillatory mechanics, backward Euler is not
-  symplectic and introduces artificial damping. For the normalized harmonic oscillator, the
+  therefore remain stable beyond the explicit Euler stability range, while accuracy continues to
+  constrain the step size.
+- **Numerical dissipation.** For conservative oscillatory mechanics, backward Euler introduces
+  artificial damping. For the normalized harmonic oscillator, the
   one-step phase-space map scales the quadratic energy by `1/(1+h²)`, so energy and phase-space
-  area contract at every step [5]. Smaller timesteps reduce this damping [1]. This is numerical,
-  not physical, dissipation and is distinct from adding a Rayleigh or other damping force.
+  area contract at every step [5]. Smaller timesteps reduce this damping [1]. This numerical
+  dissipation is distinct from adding a Rayleigh or other damping force.
 
 These properties explain the method's popularity for stiff deformable-body simulation: it trades
 high-order and long-time conservation for robust suppression of unresolved high-frequency modes.
-They do **not** imply that mechanical energy decreases for every nonlinear potential and every
-step, nor that an arbitrary stationary point of a nonconvex `G_IE` is a minimizer.
+Mechanical-energy decrease for nonlinear potentials and minimization by a nonconvex stationary
+point require separate hypotheses.
 
 # Phase-1 theorem targets
 
@@ -114,7 +116,8 @@ R_{\mathrm{IE}}(x)=0
 \nabla G_{\mathrm{IE}}(x)=0.
 $$
 
-This is an equivalence with stationarity, not with global minimization.
+This equivalence identifies stationarity. Global minimization requires additional curvature and
+existence hypotheses.
 
 Under twice differentiability, represent and prove
 
@@ -128,16 +131,16 @@ $$
 |---|---|
 | Phase-1 Lean interface | `ImplicitEulerStep` record containing a complete real inner-product state, self-adjoint continuous linear `M`, positive `h`, predicted `y`, and a potential `E` whose gradient is globally differentiable |
 | Simplified gradient formula | Phase-1 interface invariant |
-| Residual iff stationarity | gradient formula only |
+| Residual iff stationarity | gradient formula |
 | Hessian sum formula | Phase-1 interface invariant |
 | Strict/strong convexity | a positive curvature lower bound |
 | Unique minimizer | existence plus strict convexity, or a suitable strong-convexity theorem |
 
 # Formalization notes
 
-The Lean interface records one timestep problem and its constraints in an `ImplicitEulerStep` value: mass operator, twice-differentiable potential energy, timestep, predicted state, self-adjointness proof, and timestep-positivity proof. The module calls the objective `energy`, proves that it is globally differentiable, and identifies Mathlib's canonical `∇ ie.energy` with `ie.energyGradient`. Its Hessian is the inertia Hessian plus the canonical potential Hessian. The later implicit-Euler fixed-point bridge uses this gradient as its nonlinear residual. The API does not accept separate gradient or Hessian functions. The local particle-mass formula belongs in VBD synthesis, not here.
+The Lean interface records one timestep problem and its constraints in an `ImplicitEulerStep` value: mass operator, twice-differentiable potential energy, timestep, predicted state, self-adjointness proof, and timestep-positivity proof. The module calls the objective `energy`, proves that it is globally differentiable, and identifies Mathlib's canonical `∇ ie.energy` with `ie.energyGradient`. Its Hessian is the inertia Hessian plus the canonical potential Hessian. The later implicit-Euler fixed-point bridge uses this gradient as its nonlinear residual. The API derives its gradient and Hessian from the energy. VBD synthesis supplies the local particle-mass formula.
 
-The implemented Phase 1 module, `Vbd/Integrator/ImplicitEulerEnergy.lean`, selects the Fréchet derivative of the gradient as its Hessian representation. It establishes Hessian existence without curvature bounds. Quantitative lower bounds from the inertia term, including their dependence on `h`, belong to the final VBD synthesis. API details and the representation rationale live in the source documentation.
+The implemented Phase 1 module, `Vbd/Integrator/ImplicitEulerEnergy.lean`, selects the Fréchet derivative of the gradient as its Hessian representation. It establishes Hessian existence from differentiability assumptions. Quantitative lower bounds from the inertia term, including their dependence on `h`, belong to the final VBD synthesis. API details and the representation rationale live in the source documentation.
 
 # Citations
 

@@ -1,5 +1,9 @@
 # Knowledge Bundle Update Log
 
+## 2026-09-04
+
+* **Governance**: Made affirmative, standalone current-state prose the default for every non-log concept and reserved conversational rationale, corrections, rejected alternatives, and chronology for scoped logs.
+
 ## 2026-08-20
 
 * **Correction**: Adopted hierarchy-scoped [`log.md`](https://okf.md/spec/#7-log-files-optional) histories and removed the custom standalone worklog concept scheme.

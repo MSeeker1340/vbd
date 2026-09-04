@@ -8,8 +8,8 @@ timestamp: 2026-09-04T00:00:00Z
 
 # Physical conflict relation
 
-Finite-support interactions induce a symmetric conflict relation. Distinct blocks `i` and `j` do
-not conflict when no live interaction contains both:
+Finite-support interactions induce a symmetric conflict relation. Distinct blocks `i` and `j`
+conflict exactly when some live interaction contains both. Equivalently, independence means
 
 $$
 \forall e,\quad \neg(i\in N(e)\land j\in N(e)).
@@ -25,17 +25,16 @@ between serial and colored sweeps.
 # Hybrid colored updates
 
 Dynamically introduced interactions can invalidate a precomputed coloring. The buffered map is then
-Jacobi-like within the affected color and Gauss-Seidel-like between colors. It is not equated with
-the serial sweep. Its contraction must be proved from its actual derivative block entries or from a
-perturbation bound relative to the proper static case.
+Jacobi-like within the affected color and Gauss-Seidel-like between colors. Its analysis uses the
+actual derivative block entries or a perturbation bound relative to the proper static case.
 
 # VBD connection
 
-The VBD paper colors vertices so that no elastic force element contains two vertices of the same
-color. Its collision implementation may use partially Jacobi-style buffered updates when dynamic
-collision interactions violate the precomputed material coloring. The roadmap proves the static
-relationship for the concrete sweep definitions, then analyzes the hybrid map under explicit
-coupling assumptions.
+The VBD paper colors vertices so that each elastic force element intersects a color class in at
+most one vertex. Its collision implementation may use partially Jacobi-style buffered updates when
+dynamic collision interactions violate the precomputed material coloring. The roadmap proves the
+static relationship for the concrete sweep definitions, then analyzes the hybrid map under
+explicit coupling assumptions.
 
 # Citations
 

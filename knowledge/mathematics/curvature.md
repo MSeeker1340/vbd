@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Curvature, Coupling, and VBD Contraction
 description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
 tags: [curvature, coupling, hessian, contraction]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Implicit-Euler Hessian
@@ -20,8 +20,8 @@ $$
 \nabla^2G(x)=A+\nabla^2P(x).
 $$
 
-In the standard implicit-Euler specialization, `A = M / h²`. This identity becomes analytically
-useful only after the VBD block splitting, interaction supports, schedule, and norm have been fixed.
+In the standard implicit-Euler specialization, `A = M / h²`. VBD analysis combines this identity
+with the block splitting, interaction supports, schedule, and selected norm.
 
 # Block inverse bounds
 
@@ -33,10 +33,10 @@ H_{ii}(x)\succeq \mu_i I,
 $$
 
 establishes invertibility of the local Newton system and controls `‖Hᵢᵢ(x)⁻¹‖`. A sufficiently
-strong inertia contribution may therefore define a neighborhood in which the production
-singular-Hessian skip cannot occur.
+strong inertia contribution may therefore certify a neighborhood where the production update uses
+the regular branch.
 
-# Coupling, not condition number alone
+# Coupling and the contraction factor
 
 The derivative of a block-Newton update contains normalized off-diagonal blocks such as
 
@@ -45,8 +45,8 @@ H_{ii}(x)^{-1}H_{ij}(x).
 $$
 
 The contraction factor of a serial or colored sweep depends on these terms and on the chosen
-splitting. Positive definiteness or a favorable global condition number alone is not reported as a
-Gauss-Seidel contraction theorem.
+splitting. A Gauss-Seidel contraction theorem combines diagonal positivity with quantitative
+off-diagonal coupling.
 
 The intended quantitative argument bounds the diagonal inverses and off-diagonal interaction
 coupling separately, composes them according to the actual schedule, and proves `q < 1` in a stated
@@ -54,9 +54,8 @@ block norm.
 
 # Nonlinear neighborhood
 
-A contraction bound for the derivative at one stationary point does not by itself provide a
-certified radius in the original norm. Control of Hessian or sweep-derivative variation on a
-neighborhood should yield
+A certified radius in the original norm follows from a pointwise derivative bound together with
+control of Hessian or sweep-derivative variation on a neighborhood:
 
 $$
 \sup_{x\in N}\|DS(x)\|\le q<1.
@@ -68,9 +67,8 @@ finite-sweep error bounds.
 # Secondary consequences
 
 The same lower curvature bounds may imply convexity, strong convexity, uniqueness, or a descent
-direction under their usual extra hypotheses. Full-step energy decrease additionally needs control
-of Hessian variation or a line search. These are optional consequences rather than the main
-production-analysis route.
+direction under their usual extra hypotheses. Control of Hessian variation or a line search can
+additionally establish full-step energy decrease. These results form a secondary analysis route.
 
 # Citations
 

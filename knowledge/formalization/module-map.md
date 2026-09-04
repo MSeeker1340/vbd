@@ -24,9 +24,9 @@ timestamp: 2026-09-04T00:00:00Z
 | P6 | `Block/Contraction.lean` | Derivative block-entry bounds, comparison-operator estimates, split bounds, and perturbations | `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Production serial and buffered colored maps, skip-free region, sweep derivative, inertia/coupling bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
 
-These paths are the current module boundaries. Split a module only when implementation reveals a
-stable reusable boundary; record any split in the central [roadmap](/project/roadmap.md) and
-[backlog](/project/backlog.md).
+These paths are the current module boundaries. Implementation may introduce a split at a stable
+reusable boundary, with the resulting structure recorded in the central
+[roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
 
 # Initial build order
 
@@ -43,16 +43,16 @@ Block/Basic -> Block/Operator
 Dynamics/Contraction
 ```
 
-Only the bridge modules introduce cross-foundation imports. In particular, no objective, gradient,
-stationarity, or mechanics declaration belongs in `Block/*`, and no block declaration belongs in
-`Dynamics/Contraction`.
+Bridge modules introduce cross-foundation imports. `Block/*` contains block-state and
+block-operator declarations; `Dynamics/Contraction` contains generic metric and normed-space
+fixed-point declarations.
 
 # Representation and norm boundary
 
 Phase 1 retains `X` as an abstract real Hilbert-space parameter. Phase 2 uses `B : ι → Type*` and
-`BlockSum B := PiLp 2 B`. Coordinate algebra adds no Hilbert requirement. P6 selects whatever norm
-is stated by its contraction theorem; the existing finite `ℓ²` structure is the initial candidate,
-while weighted or energy norms remain theorem-local options.
+`BlockSum B := PiLp 2 B`. Coordinate algebra states its typeclass requirements declaration by
+declaration. P6 selects the norm stated by its contraction theorem; the existing finite `ℓ²`
+structure is the initial candidate, while weighted or energy norms remain theorem-local options.
 
 # Documentation boundary
 
@@ -63,6 +63,6 @@ mathematical specifications, dependency assessments, and external references.
 # Implementation status
 
 `Integrator/ImplicitEulerEnergy.lean` implements Phase 1. `Block/Basic.lean` implements
-`BlockSum B`, native coordinate application, zero-supported injection, and replacement laws without
-objective or mechanics dependencies. The remainder of P2 and all P3–P7 modules in this map are
+`BlockSum B`, native coordinate application, zero-supported injection, and replacement laws using
+Mathlib. The remainder of P2 and all P3–P7 modules in this map are
 planned; continuous-linear block entries in `Block/Operator.lean` are next.
