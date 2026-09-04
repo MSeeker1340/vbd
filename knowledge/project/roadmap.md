@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Current phase status
@@ -11,7 +11,7 @@ timestamp: 2026-09-03T00:00:00Z
 | Phase | Status | Current boundary |
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
-| Phase 2 — block sums and update algebra | active | `BS-01`: define `BlockSum B` and its coordinate operations independently of objectives and mechanics |
+| Phase 2 — block sums and update algebra | active | `BS-02`: define one-block maps and the law that every other coordinate is unchanged |
 | Phase 3 — contractive fixed-point iteration | planned | begins after the narrow Mathlib contraction API wrapper is scoped |
 | Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 finite-support interaction structure |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |

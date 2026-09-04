@@ -1,5 +1,10 @@
 # Lean Formalization Update Log
 
+## 2026-09-04
+
+* **Implementation**: Added `Vbd.Block.Basic` with `BlockSum B := PiLp 2 B`, native coordinate application, zero-supported injection, and same-coordinate, untouched-coordinate, identity, overwrite, and commutation laws for replacement.
+* **Interface**: Kept block operations as a pure functional API and deferred an optional `StateM (BlockSum B)` presentation unless later algorithm derivations demonstrate a need for imperative notation.
+
 ## 2026-09-03
 
 * **Module plan**: Replaced the planned `Optimization/*` descent stack with independent `Block/*` and `Dynamics/Contraction` foundations, pairwise `Integrator` bridges, and a final production `Integrator/VBD` synthesis module.

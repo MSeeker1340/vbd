@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-09-04
+
+* **Completion**: Marked BS-01 done after implementing the heterogeneous `BlockSum B` coordinate algebra and advanced BS-02 one-block maps to `next`.
+
 ## 2026-09-03
 
 * **Architecture**: Replaced the descent-centered Phase 2/2B sequence with three independent foundations—implicit Euler, block-operator algebra, and contractive fixed-point iteration—three pairwise bridges, and a final production VBD synthesis.

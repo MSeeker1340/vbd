@@ -36,7 +36,7 @@ Detailed mathematical specifications and roadmap ordering live in `knowledge/mat
 
 ## Current repository state
 
-The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase 1 is implemented in `Integrator/ImplicitEulerEnergy.lean`: the basis-free energy, gradient, and Hessian identities compile without VBD-specific types. Phase 2 is active and now contains only objective-independent block sums and update algebra; its next implementation is `Block/Basic.lean` with heterogeneous `BlockSum B := PiLp 2 B` coordinate operations. Phase 3 will be a thin, block-independent layer over Mathlib's contractive fixed-point results. Later bridge phases combine these foundations before the production VBD synthesis derives serial and colored contraction bounds. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
+The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase 1 is implemented in `Integrator/ImplicitEulerEnergy.lean`: the basis-free energy, gradient, and Hessian identities compile without VBD-specific types. Phase 2 is active; `Block/Basic.lean` implements heterogeneous `BlockSum B := PiLp 2 B` coordinate access, injection, and replacement algebra, and one-block maps in `Block/Update.lean` are next. Phase 3 will be a thin, block-independent layer over Mathlib's contractive fixed-point results. Later bridge phases combine these foundations before the production VBD synthesis derives serial and colored contraction bounds. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
 
 ## Development workflow
 

@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Foundation modules
@@ -31,8 +31,9 @@ stable reusable boundary; record any split in the central [roadmap](/project/roa
 
 # Initial build order
 
-Phase 1 is complete. The next implementation is `Block/Basic.lean`, followed by `Block/Update.lean`
-and `Block/Coloring.lean`. Phase 3 can begin once the pinned Mathlib contraction API has been
+Phase 1 and `Block/Basic.lean` are complete. The next implementation is the one-block-map layer in
+`Block/Update.lean`, followed by its schedule algebra and `Block/Coloring.lean`. Phase 3 can begin
+once the pinned Mathlib contraction API has been
 confirmed, but it must remain independent of the block modules.
 
 The three foundations may be implemented independently:
@@ -62,6 +63,7 @@ mathematical specifications, dependency assessments, and external references.
 
 # Implementation status
 
-Only `Integrator/ImplicitEulerEnergy.lean` is currently implemented. Its `ImplicitEulerStep` record
-holds one timestep's physical data and the proofs needed for the basis-free energy, gradient, and
-Hessian identities. All P2–P7 modules in this map are planned; `Block/Basic.lean` is next.
+`Integrator/ImplicitEulerEnergy.lean` implements Phase 1. `Block/Basic.lean` now implements
+`BlockSum B`, native coordinate application, zero-supported injection, and replacement laws without
+objective or mechanics dependencies. The remainder of P2 and all P3–P7 modules in this map are
+planned; one-block maps in `Block/Update.lean` are next.

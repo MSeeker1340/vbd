@@ -4,7 +4,7 @@ title: Pinned Mathlib API Inventory
 description: Records calculus, block-product, and fixed-point APIs confirmed in the repository's pinned Mathlib checkout.
 resource: ../.lake/packages/mathlib/Mathlib
 tags: [mathlib, lean4, gradient, block-product, contraction]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Audit basis
@@ -44,10 +44,12 @@ Potential mismatch: qualitative `PosDef` is not itself a chosen coercivity modul
 # Finite products and sums
 
 The project defines `BlockSum B := PiLp 2 B`, where `B : ι → Type*` is the heterogeneous block
-family and `X` remains reserved for a total space. `PiLp` can be formed without norm or topology
-instances. Block replacement is `WithLp.toLp 2` applied to `Function.update` of `WithLp.ofLp`; its
-same-coordinate and other-coordinate laws simplify directly. Mathlib's `Function.update_self`,
-`Function.update_of_ne`, and update commutation lemmas provide the underlying API.
+family and `X` remains reserved for a total space. `PiLp 2 B` is a type copy of the dependent
+function space `(i : ι) → B i`; it can be formed without norm or topology instances and coerces
+back to a function for native coordinate application. Block replacement is `WithLp.toLp 2` applied
+to `Function.update` of `WithLp.ofLp`; its same-coordinate and other-coordinate laws simplify
+directly. Mathlib's `Function.update_self`, `Function.update_of_ne`, and update commutation lemmas
+provide the underlying API.
 
 For analytic results, `Mathlib.Analysis.InnerProductSpace.PiL2` gives `BlockSum B` finite-product
 normed-additive, inner-product, and completeness instances when `ι` is finite and every `B i` has

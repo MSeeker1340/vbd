@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Status vocabulary
@@ -41,8 +41,8 @@ timestamp: 2026-09-03T00:00:00Z
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| BS-01 | next | `BlockSum B` and coordinate operations | none | Heterogeneous product, projections, injections, and replacement laws compile without objective or mechanics imports |
-| BS-02 | planned | One-block maps | BS-01 | A small predicate states exactly which coordinate an arbitrary state-dependent map may change |
+| BS-01 | done | `BlockSum B` and coordinate operations | none | Heterogeneous product, native coordinate access, injections, and replacement laws compile without objective or mechanics imports |
+| BS-02 | next | One-block maps | BS-01 | A small predicate states exactly which coordinate an arbitrary state-dependent map may change |
 | BS-03 | planned | Ordered schedules and sweep folds | BS-02 | Prefix states, concatenation, and composition laws retain order and repeated blocks |
 | BS-04 | planned | Simultaneous coordinate updates | BS-01 | Updates on a finite set of distinct coordinates have an explicit parallel semantics |
 | BS-05 | planned | Read-dependencies, conflicts, and colorings | BS-02 | Generic dependencies induce a symmetric conflict relation and proper-color predicate |
