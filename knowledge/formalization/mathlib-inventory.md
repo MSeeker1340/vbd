@@ -53,10 +53,11 @@ provide the underlying API.
 
 For analytic results, `Mathlib.Analysis.InnerProductSpace.PiL2` gives `BlockSum B` finite-product
 normed-additive, inner-product, and completeness instances when `ι` is finite and every `B i` has
-the corresponding structure. `PiLp.proj` and `PiLp.single` provide continuous coordinate
-projections and single-coordinate injections. No representation conversion is required at the
-analytic boundary, and exact finite-factor results do not require Hilbert or finite-dimensional
-assumptions.
+the corresponding structure. `PiLp.proj` is the continuous coordinate projection. A continuous
+single-coordinate inclusion can be formed by composing `ContinuousLinearMap.single` with the
+inverse of `PiLp.continuousLinearEquiv`; `PiLp.single` is its pointwise value-level counterpart. No
+representation conversion is required at the analytic boundary, and exact finite-factor results
+do not require finite-dimensional blocks.
 
 # Contractive fixed points
 

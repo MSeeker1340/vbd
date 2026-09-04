@@ -3,7 +3,7 @@ type: Architecture Decision
 title: Mathematical and Module Architecture
 description: Separates implicit-Euler physics, block-operator algebra, contraction theory, and their explicit bridge layers.
 tags: [architecture, dependencies, locality, contraction]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Independent foundations
@@ -12,14 +12,15 @@ The project has three self-contained foundations:
 
 1. **Implicit-Euler mathematics** defines the incremental objective, its gradient as the nonlinear
    residual, and its Hessian. It knows nothing about block schedules or convergence.
-2. **Block-operator algebra** defines heterogeneous block sums, coordinate updates, schedules,
-   dependencies, coloring, and sequential or simultaneous composition. It knows nothing about
-   objectives, mechanics, or convergence.
+2. **Block-operator algebra** defines heterogeneous block sums, coordinate replacement, block
+   entries of continuous linear operators, reconstruction, arithmetic, and ordered or colored
+   operator splittings. It knows nothing about objectives, mechanics, solver execution, or
+   convergence.
 3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, derivative,
    and perturbation results for arbitrary self-maps. It knows nothing about mechanics or blocks.
 
 Pairwise bridge layers combine implicit Euler with local interactions, implicit Euler with generic
-fixed-point results, and block composition with contraction bounds. Production VBD is the first
+fixed-point results, and block operators with contraction bounds. Production VBD is the first
 layer that may depend on all three foundations. The central [roadmap](/project/roadmap.md) gives the
 complete dependency graph and current status.
 
@@ -38,11 +39,10 @@ stability hypothesis strong enough for their conclusion.
 
 Keep these structures distinct:
 
-- **Locality/sparsity** records which blocks an update or physical interaction reads. It supports
-  conflict graphs, commuting independent updates, proper colors, and sparse cross-block
-  sensitivity bounds.
-- **Curvature and coupling** control block invertibility and the sensitivity of one updated block
-  to the others. Together with a chosen schedule or coloring, they can establish contraction.
+- **Locality/sparsity** records which blocks a physical interaction contains. It supports conflict
+  graphs, valid colors, and sparse block entries.
+- **Curvature and coupling** control block invertibility and the derivative of a complete sweep.
+  Together with its ordered or colored block splitting, they can establish contraction.
 
 Neither implies the other. In particular, positive definiteness or a favorable condition number
 does not by itself determine the contraction factor of a Gauss-Seidel or colored splitting; the
@@ -55,9 +55,9 @@ hypergraph, covering pairwise forces as well as triangle, tetrahedron, bending, 
 multi-vertex elements. A conflict graph is derived from shared hyperedges only when graph coloring
 is needed.
 
-Static proper coloring makes independent same-color updates equivalent to sequential execution.
-Dynamic collision interactions may create same-color coupling; the corresponding update remains a
-real simultaneous map whose convergence requires a separate hybrid or perturbation bound.
+The production VBD layer proves how a static proper coloring relates its concrete buffered sweep to
+serial execution. Dynamic collision interactions may create same-color coupling; the corresponding
+complete sweep requires a separate hybrid or perturbation bound.
 
 # Representation boundary
 

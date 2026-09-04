@@ -11,19 +11,18 @@ timestamp: 2026-09-04T00:00:00Z
 | Phase | Module | Responsibility | Direct project dependencies |
 |---|---|---|---|
 | P1 | `Integrator/ImplicitEulerEnergy.lean` | Implemented incremental objective, gradient/residual, and Hessian identities | none |
-| P2 | `Block/Basic.lean` | `BlockSum B`, coordinate projections, injections, and replacements | none |
-| P2 | `Block/Update.lean` | One-block maps, ordered schedules, folds, and simultaneous coordinate updates | `Block/Basic` |
-| P2 | `Block/Coloring.lean` | Abstract read-dependencies, conflicts, proper colors, commutation, and color-class maps | `Block/Update` |
+| P2 | `Block/Basic.lean` | `BlockSum B`, native coordinate access, injections, and replacements | none |
+| P2 | `Block/Operator.lean` | Continuous block inclusions, block entries, reconstruction, arithmetic, and ordered or colored splittings | `Block/Basic` |
 | P3 | `Dynamics/Contraction.lean` | Thin wrappers for local invariant contractions, finite-iterate bounds, derivative criteria, and perturbations | none |
 
 # Bridge and synthesis modules
 
 | Phase | Module | Responsibility | Direct project dependencies |
 |---|---|---|---|
-| P4 | `Integrator/LocalInteractions.lean` | Finite-support physical interactions, induced dependencies, and concrete coloring conditions | `ImplicitEulerEnergy`, `Block/Coloring` |
+| P4 | `Integrator/LocalInteractions.lean` | Finite-support physical interactions, conflict graph, and concrete coloring conditions | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Solver-independent convergence from a contractive map to a known implicit-Euler stationary fixed point | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
-| P6 | `Block/Contraction.lean` | Cross-block sensitivity, serial and colored composition bounds, and weak-conflict perturbations | `Block/Coloring`, `Dynamics/Contraction` |
-| P7 | `Integrator/VBD.lean` | Production block-Newton map, skip-free region, sweep derivative, inertia/coupling bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
+| P6 | `Block/Contraction.lean` | Derivative block-entry bounds, comparison-operator estimates, split bounds, and perturbations | `Block/Operator`, `Dynamics/Contraction` |
+| P7 | `Integrator/VBD.lean` | Production serial and buffered colored maps, skip-free region, sweep derivative, inertia/coupling bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
 
 These paths are the current module boundaries. Split a module only when implementation reveals a
 stable reusable boundary; record any split in the central [roadmap](/project/roadmap.md) and
@@ -31,16 +30,16 @@ stable reusable boundary; record any split in the central [roadmap](/project/roa
 
 # Initial build order
 
-Phase 1 and `Block/Basic.lean` are complete. The next implementation is the one-block-map layer in
-`Block/Update.lean`, followed by its schedule algebra and `Block/Coloring.lean`. Phase 3 can begin
-once the pinned Mathlib contraction API has been
-confirmed, but it must remain independent of the block modules.
+Phase 1 and `Block/Basic.lean` are complete. The next implementation is the continuous-linear block
+entry layer in `Block/Operator.lean`, followed by finite reconstruction and operator arithmetic.
+Phase 3 can begin once the pinned Mathlib contraction API has been confirmed, but it must remain
+independent of the block modules.
 
 The three foundations may be implemented independently:
 
 ```text
 Integrator/ImplicitEulerEnergy
-Block/Basic -> Block/Update -> Block/Coloring
+Block/Basic -> Block/Operator
 Dynamics/Contraction
 ```
 
@@ -63,7 +62,7 @@ mathematical specifications, dependency assessments, and external references.
 
 # Implementation status
 
-`Integrator/ImplicitEulerEnergy.lean` implements Phase 1. `Block/Basic.lean` now implements
+`Integrator/ImplicitEulerEnergy.lean` implements Phase 1. `Block/Basic.lean` implements
 `BlockSum B`, native coordinate application, zero-supported injection, and replacement laws without
 objective or mechanics dependencies. The remainder of P2 and all P3–P7 modules in this map are
-planned; one-block maps in `Block/Update.lean` are next.
+planned; continuous-linear block entries in `Block/Operator.lean` are next.

@@ -1,51 +1,66 @@
 ---
 type: Mathematical Specification
-title: Block Update Operators and Contraction
-description: Specifies objective-independent block composition and the cross-block bounds used to prove sweep contraction.
-tags: [block-operators, gauss-seidel, fixed-point, contraction]
+title: Block Linear Operators and Sweep Bounds
+description: Specifies heterogeneous block entries, operator reconstruction, splittings, and their role in sweep contraction.
+tags: [block-operators, block-matrices, gauss-seidel, contraction]
 timestamp: 2026-09-03T00:00:00Z
 ---
 
-# Block update algebra
+# Block-state algebra
 
-For heterogeneous blocks `B : ι → Type*`, the total state is `BlockSum B`. A one-block map `Uᵢ`
-may change coordinate `i` and must leave every other coordinate unchanged. An ordered schedule
-defines a serial sweep by composition. A finite set of distinct blocks also has a simultaneous
-update semantics used for a parallel color class.
+For heterogeneous blocks `B : ι → Type*`, the total state is `BlockSum B`. Reading coordinate `i`
+is ordinary dependent-function application `x i`. `BlockSum.inject i b` embeds a value into a
+state that is zero away from `i`, while `BlockSum.replace x i b` writes `b` at `i` and preserves
+every other coordinate.
 
-These definitions are independent of objectives, residuals, gradients, and descent. See the
-[roadmap](/project/roadmap.md) for the Phase 2 boundary.
+Replacement is the state-modification primitive. The block value supplied to it is computed by the
+concrete algorithm; the generic block foundation does not impose a universal update-rule type.
 
-# Cross-block sensitivity
+# Block entries
 
-A one-block map is the identity on untouched coordinates, so it is not generally a strict
-contraction of the total space. The useful local data instead bounds the changed output block in
-terms of every input block:
+Let `A : BlockSum B →L[ℝ] BlockSum B` be a continuous linear operator. Its `(i,j)` block entry is
+the continuous linear map
 
 $$
-\|\pi_i(U_i(x)-U_i(y))\|
-\le \sum_j C_{ij}\|\pi_j(x-y)\|.
+A_{ij}=\pi_i\circ A\circ\iota_j : B_j\to B_i,
 $$
 
-The nonnegative coefficients `Cᵢⱼ` form a comparison or coupling operator. Schedule composition
-must propagate these bounds in the same order as the actual updates. A global contraction theorem
-requires a stated product norm and an induced bound `q < 1`; it does not follow merely from a
-collection of isolated per-block facts.
+where `πᵢ` is Mathlib's continuous coordinate projection and `ιⱼ` is the continuous version of
+single-coordinate injection. For finite `ι`, the entries reconstruct the action of `A`:
 
-# Serial and colored sweeps
+$$
+(Ax)_i=\sum_j A_{ij}x_j.
+$$
 
-For serial execution, the composed comparison bound has Gauss-Seidel structure: later blocks see
-the already updated values of earlier blocks. For colored execution, blocks within a color read the
-same pre-color state and are Jacobi-like, while colors remain sequential.
+Consequently, two operators are equal when all their block entries are equal. Addition, scalar
+multiplication, identity, and composition reduce to the corresponding finite block-matrix formulas.
 
-When blocks in a color are independent, their cross-dependencies vanish, their updates commute,
-and the simultaneous color map equals any sequential ordering of that class. When live interactions
-couple same-color blocks, the actual color map remains valid but needs its own comparison bound or a
-perturbation theorem.
+# Ordered and colored splittings
+
+A finite order on blocks partitions entries into diagonal, earlier-block, and later-block parts.
+Their sum reconstructs the original operator. This is the algebraic splitting needed to state a
+Gauss-Seidel derivative, independently of how a nonlinear sweep computes its intermediate values.
+
+A finite coloring similarly partitions entries into same-color and cross-color parts. This is only
+an operator decomposition. Equality between concrete serial and buffered colored execution is a
+property of the actual VBD maps and is proved in the production layer.
+
+# Cross-block bounds
+
+For a differentiable complete sweep `S`, bounds
+
+$$
+\|(DS(x))_{ij}v_j\|\le C_{ij}\|v_j\|
+$$
+
+define a nonnegative comparison operator. An induced bound `q < 1` in a stated block norm yields a
+local contraction criterion. Ordered and colored splittings expose the coupling terms relevant to
+serial and buffered parallel execution; sparsity or favorable diagonal blocks alone do not imply
+contraction.
 
 # Fixed-point iteration
 
-The main convergence interface is local contraction of the complete sweep `S` on a
+The convergence interface is local contraction of the complete sweep `S` on a
 forward-invariant neighborhood of a known fixed point `x*`:
 
 $$

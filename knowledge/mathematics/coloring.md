@@ -1,47 +1,41 @@
 ---
 type: Mathematical Specification
-title: Coloring, Independence, and Parallel Updates
-description: Defines when state-dependent block updates commute and distinguishes proper parallel colors from hybrid same-color coupling.
-tags: [graph-coloring, parallelism, commutation, locality]
-timestamp: 2026-08-20T00:00:00Z
+title: Coloring and Parallel Sweep Structure
+description: Specifies physical conflict colorings and their role in serial, buffered, and hybrid VBD sweeps.
+tags: [graph-coloring, parallelism, locality, vbd]
+timestamp: 2026-09-04T00:00:00Z
 ---
 
-# Abstract independence relation
+# Physical conflict relation
 
-Phase 2 treats the read-dependencies of block maps abstractly. Two distinct blocks are independent
-when neither update changes data read by the other. This relation induces a symmetric conflict
-graph.
-
-Physical finite-support interactions later discharge this abstraction. In that specialization,
-two blocks `i` and `j` are independent when no live interaction contains both:
+Finite-support interactions induce a symmetric conflict relation. Distinct blocks `i` and `j` do
+not conflict when no live interaction contains both:
 
 $$
 \forall e,\quad \neg(i\in N(e)\land j\in N(e)).
 $$
 
-# Theorem targets
+# Coloring validity
 
-For replacement updates with values chosen independently of mutation order, updates to distinct blocks commute definitionally or by `Function.update_comm`. For state-dependent local update rules, factor-independence must also show that updating `i` does not change the local data used to compute the update at `j`, and conversely. Only then can one prove equality of the two sequential orders.
-
-A proper coloring assigns different colors to conflicting blocks. Within one color class, pairwise
-independence supports an order-independent fold and equality with a simultaneous parallel update.
-Different colors remain sequential.
+A proper coloring assigns different colors to conflicting blocks. The interaction layer proves
+this combinatorial property for concrete finite-support systems. The production VBD layer then
+uses the actual block computation and buffering semantics to prove the corresponding relationship
+between serial and colored sweeps.
 
 # Hybrid colored updates
 
-Dynamically introduced interactions can invalidate a precomputed coloring. The simultaneous map is
-then Jacobi-like within the affected color and Gauss-Seidel-like between colors. It is not equated
-with a sequential ordering. Its contraction must be proved from its actual cross-block sensitivity
-or from a perturbation bound relative to a proper coloring.
-
-Coloring and commutation require no objective, monotonicity, or curvature assumptions.
+Dynamically introduced interactions can invalidate a precomputed coloring. The buffered map is then
+Jacobi-like within the affected color and Gauss-Seidel-like between colors. It is not equated with
+the serial sweep. Its contraction must be proved from its actual derivative block entries or from a
+perturbation bound relative to the proper static case.
 
 # VBD connection
 
 The VBD paper colors vertices so that no elastic force element contains two vertices of the same
 color. Its collision implementation may use partially Jacobi-style buffered updates when dynamic
-collision interactions violate the precomputed material coloring. The roadmap first proves exact
-static equivalence, then analyzes the production hybrid map under explicit coupling assumptions.
+collision interactions violate the precomputed material coloring. The roadmap proves the static
+relationship for the concrete sweep definitions, then analyzes the hybrid map under explicit
+coupling assumptions.
 
 # Citations
 

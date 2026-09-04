@@ -1,5 +1,10 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-04
+
+* **Block theory**: Specified continuous-linear block entries, finite reconstruction, operator arithmetic, and ordered or colored splittings as the reusable algebra supporting later complete-sweep derivative bounds.
+* **Coloring**: Located conflict graphs in finite-support physical interactions and reserved serial/buffered execution equivalence for the concrete VBD sweep definitions.
+
 ## 2026-09-03
 
 * **Analysis route**: Replaced per-block energy descent as the main convergence premise with local contraction of the actual serial or colored sweep around an implicit-Euler root.

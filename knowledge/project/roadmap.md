@@ -11,11 +11,11 @@ timestamp: 2026-09-04T00:00:00Z
 | Phase | Status | Current boundary |
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
-| Phase 2 — block sums and update algebra | active | `BS-02`: define one-block maps and the law that every other coordinate is unchanged |
+| Phase 2 — block sums and linear operator algebra | active | `BS-02`: define continuous coordinate inclusions and block entries of linear operators |
 | Phase 3 — contractive fixed-point iteration | planned | begins after the narrow Mathlib contraction API wrapper is scoped |
-| Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 finite-support interaction structure |
+| Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives physical conflict structure |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
-| Phase 6 — contraction of block-composed operators | planned | combines Phase 2 update algebra with Phase 3 contraction theory |
+| Phase 6 — contraction from block-operator bounds | planned | combines Phase 2 linear operator algebra with Phase 3 contraction theory |
 | Phase 7 — production VBD synthesis | planned | combines the bridge phases to analyze the actual serial and colored VBD sweep |
 
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
@@ -57,10 +57,9 @@ $$
 Its solution concept is stationarity of `G_IE`, equivalently a root of `F_IE`. It contains no
 block schedules, coloring, iteration maps, or convergence theory.
 
-# Phase 2 — Block sums and update algebra
+# Phase 2 — Block sums and linear operator algebra
 
-Status: active. Initial modules: `Vbd/Block/Basic.lean`, `Vbd/Block/Update.lean`, and
-`Vbd/Block/Coloring.lean`.
+Status: active. Modules: `Vbd/Block/Basic.lean` and `Vbd/Block/Operator.lean`.
 
 Reserve `X` for a total space, use `B : ι → Type*` for heterogeneous block spaces, and define
 
@@ -68,23 +67,25 @@ Reserve `X` for a total space, use `B : ι → Type*` for heterogeneous block sp
 abbrev BlockSum {ι : Type*} (B : ι → Type*) := PiLp 2 B
 ```
 
-Phase 2 develops only the structure of block-indexed states and maps:
+Phase 2 develops the objective-independent algebra of block-indexed states and continuous linear
+operators:
 
-1. coordinate projection, injection, and one-block replacement;
-2. one-block maps and the law that other coordinates are unchanged;
-3. ordered schedules, prefix states, folds, and composition of schedules;
-4. simultaneous updates on distinct coordinate sets;
-5. abstract read-dependencies, conflicts, and proper colorings;
-6. commutation of independent state-dependent updates;
-7. equivalence of an independent parallel color-class update with any sequential ordering of the
-   class.
+1. native coordinate access, single-coordinate injection, and replacement;
+2. continuous single-coordinate inclusions and `(i,j)` block entries of continuous linear maps;
+3. assembly and reconstruction of operators from finite heterogeneous block matrices;
+4. entrywise formulas for identity, addition, scalar multiplication, and composition;
+5. diagonal, earlier-block, and later-block splitting relative to a finite order;
+6. same-color and cross-color splitting relative to a finite coloring.
 
 Phase 2 does not mention objectives, energy, gradients, Hessians, Newton steps, stationarity,
-implicit Euler, or convergence. It adds algebraic or analytic assumptions only to the declarations
-that require them; finite-dimensional blocks are not a phase-wide requirement.
+implicit Euler, solver execution, or convergence. `BlockSum.replace` is the primitive coordinate
+write. Phase 2 does not prescribe a universal interface for computing replacement values or define
+the concrete serial and colored VBD sweeps. It adds algebraic or analytic assumptions only to the
+declarations that require them; finite-dimensional blocks are not a phase-wide requirement.
 
-Acceptance gate: a later module can construct serial, independent-parallel, and generally
-simultaneous colored sweep maps without importing an optimization or mechanics module.
+Acceptance gate: later derivative and contraction proofs can express a linearized sweep as a
+finite heterogeneous block matrix and recover its ordered or colored splitting without importing
+an objective or mechanics module.
 
 # Phase 3 — Contractive fixed-point iteration
 
@@ -113,17 +114,17 @@ Status: planned. Module: `Vbd/Integrator/LocalInteractions.lean`.
 Dependencies: Phase 1 + Phase 2.
 
 Represent the potential as finitely many finite-support interactions. Supports form a hypergraph;
-the conflict graph joins two blocks when a live interaction reads both. Pairwise systems are the
+the conflict graph joins two blocks when a live interaction contains both. Pairwise systems are the
 two-element-support specialization, while triangle, tetrahedron, bending, and other multi-vertex
 elements remain covered.
 
-Derive the read-dependencies of physical block data, the induced conflict graph, and concrete
-coloring validity conditions. A proper color makes simultaneous elastic updates equivalent to a
-sequential ordering. Newly introduced collision interactions may invalidate a static coloring and
-must remain visible rather than being treated as independent.
+Derive the physical conflict graph and concrete coloring validity conditions. Newly introduced
+collision interactions may invalidate a static coloring and must remain visible in the production
+colored-sweep proof.
 
-Acceptance gate: the interaction structure discharges the abstract Phase 2 independence
-hypotheses for at least one pairwise and one multi-vertex example. No convergence claim is made.
+Acceptance gate: at least one pairwise and one multi-vertex example has a proved valid coloring,
+and the effect of adding a live interaction is stated exactly. No execution-equivalence or
+convergence claim is made.
 
 # Phase 5 — Implicit-Euler fixed-point goals
 
@@ -145,32 +146,29 @@ fixed point; those obligations are discharged only in the final synthesis.
 
 Acceptance gate: the theorem is solver-independent and imports no Phase 2 declarations.
 
-# Phase 6 — Contraction of block-composed operators
+# Phase 6 — Contraction from block-operator bounds
 
 Status: planned. Module: `Vbd/Block/Contraction.lean`.
 
 Dependencies: Phase 2 + Phase 3.
 
-A one-block update is the identity on untouched coordinates and is therefore not expected to be a
-strict contraction of the whole space. Record cross-block sensitivity through nonnegative bounds
-of the form
+For a differentiable complete sweep map `S`, record the derivative's block entries through
+nonnegative bounds of the form
 
 $$
-\|\pi_i(U_i(x)-U_i(y))\|
-\le \sum_j C_{ij}\|\pi_j(x-y)\|.
+\|(DS(x))_{ij}v_j\| \le C_{ij}\|v_j\|.
 $$
 
-Prove how these bounds compose into:
+The nonnegative family `C` is a comparison operator. Prove:
 
-1. a serial Gauss-Seidel sweep bound;
-2. a properly colored sweep bound;
-3. a Jacobi-within-color and Gauss-Seidel-between-colors bound;
-4. a global contraction factor in a stated block norm;
-5. perturbation bounds for weak same-color conflicts or approximate updates.
+1. reconstruction of a global derivative bound from block-entry bounds;
+2. an explicit contraction criterion in a stated block norm;
+3. bounds specialized to an ordered diagonal/earlier/later splitting;
+4. bounds specialized to a same-color/cross-color splitting;
+5. perturbation bounds for approximate derivatives or execution maps.
 
-Acceptance gate: explicit local sensitivity and coupling hypotheses produce a `q < 1` contraction
-certificate for both a serial schedule and a colored schedule. No objective or mechanics concept
-is imported.
+Acceptance gate: explicit block-entry bounds for an arbitrary differentiable self-map produce a
+`q < 1` contraction certificate. No objective, mechanics, or solver-execution concept is imported.
 
 # Phase 7 — Production VBD synthesis
 
@@ -178,7 +176,8 @@ Status: planned. Initial module: `Vbd/Integrator/VBD.lean`.
 
 Dependencies: Phases 4, 5, and 6.
 
-Define the actual unsafeguarded block-Newton update
+Define the actual unsafeguarded serial and buffered colored VBD sweeps. Their block computation is
+the full block-Newton update
 
 $$
 H_{ii}(x)p_i=-F_{IE,i}(x),
@@ -186,18 +185,19 @@ H_{ii}(x)p_i=-F_{IE,i}(x),
 U_i(x)=x+\iota_i p_i,
 $$
 
-including the production skip behavior when a block Hessian is judged singular. The required result
-chain is:
+including the production skip behavior when a block Hessian is judged singular. A complete sweep
+is exposed as a map on `BlockSum B`; implementation-local scheduling and buffer data may remain
+encapsulated by its definition. The required result chain is:
 
 1. identify regular states where every block update is defined and no skip occurs;
 2. show that a regular fixed point of a complete sweep is an implicit-Euler solution;
-3. differentiate the block update and identify the derivative of a serial sweep with the
+3. differentiate the complete serial sweep and identify its derivative with the
    schedule-dependent block Gauss-Seidel error operator;
 4. use `M / h² + ∇²P` to prove block invertibility and quantitative inverse bounds;
 5. bound cross-block coupling and obtain an explicit contraction factor `q`;
 6. control Hessian variation on a neighborhood so the linear bound extends to the nonlinear sweep;
-7. transfer the result to a proper static coloring and analyze the actual hybrid colored map when
-   live collision interactions create same-color coupling;
+7. relate the concrete buffered colored sweep to serial execution under a valid static coloring,
+   and analyze the actual hybrid map when live collision interactions create same-color coupling;
 8. conclude convergence and finite-sweep distance or residual bounds through Phase 5.
 
 Curvature is part of this synthesis because it controls block inverses and relative coupling. The

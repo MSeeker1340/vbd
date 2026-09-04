@@ -2,6 +2,7 @@
 
 ## 2026-09-04
 
+* **Module plan**: Made `Block/Operator.lean` the next Phase 2 module for block entries and finite reconstruction; physical coloring moves through `Integrator/LocalInteractions`, while concrete sweep definitions remain in `Integrator/VBD`.
 * **Implementation**: Added `Vbd.Block.Basic` with `BlockSum B := PiLp 2 B`, native coordinate application, zero-supported injection, and same-coordinate, untouched-coordinate, identity, overwrite, and commutation laws for replacement.
 * **Interface**: Kept block operations as a pure functional API and deferred an optional `StateM (BlockSum B)` presentation unless later algorithm derivations demonstrate a need for imperative notation.
 

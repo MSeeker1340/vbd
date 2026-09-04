@@ -2,6 +2,7 @@
 
 ## 2026-09-04
 
+* **Planning**: Redesigned Phase 2 around continuous-linear block entries, reconstruction, operator arithmetic, and ordered or colored splittings; concrete serial and buffered colored sweep semantics now enter with the production VBD map.
 * **Completion**: Marked BS-01 done after implementing the heterogeneous `BlockSum B` coordinate algebra and advanced BS-02 one-block maps to `next`.
 
 ## 2026-09-03

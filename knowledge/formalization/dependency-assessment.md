@@ -3,7 +3,7 @@ type: Dependency Decision Record
 title: Optimization Library Dependency Assessment
 description: Distinguishes the pinned foundation from reference-only and candidate Lean optimization libraries.
 tags: [dependencies, mathlib, optlib, cvxlean]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Current decision
@@ -43,8 +43,8 @@ therefore import a modeling choice outside the current block-operator and fixed-
 The mismatch is structural, not merely syntactic:
 
 - VBD needs arbitrary finite, possibly heterogeneous blocks; Optlib fixes two blocks.
-- VBD needs objective-independent block schedules, simultaneous color maps, read-dependencies, and
-  cross-block sensitivity composition; Optlib has no corresponding abstraction.
+- VBD needs heterogeneous block-operator entries, physical conflict colorings, and quantitative
+  sweep-derivative bounds; Optlib has no corresponding abstraction.
 - Production VBD uses unsafeguarded full block-Newton updates, while Optlib requires descending
   proximal-gradient steps.
 - The current convergence target is local contraction and a finite-sweep error bound; Optlib's

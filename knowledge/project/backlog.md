@@ -37,16 +37,16 @@ timestamp: 2026-09-04T00:00:00Z
 | IE-06 | done | Select Hessian representation | IE-04 | Source documentation explains the derivative-of-gradient choice |
 | IE-07 | done | Hessian of `G_IE` | IE-06 | Sum formula compiles under explicit twice-differentiability assumptions |
 
-# Phase 2 — block sums and update algebra
+# Phase 2 — block sums and linear operator algebra
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
 | BS-01 | done | `BlockSum B` and coordinate operations | none | Heterogeneous product, native coordinate access, injections, and replacement laws compile without objective or mechanics imports |
-| BS-02 | next | One-block maps | BS-01 | A small predicate states exactly which coordinate an arbitrary state-dependent map may change |
-| BS-03 | planned | Ordered schedules and sweep folds | BS-02 | Prefix states, concatenation, and composition laws retain order and repeated blocks |
-| BS-04 | planned | Simultaneous coordinate updates | BS-01 | Updates on a finite set of distinct coordinates have an explicit parallel semantics |
-| BS-05 | planned | Read-dependencies, conflicts, and colorings | BS-02 | Generic dependencies induce a symmetric conflict relation and proper-color predicate |
-| BS-06 | planned | Independent update commutation | BS-03, BS-05 | Independent state-dependent updates commute and a proper color-class map equals any sequential ordering |
+| BS-02 | next | Continuous block inclusions and operator entries | BS-01 | For finite heterogeneous normed blocks, the `(i,j)` entry of a continuous linear endomorphism is defined by Mathlib's coordinate projection and a continuous single-coordinate inclusion, with application lemmas |
+| BS-03 | planned | Block-matrix reconstruction and extensionality | BS-02 | Finite families of blockwise continuous linear maps assemble into an operator; extracting entries is inverse to assembly, and entrywise equality implies operator equality |
+| BS-04 | planned | Block-operator arithmetic | BS-03 | Entries of zero, identity, addition, scalar multiplication, and composition obey the expected finite block-matrix formulas |
+| BS-05 | planned | Ordered block splitting | BS-04 | A finite block order gives diagonal, earlier-block, and later-block parts whose sum reconstructs the operator |
+| BS-06 | planned | Colored block splitting | BS-04 | A finite coloring separates same-color and cross-color entries and reconstructs the operator without asserting an execution semantics |
 
 # Phase 3 — contractive fixed-point iteration
 
@@ -62,9 +62,9 @@ timestamp: 2026-09-04T00:00:00Z
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| LI-01 | planned | Finite-support interaction hypergraph | IE-07, BS-05 | Multi-block interactions expose supports without restricting them to pairs |
-| LI-02 | planned | Physical read-dependencies and conflict graph | LI-01 | Shared interactions discharge the abstract Phase 2 conflict relation |
-| LI-03 | planned | Pairwise and multi-vertex examples | LI-02, BS-06 | One pairwise and one triangle/tetrahedron-style system have proved coloring independence |
+| LI-01 | planned | Finite-support interaction hypergraph | IE-07, BS-01 | Multi-block interactions expose supports without restricting them to pairs |
+| LI-02 | planned | Physical conflict graph and proper coloring | LI-01 | Shared live interactions induce a symmetric conflict graph and a proper-color predicate |
+| LI-03 | planned | Pairwise and multi-vertex examples | LI-02 | One pairwise and one triangle/tetrahedron-style system has a proved valid coloring |
 | LI-04 | planned | Static-color validity boundary | LI-02 | New collision interactions are shown to preserve or invalidate the static independence premise explicitly |
 
 # Phase 5 — implicit-Euler fixed-point goals
@@ -75,27 +75,27 @@ timestamp: 2026-09-04T00:00:00Z
 | IF-02 | planned | Finite-iteration IE error | IF-01, CT-03 | Iterates have an explicit geometric distance bound to the IE solution |
 | IF-03 | planned | Distance-to-residual bound | IF-02, quantitative regularity of `F_IE` | A stated Lipschitz bound converts iterate error into an IE residual bound |
 
-# Phase 6 — contraction of block-composed operators
+# Phase 6 — contraction from block-operator bounds
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| BC-01 | planned | Cross-block sensitivity bounds | BS-02, CT-04 | A nonnegative coupling family bounds every output block by input-block differences |
-| BC-02 | planned | Serial sweep composition bound | BC-01, BS-03 | Schedule order produces an explicit Gauss-Seidel-style global Lipschitz bound |
-| BC-03 | planned | Properly colored sweep bound | BC-01, BS-06 | Independent same-color updates preserve sequential semantics and yield an explicit contraction certificate |
-| BC-04 | planned | Hybrid colored sweep bound | BC-01, BS-04 | Same-color coupling is represented as Jacobi-style sensitivity rather than assumed absent |
-| BC-05 | planned | Approximate and weak-conflict bounds | BC-02, BC-04, CT-05 | Perturbed serial or colored maps inherit stated convergence or error-neighborhood guarantees |
+| BC-01 | planned | Blockwise derivative bounds | BS-03, CT-04 | Bounds on every block entry of a derivative produce a nonnegative comparison operator |
+| BC-02 | planned | Global norm bound from block entries | BC-01 | A stated induced norm of the comparison operator bounds the derivative and supplies a contraction criterion |
+| BC-03 | planned | Ordered-splitting bound | BC-02, BS-05 | Diagonal, earlier-block, and later-block estimates yield an explicit Gauss-Seidel-style operator bound |
+| BC-04 | planned | Colored-splitting bound | BC-02, BS-06 | Same-color and cross-color estimates yield an explicit bound for a stated colored splitting |
+| BC-05 | planned | Approximate-operator bounds | BC-02, CT-05 | Additive derivative or execution perturbations yield explicit convergence or error-neighborhood guarantees |
 
 # Phase 7 — production VBD synthesis
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| VB-01 | planned | Production full block-Newton update and skip | LI-01, BS-02 | The map matches the paper's unsafeguarded update and exposes the singular-block skip branch |
+| VB-01 | planned | Production serial and colored VBD sweeps | LI-01, BS-01 | Complete observable sweep maps match the paper's block-Newton computation, including the singular-block skip behavior and colored buffering semantics |
 | VB-02 | planned | Regular fixed-point consistency | VB-01, IF-01 | A complete skip-free sweep fixes exactly an IE root in the stated regular region |
-| VB-03 | planned | Sweep derivative and block splitting | VB-01, BC-02 | The derivative at an IE root is identified with the schedule-dependent block Gauss-Seidel error operator |
+| VB-03 | planned | Sweep derivative and block entries | VB-01, BS-05 | The derivative at an IE root is identified with the schedule-dependent block Gauss-Seidel error operator and its ordered block splitting |
 | VB-04 | planned | Inertia-based block inverse bounds | IE-07, VB-01 | `M/h² + ∇²P` yields explicit coercivity and inverse-norm bounds on a neighborhood |
-| VB-05 | planned | Serial coupling and contraction factor | VB-03, VB-04, BC-02 | Off-diagonal interaction bounds produce an explicit `q < 1` for the actual serial sweep |
+| VB-05 | planned | Serial coupling and contraction factor | VB-03, VB-04, BC-03 | Off-diagonal interaction bounds produce an explicit `q < 1` for the actual serial sweep |
 | VB-06 | planned | Nonlinear contraction neighborhood | VB-05, CT-04 | Hessian variation produces a forward-invariant neighborhood with a uniform contraction bound |
-| VB-07 | planned | Proper and hybrid colored VBD | LI-04, VB-06, BC-03, BC-04 | Static colors preserve the serial result; collision-induced same-color coupling has a separate explicit bound |
+| VB-07 | planned | Proper and hybrid colored VBD | LI-04, VB-06, BC-04 | The concrete buffered colored sweep is related to the serial sweep for valid static colors; collision-induced same-color coupling has a separate explicit bound |
 | VB-08 | planned | End-to-end finite-sweep theorem | VB-02, VB-06, VB-07, IF-02 | A concrete finite-support IE system obtains distance or residual error after a fixed number of production sweeps |
 
 # Deferred by the current route

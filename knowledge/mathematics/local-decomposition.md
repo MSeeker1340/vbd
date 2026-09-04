@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Finite-Support Physical Interactions
 description: Describes interaction hypergraphs and the locality data used to derive block dependencies and coloring.
 tags: [locality, sparsity, interactions, hypergraph]
-timestamp: 2026-09-03T00:00:00Z
+timestamp: 2026-09-04T00:00:00Z
 ---
 
 # Interaction model
@@ -19,15 +19,14 @@ $$
 Supports form a hypergraph. Pairwise forces have two-element supports; triangle, tetrahedron,
 bending, and other multi-vertex elements use larger supports without changing the abstraction.
 
-# Dependency and coloring role
+# Conflict and coloring role
 
-The support data determines which physical quantities a block update may read. Two blocks conflict
-when some live interaction contains both. This derived conflict graph is the input to the abstract
-coloring and update-commutation theory.
+Two blocks conflict when some live interaction contains both. This derived conflict graph supplies
+the proper-color condition and predicts sparsity of derivative block entries.
 
-For static interactions, a proper coloring prevents same-color coupling. Dynamically introduced
-collision interactions can add hyperedges and invalidate that fact. Such coupling must appear in
-the simultaneous color map or be removed by recoloring.
+For static interactions, a proper coloring excludes a shared interaction within a color.
+Dynamically introduced collision interactions can add hyperedges and invalidate that fact. Such
+coupling must appear in the concrete buffered sweep or be removed by recoloring.
 
 # Energy bookkeeping
 
@@ -38,9 +37,9 @@ lemma. It is not a convergence principle and is not part of the main fixed-point
 # VBD connection
 
 VBD's elastic force elements instantiate finite-support interactions. Their supports justify the
-static vertex conflict graph and the independence of properly colored elastic updates. The
-production collision path may introduce interactions not represented by that static graph and is
-therefore handled separately in the final colored-sweep analysis.
+static vertex conflict graph. The production collision path may introduce interactions not
+represented by that static graph and is therefore handled separately in the final colored-sweep
+analysis.
 
 # Citations
 
