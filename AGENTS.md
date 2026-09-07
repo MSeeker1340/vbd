@@ -16,8 +16,10 @@ The project-local `knowledge/` directory is the detailed source of project conte
 Use the official `okf-open-knowledge-format` skill whenever creating, restructuring, validating, or materially updating the bundle.
 
 - Write every non-log knowledge concept as an affirmative, standalone description of the accepted current state. Keep conversational rationale, corrections, rejected alternatives, and chronological commentary in the nearest scoped `log.md`. Use negative phrasing in a non-log concept only when it is essential to state a precise mathematical, API, dependency, or safety boundary.
+- Enforce the concept/log split strictly: non-log concepts must not narrate how the current state was reached, discuss earlier drafts or objections, justify corrections, or mention rejected proposals. Rewrite the accepted result directly as current-state knowledge. Put chronology, deliberation, rationale, corrections, and rejected alternatives only in the nearest scoped `log.md`.
 - Keep project management material together under `knowledge/project/`: durable plans, the backlog, and decisions.
 - Record meaningful knowledge changes as concise, newest-first entries in the `log.md` nearest to their scope; use `knowledge/log.md` only for bundle-wide changes. These curated update notes complement rather than replace Git history.
+- Update the accepted-state concept and its nearest scoped log in the same completed work round. Before completing that round, audit every changed non-log concept for historical commentary and verify that each meaningful knowledge change has a corresponding scoped log entry.
 - Update relevant project, mathematics, formalization, or reference concepts when work changes the corresponding durable knowledge.
 - Keep indexes useful for progressive disclosure, preserve cross-links, and validate OKF conformance after bundle edits.
 - Do not pad the bundle with empty, speculative, or source-mirroring concepts. Keep source-local APIs, assumptions, representation choices, and proof notes in Lean source documentation, placing them on the closest declaration and reserving module docstrings for module-wide context; reserve the bundle for reusable mathematics and cross-cutting project knowledge.
@@ -46,4 +48,6 @@ The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase
 - Use `lake build` for the full project, `lake build <Module>` or `lake lean <file>` while iterating, and `lake lint` for the configured package linter.
 - When dependencies, toolchains, module layout, or public theorem interfaces change, update the corresponding knowledge concepts and tracking state.
 - Do not build generic numerical-ODE or simulation infrastructure unless an accepted target theorem requires it.
+- Treat each completed round of conversation and related edits as a Git commit boundary. A round is complete when its requested outcome is implemented, relevant documentation is synchronized, and proportionate validation passes. Commit all and only that round's related changes before beginning unrelated work or handing control back to the user.
+- The exact boundary between rounds is a judgment call. When uncertain, prefer an additional focused commit over leaving completed work uncommitted or combining unrelated changes. Never include unrelated user changes in such a commit.
 - Use a concise one-line commit subject. If a commit has a body, it may contain only `Log: knowledge/<scope>/log.md` references and, for work substantially produced by an agent, an `Assisted-by: <agent name>` trailer.
