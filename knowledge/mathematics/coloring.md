@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Coloring and Parallel Sweep Structure
 description: Specifies physical conflict colorings and their role in serial, buffered, and hybrid VBD sweeps.
 tags: [graph-coloring, parallelism, locality, vbd]
-timestamp: 2026-09-04T00:00:00Z
+timestamp: 2026-09-07T00:00:00Z
 ---
 
 # Physical conflict relation
@@ -18,15 +18,17 @@ $$
 # Coloring validity
 
 A proper coloring assigns different colors to conflicting blocks. The interaction layer proves
-this combinatorial property for concrete finite-support systems. The production VBD layer then
-uses the actual block computation and buffering semantics to prove the corresponding relationship
-between serial and colored sweeps.
+this combinatorial property for concrete finite-support systems. For the corresponding concrete
+VBD update operators, physical independence establishes pairwise commutation within each color.
+The generic block-update algebra then identifies the simultaneous color batch with every serial
+ordering of those operators. The order between color batches is supplied externally.
 
 # Hybrid colored updates
 
-Dynamically introduced interactions can invalidate a precomputed coloring. The buffered map is then
-Jacobi-like within the affected color and Gauss-Seidel-like between colors. Its analysis uses the
-actual derivative block entries or a perturbation bound relative to the proper static case.
+Dynamically introduced interactions can invalidate a precomputed coloring and the corresponding
+commutation property. The buffered map is then Jacobi-like within the affected color and
+Gauss-Seidel-like between colors. Its analysis uses its actual simultaneous-batch derivative or a
+perturbation bound relative to the commuting static case.
 
 # VBD connection
 

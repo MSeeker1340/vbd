@@ -26,7 +26,7 @@ Use the official `okf-open-knowledge-format` skill whenever creating, restructur
 
 - Use Mathlib as the primary Lean 4 foundation. Search Mathlib and relevant optimization formalizations before reproving standard results.
 - Evaluate any new Lean 4 dependency explicitly before adding it.
-- Preserve three independent foundations—implicit-Euler mathematics, block-operator algebra, and contractive fixed-point iteration—and combine them only in the explicit bridge layers defined by the roadmap. Do not let mechanics- or implementation-specific assumptions leak into either generic foundation.
+- Preserve three independent foundations—implicit-Euler mathematics, block-update/operator algebra, and contractive fixed-point iteration—and combine them only in the explicit bridge layers defined by the roadmap. Do not let mechanics- or implementation-specific assumptions leak into either generic foundation.
 - Keep locality/sparsity separate from positive-curvature assumptions.
 - Use stationary points as the generic solution concept. Do not claim minimization, uniqueness, convergence, or rates without the additional hypotheses that justify them.
 - Keep nonconvex, convex, and strongly convex results separate; state assumptions explicitly and as weakly as practical.
@@ -37,7 +37,7 @@ Detailed mathematical specifications and roadmap ordering live in `knowledge/mat
 
 ## Current repository state
 
-The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase 1 is implemented in `Integrator/ImplicitEulerEnergy.lean`: the basis-free energy, gradient, and Hessian identities compile without VBD-specific types. Phase 2 is active; `Block/Basic.lean` implements heterogeneous `BlockSum B := PiLp 2 B` coordinate access, injection, and replacement algebra, and continuous-linear block entries are next. Phase 3 will be a thin, block-independent layer over Mathlib's contractive fixed-point results. Later bridge phases combine these foundations before the production VBD synthesis defines the concrete serial and buffered colored sweeps and derives their contraction bounds. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
+The repository is a Lean library pinned to Lean and Mathlib `v4.34.0-rc1`. Phase 1 is implemented in `Integrator/ImplicitEulerEnergy.lean`: the basis-free energy, gradient, and Hessian identities compile without VBD-specific types. Phase 2 is active; `Block/Basic.lean` implements heterogeneous `BlockSum B := PiLp 2 B` coordinate access, injection, and replacement algebra, and write-local update operators with externally controlled composition are next. Phase 3 will be a thin, block-independent layer over Mathlib's contractive fixed-point results. Later bridge phases combine these foundations before the production VBD synthesis defines the concrete block-Newton operators and serial or buffered colored execution plans and derives their contraction bounds. The repository-managed pre-commit hook validates the `knowledge/` bundle and builds the complete Lean project.
 
 ## Development workflow
 

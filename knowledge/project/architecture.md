@@ -1,9 +1,9 @@
 ---
 type: Architecture Decision
 title: Mathematical and Module Architecture
-description: Separates implicit-Euler physics, block-operator algebra, contraction theory, and their explicit bridge layers.
+description: Separates implicit-Euler physics, block-update and operator algebra, contraction theory, and their explicit bridge layers.
 tags: [architecture, dependencies, locality, contraction]
-timestamp: 2026-09-04T00:00:00Z
+timestamp: 2026-09-07T00:00:00Z
 ---
 
 # Independent foundations
@@ -12,9 +12,9 @@ The project has three self-contained foundations:
 
 1. **Implicit-Euler mathematics** defines the incremental objective, its gradient as the nonlinear
    residual, and its Hessian.
-2. **Block-operator algebra** defines heterogeneous block sums, coordinate replacement, block
-   entries of continuous linear operators, reconstruction, arithmetic, and ordered or colored
-   operator splittings.
+2. **Block-update algebra** defines heterogeneous block sums, write-local state transformations,
+   externally controlled composition, commutation, simultaneous batches, and block-matrix
+   representations of continuous linear operators.
 3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, derivative,
    and perturbation results for arbitrary self-maps.
 
@@ -40,12 +40,12 @@ Keep these structures distinct:
 
 - **Locality/sparsity** records which blocks a physical interaction contains. It supports conflict
   graphs, valid colors, and sparse block entries.
-- **Curvature and coupling** control block invertibility and the derivative of a complete sweep.
-  Together with its ordered or colored block splitting, they can establish contraction.
+- **Curvature and coupling** control block invertibility and derivatives of the supplied update
+  operators. Their bounds compose according to the actual external execution semantics.
 
-These structures are independent. A contraction factor for a Gauss-Seidel or colored splitting is
-derived from positive diagonal control together with off-diagonal coupling in the chosen block
-norm.
+These structures are independent. A contraction factor for serial or colored execution is derived
+from positive diagonal control, off-diagonal coupling, and the externally supplied composition or
+simultaneous-batch semantics in the chosen block norm.
 
 # Interaction boundary
 
@@ -72,8 +72,14 @@ Coordinate algebra states its required instances locally. Contraction modules ma
 
 The existing finite `ℓ²` norm is the first representation candidate. A weighted maximum or
 system-dependent energy norm may be introduced locally when it turns a coupling or spectral
-condition into a contraction. Matrix-native and compactness results introduce finite-dimensional
+condition into a contraction. Scalar-matrix and compactness results introduce finite-dimensional
 block assumptions at their declaration sites.
+
+# Notation boundary
+
+Mathematical specifications present finite indexed families of block operators as operator-valued
+block matrices. This notation leaves the interior of each block basis-free. Each implementing Lean
+module selects its concrete source representation locally.
 
 # Documentation boundary
 

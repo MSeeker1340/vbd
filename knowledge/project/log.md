@@ -1,5 +1,10 @@
 # Project Management Update Log
 
+## 2026-09-07
+
+* **Roadmap correction**: Recentered Phase 2 on externally composed update operators, write locality, commutation, simultaneous batches, and their block-matrix linearizations. Removed generic `D/L/U` and same-color/cross-color matrix splitting as Phase-2 primitives; concrete Gauss–Seidel structure is derived only from the production VBD operators and controller order.
+* **Correction**: Kept operator block matrices as the engineering-facing mathematical notation while removing `DMatrix` as a roadmap-level implementation commitment; the Lean representation remains a source-local choice and may use the indexed entry family directly. The categorical finite-biproduct route remains unnecessary because it adds wrappers and transport without changing the planned mathematics.
+
 ## 2026-09-04
 
 * **Planning**: Redesigned Phase 2 around continuous-linear block entries, reconstruction, operator arithmetic, and ordered or colored splittings; concrete serial and buffered colored sweep semantics now enter with the production VBD map.

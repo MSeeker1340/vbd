@@ -1,5 +1,10 @@
 # Lean Formalization Update Log
 
+## 2026-09-07
+
+* **Module plan**: Restored `Block/Update.lean` for write-local operators and externally controlled execution algebra; retained `Block/Operator.lean` as an independent block-matrix linearization layer rather than making matrix splittings the execution model.
+* **Correction**: Removed `DMatrix` from the planned public implementation boundary. Phase 2 remains representation-neutral at roadmap level, and its Lean code may operate directly on indexed continuous-linear entries. `DMatrix` and categorical biproducts were evaluated without being adopted as project-wide commitments.
+
 ## 2026-09-04
 
 * **Module plan**: Made `Block/Operator.lean` the next Phase 2 module for block entries and finite reconstruction; physical coloring moves through `Integrator/LocalInteractions`, while concrete sweep definitions remain in `Integrator/VBD`.

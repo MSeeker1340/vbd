@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-09-04T00:00:00Z
+timestamp: 2026-09-07T00:00:00Z
 ---
 
 # Current phase status
@@ -11,11 +11,11 @@ timestamp: 2026-09-04T00:00:00Z
 | Phase | Status | Current boundary |
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
-| Phase 2 — block sums and linear operator algebra | active | `BS-02`: define continuous coordinate inclusions and block entries of linear operators |
+| Phase 2 — block-state and update-operator algebra | active | `BS-02`: define write locality for general state-update operators |
 | Phase 3 — contractive fixed-point iteration | planned | begins after the narrow Mathlib contraction API wrapper is scoped |
 | Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives physical conflict structure |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
-| Phase 6 — contraction from block-operator bounds | planned | combines Phase 2 linear operator algebra with Phase 3 contraction theory |
+| Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
 | Phase 7 — production VBD synthesis | planned | combines the bridge phases to analyze the actual serial and colored VBD sweep |
 
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
@@ -57,9 +57,10 @@ $$
 Its solution concept is stationarity of `G_IE`, equivalently a root of `F_IE`. Its scope consists of
 the objective and its differential identities.
 
-# Phase 2 — Block sums and linear operator algebra
+# Phase 2 — Block-state and update-operator algebra
 
-Status: active. Modules: `Vbd/Block/Basic.lean` and `Vbd/Block/Operator.lean`.
+Status: active. Modules: `Vbd/Block/Basic.lean`, `Vbd/Block/Update.lean`, and
+`Vbd/Block/Operator.lean`.
 
 Reserve `X` for a total space, use `B : ι → Type*` for heterogeneous block spaces, and define
 
@@ -67,24 +68,30 @@ Reserve `X` for a total space, use `B : ι → Type*` for heterogeneous block sp
 abbrev BlockSum {ι : Type*} (B : ι → Type*) := PiLp 2 B
 ```
 
-Phase 2 develops the objective-independent algebra of block-indexed states and continuous linear
-operators:
+Phase 2 develops the objective-independent algebra of block-indexed states and externally
+controlled update operators:
 
 1. native coordinate access, single-coordinate injection, and replacement;
-2. continuous single-coordinate inclusions and `(i,j)` block entries of continuous linear maps;
-3. assembly and reconstruction of operators from finite heterogeneous block matrices;
-4. entrywise formulas for identity, addition, scalar multiplication, and composition;
-5. diagonal, earlier-block, and later-block splitting relative to a finite order;
-6. same-color and cross-color splitting relative to a finite coloring.
+2. write-locality predicates for general state-update operators, with block updates as the
+   singleton-write specialization;
+3. identity, composition, and finite execution sequences whose order is supplied externally;
+4. commutation and invariance of finite composition under reordering;
+5. simultaneous merging for disjoint write supports and its equality with sequential composition
+   for commuting families, giving the generic color-batch algebra;
+6. continuous-linear block entries, finite assembly, and block-matrix arithmetic for linear update
+   operators and derivatives.
 
 `BlockSum.replace` is the primitive coordinate write. The phase vocabulary consists of block
-states and continuous linear operators. Concrete replacement-value computations and complete
-serial or colored VBD sweeps enter in Phase 7. Algebraic and analytic assumptions remain local to
-the declarations that use them, and the core results support infinite-dimensional blocks.
+states, state-update operators, external execution data, and continuous linear operators. External
+execution data assigns positions to update operators. Concrete VBD update formulas, physical
+independence proofs, and production serial or buffered execution enter through later bridge and
+synthesis phases.
+Algebraic and analytic assumptions remain local to the declarations that use them, and the core
+results support infinite-dimensional blocks.
 
-Acceptance gate: later derivative and contraction proofs can express a linearized sweep as a
-finite heterogeneous block matrix and recover its ordered or colored splitting using the block
-foundation alone.
+Acceptance gate: later modules can supply concrete update operators and an external serial or
+color-batched execution plan, reduce commuting batches to order-independent composition, and
+represent the resulting linear operators or derivatives by heterogeneous block matrices.
 
 # Phase 3 — Contractive fixed-point iteration
 
@@ -143,29 +150,31 @@ the concrete VBD map and its fixed-point identification.
 
 Acceptance gate: the theorem is solver-independent and uses the Phase 1 and Phase 3 interfaces.
 
-# Phase 6 — Contraction from block-operator bounds
+# Phase 6 — Contraction of composed updates
 
 Status: planned. Module: `Vbd/Block/Contraction.lean`.
 
 Dependencies: Phase 2 + Phase 3.
 
-For a differentiable complete sweep map `S`, record the derivative's block entries through
-nonnegative bounds of the form
+For an externally ordered differentiable update sequence, record block bounds for each derivative
+factor through nonnegative matrices `C⁽ʳ⁾` satisfying
 
 $$
-\|(DS(x))_{ij}v_j\| \le C_{ij}\|v_j\|.
+\|(DU_r(x_{r-1}))_{ij}v_j\| \le C^{(r)}_{ij}\|v_j\|.
 $$
 
-The nonnegative family `C` is a comparison operator. Prove:
+Prove:
 
-1. reconstruction of a global derivative bound from block-entry bounds;
-2. an explicit contraction criterion in a stated block norm;
-3. bounds specialized to an ordered diagonal/earlier/later splitting;
-4. bounds specialized to a same-color/cross-color splitting;
-5. perturbation bounds for approximate derivatives or execution maps.
+1. reconstruction of global operator bounds from block-entry bounds;
+2. propagation of comparison bounds through externally ordered composition;
+3. bounds for commuting color batches using their order-independent composition;
+4. separate bounds for buffered simultaneous batches with same-color coupling;
+5. an explicit contraction criterion in a stated block norm;
+6. perturbation bounds for approximate derivatives or execution maps.
 
-Acceptance gate: explicit block-entry bounds for an arbitrary differentiable self-map produce a
-`q < 1` contraction certificate using the block and dynamics foundations.
+Acceptance gate: explicit block-entry bounds for supplied serial or color-batched update operators
+compose according to their actual execution semantics and produce a `q < 1` contraction
+certificate using the block and dynamics foundations.
 
 # Phase 7 — Production VBD synthesis
 
@@ -173,8 +182,8 @@ Status: planned. Initial module: `Vbd/Integrator/VBD.lean`.
 
 Dependencies: Phases 4, 5, and 6.
 
-Define the actual unsafeguarded serial and buffered colored VBD sweeps. Their block computation is
-the full block-Newton update
+Define the actual unsafeguarded VBD block-update operators. External serial and buffered colored
+execution plans apply those operators. The block computation is the full block-Newton update
 
 $$
 H_{ii}(x)p_i=-F_{IE,i}(x),
@@ -182,19 +191,20 @@ H_{ii}(x)p_i=-F_{IE,i}(x),
 U_i(x)=x+\iota_i p_i,
 $$
 
-including the production skip behavior when a block Hessian is judged singular. A complete sweep
-is exposed as a map on `BlockSum B`; implementation-local scheduling and buffer data may remain
-encapsulated by its definition. The required result chain is:
+including the production skip behavior when a block Hessian is judged singular. Each complete
+execution is exposed as a map on `BlockSum B`; controller ordering and buffer semantics remain
+explicit inputs to its construction. The required result chain is:
 
 1. identify regular states where every block update follows the nonsingular branch;
 2. show that a regular fixed point of a complete sweep is an implicit-Euler solution;
-3. differentiate the complete serial sweep and identify its derivative with the
-   schedule-dependent block Gauss-Seidel error operator;
+3. differentiate the externally ordered serial composition and identify its derivative with the
+   corresponding block Gauss-Seidel error operator;
 4. use `M / h² + ∇²P` to prove block invertibility and quantitative inverse bounds;
 5. bound cross-block coupling and obtain an explicit contraction factor `q`;
 6. control Hessian variation on a neighborhood so the linear bound extends to the nonlinear sweep;
-7. relate the concrete buffered colored sweep to serial execution under a valid static coloring,
-   and analyze the actual hybrid map when live collision interactions create same-color coupling;
+7. prove commutation of concrete same-color operators under a valid static coloring, relate their
+   simultaneous batches to serial composition, and analyze the buffered map when live collision
+   interactions create same-color coupling;
 8. conclude convergence and finite-sweep distance or residual bounds through Phase 5.
 
 Curvature is part of this synthesis because it controls block inverses and relative coupling. The
@@ -208,8 +218,8 @@ smaller timestep / stronger mass term
   -> smaller error after a fixed number of sweeps
 ```
 
-Each convergence theorem includes the chosen serial or colored splitting and its off-diagonal
-coupling in addition to any positive-definiteness or condition-number assumptions.
+Each convergence theorem includes the external serial or colored execution plan and its
+off-diagonal coupling in addition to any positive-definiteness or condition-number assumptions.
 
 Acceptance gate: at least one concrete finite-support implicit-Euler system instantiates the whole
 chain for the production full-step update, with all regularity, coloring, and neighborhood

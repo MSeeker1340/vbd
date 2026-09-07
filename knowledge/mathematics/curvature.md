@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Curvature, Coupling, and VBD Contraction
 description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
 tags: [curvature, coupling, hessian, contraction]
-timestamp: 2026-09-04T00:00:00Z
+timestamp: 2026-09-07T00:00:00Z
 ---
 
 # Implicit-Euler Hessian
@@ -21,7 +21,8 @@ $$
 $$
 
 In the standard implicit-Euler specialization, `A = M / h²`. VBD analysis combines this identity
-with the block splitting, interaction supports, schedule, and selected norm.
+with the concrete block-update operators, interaction supports, externally supplied execution
+plan, and selected norm.
 
 # Block inverse bounds
 
@@ -44,12 +45,12 @@ $$
 H_{ii}(x)^{-1}H_{ij}(x).
 $$
 
-The contraction factor of a serial or colored sweep depends on these terms and on the chosen
-splitting. A Gauss-Seidel contraction theorem combines diagonal positivity with quantitative
-off-diagonal coupling.
+The contraction factor of a serial or colored execution depends on these terms and on the actual
+ordered-composition or simultaneous-batch semantics. A Gauss–Seidel contraction theorem combines
+diagonal positivity with quantitative off-diagonal coupling propagated through that composition.
 
-The intended quantitative argument bounds the diagonal inverses and off-diagonal interaction
-coupling separately, composes them according to the actual schedule, and proves `q < 1` in a stated
+A quantitative contraction proof bounds the diagonal inverses and off-diagonal interaction coupling
+separately, composes them according to the external execution plan, and proves `q < 1` in a stated
 block norm.
 
 # Nonlinear neighborhood
@@ -68,7 +69,7 @@ finite-sweep error bounds.
 
 The same lower curvature bounds may imply convexity, strong convexity, uniqueness, or a descent
 direction under their usual extra hypotheses. Control of Hessian variation or a line search can
-additionally establish full-step energy decrease. These results form a secondary analysis route.
+additionally establish full-step energy decrease.
 
 # Citations
 

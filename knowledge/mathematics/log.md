@@ -1,5 +1,10 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-07
+
+* **Correction**: Removed the rejected block-value-rule formulation and the generic ordered/colored matrix splittings. Update operators are supplied state transformations, execution order is external, and color equivalence is expressed through commutation and simultaneous merging.
+* **Block specification**: Recast the block space as a finite mathematical `ℓ²`-direct sum and made operator-valued block matrices the primary engineering-facing notation, including matrix forms for projection, inclusion, replacement, and linearization; kept Lean representation details in the formalization layer and source documentation.
+
 ## 2026-09-04
 
 * **Block theory**: Specified continuous-linear block entries, finite reconstruction, operator arithmetic, and ordered or colored splittings as the reusable algebra supporting later complete-sweep derivative bounds.
