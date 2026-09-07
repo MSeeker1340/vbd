@@ -42,10 +42,10 @@ timestamp: 2026-09-07T00:00:00Z
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
 | BS-01 | done | `BlockSum B` and coordinate operations | none | Heterogeneous product, native coordinate access, injections, and replacement laws compile using Mathlib |
-| BS-02 | next | Update operators and write locality | BS-01 | General state-update operators carry an explicit write-support predicate; singleton support characterizes a block update and external execution data supplies its order |
-| BS-03 | planned | External execution composition | BS-02 | Finite externally ordered operator sequences have empty, singleton, intermediate-state, and concatenation laws |
+| BS-02 | next | Write support for state-update operators | BS-01 | A predicate records preservation of every coordinate outside a supplied set of blocks; support enlargement, empty support for identity, and union bounds for composition apply to general operators and multi-block batches |
+| BS-03 | planned | External execution composition | BS-02 | Finite externally ordered operator sequences have empty, singleton, intermediate-state, and concatenation laws; execution preserves coordinates outside the union of the supplied write supports |
 | BS-04 | planned | Commutation and reordering | BS-03 | Pairwise-commuting finite operator families have an order-independent composite |
-| BS-05 | planned | Simultaneous and color-batch algebra | BS-02, BS-04 | Disjoint-support simultaneous merging is defined and equals every sequential ordering under pairwise commutation |
+| BS-05 | planned | Simultaneous and color-batch algebra | BS-02, BS-04 | Pairwise-disjoint write supports define a simultaneous merge supported on their union, including for noncommuting operators; pairwise commutation makes the merge equal every sequential ordering |
 | BS-06 | planned | Continuous-linear block representation | BS-01 | Finite heterogeneous continuous-linear entries assemble and reconstruct operators, and identity and composition satisfy the block-matrix formulas |
 
 # Phase 3 — contractive fixed-point iteration

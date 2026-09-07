@@ -2,6 +2,7 @@
 
 ## 2026-09-07
 
+* **Clarification**: Specified Phase 2 write support as a preservation predicate for arbitrary sets of coordinates, used across operators, compositions, and multi-block batches. Removed singleton-update certification from BS-02's acceptance criteria; coordinate replacement already supplies that behavior. Made accumulated execution support and simultaneous merging without commutation explicit in the roadmap and backlog.
 * **Roadmap correction**: Recentered Phase 2 on externally composed update operators, write locality, commutation, simultaneous batches, and their block-matrix linearizations. Removed generic `D/L/U` and same-color/cross-color matrix splitting as Phase-2 primitives; concrete Gauss–Seidel structure is derived only from the production VBD operators and controller order.
 * **Correction**: Kept operator block matrices as the engineering-facing mathematical notation while removing `DMatrix` as a roadmap-level implementation commitment; the Lean representation remains a source-local choice and may use the indexed entry family directly. The categorical finite-biproduct route remains unnecessary because it adds wrappers and transport without changing the planned mathematics.
 

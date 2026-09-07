@@ -72,26 +72,33 @@ Phase 2 develops the objective-independent algebra of block-indexed states and e
 controlled update operators:
 
 1. native coordinate access, single-coordinate injection, and replacement;
-2. write-locality predicates for general state-update operators, with block updates as the
-   singleton-write specialization;
-3. identity, composition, and finite execution sequences whose order is supplied externally;
+2. a write-support predicate recording that an operator preserves every coordinate outside a
+   supplied set, with support enlargement and union bounds for composition;
+3. identity, composition, and finite execution sequences whose order is supplied externally,
+   tracking preserved coordinates through individual operators and multi-block batches;
 4. commutation and invariance of finite composition under reordering;
 5. simultaneous merging for disjoint write supports and its equality with sequential composition
    for commuting families, giving the generic color-batch algebra;
 6. continuous-linear block entries, finite assembly, and block-matrix arithmetic for linear update
    operators and derivatives.
 
-`BlockSum.replace` is the primitive coordinate write. The phase vocabulary consists of block
-states, state-update operators, external execution data, and continuous linear operators. External
-execution data assigns positions to update operators. Concrete VBD update formulas, physical
+Write support is an upper bound on the coordinates an operator may change. Its role is to express
+preservation across compositions and batches with arbitrary sets of affected coordinates; reads
+may depend on the entire state. Concrete coordinate writes use `BlockSum.replace`, whose
+coordinate laws already describe the preserved coordinates.
+
+The phase vocabulary consists of block states, state-update operators, external execution data,
+and continuous linear operators. External execution data assigns positions to update operators.
+Concrete VBD update formulas, physical
 independence proofs, and production serial or buffered execution enter through later bridge and
 synthesis phases.
 Algebraic and analytic assumptions remain local to the declarations that use them, and the core
 results support infinite-dimensional blocks.
 
-Acceptance gate: later modules can supply concrete update operators and an external serial or
-color-batched execution plan, reduce commuting batches to order-independent composition, and
-represent the resulting linear operators or derivatives by heterogeneous block matrices.
+Acceptance gate: later modules can track sets of preserved coordinates through externally ordered
+executions, merge disjoint writes into simultaneous batches, reduce commuting batches to
+order-independent composition, and represent linear operators or derivatives by heterogeneous
+block matrices. Simultaneous merging is available for noncommuting operators as well.
 
 # Phase 3 — Contractive fixed-point iteration
 
