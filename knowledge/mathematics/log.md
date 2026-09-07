@@ -2,6 +2,7 @@
 
 ## 2026-09-07
 
+* **Background**: Connected block states to candidate configurations in the implicit-Euler solve, with particle, multibody, and nodal finite-element examples explaining block structure and local interactions. Distinguished solver updates from timestep advancement and linked the interaction model before introducing the abstract block space.
 * **Simplification**: Focused the block-coordinate specification on write support as an upper bound on changed coordinates, support propagation through external execution, commutation, and simultaneous batches. Condensed routine coordinate and matrix arithmetic, retained the basis-free block representation, and made the later analytic boundary explicit. Updated the mathematics index to match.
 * **Correction**: Removed the rejected block-value-rule formulation and the generic ordered/colored matrix splittings. Update operators are supplied state transformations, execution order is external, and color equivalence is expressed through commutation and simultaneous merging.
 * **Block specification**: Recast the block space as a finite mathematical `ℓ²`-direct sum and made operator-valued block matrices the primary engineering-facing notation, including matrix forms for projection, inclusion, replacement, and linearization; kept Lean representation details in the formalization layer and source documentation.

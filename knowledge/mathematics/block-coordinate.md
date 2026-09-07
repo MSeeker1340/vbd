@@ -6,11 +6,37 @@ tags: [write-support, block-updates, block-operators, block-matrices, coloring]
 timestamp: 2026-09-07T00:00:00Z
 ---
 
+# Background
+
+In [implicit Euler as optimization](/mathematics/implicit-euler.md), the unknown `x ∈ X` is the
+configuration sought at the end of one timestep. The previous configuration and velocity determine
+the prediction `y`, and the solver seeks a stationary point of the incremental objective
+`G_IE(x)`. A **state** here is a candidate configuration during that solve: it contains the
+configuration degrees of freedom being updated. Velocity has been eliminated in forming the
+implicit-Euler objective. An update operator changes this candidate within the timestep's solve.
+
+Mechanical models often give these degrees of freedom a natural block structure. Particle and
+multibody models group coordinates by particle or body, with springs, joints, or contacts coupling
+the participating blocks. In a nodal finite-element discretization of an elastic body, a block
+can hold one node's position or displacement. Each element contributes an energy depending on
+its incident nodes; assembling the elements produces a global energy with local interactions.
+For example, a linear tetrahedral element couples four nodal blocks.
+
+These models motivate viewing a configuration as a collection of blocks and organizing solver
+updates around subsets of them. Local interactions couple blocks, so a change to one block can
+affect the computation of updates to neighboring blocks. The
+[finite-support interaction model](/mathematics/local-decomposition.md) describes that physical
+dependency structure. The algebra here provides block states and operations on them, with write
+support recording which coordinates an operation preserves. It applies to supplied state maps
+independently of their physical origin or the objective being solved.
+
 # Block states
 
-A state has coordinates indexed by `I`, with coordinate `i` taking values in `Xᵢ`. Coordinate
-access and replacement provide the underlying algebra. Write-support and execution statements
-apply to arbitrary block types; linear representation uses a finite index set and real normed
+Represent a state as `x = (xᵢ)ᵢ∈I`, where `I` indexes the blocks and `xᵢ ∈ Xᵢ` is the entire
+configuration block at index `i`. Blocks may have different types or dimensions. Coordinate
+access reads a block, and replacement substitutes a new value for that block while preserving
+the others. Write-support and execution statements apply to arbitrary block types; linear
+representation uses a finite index set and real normed
 vector spaces, with total space
 
 $$
@@ -20,7 +46,7 @@ X=\bigoplus_{i\in I}^{\ell^2}X_i,
 $$
 
 The blocks may be infinite-dimensional. Write `πᵢ : X → Xᵢ` for projection and `ιᵢ : Xᵢ → X`
-for inclusion. Coordinate replacement changes the designated coordinate and preserves the others.
+for inclusion.
 
 # Write support
 
