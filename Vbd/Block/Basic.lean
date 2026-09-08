@@ -9,14 +9,14 @@ import Mathlib.Analysis.Normed.Lp.PiLp
 /-!
 # Heterogeneous block states
 
-This module defines the objective-independent coordinate algebra used by block updates. For a
-block family `B : ι → Type*`, the dependent function type `(i : ι) → B i` stores one value of
-the possibly different type `B i` at each coordinate. Mathlib's `PiLp 2 B` is a type copy of this
-dependent function space that carries the finite-product `L²` geometry when the blocks have the
-required analytic structures. It coerces back to a function, so a state coordinate is read as
-`x i`. Single-coordinate injection additionally requires zero values in the block family.
+This module defines the objective-independent algebra of block access, injection, and replacement.
+For a block family `B : ι → Type*`, the dependent function type `(i : ι) → B i` stores one
+value of the possibly different type `B i` at each block index `i`. Mathlib's `PiLp 2 B` is a
+type copy of this dependent function space that carries the finite-product `L²` geometry when
+the blocks have the required analytic structures. It coerces back to a function, so `x i` reads
+the whole block at index `i`. Injection additionally requires zero values in the block family.
 
-Context: `knowledge/mathematics/block-coordinate.md`
+Context: `knowledge/mathematics/block-states-and-operators.md`
 -/
 
 open scoped ENNReal
@@ -35,7 +35,7 @@ section Injection
 
 variable [DecidableEq ι] [(i : ι) → Zero (B i)]
 
-/-- Inject a block value into a state which is zero away from that coordinate. -/
+/-- Inject a value into block `i` of a state whose other blocks are zero. -/
 def inject (i : ι) (b : B i) : BlockSum B := PiLp.single 2 i b
 
 @[simp]
@@ -52,7 +52,7 @@ section Replacement
 
 variable [DecidableEq ι]
 
-/-- Replace coordinate `i` of `x` by `b`, leaving all other coordinates unchanged. -/
+/-- Replace block `i` of `x` by `b`, leaving all other blocks unchanged. -/
 def replace (x : BlockSum B) (i : ι) (b : B i) : BlockSum B :=
   WithLp.toLp 2 (Function.update (WithLp.ofLp x) i b)
 
@@ -80,7 +80,7 @@ theorem replace_comm (x : BlockSum B) {i j : ι} (h : i ≠ j) (b : B i) (c : B 
 
 end Replacement
 
-/-- A finite state is the sum of its single-block injections. -/
+/-- A state with finitely many blocks is the sum of its single-block injections. -/
 theorem sum_inject [Fintype ι] [DecidableEq ι] [∀ i, AddCommGroup (B i)]
     (x : BlockSum B) : ∑ i, inject i (x i) = x := by
   apply PiLp.ext

@@ -24,7 +24,7 @@ Each vertex update is a low-dimensional full Newton step based on the local grad
 The paper describes local line search as an option but reports that its evaluated production runs
 do not use it. The implementation also skips an update when the Hessian is nearly singular. The
 current roadmap therefore analyzes the actual unsafeguarded sweep as a fixed-point iteration rather
-than assuming descent; see the generic [block-operator analysis](/mathematics/block-coordinate.md).
+than assuming descent; see the generic [block-operator analysis](/mathematics/block-states-and-operators.md).
 
 For parallelism, vertices are colored so no elastic force element contains two vertices of one
 color. Color classes are processed sequentially and vertices within a class in parallel. Dynamic

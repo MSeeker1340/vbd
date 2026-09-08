@@ -1,6 +1,6 @@
 ---
 type: Mathematical Specification
-title: Block Decompositions and Update Operators
+title: Block States and Operators
 description: Describes block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
 timestamp: 2026-09-08T00:00:00Z

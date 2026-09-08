@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+* **Terminology review**: Reviewed all three `Block` modules. Clarified whole blocks and block indices in `Basic`, operator indices and list positions in `Update`, and finite index families and `Fintype` instances in `Operator`. Made write-support and simultaneous-merge descriptions precise; retained declaration names and theorem statements. Updated the specification link in `Basic`.
+
 * **Implementation**: Completed the independent `Block/Update` and `Block/Operator` modules and exported them through `Vbd.lean`. Added exact write-support calculus, ordered execution and permutation laws, disjoint snapshot merging with exact support and commuting sequential equivalence, additive change identities, and heterogeneous continuous-linear assembly, reconstruction, arithmetic, and preserved-row characterization. Kept algebraic block identities in `Block/Basic` and analytic assumptions local to the operator layer.
 
 ## 2026-09-07

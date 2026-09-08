@@ -10,7 +10,8 @@ import Mathlib.Data.List.Perm.Basic
 # Write support and externally ordered updates
 
 An update is an ordinary self-map. `execute U order` applies the operators in list order,
-including repeated positions. Write bounds constrain outputs only; reads may use the whole state.
+including repeated operator indices. Write-support bounds constrain outputs only; reads may use
+the whole state.
 `merge` selects disjoint output blocks evaluated at one common input. Its definition requires
 neither commutation nor algebraic structure on the blocks.
 -/
@@ -20,7 +21,7 @@ namespace BlockUpdate
 
 variable {ι : Type*} {B : ι → Type*}
 
-/-- The blocks changed at some input. -/
+/-- The set of block indices at which the update changes some input state. -/
 def writeSupport (U : BlockSum B → BlockSum B) : Set ι :=
   {i | ∃ x, U x i ≠ x i}
 
@@ -55,7 +56,7 @@ theorem writeSupport_replace [DecidableEq ι] (i : ι) (f : BlockSum B → B i) 
 section Execution
 variable {X : Type*} {κ : Type*}
 
-/-- External positions are applied from left to right. -/
+/-- Apply the operators indexed by `order`, in list order. -/
 def execute (U : κ → X → X) (order : List κ) (x : X) : X :=
   order.foldl (fun z r ↦ U r z) x
 
@@ -86,7 +87,7 @@ theorem intermediate_succ (U : κ → X → X) (order : List κ) (x : X)
   rw [List.take_succ_eq_append_getElem h, execute_append]
   rfl
 
-/-- Once every position has executed, every longer prefix gives the final state. -/
+/-- Once every update in the list has been applied, every longer prefix gives the final state. -/
 theorem intermediate_eq_execute (U : κ → X → X) (order : List κ) (x : X)
     {n : ℕ} (h : order.length ≤ n) : intermediate U order x n = execute U order x := by
   simp only [intermediate, List.take_of_length_le h]
@@ -129,7 +130,8 @@ theorem writeSupport_execute (U : κ → BlockSum B → BlockSum B) (order : Lis
     writeSupport (execute U order) ⊆ ⋃ r ∈ order, writeSupport (U r) :=
   writeSupport_execute_subset U order _ (fun _ _ ↦ Set.Subset.rfl)
 
-/-- Select outputs from supplied write bounds. Under disjointness the owner is unique.
+/-- Select output blocks using supplied write-support bounds. Pairwise disjoint bounds assign
+at most one operator index to each block.
 The finite set indexes operators, independently of the block index type. -/
 noncomputable def merge (U : κ → BlockSum B → BlockSum B) (K : Finset κ)
     (W : κ → Set ι) (x : BlockSum B) : BlockSum B := by
@@ -174,7 +176,8 @@ theorem writeSupport_merge (U : κ → BlockSum B → BlockSum B) (K : Finset κ
   · rintro ⟨r, hr, x, hx⟩
     exact ⟨x, (merge_apply_of_mem U K W hd hr (hb r hr ⟨x, hx⟩) x).trans_ne hx⟩
 
-/-- Every enumeration of a commuting disjoint batch implements its snapshot merge. -/
+/-- Every enumeration of a pairwise-commuting family with disjoint write-support bounds
+implements its simultaneous merge. -/
 theorem merge_eq_execute (U : κ → BlockSum B → BlockSum B) (K : Finset κ)
     (W : κ → Set ι) (hb : ∀ r ∈ K, writeSupport (U r) ⊆ W r)
     (hd : ∀ r ∈ K, ∀ s ∈ K, r ≠ s → Disjoint (W r) (W s))
@@ -207,7 +210,7 @@ theorem writeSupport_merge_subset (U : κ → BlockSum B → BlockSum B) (K : Fi
   rw [writeSupport_merge U K W hb hd]
   exact Set.iUnion₂_mono hb
 
-/-- On additive blocks, snapshot merging sums the changes computed from the original state. -/
+/-- On additive blocks, simultaneous merging sums the changes computed from the original state. -/
 theorem merge_eq_add_sum [∀ i, AddCommGroup (B i)]
     (U : κ → BlockSum B → BlockSum B) (K : Finset κ)
     (W : κ → Set ι) (hb : ∀ r ∈ K, writeSupport (U r) ⊆ W r)

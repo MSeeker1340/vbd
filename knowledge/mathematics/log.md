@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+* **Naming**: Renamed the block-state and operator specification to [Block states and operators](./block-states-and-operators.md), aligned its title and index entry, and updated incoming references.
+
 * **Presentation**: Illustrated write support and simultaneous merging with a shared four-block example, showing preserved blocks as zeros in change vectors and merging as their sum. Added the corresponding linear batch matrix with selected operator block rows and an identity block row, keeping nonlinear component maps distinct from linear matrix entries.
 * **Exposition**: Replaced the theorem's closing explanation of colored execution with a brief sidenote linking to the later treatment of VBD's colored updates.
 * **Theorem**: Refined simultaneous batches with explicit operator and block index sets, support bounds, snapshot semantics, and exact support. Stated simultaneous–sequential equivalence for every enumeration of a pairwise-commuting family with disjoint write-support bounds, and supplied a detailed blockwise proof including unassigned blocks and the empty batch.

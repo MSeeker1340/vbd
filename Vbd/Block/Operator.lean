@@ -8,8 +8,8 @@ import Vbd.Block.Basic
 /-!
 # Continuous-linear block matrices
 
-Finite heterogeneous normed blocks represent continuous linear maps by basis-free entries.
-Blocks may be infinite-dimensional. The scalar field is arbitrary; no inner product,
+A finite family of heterogeneous normed blocks represents continuous linear maps by basis-free
+block entries. Blocks may be infinite-dimensional. The scalar field is arbitrary; no inner product,
 completeness, curvature, or differentiability hypotheses are needed.
 -/
 
@@ -87,7 +87,7 @@ section Finite
 
 variable [Finite ι]
 
-/-- A local enumeration supplies the finite-product norm without exposing a chosen enumeration. -/
+/-- A local `Fintype` instance supplies the finite-product norm from a finite index type. -/
 noncomputable local instance : Fintype ι := Fintype.ofFinite ι
 
 /-- Equality of operators is equality of all block entries. -/
