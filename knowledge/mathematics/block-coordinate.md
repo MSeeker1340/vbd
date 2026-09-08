@@ -141,6 +141,20 @@ specifies how to combine outputs and when that combination equals sequential com
 
 ## Write support
 
+Consider a state with four blocks and an operator that may change blocks 1 and 3:
+
+$$
+x=\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix},
+\qquad
+U(x)=\begin{bmatrix}u_1(x)\\x_2\\u_3(x)\\x_4\end{bmatrix},
+\qquad
+U(x)-x=\begin{bmatrix}u_1(x)-x_1\\0\\u_3(x)-x_3\\0\end{bmatrix}.
+$$
+
+The zero blocks in the change vector show that blocks 2 and 4 are preserved. The component maps
+`u₁ : X → X₁` and `u₃ : X → X₃` may be nonlinear and depend on the entire input. Thus `{1,3}`
+is a bound on the changed block indices; either selected block may also be preserved.
+
 For a state-update operator `U : X → X`, its **write support** is the set of block indices
 at which it changes some input state:
 
@@ -193,7 +207,28 @@ a valid [coloring](/mathematics/coloring.md).
 ## Simultaneous batches
 
 A simultaneous batch computes several updates from a common input state and then combines their
-outputs block by block. Let `K` be a finite set indexing the operators `Uᵣ : X → X`. For each
+outputs block by block. Using the four-block operator `U` above, let `V` update block 2. Their
+simultaneous batch has the block-vector form
+
+$$
+U(x)=\begin{bmatrix}u_1(x)\\x_2\\u_3(x)\\x_4\end{bmatrix},
+\qquad
+V(x)=\begin{bmatrix}x_1\\v_2(x)\\x_3\\x_4\end{bmatrix},
+\qquad
+P(x)=\begin{bmatrix}u_1(x)\\v_2(x)\\u_3(x)\\x_4\end{bmatrix}.
+$$
+
+The batch selects blocks 1 and 3 from `U(x)`, block 2 from `V(x)`, and preserves block 4.
+All displayed component maps are evaluated at the same `x`. Equivalently, the disjoint changes
+combine as
+
+$$
+P(x)=x+
+\begin{bmatrix}u_1(x)-x_1\\0\\u_3(x)-x_3\\0\end{bmatrix}
++\begin{bmatrix}0\\v_2(x)-x_2\\0\\0\end{bmatrix}.
+$$
+
+In general, let `K` be a finite set indexing the operators `Uᵣ : X → X`. For each
 `r ∈ K`, choose a write-support bound `Wᵣ ⊆ I`, with
 
 $$
@@ -216,6 +251,13 @@ $$
 Every selected output is computed from the original `x`. This is the snapshot semantics of a
 buffered parallel batch. The definition applies whether or not the operators commute. For an
 empty family it gives `P_∅ = id_X`.
+
+On vector-space blocks, the same construction can be written as the sum of the disjoint change
+vectors:
+
+$$
+P_K(x)=x+\sum_{r\in K}\bigl(U_r(x)-x\bigr).
+$$
 
 The exact write support is
 
@@ -324,6 +366,23 @@ $$
 Thus block rows outside the write support are identity block rows. For a simultaneous batch of
 linear operators, each selected block row is taken from its designated operator, and every
 unselected block row is an identity block row.
+
+For linear operators `U(x) = Ax` and `V(x) = Bx` with the write-support bounds of the four-block
+example, the batch is the operator block matrix
+
+$$
+P(x)=
+\begin{bmatrix}
+A_{11}&A_{12}&A_{13}&A_{14}\\
+B_{21}&B_{22}&B_{23}&B_{24}\\
+A_{31}&A_{32}&A_{33}&A_{34}\\
+0&0&0&\operatorname{id}_{X_4}
+\end{bmatrix}
+\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}.
+$$
+
+This displays the same selection of output blocks as the nonlinear block-vector example.
+Each entry is an operator between whole block spaces.
 
 ## Connection to linearization
 
