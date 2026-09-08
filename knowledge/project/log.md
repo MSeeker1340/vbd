@@ -2,6 +2,8 @@
 
 ## 2026-09-08
 
+* **Completion**: Implemented BS-02–BS-06, marked Phase 2 complete, synchronized the root repository status, and advanced the Phase 3 contraction API assessment to `next`.
+
 * **Specification**: Aligned the Phase 2 roadmap and backlog with operator write support as a set of block indices and distinguished it from supplied support bounds. Standardized the phase terminology around whole blocks and block indices, leaving implementation-level predicate choices to Lean source documentation.
 
 ## 2026-09-07

@@ -80,5 +80,24 @@ theorem replace_comm (x : BlockSum B) {i j : ι} (h : i ≠ j) (b : B i) (c : B 
 
 end Replacement
 
+/-- A finite state is the sum of its single-block injections. -/
+theorem sum_inject [Fintype ι] [DecidableEq ι] [∀ i, AddCommGroup (B i)]
+    (x : BlockSum B) : ∑ i, inject i (x i) = x := by
+  apply PiLp.ext
+  simp [inject, WithLp.ofLp_sum, Finset.sum_apply]
+
+/-- Replacement as addition of a single-block change. -/
+theorem replace_eq_add_inject [DecidableEq ι] [∀ i, AddCommGroup (B i)]
+    (x : BlockSum B) (i : ι) (v : B i) :
+    replace x i v = x + inject i (v - x i) := by
+  apply PiLp.ext
+  intro j
+  by_cases h : j = i
+  · subst j
+    simp only [replace_apply_same, WithLp.ofLp_add, Pi.add_apply, inject_apply_same,
+      add_sub_cancel]
+  · simp only [replace_apply_of_ne x h, WithLp.ofLp_add, Pi.add_apply,
+      inject_apply_of_ne h, add_zero]
+
 end BlockSum
 end Vbd

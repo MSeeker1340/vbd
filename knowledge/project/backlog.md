@@ -42,17 +42,17 @@ timestamp: 2026-09-08T00:00:00Z
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
 | BS-01 | done | `BlockSum B` and block operations | none | Heterogeneous product, native block access, injections, and replacement laws compile using Mathlib |
-| BS-02 | next | Write support for state-update operators | BS-01 | Write support is the set of block indices changed for some input; containment in a supplied set is equivalent to preservation outside it; identity has empty support and composition has support bounded by the union |
-| BS-03 | planned | External execution composition | BS-02 | Finite externally ordered operator sequences have empty, singleton, intermediate-state, and concatenation laws; execution preserves blocks outside the union of the supplied write-support bounds |
-| BS-04 | planned | Commutation and reordering | BS-03 | Pairwise-commuting finite operator families have an order-independent composite |
-| BS-05 | planned | Simultaneous and color-batch algebra | BS-02, BS-04 | Pairwise-disjoint write-support bounds define a simultaneous merge whose support is the union of the constituent supports, including for noncommuting operators; pairwise commutation makes the merge equal every sequential ordering |
-| BS-06 | planned | Continuous-linear block representation | BS-01 | Finite heterogeneous continuous-linear entries assemble and reconstruct operators, and identity and composition satisfy the block-matrix formulas |
+| BS-02 | done | Write support for state-update operators | BS-01 | Write support is the set of block indices changed for some input; containment in a supplied set is equivalent to preservation outside it; identity has empty support and composition has support bounded by the union |
+| BS-03 | done | External execution composition | BS-02 | Finite externally ordered operator sequences have empty, singleton, intermediate-state, and concatenation laws; execution preserves blocks outside the union of the supplied write-support bounds |
+| BS-04 | done | Commutation and reordering | BS-03 | Pairwise-commuting finite operator families have an order-independent composite |
+| BS-05 | done | Simultaneous and color-batch algebra | BS-02, BS-04 | Pairwise-disjoint write-support bounds define a simultaneous merge whose support is the union of the constituent supports, including for noncommuting operators; pairwise commutation makes the merge equal every sequential ordering |
+| BS-06 | done | Continuous-linear block representation | BS-01 | Finite heterogeneous continuous-linear entries assemble and reconstruct operators, and identity and composition satisfy the block-matrix formulas |
 
 # Phase 3 — contractive fixed-point iteration
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| CT-01 | planned | Pinned Mathlib contraction API assessment | none | Exact reusable `ContractingWith`, restricted-map, fixed-point, and iterate-bound declarations are recorded |
+| CT-01 | next | Pinned Mathlib contraction API assessment | none | Exact reusable `ContractingWith`, restricted-map, fixed-point, and iterate-bound declarations are recorded |
 | CT-02 | planned | Local invariant-set contraction wrapper | CT-01 | A contraction on a forward-invariant complete subset yields a unique local fixed point and iterate convergence |
 | CT-03 | planned | Finite-iteration distance bound | CT-02 | The public theorem exposes a geometric `q^k` bound suitable for a fixed iteration budget |
 | CT-04 | planned | Derivative-bound bridge | CT-02 | A uniform derivative/operator-norm bound on a stated neighborhood yields the required Lipschitz contraction |

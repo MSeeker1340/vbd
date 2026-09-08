@@ -11,7 +11,7 @@ timestamp: 2026-09-08T00:00:00Z
 | Phase | Status | Current boundary |
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
-| Phase 2 — block-state and update-operator algebra | active | `BS-02`: define write locality for general state-update operators |
+| Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
 | Phase 3 — contractive fixed-point iteration | planned | begins after the narrow Mathlib contraction API wrapper is scoped |
 | Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives physical conflict structure |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
@@ -59,7 +59,7 @@ the objective and its differential identities.
 
 # Phase 2 — Block-state and update-operator algebra
 
-Status: active. Modules: `Vbd/Block/Basic.lean`, `Vbd/Block/Update.lean`, and
+Status: complete. Modules: `Vbd/Block/Basic.lean`, `Vbd/Block/Update.lean`, and
 `Vbd/Block/Operator.lean`.
 
 Reserve `X` for a total space, use `B : ι → Type*` for heterogeneous block spaces, and define

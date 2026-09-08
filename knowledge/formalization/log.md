@@ -1,5 +1,9 @@
 # Lean Formalization Update Log
 
+## 2026-09-08
+
+* **Implementation**: Completed the independent `Block/Update` and `Block/Operator` modules and exported them through `Vbd.lean`. Added exact write-support calculus, ordered execution and permutation laws, disjoint snapshot merging with exact support and commuting sequential equivalence, additive change identities, and heterogeneous continuous-linear assembly, reconstruction, arithmetic, and preserved-row characterization. Kept algebraic block identities in `Block/Basic` and analytic assumptions local to the operator layer.
+
 ## 2026-09-07
 
 * **Module plan**: Restored `Block/Update.lean` for write-local operators and externally controlled execution algebra; retained `Block/Operator.lean` as an independent block-matrix linearization layer rather than making matrix splittings the execution model.
