@@ -297,9 +297,8 @@ The proof uses commutation to move the designated operator first, and disjoint w
 bounds to ensure that the remaining operators preserve its selected output block. These are
 algebraic hypotheses on state maps; the theorem requires no linearity or differentiability.
 
-A colored algorithm processes its color classes in a chosen order, interpreting each class as a
-simultaneous batch. When a class satisfies the theorem's hypotheses, its batch equals every
-sequential ordering of its operators. The order between classes remains part of the algorithm.
+> This theorem underlies the later treatment of VBD's
+> [colored updates](/mathematics/coloring.md).
 
 ## Continuous-linear block representation
 
