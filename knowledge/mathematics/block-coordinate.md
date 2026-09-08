@@ -1,12 +1,10 @@
 ---
 type: Mathematical Specification
 title: Block Decompositions and Update Operators
-description: Specifies write supports across external executions, commutation, simultaneous batches, and their continuous-linear block representation.
+description: Describes block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
 timestamp: 2026-09-08T00:00:00Z
 ---
-
-# Background
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), the unknown `x ∈ X` is the
 configuration sought at the end of one timestep. The previous configuration and velocity determine
@@ -27,7 +25,7 @@ updates around subsets of them. Local interactions couple blocks, so a change to
 affect the computation of updates to neighboring blocks. The
 [finite-support interaction model](/mathematics/local-decomposition.md) describes that physical
 dependency structure. The algebra here provides block states and operations on them, with write
-support identifying the blocks an operation can change. It applies to supplied state maps
+support identifying the blocks an operation can change. It applies to state maps
 independently of their physical origin or the objective being solved.
 
 # Block states
@@ -80,7 +78,68 @@ The other blocks retain their values. Block access, replacement, and the write-s
 algebra below also apply to arbitrary block types; the normed vector-space structure supplies
 the linear representation above.
 
-# Write support
+# Operators on block states
+
+An update operator transforms one candidate state into another:
+
+$$
+U:X\to X.
+$$
+
+A sequential algorithm applies such operators in a chosen order. Parallel algorithms group
+updates into batches whose results must be combined. Composition and commutation describe the
+ordering algebra for self-maps of any space; write support and block representation then relate
+these maps to the decomposition of `X`.
+
+## Sequential composition
+
+Applying `U` and then `V` is represented by
+
+$$
+x\longmapsto U(x)\longmapsto V(U(x))=(V\circ U)(x).
+$$
+
+Composition is associative and has the identity map as its unit:
+
+$$
+T\circ(V\circ U)=(T\circ V)\circ U,
+\qquad
+\operatorname{id}_X\circ U=U\circ\operatorname{id}_X=U.
+$$
+
+For a finite sequence `𝓔 = (U₁, …, Uₘ)`, the composite and its intermediate states are
+
+$$
+S_{\mathcal E}=U_m\circ\cdots\circ U_1,
+\qquad x_0=x,
+\qquad x_r=U_r(x_{r-1}).
+$$
+
+The empty sequence represents the identity. Concatenating sequences composes their maps in
+execution order:
+
+$$
+S_{\mathcal E\mathbin{+\!+}\mathcal F}
+=S_{\mathcal F}\circ S_{\mathcal E}.
+$$
+
+This models a sequential VBD sweep once its updates and order have been chosen. A batch is itself
+a state map, so the same algebra also describes a sequence of batches.
+
+## Commutation and reordering
+
+Two operators commute when their composite is independent of which is applied first:
+
+$$
+U\circ V=V\circ U.
+$$
+
+Adjacent commuting operators may be exchanged in a sequence. Consequently, a finite
+pairwise-commuting family has the same composite in every enumeration. These identities justify
+reordering algorithmic steps. For parallel execution, the simultaneous-batch construction below
+specifies how to combine outputs and when that combination equals sequential composition.
+
+## Write support
 
 For a state-update operator `U : X → X`, its **write support** is the set of block indices
 at which it changes some input state:
@@ -117,33 +176,21 @@ $$
 The inclusion allows changes to cancel during composition. In particular, write-support bounds
 `W` and `Z` for `U` and `V` give the bound `W ∪ Z` for `V ∘ U`, including when they overlap.
 
-# External execution
-
-An external controller supplies a finite sequence `𝓔 = (U₁, …, Uₘ)`. Its execution and
-intermediate states are
+For a sequence `𝓔 = (U₁, …, Uₘ)`, this gives the bound
 
 $$
-S_{\mathcal E}=U_m\circ\cdots\circ U_1,
-\qquad x_0=x,
-\qquad x_r=U_r(x_{r-1}).
+\operatorname{supp}_{\mathrm w}(S_{\mathcal E})
+\subseteq\bigcup_{r=1}^{m}\operatorname{supp}_{\mathrm w}(U_r).
 $$
 
-If `Uᵣ` has write-support bound `Wᵣ`, the execution preserves every block outside `⋃ᵣ Wᵣ`.
-Concatenating executions composes their maps in execution order. A batch is itself a state map,
-so the same composition applies to externally ordered batches.
-
-# Commutation and reordering
-
-Operators `U` and `V` commute when `U ∘ V = V ∘ U`. Adjacent commuting operators may be exchanged
-in an execution, and a finite pairwise-commuting family has the same composite in every enumeration.
+Any supplied bounds `Wᵣ` therefore give the execution a bound `⋃ᵣ Wᵣ`.
 
 Disjoint write supports alone do not imply commutation: an operator may read a block changed
-by another. Commutation expresses that their effects are compatible with either execution order.
-The [interaction layer](/mathematics/local-decomposition.md) supplies physical locality information;
-the production layer uses it to establish commutation for concrete operators under a valid
-[coloring](/mathematics/coloring.md).
+by another. The [interaction layer](/mathematics/local-decomposition.md) supplies physical locality
+information; the production layer uses it to establish commutation for concrete operators under
+a valid [coloring](/mathematics/coloring.md).
 
-# Simultaneous batches
+## Simultaneous batches
 
 Let a finite family `(Uᵣ)ᵣ∈K` have pairwise-disjoint write-support bounds `(Wᵣ)ᵣ∈K`. The simultaneous
 map `P_K` evaluates all operators on the same input and merges their selected blocks:
@@ -164,10 +211,11 @@ For pairwise-commuting operators, the simultaneous map equals their sequential c
 every enumeration. For a block index in `Wᵣ`, place `Uᵣ` first using commutation; all remaining
 operators preserve that block. This identifies the sequential output with the merge formula.
 
-Color classes are executed in an external order, with each class interpreted as a simultaneous
-batch. Within a commuting class, the batch may also be interpreted as any sequential ordering.
+A colored algorithm processes its color classes in a chosen order, with each class interpreted
+as a simultaneous batch. Within a commuting class, the batch may also be interpreted as any
+sequential ordering.
 
-# Continuous-linear block representation
+## Continuous-linear block representation
 
 For finite `I` and normed vector-space blocks, projection and inclusion are continuous linear
 maps. A continuous linear operator `A : X → X` is represented by the operator-valued block matrix
@@ -181,15 +229,21 @@ and assembly are inverse. The representation preserves operator arithmetic and k
 basis-free. A displayed matrix uses any enumeration of `I`; the represented map is independent
 of that choice.
 
-Write support has a direct interpretation here: block rows outside the write support are the
-corresponding identity block rows. For a simultaneous batch of linear operators, each selected
-block row is taken from its designated operator, and every unselected block row is an identity
-block row.
+The write support of `A` consists of the block rows in which it differs from the identity:
 
-# Use by later phases
+$$
+\operatorname{supp}_{\mathrm w}(A)
+=\{i\in I\mid \exists j\in I,\ [A-\operatorname{id}_X]_{ij}\ne 0\}.
+$$
+
+Thus block rows outside the write support are identity block rows. For a simultaneous batch of
+linear operators, each selected block row is taken from its designated operator, and every
+unselected block row is an identity block row.
+
+## Connection to linearization
 
 The [roadmap](/project/roadmap.md) uses this algebra to supply actual execution maps and their
-linear representations to later bridge layers. For differentiable supplied updates, those layers
+linear representations to later bridge layers. For differentiable updates, those layers
 apply the chain rule at the intermediate states:
 
 $$
