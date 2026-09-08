@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Block Decompositions and Update Operators
 description: Specifies write supports across external executions, commutation, simultaneous batches, and their continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
-timestamp: 2026-09-07T00:00:00Z
+timestamp: 2026-09-08T00:00:00Z
 ---
 
 # Background
@@ -32,21 +32,52 @@ independently of their physical origin or the objective being solved.
 
 # Block states
 
-Represent a state as `x = (xᵢ)ᵢ∈I`, where `I` indexes the blocks and `xᵢ ∈ Xᵢ` is the entire
-configuration block at index `i`. Blocks may have different types or dimensions. Coordinate
-access reads a block, and replacement substitutes a new value for that block while preserving
-the others. Write-support and execution statements apply to arbitrary block types; linear
-representation uses a finite index set and real normed
-vector spaces, with total space
+Let `I` be a finite index set and `Xᵢ` a real normed vector space for each block. The total
+state space has the decomposition
 
 $$
-X=\bigoplus_{i\in I}^{\ell^2}X_i,
-\qquad
-\|x\|^2=\sum_{i\in I}\|x_i\|^2.
+X=\bigoplus_{i\in I}^{\ell^2}X_i.
 $$
 
-The blocks may be infinite-dimensional. Write `πᵢ : X → Xᵢ` for projection and `ιᵢ : Xᵢ → X`
-for inclusion.
+The block spaces may differ and may be infinite-dimensional. A state is a block vector,
+displayed using any fixed enumeration of `I`:
+
+$$
+x=(x_i)_{i\in I}=\begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}\in X,
+\qquad x_i\in X_i.
+$$
+
+Each `xᵢ` contains the entire configuration block at index `i`. The `ℓ²` norm combines their
+individual norms:
+
+$$
+\|x\|_X^2=\sum_{i\in I}\|x_i\|_{X_i}^2.
+$$
+
+Projection reads one block:
+
+$$
+\pi_i:X\to X_i,\qquad \pi_i x=x_i.
+$$
+
+Inclusion places a block value in an otherwise zero state:
+
+$$
+\iota_i:X_i\to X,\qquad
+\iota_i b=\begin{bmatrix}0\\ \vdots\\ b\\ \vdots\\ 0\end{bmatrix},
+\quad\text{with }b\text{ in block }i.
+$$
+
+Both maps are continuous linear. Replacing block `i` by `b` uses them to express the change
+to a state:
+
+$$
+R_i(x,b)=x+\iota_i(b-\pi_i x).
+$$
+
+The other coordinates retain their values. Coordinate access, replacement, and the write-support
+algebra below also apply to arbitrary block types; the normed vector-space structure supplies
+the linear representation above.
 
 # Write support
 

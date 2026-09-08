@@ -1,5 +1,9 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-08
+
+* **Exposition**: Reordered the block-states section into a sequence of definitions with formulas: decomposition, state vector, norm, projection, inclusion, and replacement. Kept the distinction between general coordinate algebra and the normed linear representation.
+
 ## 2026-09-07
 
 * **Background**: Connected block states to candidate configurations in the implicit-Euler solve, with particle, multibody, and nodal finite-element examples explaining block structure and local interactions. Distinguished solver updates from timestep advancement and linked the interaction model before introducing the abstract block space.
