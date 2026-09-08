@@ -2,6 +2,7 @@
 
 ## 2026-09-08
 
+* **Theorem**: Refined simultaneous batches with explicit operator and block index sets, support bounds, snapshot semantics, and exact support. Stated simultaneous–sequential equivalence for every enumeration of a pairwise-commuting family with disjoint write-support bounds, and supplied a detailed blockwise proof including unassigned blocks and the empty batch.
 * **Organization**: Grouped the specification into block states and operators on block states, retaining the mechanical background as an introduction. Presented sequential composition and commutation before the block-dependent concepts, with sequential and parallel algorithm motivation. Recast external execution as sequential composition and made the relationship between write support and block rows of the operator minus identity explicit. Updated the mathematics index.
 * **Definition**: Replaced the predicate-first write-support presentation with the set of block indices changed for some input, and characterized support bounds by containment. Updated execution and batch statements to distinguish exact support from bounds. Standardized block and block-index terminology, reserving scalar coordinates for the interior of a block.
 * **Exposition**: Reordered the block-states section into a sequence of definitions with formulas: decomposition, state vector, norm, projection, inclusion, and replacement. Kept the distinction between general coordinate algebra and the normed linear representation.

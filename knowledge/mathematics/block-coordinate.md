@@ -192,28 +192,114 @@ a valid [coloring](/mathematics/coloring.md).
 
 ## Simultaneous batches
 
-Let a finite family `(Uᵣ)ᵣ∈K` have pairwise-disjoint write-support bounds `(Wᵣ)ᵣ∈K`. The simultaneous
-map `P_K` evaluates all operators on the same input and merges their selected blocks:
+A simultaneous batch computes several updates from a common input state and then combines their
+outputs block by block. Let `K` be a finite set indexing the operators `Uᵣ : X → X`. For each
+`r ∈ K`, choose a write-support bound `Wᵣ ⊆ I`, with
 
 $$
-(P_K(x))_j=
+\operatorname{supp}_{\mathrm w}(U_r)\subseteq W_r,
+\qquad
+W_r\cap W_s=\varnothing\quad(r\ne s).
+$$
+
+Here `r,s ∈ K` index operators, while `i ∈ I` indexes blocks. Disjointness assigns at most one
+operator to each block. Define the **simultaneous batch map** `P_K : X → X` by
+
+$$
+(P_K(x))_i=
 \begin{cases}
-(U_r(x))_j,&j\in W_r,\\
-x_j,&j\notin\displaystyle\bigcup_{r\in K}W_r.
+(U_r(x))_i,&\text{if }i\in W_r\text{ for the unique such }r\in K,\\
+x_i,&\text{if }i\notin\displaystyle\bigcup_{r\in K}W_r.
 \end{cases}
 $$
 
-Disjointness makes the writer for each selected block unique. The resulting map has write support
-`⋃ᵣ supp_w(Uᵣ)`, bounded by `⋃ᵣ Wᵣ`. This construction applies to noncommuting operators, giving
-the snapshot semantics needed for buffered batches with coupled reads.
+Every selected output is computed from the original `x`. This is the snapshot semantics of a
+buffered parallel batch. The definition applies whether or not the operators commute. For an
+empty family it gives `P_∅ = id_X`.
 
-For pairwise-commuting operators, the simultaneous map equals their sequential composition in
-every enumeration. For a block index in `Wᵣ`, place `Uᵣ` first using commutation; all remaining
-operators preserve that block. This identifies the sequential output with the merge formula.
+The exact write support is
 
-A colored algorithm processes its color classes in a chosen order, with each class interpreted
-as a simultaneous batch. Within a commuting class, the batch may also be interpreted as any
-sequential ordering.
+$$
+\operatorname{supp}_{\mathrm w}(P_K)
+=\bigcup_{r\in K}\operatorname{supp}_{\mathrm w}(U_r)
+\subseteq\bigcup_{r\in K}W_r.
+$$
+
+Indeed, if `P_K` changes block `i` at an input, the designated operator changes that block at the
+same input. Conversely, if `Uᵣ` changes block `i` at an input, then `i ∈ Wᵣ`, and the merge selects
+that changed value. A bound may include additional blocks that its operator always preserves;
+selecting those outputs leaves the corresponding input blocks unchanged.
+
+### Theorem: simultaneous and sequential equivalence
+
+Let `(Uᵣ)ᵣ∈K` and `(Wᵣ)ᵣ∈K` satisfy the support and disjointness conditions above. Assume in
+addition that the operators commute pairwise:
+
+$$
+U_r\circ U_s=U_s\circ U_r\qquad(r\ne s).
+$$
+
+For every enumeration `(r₁, …, rₘ)` containing each member of `K` exactly once, the simultaneous
+batch equals the sequential composite:
+
+$$
+P_K=U_{r_m}\circ\cdots\circ U_{r_1}.
+$$
+
+Thus every such sequential ordering implements the same map as the simultaneous batch.
+
+**Proof.** Write `S = U_{r_m} ∘ ⋯ ∘ U_{r_1}`. Fix an arbitrary input `x ∈ X`. Equality of
+states is equality of all their blocks, so fix a block index `i ∈ I` and compare `(S(x))ᵢ`
+with `(P_K(x))ᵢ`.
+
+**Case 1: no operator is assigned block `i`.** Then `i ∉ Wᵣ` for every `r ∈ K`. The support
+bound implies
+
+$$
+(U_r(z))_i=z_i\qquad\text{for every state }z\text{ and every }r\in K.
+$$
+
+Apply this equality at each intermediate state of the sequential execution. Every step preserves
+block `i`, so `(S(x))ᵢ = xᵢ`. The second branch of the merge definition also gives
+`(P_K(x))ᵢ = xᵢ`.
+
+**Case 2: block `i` is assigned to an operator `Uᵣ`.** Disjointness makes `r` unique. Locate
+`r` in the enumeration. By successively exchanging `Uᵣ` with each operator preceding it in
+execution order, pairwise commutation moves `Uᵣ` to the first position without changing `S`.
+Consequently,
+
+$$
+S=T\circ U_r,
+$$
+
+where `T` is the sequential composite of all the other operators, retaining their relative order.
+If there are no other operators, `T = id_X`.
+
+For every `s ≠ r`, disjointness and `i ∈ Wᵣ` give `i ∉ Wₛ`. Hence `Uₛ` preserves block `i`
+at every input. Applying this fact through the sequence defining `T` gives
+
+$$
+(T(z))_i=z_i\qquad\text{for every state }z.
+$$
+
+In particular, take `z = Uᵣ(x)`. Then
+
+$$
+(S(x))_i=(T(U_r(x)))_i=(U_r(x))_i=(P_K(x))_i,
+$$
+
+where the last equality is the first branch of the merge definition.
+
+Both cases give equality at block `i`. Since `i` and `x` were arbitrary, `S = P_K`. For `K = ∅`,
+both maps are the identity by definition. ∎
+
+The proof uses commutation to move the designated operator first, and disjoint write-support
+bounds to ensure that the remaining operators preserve its selected output block. These are
+algebraic hypotheses on state maps; the theorem requires no linearity or differentiability.
+
+A colored algorithm processes its color classes in a chosen order, interpreting each class as a
+simultaneous batch. When a class satisfies the theorem's hypotheses, its batch equals every
+sequential ordering of its operators. The order between classes remains part of the algorithm.
 
 ## Continuous-linear block representation
 
