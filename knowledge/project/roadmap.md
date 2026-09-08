@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-09-07T00:00:00Z
+timestamp: 2026-09-08T00:00:00Z
 ---
 
 # Current phase status
@@ -71,21 +71,23 @@ abbrev BlockSum {ι : Type*} (B : ι → Type*) := PiLp 2 B
 Phase 2 develops the objective-independent algebra of block-indexed states and externally
 controlled update operators:
 
-1. native coordinate access, single-coordinate injection, and replacement;
-2. a write-support predicate recording that an operator preserves every coordinate outside a
-   supplied set, with support enlargement and union bounds for composition;
+1. native block access, single-block injection, and replacement;
+2. the write support of an operator as the set of block indices it can change, with containment
+   characterizing supplied support bounds and union bounds for composition;
 3. identity, composition, and finite execution sequences whose order is supplied externally,
-   tracking preserved coordinates through individual operators and multi-block batches;
+   tracking preserved blocks through individual operators and multi-block batches;
 4. commutation and invariance of finite composition under reordering;
 5. simultaneous merging for disjoint write supports and its equality with sequential composition
    for commuting families, giving the generic color-batch algebra;
 6. continuous-linear block entries, finite assembly, and block-matrix arithmetic for linear update
    operators and derivatives.
 
-Write support is an upper bound on the coordinates an operator may change. Its role is to express
-preservation across compositions and batches with arbitrary sets of affected coordinates; reads
-may depend on the entire state. Concrete coordinate writes use `BlockSum.replace`, whose
-coordinate laws already describe the preserved coordinates.
+Write support contains exactly those block indices at which the operator changes some input
+state. A write-support bound is any set containing that support. These bounds express preservation
+across compositions and batches with arbitrary sets of affected blocks; reads may depend on the
+entire state. Concrete block writes use `BlockSum.replace`, whose block access laws already
+describe the preserved blocks. Block indices identify whole blocks, each with its own internal
+degrees of freedom.
 
 The phase vocabulary consists of block states, state-update operators, external execution data,
 and continuous linear operators. External execution data assigns positions to update operators.
@@ -95,7 +97,7 @@ synthesis phases.
 Algebraic and analytic assumptions remain local to the declarations that use them, and the core
 results support infinite-dimensional blocks.
 
-Acceptance gate: later modules can track sets of preserved coordinates through externally ordered
+Acceptance gate: later modules can track sets of preserved blocks through externally ordered
 executions, merge disjoint writes into simultaneous batches, reduce commuting batches to
 order-independent composition, and represent linear operators or derivatives by heterogeneous
 block matrices. Simultaneous merging is available for noncommuting operators as well.

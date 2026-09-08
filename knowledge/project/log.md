@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-09-08
+
+* **Specification**: Aligned the Phase 2 roadmap and backlog with operator write support as a set of block indices and distinguished it from supplied support bounds. Standardized the phase terminology around whole blocks and block indices, leaving implementation-level predicate choices to Lean source documentation.
+
 ## 2026-09-07
 
 * **Clarification**: Specified Phase 2 write support as a preservation predicate for arbitrary sets of coordinates, used across operators, compositions, and multi-block batches. Removed singleton-update certification from BS-02's acceptance criteria; coordinate replacement already supplies that behavior. Made accumulated execution support and simultaneous merging without commutation explicit in the roadmap and backlog.

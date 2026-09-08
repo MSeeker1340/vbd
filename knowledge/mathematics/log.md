@@ -2,6 +2,7 @@
 
 ## 2026-09-08
 
+* **Definition**: Replaced the predicate-first write-support presentation with the set of block indices changed for some input, and characterized support bounds by containment. Updated execution and batch statements to distinguish exact support from bounds. Standardized block and block-index terminology, reserving scalar coordinates for the interior of a block.
 * **Exposition**: Reordered the block-states section into a sequence of definitions with formulas: decomposition, state vector, norm, projection, inclusion, and replacement. Kept the distinction between general coordinate algebra and the normed linear representation.
 
 ## 2026-09-07

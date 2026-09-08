@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-09-07T00:00:00Z
+timestamp: 2026-09-08T00:00:00Z
 ---
 
 # Status vocabulary
@@ -41,11 +41,11 @@ timestamp: 2026-09-07T00:00:00Z
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| BS-01 | done | `BlockSum B` and coordinate operations | none | Heterogeneous product, native coordinate access, injections, and replacement laws compile using Mathlib |
-| BS-02 | next | Write support for state-update operators | BS-01 | A predicate records preservation of every coordinate outside a supplied set of blocks; support enlargement, empty support for identity, and union bounds for composition apply to general operators and multi-block batches |
-| BS-03 | planned | External execution composition | BS-02 | Finite externally ordered operator sequences have empty, singleton, intermediate-state, and concatenation laws; execution preserves coordinates outside the union of the supplied write supports |
+| BS-01 | done | `BlockSum B` and block operations | none | Heterogeneous product, native block access, injections, and replacement laws compile using Mathlib |
+| BS-02 | next | Write support for state-update operators | BS-01 | Write support is the set of block indices changed for some input; containment in a supplied set is equivalent to preservation outside it; identity has empty support and composition has support bounded by the union |
+| BS-03 | planned | External execution composition | BS-02 | Finite externally ordered operator sequences have empty, singleton, intermediate-state, and concatenation laws; execution preserves blocks outside the union of the supplied write-support bounds |
 | BS-04 | planned | Commutation and reordering | BS-03 | Pairwise-commuting finite operator families have an order-independent composite |
-| BS-05 | planned | Simultaneous and color-batch algebra | BS-02, BS-04 | Pairwise-disjoint write supports define a simultaneous merge supported on their union, including for noncommuting operators; pairwise commutation makes the merge equal every sequential ordering |
+| BS-05 | planned | Simultaneous and color-batch algebra | BS-02, BS-04 | Pairwise-disjoint write-support bounds define a simultaneous merge whose support is the union of the constituent supports, including for noncommuting operators; pairwise commutation makes the merge equal every sequential ordering |
 | BS-06 | planned | Continuous-linear block representation | BS-01 | Finite heterogeneous continuous-linear entries assemble and reconstruct operators, and identity and composition satisfy the block-matrix formulas |
 
 # Phase 3 — contractive fixed-point iteration
