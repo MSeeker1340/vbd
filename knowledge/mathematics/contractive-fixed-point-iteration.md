@@ -124,6 +124,29 @@ is `L`-Lipschitz on `S` and `F(x*) = 0`, then `‖F(x_k)‖ ≤ L d(x_k,x*)`.
 The [implicit-Euler bridge](/project/roadmap.md#phase-5--implicit-euler-fixed-point-goals)
 supplies this connection to [stationarity](/mathematics/implicit-euler.md).
 
+# Adaptive stopping from the last update
+
+After `k ≥ 1` exact iterations, let `Δ_k = d(x_k,x_{k-1})`. Applying the defect bound at
+`x_k` and contraction to the pair `x_{k-1}, x_k` gives
+
+$$
+d(x_k,x^*)\le\frac{q}{1-q}\Delta_k.
+$$
+
+Thus `q Δ_k/(1-q) ≤ ε` certifies the current state's error without computing another sweep.
+The formula also covers `q = 0`, when the first sweep reaches the fixed point.
+
+A simpler rule stops when `Δ_k ≤ τ` for a chosen update tolerance `τ > 0`. This rule needs no
+value of `q` to execute. Under the Banach hypotheses, existence of some `q < 1` ensures eventual
+termination, but a state-error interpretation of `τ` requires quantitative information.
+For example, `T(x) = (1-δ)x + δ` on `[0,1]`, with `0 < δ < 1`, contracts with factor `1-δ`.
+Starting at zero gives a first displacement `δ` and remaining error `1-δ`. Arbitrarily small
+updates can therefore coexist with substantial state error across this family.
+
+Practical update-based stopping and [related adaptive VBD mechanisms](/references/adaptive-vbd-iterations.md)
+are distinct from certified solution accuracy. Checks on observed history can detect failures;
+they do not by themselves prove a uniform contraction bound or fixed-point/root consistency.
+
 # Derivative and invariant-ball certificates
 
 Let `X` be a real normed space and `S` a convex subset. Suppose `T : X → X` is Fréchet

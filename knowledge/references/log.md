@@ -1,5 +1,9 @@
 # Curated References Update Log
 
+## 2026-09-11
+
+* **Research**: Added [Adaptive VBD iterations and stopping criteria](./adaptive-vbd-iterations.md), comparing original VBD initialization/acceleration, AVBD penalties, related adaptive rigid-body substepping, WarpVBD early stopping, and Newton's iteration-budget API. Verified WarpVBD's coordinate-sum stop test against its source. The bounded search did not identify a Banach-certified adaptive VBD iteration paper or establish why production implementations choose fixed budgets; distinguished these limits from the positive implementation evidence.
+
 ## 2026-09-03
 
 * **Correction**: Recorded that evaluated VBD runs use the unsafeguarded full block-Newton step; local line search is optional and was disabled in the reported experiments.

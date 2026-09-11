@@ -3,6 +3,7 @@
 Reference notes:
 
 - [Vertex Block Descent](./vbd-paper.md) - Primary mechanics and algorithm reference.
+- [Adaptive VBD iterations and stopping criteria](./adaptive-vbd-iterations.md) - Distinguishes update-based early stopping, adaptive solver mechanisms, and certified solution-error bounds in VBD-related work.
 - [Tseng 2001](./tseng-2001.md) - Classical block-coordinate convergence assumptions and conclusions.
 - [Mathlib](./mathlib.md) - Primary Lean 4 mathematical foundation.
 - [Lean 4 optsuite/optlib](./optlib-lean4.md) - Assessed descent/KL reference outside the current fixed-point route.
