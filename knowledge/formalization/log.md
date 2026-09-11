@@ -2,6 +2,8 @@
 
 ## 2026-09-11
 
+* **Work order**: Synchronized the module plan with the early applicability gate: the thin Phase 3 core precedes AP-01–AP-03, and further dynamics and bridge/synthesis formalization requires a supported proceed decision. Kept the three foundation import boundaries intact during exploratory work.
+
 * **Simplification**: Deleted `execute`, `intermediate`, and their wrapper lemmas. Retained block-specific preservation and write-support lemmas for Mathlib’s `List.prod` on `Function.End`; reformulated simultaneous–sequential equivalence as `merge_eq_prod`, using Mathlib’s product reordering theorem directly. Updated the module map.
 
 ## 2026-09-08

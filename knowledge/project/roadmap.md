@@ -12,7 +12,8 @@ timestamp: 2026-09-11T00:00:00Z
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
 | Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
-| Phase 3 — contractive fixed-point iteration | planned | begins after the narrow Mathlib contraction API wrapper is scoped |
+| Phase 3 — contractive fixed-point iteration | planned | CT-01–CT-03 form the initial core; further formalization follows the applicability gate |
+| Applicability study — AP-01–AP-03 | planned | follows the initial Phase 3 core and gates derivative, perturbation, and bridge/synthesis formalization |
 | Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives physical conflict structure |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
 | Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
@@ -41,6 +42,52 @@ P1 implicit Euler          P2 block algebra          P3 contraction theory
 
 Phases 1, 2, and 3 are independent foundations. Phases 4, 5, and 6 are pairwise bridges. Phase 7
 is the first layer allowed to depend on the complete chain.
+
+# Applicability gate and work order
+
+The research target is a conditional, quantitative convergence theorem for a meaningful family
+of actual VBD sweeps. Its hypotheses must be connected to physical parameters and relevant
+initial states. The initial guarantee concerns one timestep's nonlinear solve; simulation
+stability across timesteps and convergence from arbitrary initial configurations require
+separate results.
+
+Work proceeds through the thin Phase 3 core CT-01–CT-03, then the bounded applicability study
+AP-01–AP-03, before CT-04–CT-05 or Phase 4–7 formalization. The study anticipates production
+mathematics through derivations and reproducible diagnostic experiments. It introduces no
+cross-foundation Lean imports and requires no general simulation infrastructure.
+
+1. **AP-01 — Select the test family.** Specify a parameterized mechanical family with nonzero
+   cross-block coupling, a coupled quadratic baseline, and a nonlinear case. Define the actual
+   full-step serial sweep, skip threshold, and at least one proper-color execution. Document
+   parameter ranges and their physical or published provenance, warm-start construction, and
+   target error and sweep budgets before assessing the certificate. Include timestep, stiffness,
+   mass-ratio, and coupling variation sufficient to expose restrictive assumptions.
+2. **AP-02 — Assess the certificate.** Derive the actual sweep linearization and candidate
+   neighborhood estimates. Compare observed iteration behavior, the sweep derivative's spectral
+   radius and operator norms, and the proposed comparison-matrix bounds. Assess the certified
+   timestep range, invariant radius, warm-start membership, and predicted iteration budget.
+   Evaluate loss from absolute-value bounds and norm conversions, including dependence on system
+   size. Test objective-increasing updates as a distinct coverage question. Clearly separate
+   analytic guarantees from sampled or floating-point evidence: a derivative at one point or
+   successful trajectories do not certify uniform contraction on a neighborhood.
+3. **AP-03 — Decide the theorem route.** Record the selected family, quantitative coverage,
+   remaining proof obligations, norm, and execution scope. Proceed when analytic estimates
+   support a nonempty parameter range justified by AP-01, relevant warm starts, and the stated
+   accuracy budget. If the certificate is ineffective, assess a better norm, sharper bounds,
+   or contraction over several sweeps, including intermediate-iterate control. If these remain
+   ineffective, revise the target or convergence tool before extending the formalization.
+
+AP-03 can be completed with either a proceed or revise conclusion. Dependent formalization
+requires a proceed conclusion for its selected route; a revise conclusion leaves that work
+gated until an updated assessment supports it. The assessment and its reproducible artifacts
+belong with the relevant mathematics/reference concepts and scoped logs. Experimental results
+guide theorem selection; Lean proofs discharge the accepted analytic obligations.
+
+The applicability gate requires substantive coupling and a nonlinear family. An isolated
+diagonal example, an unspecified sufficiently small timestep, or an unquantified neighborhood
+does not establish practical coverage. Coverage of non-descent behavior requires a certified
+example within the selected mechanical family where an actual update increases the objective.
+If that coverage is unavailable, AP-03 must state the limitation and bound the theorem's claims.
 
 # Phase 1 — Implicit Euler mathematics
 
@@ -103,6 +150,11 @@ block matrices. Simultaneous merging is available for noncommuting operators as 
 
 Status: planned. Module: `Vbd/Dynamics/Contraction.lean`.
 
+The [contractive iteration specification](/mathematics/contractive-fixed-point-iteration.md)
+provides the mathematical interface. CT-01–CT-03 supply the initial API assessment, invariant-set
+wrapper, and finite-iterate bound. Derivative and perturbation extensions follow AP-03's proceed
+decision and serve its selected route; the initial core remains independent of VBD assumptions.
+
 Reuse Mathlib's `ContractingWith` and Banach fixed-point results. Add the project-relevant
 bridges that are absent or awkward at the call site:
 
@@ -161,6 +213,11 @@ Acceptance gate: the theorem is solver-independent and uses the Phase 1 and Phas
 Status: planned. Module: `Vbd/Block/Contraction.lean`.
 
 Dependencies: Phase 2 + Phase 3.
+
+Formalization follows the AP-03 proceed decision. The chosen norm and bound construction must
+support its assessed family and parameter range. Nonnegative comparison matrices are the initial
+candidate; a sharper construction or a several-sweep certificate selected by AP-03 requires
+synchronized theorem targets and dependencies before implementation.
 
 For an externally ordered differentiable update sequence, record block bounds for each derivative
 factor through nonnegative matrices `C⁽ʳ⁾` satisfying
@@ -227,9 +284,15 @@ smaller timestep / stronger mass term
 Each convergence theorem includes the external serial or colored execution plan and its
 off-diagonal coupling in addition to any positive-definiteness or condition-number assumptions.
 
-Acceptance gate: at least one concrete finite-support implicit-Euler system instantiates the whole
-chain for the production full-step update, with all regularity, coloring, and neighborhood
-hypotheses explicit.
+Acceptance gate: the parameterized, coupled mechanical family accepted by AP-03, including its
+nonlinear case, instantiates the whole chain for the production full-step update. The theorem
+derives the certificate from explicit system assumptions, with quantitative timestep and parameter
+ranges, block regularity, execution semantics, invariant radius, and a proved initial-state
+membership condition instantiated for the selected warm starts. It supplies error and iteration
+bounds meeting the AP-01 target on the accepted range. A reproducible assessment reports the
+conservatism of these bounds against observed behavior and identifies excluded regimes. Claims
+of non-descent coverage require the corresponding certified objective-increase example; sampling
+alone does not establish it. All analytic certificate obligations are proved in Lean.
 
 # Secondary and deferred routes
 

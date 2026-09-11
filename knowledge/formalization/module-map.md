@@ -33,7 +33,11 @@ These paths are the current module boundaries recorded in the central
 Phases 1 and 2 are complete. `Block/Update.lean` and `Block/Operator.lean` each depend only on
 `Block/Basic.lean` within the project.
 Phase 3 begins after confirmation of the pinned Mathlib contraction API and remains independent of
-the block modules.
+the block modules. CT-01–CT-03 form its initial core. The
+[applicability study](/project/roadmap.md#applicability-gate-and-work-order) AP-01–AP-03 then
+assesses the concrete VBD theorem route before CT-04–CT-05 and Phase 4–7 formalization.
+Proceeding requires a supported AP-03 decision. Exploratory derivations and diagnostic scripts
+introduce no cross-foundation Lean imports; the module dependency boundaries stay in force.
 
 The three foundations may be implemented independently:
 
