@@ -327,6 +327,18 @@ alone does not establish it. All analytic certificate obligations are proved in 
 
 # Secondary and deferred routes
 
+One potential engineering extension is an offline configuration analyzer that selects parameter
+ranges for a VBD solver and emits a lightweight adaptive iteration loop. Symbolic estimates or
+validated numerical bounds could certify contraction over a stated family of configurations and
+state regions; sampling supplies empirical guidance rather than a uniform certificate. A known
+factor can be compiled into a displacement threshold for a requested solution-error tolerance,
+leaving the expensive analysis outside runtime. Runtime validity requires either an offline
+guarantee covering evolving states and contacts or checks with a fallback outside the certified
+range. Analysis failure should be distinguished from demonstrated noncontraction, and performance
+depends on certificate conservatism and monitoring cost. This extension is outside the active
+roadmap; the [adaptive VBD reference note](/references/adaptive-vbd-iterations.md) describes
+related mechanisms and the distinction between heuristic stopping and certified accuracy.
+
 Energy-change identities, local or sweep monotonicity, line search, convex minimization, and KL
 arguments form secondary routes activated by a named target theorem or compatible solver variant.
 
