@@ -1,5 +1,9 @@
 # Lean Formalization Update Log
 
+## 2026-09-11
+
+* **Simplification**: Deleted `execute`, `intermediate`, and their wrapper lemmas. Retained block-specific preservation and write-support lemmas for Mathlib’s `List.prod` on `Function.End`; reformulated simultaneous–sequential equivalence as `merge_eq_prod`, using Mathlib’s product reordering theorem directly. Updated the module map.
+
 ## 2026-09-08
 
 * **Terminology review**: Reviewed all three `Block` modules. Clarified whole blocks and block indices in `Basic`, operator indices and list positions in `Update`, and finite index families and `Fintype` instances in `Operator`. Made write-support and simultaneous-merge descriptions precise; retained declaration names and theorem statements. Updated the specification link in `Basic`.

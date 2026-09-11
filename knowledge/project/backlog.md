@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-09-08T00:00:00Z
+timestamp: 2026-09-11T00:00:00Z
 ---
 
 # Status vocabulary
@@ -43,8 +43,8 @@ timestamp: 2026-09-08T00:00:00Z
 |---|---|---|---|---|
 | BS-01 | done | `BlockSum B` and block operations | none | Heterogeneous product, native block access, injections, and replacement laws compile using Mathlib |
 | BS-02 | done | Write support for state-update operators | BS-01 | Write support is the set of block indices changed for some input; containment in a supplied set is equivalent to preservation outside it; identity has empty support and composition has support bounded by the union |
-| BS-03 | done | External execution composition | BS-02 | Finite externally ordered operator sequences have empty, singleton, intermediate-state, and concatenation laws; execution preserves blocks outside the union of the supplied write-support bounds |
-| BS-04 | done | Commutation and reordering | BS-03 | Pairwise-commuting finite operator families have an order-independent composite |
+| BS-03 | done | Write support of finite compositions | BS-02 | Ordinary finite products of self-maps preserve blocks outside the union of their write-support bounds; composition algebra uses Mathlib |
+| BS-04 | done | Commutation and reordering | BS-03 | Mathlib’s product reordering theorem supplies order independence for pairwise-commuting finite operator families |
 | BS-05 | done | Simultaneous and color-batch algebra | BS-02, BS-04 | Pairwise-disjoint write-support bounds define a simultaneous merge whose support is the union of the constituent supports, including for noncommuting operators; pairwise commutation makes the merge equal every sequential ordering |
 | BS-06 | done | Continuous-linear block representation | BS-01 | Finite heterogeneous continuous-linear entries assemble and reconstruct operators, and identity and composition satisfy the block-matrix formulas |
 

@@ -3,7 +3,7 @@ type: Architecture Decision
 title: Mathematical and Module Architecture
 description: Separates implicit-Euler physics, block-update and operator algebra, contraction theory, and their explicit bridge layers.
 tags: [architecture, dependencies, locality, contraction]
-timestamp: 2026-09-07T00:00:00Z
+timestamp: 2026-09-11T00:00:00Z
 ---
 
 # Independent foundations
@@ -13,7 +13,7 @@ The project has three self-contained foundations:
 1. **Implicit-Euler mathematics** defines the incremental objective, its gradient as the nonlinear
    residual, and its Hessian.
 2. **Block-update algebra** defines heterogeneous block sums, write-local state transformations,
-   externally controlled composition, commutation, simultaneous batches, and block-matrix
+   composition, commutation, simultaneous batches, and block-matrix
    representations of continuous linear operators.
 3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, derivative,
    and perturbation results for arbitrary self-maps.

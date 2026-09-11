@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-09-11
+
+* **Scope correction**: Removed external execution data and the dedicated execution/intermediate-state API from Phase 2. Updated BS-03, BS-04, the roadmap, architecture, and repository status to use ordinary composition and Mathlib’s existing monoid laws. Production execution semantics remain in the later layers.
+
 ## 2026-09-08
 
 * **Completion**: Implemented BS-02–BS-06, marked Phase 2 complete, synchronized the root repository status, and advanced the Phase 3 contraction API assessment to `next`.

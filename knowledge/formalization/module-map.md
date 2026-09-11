@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-09-08T00:00:00Z
+timestamp: 2026-09-11T00:00:00Z
 ---
 
 # Foundation modules
@@ -12,7 +12,7 @@ timestamp: 2026-09-08T00:00:00Z
 |---|---|---|---|
 | P1 | `Integrator/ImplicitEulerEnergy.lean` | Implemented incremental objective, gradient/residual, and Hessian identities | none |
 | P2 | `Block/Basic.lean` | `BlockSum B`, native coordinate access, injections, and replacements | none |
-| P2 | `Block/Update.lean` | Exact write support, external finite composition, commutation, and simultaneous batches | `Block/Basic` |
+| P2 | `Block/Update.lean` | Write support under composition and simultaneous merging | `Block/Basic` |
 | P2 | `Block/Operator.lean` | Continuous block entries, finite assembly and reconstruction, and block-matrix arithmetic | `Block/Basic` |
 | P3 | `Dynamics/Contraction.lean` | Thin wrappers for local invariant contractions, finite-iterate bounds, derivative criteria, and perturbations | none |
 
@@ -64,7 +64,7 @@ mathematical specifications, dependency assessments, and external references.
 # Implementation status
 
 `Integrator/ImplicitEulerEnergy.lean` implements Phase 1. The three Phase 2 modules implement
-heterogeneous block operations, exact write support and externally ordered execution, disjoint
+heterogeneous block operations, exact write support under ordinary composition, disjoint
 snapshot merging with commuting sequential equivalence, and continuous-linear block-matrix
 assembly, reconstruction, and arithmetic. Preserved linear output blocks are characterized by
 identity block rows. All implemented foundation modules are exported by `Vbd.lean`.

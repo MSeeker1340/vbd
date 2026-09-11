@@ -4,16 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: VBD contributors
 -/
 import Vbd.Block.Basic
-import Mathlib.Data.List.Perm.Basic
+import Mathlib.Algebra.Group.End
+import Mathlib.Algebra.BigOperators.Group.List.Lemmas
 
 /-!
-# Write support and externally ordered updates
+# Write support and simultaneous merging
 
-An update is an ordinary self-map. `execute U order` applies the operators in list order,
-including repeated operator indices. Write-support bounds constrain outputs only; reads may use
-the whole state.
-`merge` selects disjoint output blocks evaluated at one common input. Its definition requires
-neither commutation nor algebraic structure on the blocks.
+Updates are ordinary self-maps, composed with `Function.comp`. Finite composition uses Mathlib's
+`Function.End` monoid and `List.prod`: multiplication is composition, so the rightmost factor acts
+first. Identity, associativity, and reordering of commuting factors use Mathlib's monoid laws.
+Write-support bounds constrain output blocks; reads may use the whole state. Simultaneous merging
+combines output blocks evaluated at a common input.
 -/
 
 namespace Vbd
@@ -53,82 +54,24 @@ theorem writeSupport_replace [DecidableEq ι] (i : ι) (f : BlockSum B → B i) 
   apply writeSupport_subset_iff.mpr
   exact fun x j hj ↦ BlockSum.replace_apply_of_ne x hj (f x)
 
-section Execution
-variable {X : Type*} {κ : Type*}
+/-- A product of operators preserving a block preserves that block. -/
+theorem prod_preserves (l : List (Function.End (BlockSum B))) (i : ι)
+    (h : ∀ U ∈ l, ∀ x, U x i = x i) (x : BlockSum B) : l.prod x i = x i := by
+  induction l with
+  | nil => rfl
+  | cons U l ih =>
+      exact (h U List.mem_cons_self (l.prod x)).trans
+        (ih (fun V hV ↦ h V (List.mem_cons_of_mem U hV)))
 
-/-- Apply the operators indexed by `order`, in list order. -/
-def execute (U : κ → X → X) (order : List κ) (x : X) : X :=
-  order.foldl (fun z r ↦ U r z) x
-
-@[simp] theorem execute_nil (U : κ → X → X) : execute U [] = id := rfl
-
-@[simp] theorem execute_cons (U : κ → X → X) (r : κ) (order : List κ) :
-    execute U (r :: order) = execute U order ∘ U r := rfl
-
-@[simp] theorem execute_singleton (U : κ → X → X) (r : κ) :
-    execute U [r] = U r := rfl
-
-theorem execute_append (U : κ → X → X) (a b : List κ) :
-    execute U (a ++ b) = execute U b ∘ execute U a := by
-  funext x
-  exact List.foldl_append
-
-/-- The state after the first `n` positions; out-of-range prefixes give the final state. -/
-def intermediate (U : κ → X → X) (order : List κ) (x : X) (n : ℕ) : X :=
-  execute U (order.take n) x
-
-theorem intermediate_zero (U : κ → X → X) (order : List κ) (x : X) :
-    intermediate U order x 0 = x := rfl
-
-theorem intermediate_succ (U : κ → X → X) (order : List κ) (x : X)
-    (n : ℕ) (h : n < order.length) :
-    intermediate U order x (n + 1) = U order[n] (intermediate U order x n) := by
-  unfold intermediate
-  rw [List.take_succ_eq_append_getElem h, execute_append]
-  rfl
-
-/-- Once every update in the list has been applied, every longer prefix gives the final state. -/
-theorem intermediate_eq_execute (U : κ → X → X) (order : List κ) (x : X)
-    {n : ℕ} (h : order.length ≤ n) : intermediate U order x n = execute U order x := by
-  simp only [intermediate, List.take_of_length_le h]
-
-/-- Adjacent commuting updates may be exchanged inside an arbitrary execution. -/
-theorem execute_swap (U : κ → X → X) (before after : List κ) (r s : κ)
-    (h : Function.Commute (U r) (U s)) :
-    execute U (before ++ r :: s :: after) = execute U (before ++ s :: r :: after) := by
-  simp only [execute_append, execute_cons]
-  exact funext fun x ↦ congrArg (execute U after) (h (execute U before x)).symm
-
-/-- Permutations preserve execution when the participating operators commute. -/
-theorem execute_perm (U : κ → X → X) {a b : List κ} (h : a.Perm b)
-    (hc : ∀ r ∈ a, ∀ s ∈ a, Function.Commute (U r) (U s)) :
-    execute U a = execute U b := by
-  funext x
-  exact h.foldl_eq' (f := fun z r ↦ U r z) (fun r hr s hs z ↦ (hc r hr s hs z).symm) x
-
-end Execution
+/-- Write support propagates through ordinary finite composition. -/
+theorem writeSupport_prod (l : List (Function.End (BlockSum B))) :
+    writeSupport l.prod ⊆ ⋃ U ∈ l, writeSupport U := by
+  apply writeSupport_subset_iff.mpr
+  exact fun x i hi ↦ prod_preserves l i (fun U hU z ↦
+    writeSupport_subset_iff.mp (show writeSupport U ⊆ writeSupport U from Set.Subset.rfl)
+      z i (by aesop)) x
 
 variable {κ : Type*}
-
-theorem execute_preserves (U : κ → BlockSum B → BlockSum B) (order : List κ)
-    (i : ι) (h : ∀ r ∈ order, ∀ x, U r x i = x i) (x : BlockSum B) :
-    execute U order x i = x i := by
-  induction order generalizing x with
-  | nil => rfl
-  | cons r order ih =>
-      exact (ih (fun s hs ↦ h s (List.mem_cons_of_mem r hs)) (U r x)).trans
-        (h r List.mem_cons_self x)
-
-theorem writeSupport_execute_subset (U : κ → BlockSum B → BlockSum B)
-    (order : List κ) (W : κ → Set ι) (h : ∀ r ∈ order, writeSupport (U r) ⊆ W r) :
-    writeSupport (execute U order) ⊆ ⋃ r ∈ order, W r := by
-  rw [writeSupport_subset_iff]
-  exact fun x i hi ↦ execute_preserves U order i
-    (fun r hr z ↦ writeSupport_subset_iff.mp (h r hr) z i (by aesop)) x
-
-theorem writeSupport_execute (U : κ → BlockSum B → BlockSum B) (order : List κ) :
-    writeSupport (execute U order) ⊆ ⋃ r ∈ order, writeSupport (U r) :=
-  writeSupport_execute_subset U order _ (fun _ _ ↦ Set.Subset.rfl)
 
 /-- Select output blocks using supplied write-support bounds. Pairwise disjoint bounds assign
 at most one operator index to each block.
@@ -178,31 +121,39 @@ theorem writeSupport_merge (U : κ → BlockSum B → BlockSum B) (K : Finset κ
 
 /-- Every enumeration of a pairwise-commuting family with disjoint write-support bounds
 implements its simultaneous merge. -/
-theorem merge_eq_execute (U : κ → BlockSum B → BlockSum B) (K : Finset κ)
+theorem merge_eq_prod (U : κ → Function.End (BlockSum B)) (K : Finset κ)
     (W : κ → Set ι) (hb : ∀ r ∈ K, writeSupport (U r) ⊆ W r)
     (hd : ∀ r ∈ K, ∀ s ∈ K, r ≠ s → Disjoint (W r) (W s))
     (hc : ∀ r ∈ K, ∀ s ∈ K, Function.Commute (U r) (U s))
     (order : List κ) (hn : order.Nodup) (he : ∀ r, r ∈ order ↔ r ∈ K) :
-    merge U K W = execute U order := by
+    merge U K W = (order.map U).prod := by
   classical
   funext x
   apply PiLp.ext
   intro i
   by_cases h : ∃ r, r ∈ K ∧ i ∈ W r
   · obtain ⟨r, hr, hi⟩ := h
-    rw [merge_apply_of_mem U K W hd hr hi,
-      execute_perm U (List.perm_cons_erase ((he r).mpr hr))
-        (fun r hr s hs ↦ hc r ((he r).mp hr) s ((he s).mp hs)), execute_cons]
-    exact (execute_preserves U (order.erase r) i (fun s hs z ↦
+    have hp : order.Perm (order.erase r ++ [r]) :=
+      (List.perm_cons_erase ((he r).mpr hr)).trans (by simpa using
+        (List.perm_append_comm (l₁ := [r]) (l₂ := order.erase r)))
+    have hc' : (order.map U).Pairwise Commute := by
+      exact List.pairwise_map.mpr (List.Pairwise.imp_of_mem
+        (fun hs ht _ ↦ funext (hc _ ((he _).mp hs) _ ((he _).mp ht))) hn)
+    rw [merge_apply_of_mem U K W hd hr hi, (hp.map U).prod_eq' hc',
+      List.map_append, List.prod_append, List.map_singleton, List.prod_singleton]
+    refine (prod_preserves ((order.erase r).map U) i ?_ (U r x)).symm
+    simp only [List.forall_mem_map]
+    exact fun s hs z ↦
       writeSupport_subset_iff.mp (hb s ((he s).mp (List.mem_of_mem_erase hs))) z i
         (fun his ↦ Set.disjoint_left.mp
           (hd s ((he s).mp (List.mem_of_mem_erase hs)) r hr
-            (hn.mem_erase_iff.mp hs).1) his hi)) (U r x)).symm
+            (hn.mem_erase_iff.mp hs).1) his hi)
   · rw [merge_apply_of_not_mem U K W (by aesop)]
-    exact (execute_preserves U order i (fun r hr z ↦
-      writeSupport_subset_iff.mp (hb r ((he r).mp hr)) z i (by aesop)) x).symm
+    refine (prod_preserves (order.map U) i ?_ x).symm
+    exact List.forall_mem_map.mpr (fun r hr z ↦
+      writeSupport_subset_iff.mp (hb r ((he r).mp hr)) z i (by aesop))
 
-/-- The support bound for a batch can be reused when that batch is an execution step. -/
+/-- The union of the supplied bounds bounds the write support of the simultaneous merge. -/
 theorem writeSupport_merge_subset (U : κ → BlockSum B → BlockSum B) (K : Finset κ)
     (W : κ → Set ι) (hb : ∀ r ∈ K, writeSupport (U r) ⊆ W r)
     (hd : ∀ r ∈ K, ∀ s ∈ K, r ≠ s → Disjoint (W r) (W s)) :
