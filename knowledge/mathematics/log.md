@@ -2,6 +2,8 @@
 
 ## 2026-09-11
 
+* **Motivation**: Introduced the VBD solver context in [Contractive fixed-point iteration](./contractive-fixed-point-iteration.md), distinguishing Newton descent from root finding and explaining invariant-neighborhood contraction, finite-sweep guarantees, and the later block-coupling and stationarity bridges. Clarified that objective descent and contraction are distinct properties.
+
 * **Creation**: Added [Contractive fixed-point iteration](./contractive-fixed-point-iteration.md) with invariant-set hypotheses, Banach existence and uniqueness, finite-iteration and defect bounds, derivative and invariant-ball certificates, and separate persistent, vanishing, and summable perturbation conclusions. Indexed the article and linked the curvature specification to it, making the convexity and completeness premises explicit.
 
 ## 2026-09-08

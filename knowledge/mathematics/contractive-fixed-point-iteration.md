@@ -6,6 +6,35 @@ tags: [fixed-points, contraction, iteration, perturbations]
 timestamp: 2026-09-11T00:00:00Z
 ---
 
+In [implicit Euler as optimization](/mathematics/implicit-euler.md), a timestep is determined
+by a stationary point of the incremental objective `G_IE`. VBD seeks this configuration through
+repeated block-Newton updates, organized into serial or buffered colored sweeps using the
+[block-operator algebra](/mathematics/block-states-and-operators.md). Each complete sweep is a
+map on candidate configurations. The convergence question is whether repeatedly applying that
+map approaches a stationary solution, and how much error remains after a fixed sweep budget.
+
+Newton updates admit both an optimization interpretation and a root-finding interpretation.
+A positive-definite local Hessian makes the Newton direction a descent direction away from
+stationarity; decreasing the objective with the full step additionally requires control of the
+quadratic model's error. Root finding targets the stationarity equation itself. Convergence to
+a root can hold even when a step increases the objective or its direction fails to be a descent
+direction. Minimization requires additional hypotheses about the stationary point.
+
+The contraction approach certifies the actual sweep map on an invariant neighborhood of a
+stationary solution. A uniform factor below one gives geometric convergence and finite-sweep
+error bounds while permitting intermediate objective increases. Contraction and objective
+descent provide different kinds of control over iteration: monotone objective
+decrease alone implies neither contraction nor convergence of the iterates. A contraction
+does decrease distance to its fixed point in the certified metric.
+
+For VBD, the substantive certificate comes from controlling block inverses, cross-block
+coupling, and their propagation through the actual execution order or simultaneous-batch
+semantics. The [curvature and coupling analysis](/mathematics/curvature.md) supplies these
+bounds, and the [implicit-Euler bridge](/project/roadmap.md#phase-5--implicit-euler-fixed-point-goals)
+connects a designated fixed point to stationarity. The theory here provides the independent,
+objective-free iteration estimates used by those layers. Its guarantees apply within the
+certified region; practical convergence alone does not establish a contraction certificate.
+
 # Setting and contraction
 
 Fixed-point iteration applies a self-map repeatedly to solve its fixed-point equation. Let
