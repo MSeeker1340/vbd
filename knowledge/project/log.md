@@ -2,6 +2,8 @@
 
 ## 2026-09-11
 
+* **Evaluation routes**: Extended AP-01–AP-03 to compare state contraction with fixed-point consistency against qualitative and quantitative physical-residual progress on the same mechanical families. Separated physical residual, sweep defect, state distance, and objective diagnostics; distinguished intermediate residual increases from spurious fixed points. Allowed scoped qualitative milestones without closing the quantitative end-to-end target, required downstream synchronization when a route is selected, and removed the contraction-bridge dependency from VB-02's consistency proof.
+
 * **Applicability gate**: Prioritized CT-01–CT-03 followed by AP-01–AP-03 before derivative, perturbation, and bridge/synthesis formalization. Added a coupled nonlinear test family, preselected practical targets, analytic and numerical certificate assessment, and a proceed-or-revise decision. Strengthened Phase 7 acceptance to require quantitative parameter and warm-start coverage, useful finite-sweep bounds, conservatism reporting, and a certified example for any non-descent coverage claim. This addresses the risk of completing a correct but practically restrictive theorem; updated backlog dependencies and norm/execution decisions accordingly.
 
 * **Scope correction**: Removed external execution data and the dedicated execution/intermediate-state API from Phase 2. Updated BS-03, BS-04, the roadmap, architecture, and repository status to use ordinary composition and Mathlib’s existing monoid laws. Production execution semantics remain in the later layers.

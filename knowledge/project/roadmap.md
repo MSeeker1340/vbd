@@ -60,22 +60,53 @@ cross-foundation Lean imports and requires no general simulation infrastructure.
    cross-block coupling, a coupled quadratic baseline, and a nonlinear case. Define the actual
    full-step serial sweep, skip threshold, and at least one proper-color execution. Document
    parameter ranges and their physical or published provenance, warm-start construction, and
-   target error and sweep budgets before assessing the certificate. Include timestep, stiffness,
+   target error and sweep budgets before assessing the certificate. Define the physical residual
+   `r_IE(x) = ‖F_IE(x)‖`, its norm and scaling, and the sweep defect `r_T(x) = d(x,T(x))`
+   separately. Include timestep, stiffness,
    mass-ratio, and coupling variation sufficient to expose restrictive assumptions.
-2. **AP-02 — Assess the certificate.** Derive the actual sweep linearization and candidate
+2. **AP-02 — Compare the certificates.** Derive the actual sweep linearization and candidate
    neighborhood estimates. Compare observed iteration behavior, the sweep derivative's spectral
    radius and operator norms, and the proposed comparison-matrix bounds. Assess the certified
    timestep range, invariant radius, warm-start membership, and predicted iteration budget.
    Evaluate loss from absolute-value bounds and norm conversions, including dependence on system
-   size. Test objective-increasing updates as a distinct coverage question. Clearly separate
+   size. Evaluate direct physical-residual progress on the same systems, parameter ranges,
+   and initial states using the guarantee levels below. Assess fixed-point/root consistency
+   independently of contraction, including the effect of skipped blocks and execution semantics.
+   Track state distance where a root is available, physical residual, sweep defect, and objective
+   separately. Test objective-increasing updates as a distinct coverage question. Clearly separate
    analytic guarantees from sampled or floating-point evidence: a derivative at one point or
    successful trajectories do not certify uniform contraction on a neighborhood.
-3. **AP-03 — Decide the theorem route.** Record the selected family, quantitative coverage,
-   remaining proof obligations, norm, and execution scope. Proceed when analytic estimates
-   support a nonempty parameter range justified by AP-01, relevant warm starts, and the stated
-   accuracy budget. If the certificate is ineffective, assess a better norm, sharper bounds,
+3. **AP-03 — Decide the theorem route.** Compare the coverage and proof obligations of state
+   contraction with consistency, qualitative physical-residual progress, and quantitative
+   physical-residual reduction. Record the selected family, guarantee level, coverage,
+   remaining proof obligations, norm, and execution scope. A quantitative proceed decision
+   requires analytic estimates supporting a nonempty parameter range justified by AP-01,
+   relevant warm starts, and the stated accuracy budget. A qualitative proceed decision may
+   authorize a scoped residual-progress theorem with explicit covered initial states and region;
+   it does not satisfy the quantitative end-to-end acceptance gate. If the certificate is
+   ineffective, assess a better norm, sharper bounds,
    or contraction over several sweeps, including intermediate-iterate control. If these remain
    ineffective, revise the target or convergence tool before extending the formalization.
+
+The evaluation distinguishes these guarantee levels:
+
+| Route | Analytic target on the stated invariant region | Supported conclusion |
+|---|---|---|
+| State contraction and consistency | Uniform `q < 1`, completeness and nonemptiness, and fixed-point/root consistency | Unique fixed point in the region, geometric state convergence, and physical-residual convergence under continuity; residual error bounds additionally use quantitative regularity |
+| Qualitative physical-residual progress | `r_IE(T(x)) < r_IE(x)` at every non-root, with preservation of zero residual | Every further sweep improves the physical residual until it is zero; this alone supplies neither an arbitrary-accuracy guarantee nor an iteration budget |
+| Quantitative physical-residual reduction | `r_IE(T(x)) ≤ θ r_IE(x)` with uniform `0 ≤ θ < 1`, or an explicit decrease recurrence sufficient for the target tolerance | A proved finite-sweep physical-residual bound without requiring pairwise contraction of states; state convergence needs separate hypotheses |
+
+Strict distance shrinking implies strict decrease of `r_T` away from fixed points. This is a
+separate diagnostic guarantee; identifying its practical meaning requires a proved relationship
+to `r_IE`. Bounds comparing two residuals do not automatically transfer stepwise monotonicity.
+Contraction toward a true root can allow intermediate physical-residual increases while still
+forcing that residual to vanish by continuity. Strict physical-residual decrease at every
+non-root itself excludes spurious fixed points, although root preservation remains an obligation.
+
+The Phase 4–7 theorem chain below specifies the state-contraction route. Selecting a residual
+route or a qualitative milestone requires AP-03 to synchronize the downstream deliverables and
+dependencies before implementing them. A useful qualitative result can be accepted as a scoped
+milestone while the quantitative project target remains open.
 
 AP-03 can be completed with either a proceed or revise conclusion. Dependent formalization
 requires a proceed conclusion for its selected route; a revise conclusion leaves that work
