@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Curvature, Coupling, and VBD Contraction
 description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
 tags: [curvature, coupling, hessian, contraction]
-timestamp: 2026-09-07T00:00:00Z
+timestamp: 2026-09-11T00:00:00Z
 ---
 
 # Implicit-Euler Hessian
@@ -62,8 +62,9 @@ $$
 \sup_{x\in N}\|DS(x)\|\le q<1.
 $$
 
-Together with invariance of `N`, generic fixed-point theory then supplies local convergence and
-finite-sweep error bounds.
+On a convex `N`, the derivative bound gives a Lipschitz contraction. Together with invariance
+and completeness of a nonempty `N`, [contractive fixed-point iteration](./contractive-fixed-point-iteration.md)
+then supplies a unique fixed point in `N`, local convergence, and finite-sweep error bounds.
 
 # Secondary consequences
 

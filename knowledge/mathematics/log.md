@@ -1,5 +1,9 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-11
+
+* **Creation**: Added [Contractive fixed-point iteration](./contractive-fixed-point-iteration.md) with invariant-set hypotheses, Banach existence and uniqueness, finite-iteration and defect bounds, derivative and invariant-ball certificates, and separate persistent, vanishing, and summable perturbation conclusions. Indexed the article and linked the curvature specification to it, making the convexity and completeness premises explicit.
+
 ## 2026-09-08
 
 * **Naming**: Renamed the block-state and operator specification to [Block states and operators](./block-states-and-operators.md), aligned its title and index entry, and updated incoming references.
