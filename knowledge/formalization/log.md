@@ -1,5 +1,9 @@
 # Lean Formalization Update Log
 
+## 2026-09-14
+
+* **Phase 3 core**: Reviewed and recorded the pinned Mathlib contraction, invariant-subset, fixed-point and iterate APIs. Implemented and exported six small ambient-space interfaces in `Dynamics/Contraction.lean`, reusing Mathlib existence, uniqueness, Lipschitz iteration and defect bounds. Kept completeness local to existence and strict contraction local to convergence/uniqueness/error certification. Synchronized the module map.
+
 ## 2026-09-11
 
 * **Work order**: Synchronized the module plan with the early applicability gate: the thin Phase 3 core precedes AP-01–AP-03, and further dynamics and bridge/synthesis formalization requires a supported proceed decision. Kept the three foundation import boundaries intact during exploratory work.

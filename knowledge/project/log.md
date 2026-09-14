@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-09-14
+
+* **Phase 3 core completion**: Completed CT-01–CT-03 and advanced AP-01 to `next`. Synchronized the roadmap and repository status; derivative and optional perturbation extensions remain gated by the applicability study.
+
 ## 2026-09-11
 
 * **Future direction**: Recorded offline VBD configuration analysis and compiled adaptive stopping as a potential engineering extension outside the active roadmap, with explicit certificate, runtime-validity, and performance boundaries. Added no implementation milestone.

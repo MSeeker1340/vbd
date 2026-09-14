@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-09-11T00:00:00Z
+timestamp: 2026-09-14T00:00:00Z
 ---
 
 # Current phase status
@@ -12,8 +12,8 @@ timestamp: 2026-09-11T00:00:00Z
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
 | Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
-| Phase 3 — contractive fixed-point iteration | planned | CT-01–CT-03 form the initial core; further formalization follows the applicability gate |
-| Applicability study — AP-01–AP-03 | planned | follows the initial Phase 3 core and gates derivative, perturbation, and bridge/synthesis formalization |
+| Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-03 are implemented; CT-04–CT-05 await the applicability gate |
+| Applicability study — AP-01–AP-03 | next | AP-01 selects the representative family; the study gates further formalization |
 | Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives physical conflict structure |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
 | Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
@@ -179,11 +179,13 @@ block matrices. Simultaneous merging is available for noncommuting operators as 
 
 # Phase 3 — Contractive fixed-point iteration
 
-Status: planned. Module: `Vbd/Dynamics/Contraction.lean`.
+Status: CT-01–CT-03 complete; extensions gated by AP-03. Module: `Vbd/Dynamics/Contraction.lean`.
 
 The [contractive iteration specification](/mathematics/contractive-fixed-point-iteration.md)
 provides the mathematical interface. CT-01–CT-03 supply the initial API assessment, invariant-set
-wrapper, and finite-iterate bound. Derivative and perturbation extensions follow AP-03's proceed
+wrapper, and finite-iterate bound. The implemented metric-space interface also exposes convergence
+to a supplied fixed point and the defect bound, with completeness required only for existence.
+Derivative and perturbation extensions follow AP-03's proceed
 decision and serve its selected route; the initial core remains independent of VBD assumptions.
 
 Reuse Mathlib's `ContractingWith` and Banach fixed-point results. Add the project-relevant

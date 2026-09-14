@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-09-11T00:00:00Z
+timestamp: 2026-09-14T00:00:00Z
 ---
 
 # Foundation modules
@@ -14,7 +14,7 @@ timestamp: 2026-09-11T00:00:00Z
 | P2 | `Block/Basic.lean` | `BlockSum B`, native coordinate access, injections, and replacements | none |
 | P2 | `Block/Update.lean` | Write support under composition and simultaneous merging | `Block/Basic` |
 | P2 | `Block/Operator.lean` | Continuous block entries, finite assembly and reconstruction, and block-matrix arithmetic | `Block/Basic` |
-| P3 | `Dynamics/Contraction.lean` | Thin wrappers for local invariant contractions, finite-iterate bounds, derivative criteria, and perturbations | none |
+| P3 | `Dynamics/Contraction.lean` | Implemented local fixed-point and finite-iterate interfaces; derivative and perturbation extensions await AP-03 | none |
 
 # Bridge and synthesis modules
 
@@ -32,8 +32,8 @@ These paths are the current module boundaries recorded in the central
 
 Phases 1 and 2 are complete. `Block/Update.lean` and `Block/Operator.lean` each depend only on
 `Block/Basic.lean` within the project.
-Phase 3 begins after confirmation of the pinned Mathlib contraction API and remains independent of
-the block modules. CT-01–CT-03 form its initial core. The
+Phase 3 has an implemented, block-independent core covering CT-01–CT-03 and reusing the pinned
+Mathlib contraction API. The
 [applicability study](/project/roadmap.md#applicability-gate-and-work-order) AP-01–AP-03 then
 assesses the concrete VBD theorem route before CT-04–CT-05 and Phase 4–7 formalization.
 Proceeding requires a supported AP-03 decision. Exploratory derivations and diagnostic scripts
@@ -73,4 +73,7 @@ snapshot merging with commuting sequential equivalence, and continuous-linear bl
 assembly, reconstruction, and arithmetic. Preserved linear output blocks are characterized by
 identity block rows. All implemented foundation modules are exported by `Vbd.lean`.
 
-P3–P7 remain planned. The next backlog item is the pinned Mathlib contraction API assessment.
+`Dynamics/Contraction.lean` implements CT-01–CT-03 using Mathlib contraction and Lipschitz
+iteration results. It supplies local fixed-point existence and uniqueness, convergence to a
+supplied fixed point, finite-iterate distance bounds, and a defect-based error estimate, with
+no project imports. CT-04–CT-05 and P4–P7 await the applicability gate. AP-01 is the next item.

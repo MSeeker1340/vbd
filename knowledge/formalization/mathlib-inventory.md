@@ -4,7 +4,7 @@ title: Pinned Mathlib API Inventory
 description: Records calculus, block-product, and fixed-point APIs confirmed in the repository's pinned Mathlib checkout.
 resource: ../.lake/packages/mathlib/Mathlib
 tags: [mathlib, lean4, gradient, block-product, contraction]
-timestamp: 2026-09-04T00:00:00Z
+timestamp: 2026-09-14T00:00:00Z
 ---
 
 # Audit basis
@@ -65,19 +65,41 @@ infinite-dimensional blocks.
 
 # Contractive fixed points
 
-`Mathlib/Topology/MetricSpace/Contracting.lean` defines `ContractingWith K f` as `K < 1` together
-with `LipschitzWith K f`. It provides Banach fixed points on complete metric spaces, convergence of
-iterates, a priori distance estimates, and restriction to forward-invariant subsets. Phase 3 wraps
-the declarations needed for the project's local-ball, derivative-bound, and perturbation
-interfaces.
+The pinned `Mathlib/Topology/MetricSpace/Contracting.lean` supplies Banach theory, including
+complete invariant subsets. `ContractingWith K f` is `K < 1 ∧ LipschitzWith K f`, with
+`K : ℝ≥0`. Its foundation uses extended metric spaces; metric-space interfaces eliminate
+finite-distance side conditions.
 
-The existing API is norm-agnostic. The later block-contraction layer turns a spectral-radius bound
-into a convergence result through a direct norm bound, an appropriate equivalent norm, or a
-suitable iterate result.
+| Declarations | Assumptions and reusable result |
+|---|---|
+| `LipschitzOnWith.mapsToRestrict`, `Set.MapsTo.lipschitzOnWith_iff_restrict` | Turn a set-local Lipschitz bound and `MapsTo` into the Lipschitz bound on the subtype self-map |
+| `ContractingWith.restrict` | Restricts an ambient contraction to an invariant subset; a set-local certificate instead uses the preceding Lipschitz bridge with `K < 1` |
+| `ContractingWith.exists_fixedPoint'` | `IsComplete s`, invariance, contraction of the restricted map, a seed in `s`, and finite seed-to-image distance give an ambient fixed point in `s`, convergence from the seed, and a geometric `edist` bound |
+| `ContractingWith.fixedPoint`, `fixedPoint_isFixedPt`, `fixedPoint_unique`, `tendsto_iterate_fixedPoint` | Chosen fixed point, uniqueness and convergence on a nonempty complete metric space |
+| `ContractingWith.fixedPoint_unique'` | Uniqueness of two supplied fixed points in a metric space, without completeness |
+| `ContractingWith.tendsto_iterate_efixedPoint'` | Ambient convergence to the selected fixed point of a complete invariant subset |
+| `ContractingWith.apriori_dist_iterate_fixedPoint_le` | Distance at iteration `n` bounded by `dist x (f x) * K^n / (1-K)` on a nonempty complete metric space |
+| `ContractingWith.aposteriori_dist_iterate_fixedPoint_le` | Distance at iteration `n` bounded by its next-step displacement divided by `1-K` |
+| `ContractingWith.dist_le_of_fixedPoint` | Defect bound relative to any supplied fixed point, without completeness |
+| `LipschitzWith.iterate`, `LipschitzWith.dist_iterate_succ_le_geometric` | Iteration has Lipschitz factor `K^n`; consecutive displacements have a geometric bound, without requiring `K < 1` |
+| `Set.MapsTo.iterate`, `Set.MapsTo.iterate_restrict`, `Function.IsFixedPt.iterate` | Invariant iterates, agreement between subtype and ambient iteration, and preservation of a fixed point under iteration |
+| `IsClosed.isComplete`, `Metric.isClosed_closedBall` | Closed sets and closed balls inherit completeness from a complete ambient space |
+| `ContractingWith.dist_fixedPoint_fixedPoint_of_dist_le'` | Fixed-point stability under a uniformly bounded map discrepancy; the comparison map's fixed point is supplied |
+
+`Vbd/Dynamics/Contraction.lean` uses these results for ambient-space local-set interfaces.
+Completeness enters only for existence. A supplied fixed point has a finite-iterate bound for
+any nonnegative Lipschitz factor; for a factor below one, convergence follows by squeezing that
+bound with Mathlib's geometric-limit theorem. The source documents the individual wrappers.
+The generic metric formulation leaves the choice of block norm to the later analysis.
+
+Derivative-bound and perturbation extensions are subject to the
+[applicability gate](/project/roadmap.md#applicability-gate-and-work-order). The derivative
+candidate is Mathlib's convex-set mean-value theory; full theorem selection for that extension
+belongs to CT-04.
 
 # Citations
 
 [1] [Mathlib gradient documentation](https://leanprover-community.github.io/mathlib4_docs/Mathlib/Analysis/Calculus/Gradient/Basic.html)
 [2] [Mathlib strong-convexity source](https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/Analysis/Convex/Strong.lean)
 [3] [Mathlib positive-definite matrix source](https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/LinearAlgebra/Matrix/PosDef.lean)
-[4] [Mathlib contractive-map source](https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/Topology/MetricSpace/Contracting.lean)
+[4] [Mathlib contractive-map source](https://github.com/leanprover-community/mathlib4/blob/de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11/Mathlib/Topology/MetricSpace/Contracting.lean)

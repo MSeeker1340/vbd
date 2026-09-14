@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-09-11T00:00:00Z
+timestamp: 2026-09-14T00:00:00Z
 ---
 
 # Status vocabulary
@@ -52,9 +52,9 @@ timestamp: 2026-09-11T00:00:00Z
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| CT-01 | next | Pinned Mathlib contraction API assessment | none | Exact reusable `ContractingWith`, restricted-map, fixed-point, and iterate-bound declarations are recorded |
-| CT-02 | planned | Local invariant-set contraction wrapper | CT-01 | A contraction on a forward-invariant complete subset yields a unique local fixed point and iterate convergence |
-| CT-03 | planned | Finite-iteration distance bound | CT-02 | The public theorem exposes a geometric `q^k` bound suitable for a fixed iteration budget |
+| CT-01 | done | Pinned Mathlib contraction API assessment | none | Exact reusable `ContractingWith`, restricted-map, fixed-point, and iterate-bound declarations are recorded |
+| CT-02 | done | Local invariant-set contraction wrapper | CT-01 | A contraction on a forward-invariant complete subset yields a unique local fixed point and iterate convergence |
+| CT-03 | done | Finite-iteration distance bound | CT-02 | The public theorem exposes a geometric `q^k` bound suitable for a fixed iteration budget |
 | CT-04 | planned | Derivative-bound bridge | CT-02, AP-03 | A uniform derivative/operator-norm bound on a stated convex neighborhood yields the Lipschitz contraction needed by the AP-03 route |
 | CT-05 | planned | Perturbed contraction bounds | CT-03, AP-03 | Persistent, vanishing, and summable perturbations have explicitly separated conclusions and explicit perturbed-region membership premises; implementation serves the accepted execution analysis |
 
@@ -69,7 +69,7 @@ defines the evidence standard and the response to an ineffective certificate.
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| AP-01 | planned | Representative mechanical family and evaluation targets | CT-03 | A parameterized family has substantive cross-block coupling, a quadratic baseline and nonlinear case, exact serial and proper-color sweep semantics, skip threshold, justified parameter ranges, defined warm starts, separately defined physical residual and sweep defect with norms/scaling, and target error/sweep budgets selected before certificate evaluation |
+| AP-01 | next | Representative mechanical family and evaluation targets | CT-03 | A parameterized family has substantive cross-block coupling, a quadratic baseline and nonlinear case, exact serial and proper-color sweep semantics, skip threshold, justified parameter ranges, defined warm starts, separately defined physical residual and sweep defect with norms/scaling, and target error/sweep budgets selected before certificate evaluation |
 | AP-02 | planned | Comparison of state-contraction and physical-residual certificates | AP-01 | Derive the sweep linearization and candidate neighborhood bounds; assess fixed-point/root consistency including skips independently of contraction; compare state contraction, qualitative physical-residual progress and quantitative residual reduction over the same selected range; report timestep, radius, warm-start coverage, iteration budget where supported, system-size dependence and objective-increase cases, separating analytic guarantees from numerical evidence and sweep-defect decrease |
 | AP-03 | planned | Proceed or revise decision with an explicit guarantee level | AP-02 | Record the selected norm, family, execution scope, route, coverage and proof obligations; quantitative proceed requires an analytically supported parameter range, relevant warm-start membership and target budget; qualitative proceed authorizes only a scoped physical-residual progress milestone; assess sharper bounds, alternative norms or several-sweep contraction when needed, and synchronize downstream targets/dependencies for the selected route before implementation |
 
