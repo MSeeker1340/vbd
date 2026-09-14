@@ -1,0 +1,14 @@
+{
+  "cases": 336,
+  "numpy": "2.4.3",
+  "max_derivative_fd_error": 7.955774927737025e-12,
+  "supported_cases": 192,
+  "supported_worst_residual20": 1.214306433183765e-17,
+  "supported_max_sweeps": 6,
+  "residual_increase_cases": 5,
+  "q_endpoint": 0.511374358974359,
+  "theta_endpoint": 1.0841136410256411,
+  "theta_at_point2": 0.79883839080663,
+  "non_descent_energy_before": 1,
+  "non_descent_energy_after": "37/16"
+}

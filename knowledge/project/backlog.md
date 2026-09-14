@@ -55,8 +55,8 @@ timestamp: 2026-09-14T00:00:00Z
 | CT-01 | done | Pinned Mathlib contraction API assessment | none | Exact reusable `ContractingWith`, restricted-map, fixed-point, and iterate-bound declarations are recorded |
 | CT-02 | done | Local invariant-set contraction wrapper | CT-01 | A contraction on a forward-invariant complete subset yields a unique local fixed point and iterate convergence |
 | CT-03 | done | Finite-iteration distance bound | CT-02 | The public theorem exposes a geometric `q^k` bound suitable for a fixed iteration budget |
-| CT-04 | planned | Derivative-bound bridge | CT-02, AP-03 | A uniform derivative/operator-norm bound on a stated convex neighborhood yields the Lipschitz contraction needed by the AP-03 route |
-| CT-05 | planned | Perturbed contraction bounds | CT-03, AP-03 | Persistent, vanishing, and summable perturbations have explicitly separated conclusions and explicit perturbed-region membership premises; implementation serves the accepted execution analysis |
+| CT-04 | next | Derivative-bound bridge | CT-02, AP-03 | A uniform derivative/operator-norm bound on a stated convex neighborhood yields the Lipschitz contraction needed by the AP-03 route |
+| CT-05 | deferred | Perturbed contraction bounds | CT-03, AP-03 | Persistent, vanishing, and summable perturbations have explicitly separated conclusions and explicit perturbed-region membership premises; implementation serves the accepted execution analysis |
 
 # Early applicability study
 
@@ -69,9 +69,13 @@ defines the evidence standard and the response to an ineffective certificate.
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| AP-01 | next | Representative mechanical family and evaluation targets | CT-03 | A parameterized family has substantive cross-block coupling, a quadratic baseline and nonlinear case, exact serial and proper-color sweep semantics, skip threshold, justified parameter ranges, defined warm starts, separately defined physical residual and sweep defect with norms/scaling, and target error/sweep budgets selected before certificate evaluation |
-| AP-02 | planned | Comparison of state-contraction and physical-residual certificates | AP-01 | Derive the sweep linearization and candidate neighborhood bounds; assess fixed-point/root consistency including skips independently of contraction; compare state contraction, qualitative physical-residual progress and quantitative residual reduction over the same selected range; report timestep, radius, warm-start coverage, iteration budget where supported, system-size dependence and objective-increase cases, separating analytic guarantees from numerical evidence and sweep-defect decrease |
-| AP-03 | planned | Proceed or revise decision with an explicit guarantee level | AP-02 | Record the selected norm, family, execution scope, route, coverage and proof obligations; quantitative proceed requires an analytically supported parameter range, relevant warm-start membership and target budget; qualitative proceed authorizes only a scoped physical-residual progress milestone; assess sharper bounds, alternative norms or several-sweep contraction when needed, and synchronize downstream targets/dependencies for the selected route before implementation |
+| AP-01 | done | Representative mechanical family and evaluation targets | CT-03 | A parameterized family has substantive cross-block coupling, a quadratic baseline and nonlinear case, exact serial and proper-color sweep semantics, skip threshold, justified parameter ranges, defined warm starts, separately defined physical residual and sweep defect with norms/scaling, and target error/sweep budgets selected before certificate evaluation |
+| AP-02 | done | Comparison of state-contraction and physical-residual certificates | AP-01 | Derive the sweep linearization and candidate neighborhood bounds; assess fixed-point/root consistency including skips independently of contraction; compare state contraction, qualitative physical-residual progress and quantitative residual reduction over the same selected range; report timestep, radius, warm-start coverage, iteration budget where supported, system-size dependence and objective-increase cases, separating analytic guarantees from numerical evidence and sweep-defect decrease |
+| AP-03 | done | Proceed or revise decision with an explicit guarantee level | AP-02 | Record the selected norm, family, execution scope, route, coverage and proof obligations; quantitative proceed requires an analytically supported parameter range, relevant warm-start membership and target budget; qualitative proceed authorizes only a scoped physical-residual progress milestone; assess sharper bounds, alternative norms or several-sweep contraction when needed, and synchronize downstream targets/dependencies for the selected route before implementation |
+
+The completed [study](/mathematics/applicability-study.md) and
+[proceed decision](./applicability-decision.md) discharge the research gate for the selected
+exact-execution chain theorem. They do not discharge its Lean proof obligations.
 
 # Phase 4 — local interactions and coloring
 
@@ -97,8 +101,8 @@ defines the evidence standard and the response to an ineffective certificate.
 | BC-01 | planned | Blockwise derivative-factor bounds | BS-06, CT-04 | Bounds on each block entry of each supplied update derivative produce nonnegative comparison matrices |
 | BC-02 | planned | Ordered composition bound | BS-03, BC-01 | Comparison matrices compose in the same externally supplied order as the update operators |
 | BC-03 | planned | Commuting color-batch bound | BS-04, BS-05, BC-02 | A commuting batch has an order-independent derivative and an explicit block-norm bound |
-| BC-04 | planned | Buffered simultaneous-batch bound | BS-05, BC-01 | Same-color coupling is bounded using the actual simultaneous snapshot semantics |
-| BC-05 | planned | Contraction and perturbation bounds | BC-02, BC-03, BC-04, CT-05 | Serial and colored execution maps obtain explicit contraction or error-neighborhood guarantees |
+| BC-04 | deferred | Buffered simultaneous-batch bound | BS-05, BC-01 | Same-color coupling is bounded using the actual simultaneous snapshot semantics |
+| BC-05 | planned | Exact-execution contraction bounds | BC-02, BC-03 | Serial and proper-color execution maps obtain explicit maximum-norm contraction bounds; perturbation extensions depend on deferred BC-04 and CT-05 |
 
 # Phase 7 — production VBD synthesis
 
@@ -110,8 +114,8 @@ defines the evidence standard and the response to an ineffective certificate.
 | VB-04 | planned | Inertia-based block inverse bounds | IE-07, VB-01 | `M/h² + ∇²P` yields explicit coercivity and inverse-norm bounds on a neighborhood |
 | VB-05 | planned | Serial coupling and contraction factor | VB-03, VB-04, BC-02 | Off-diagonal interaction bounds produce an explicit `q < 1` for the actual serial execution over the AP-03 parameter range, with norm-conversion constants stated |
 | VB-06 | planned | Nonlinear contraction neighborhood | VB-05, CT-04 | Hessian variation produces an explicit invariant radius with a uniform contraction bound and a proved initial-state membership condition instantiated for the selected warm starts |
-| VB-07 | planned | Proper and hybrid colored VBD | LI-04, VB-06, BC-03, BC-04 | Physical independence discharges the commutation hypotheses for valid colors; collision-induced same-color coupling uses the buffered simultaneous bound |
-| VB-08 | planned | End-to-end finite-sweep theorem | VB-02, VB-06, VB-07, IF-02 | The AP-03 parameterized coupled family, including its nonlinear case, has Lean-proved system-to-certificate and finite-sweep bounds meeting the selected accuracy budget; quantitative parameter ranges and warm-start coverage are instantiated, conservatism and exclusions are assessed reproducibly, and any non-descent coverage claim has a certified objective-increase example |
+| VB-07 | planned | Proper-color VBD | LI-04, VB-06, BC-03 | Physical independence discharges commutation and snapshot equivalence for the selected static proper colors; hybrid collision coupling requires a further applicability decision |
+| VB-08 | planned | End-to-end finite-sweep theorem | VB-02, VB-06, VB-07, IF-03 | The AP-03 parameterized coupled family, including its nonlinear case, has Lean-proved system-to-certificate and finite-sweep bounds meeting the selected accuracy budget; quantitative parameter ranges and warm-start coverage are instantiated, conservatism and exclusions are assessed reproducibly, and any non-descent coverage claim has a certified objective-increase example |
 
 # Deferred by the current route
 
@@ -129,10 +133,10 @@ defines the evidence standard and the response to an ineffective certificate.
 # Open decisions
 
 1. Continuous linear operator versus matrix as the primary mass representation in Phase 7.
-2. AP-03 selects the first certificate norm and bound construction using the applicability study: the
-   existing finite `ℓ²` norm, a weighted maximum norm, or a system-dependent energy norm are candidates.
-3. AP-03 selects whether the first production synthesis excludes same-color collision coupling or
-   includes a small perturbation bound; proper-color execution is part of the applicability study.
+
+The [AP-03 decision](./applicability-decision.md) fixes the first certificate to the maximum norm
+and static proper colors. Its scalar nonlinear chain, predictor box, and 20-sweep residual target
+instantiate VB-05–VB-08. CT-04 is next; CT-05 and BC-04 require a later execution-scope assessment.
 
 Every resolved project-wide architecture decision should become an Architecture Decision concept
 and be removed from this list in the same change. Source-local representation choices belong in

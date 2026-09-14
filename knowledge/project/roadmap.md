@@ -12,14 +12,20 @@ timestamp: 2026-09-14T00:00:00Z
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
 | Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
-| Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-03 are implemented; CT-04–CT-05 await the applicability gate |
-| Applicability study — AP-01–AP-03 | next | AP-01 selects the representative family; the study gates further formalization |
+| Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-03 are implemented; CT-04 is next and CT-05 is deferred |
+| Applicability study — AP-01–AP-03 | complete | Quantitative proceed for nonlinear axial chains in the maximum norm with serial and proper-color execution |
 | Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives physical conflict structure |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
 | Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
 | Phase 7 — production VBD synthesis | planned | combines the bridge phases to analyze the actual serial and colored VBD sweep |
 
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
+
+The accepted [applicability decision](./applicability-decision.md) selects the
+[axial-chain certificate](/mathematics/applicability-study.md): `h² k_max/m_min ≤ 1/4`,
+`0 ≤ η ≤ 1`, the stated predictor box, and a physical residual below `10⁻⁶` in 20 sweeps.
+The first theorem uses maximum-norm state contraction and static proper colors. Hybrid
+execution and perturbation extensions require a further applicability decision.
 
 # Goal and dependency graph
 
@@ -179,14 +185,14 @@ block matrices. Simultaneous merging is available for noncommuting operators as 
 
 # Phase 3 — Contractive fixed-point iteration
 
-Status: CT-01–CT-03 complete; extensions gated by AP-03. Module: `Vbd/Dynamics/Contraction.lean`.
+Status: CT-01–CT-03 complete; CT-04 next under the accepted AP-03 route; CT-05 deferred. Module: `Vbd/Dynamics/Contraction.lean`.
 
 The [contractive iteration specification](/mathematics/contractive-fixed-point-iteration.md)
 provides the mathematical interface. CT-01–CT-03 supply the initial API assessment, invariant-set
 wrapper, and finite-iterate bound. The implemented metric-space interface also exposes convergence
 to a supplied fixed point and the defect bound, with completeness required only for existence.
-Derivative and perturbation extensions follow AP-03's proceed
-decision and serve its selected route; the initial core remains independent of VBD assumptions.
+The derivative extension serves the accepted maximum-norm route; perturbation extensions
+serve future approximate or hybrid execution assessments; the initial core remains independent of VBD assumptions.
 
 Reuse Mathlib's `ContractingWith` and Banach fixed-point results. Add the project-relevant
 bridges that are absent or awkward at the call site:
@@ -195,7 +201,7 @@ bridges that are absent or awkward at the call site:
 2. explicit finite-iterate distance bounds;
 3. derivative bounds on a convex neighborhood implying a Lipschitz contraction there;
 4. local convergence to a known fixed point;
-5. persistent, vanishing, and summable perturbation bounds.
+5. deferred persistent, vanishing, and summable perturbation bounds for an accepted approximate-execution scope.
 
 Use direct Lipschitz or operator-norm bounds first. A spectral-radius hypothesis enters through an
 appropriate equivalent norm or an iterate theorem.
@@ -247,10 +253,10 @@ Status: planned. Module: `Vbd/Block/Contraction.lean`.
 
 Dependencies: Phase 2 + Phase 3.
 
-Formalization follows the AP-03 proceed decision. The chosen norm and bound construction must
-support its assessed family and parameter range. Nonnegative comparison matrices are the initial
-candidate; a sharper construction or a several-sweep certificate selected by AP-03 requires
-synchronized theorem targets and dependencies before implementation.
+Formalization follows the [AP-03 proceed decision](./applicability-decision.md): nonnegative
+comparison matrices with changed-row sum bounds in the block maximum norm support the
+selected chain and parameter range. A broader certificate or several-sweep route requires an
+updated applicability assessment and synchronized theorem targets before implementation.
 
 For an externally ordered differentiable update sequence, record block bounds for each derivative
 factor through nonnegative matrices `C⁽ʳ⁾` satisfying
@@ -264,9 +270,9 @@ Prove:
 1. reconstruction of global operator bounds from block-entry bounds;
 2. propagation of comparison bounds through externally ordered composition;
 3. bounds for commuting color batches using their order-independent composition;
-4. separate bounds for buffered simultaneous batches with same-color coupling;
+4. deferred bounds for buffered simultaneous batches with same-color coupling;
 5. an explicit contraction criterion in a stated block norm;
-6. perturbation bounds for approximate derivatives or execution maps.
+6. deferred perturbation bounds for approximate derivatives or execution maps.
 
 Acceptance gate: explicit block-entry bounds for supplied serial or color-batched update operators
 compose according to their actual execution semantics and produce a `q < 1` contraction
@@ -298,10 +304,10 @@ explicit inputs to its construction. The required result chain is:
 4. use `M / h² + ∇²P` to prove block invertibility and quantitative inverse bounds;
 5. bound cross-block coupling and obtain an explicit contraction factor `q`;
 6. control Hessian variation on a neighborhood so the linear bound extends to the nonlinear sweep;
-7. prove commutation of concrete same-color operators under a valid static coloring, relate their
-   simultaneous batches to serial composition, and analyze the buffered map when live collision
-   interactions create same-color coupling;
-8. conclude convergence and finite-sweep distance or residual bounds through Phase 5.
+7. prove commutation of concrete same-color operators under a valid static coloring and relate their
+   simultaneous batches to serial composition; hybrid collision coupling requires a further assessment;
+8. conclude convergence and the selected finite-sweep physical-residual bound through Phase 5,
+   including IF-03 quantitative distance-to-residual transport.
 
 Curvature is part of this synthesis because it controls block inverses and relative coupling. The
 intended quantitative chain is

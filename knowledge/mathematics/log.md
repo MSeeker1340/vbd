@@ -2,6 +2,8 @@
 
 ## 2026-09-14
 
+* **Applicability study**: Derived a uniform nonlinear axial-chain certificate, predictor and intermediate-state bounds, independent skip-free consistency, and quantitative residual reduction on a smaller subrange. Added 336 reproducible numerical cases, exact residual-progress and objective-increase counterexamples, norm-conservatism analysis, and explicit production-coverage limits; linked the curvature specification.
+
 * **Scope and motivation**: Labeled perturbed iteration as an optional extension and explained its role in transferring reference-map accuracy to approximate execution. Distinguished this strategy from direct analysis of exact serial or buffered VBD maps, linked its selection to the applicability study, and clarified that floating-point verification remains deferred.
 
 ## 2026-09-11

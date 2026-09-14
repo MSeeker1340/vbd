@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Curvature, Coupling, and VBD Contraction
 description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
 tags: [curvature, coupling, hessian, contraction]
-timestamp: 2026-09-11T00:00:00Z
+timestamp: 2026-09-14T00:00:00Z
 ---
 
 # Implicit-Euler Hessian
@@ -65,6 +65,14 @@ $$
 On a convex `N`, the derivative bound gives a Lipschitz contraction. Together with invariance
 and completeness of a nonempty `N`, [contractive fixed-point iteration](./contractive-fixed-point-iteration.md)
 then supplies a unique fixed point in `N`, local convergence, and finite-sweep error bounds.
+
+# Instantiated applicability certificate
+
+The [axial-chain study](./applicability-study.md) instantiates these bounds for quadratic and
+quartic springs. It retains the off-root derivative term `f_i ∂D_i/D_i²`, controls every
+intermediate block state, and gives a maximum-norm factor below `0.512` for
+`h² k_max/m_min ≤ 1/4` on its explicit box. The result supports the selected 20-sweep
+physical-residual target; generic nonconvex and collision cases require separate bounds.
 
 # Secondary consequences
 

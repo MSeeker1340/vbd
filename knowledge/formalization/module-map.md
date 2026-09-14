@@ -14,7 +14,7 @@ timestamp: 2026-09-14T00:00:00Z
 | P2 | `Block/Basic.lean` | `BlockSum B`, native coordinate access, injections, and replacements | none |
 | P2 | `Block/Update.lean` | Write support under composition and simultaneous merging | `Block/Basic` |
 | P2 | `Block/Operator.lean` | Continuous block entries, finite assembly and reconstruction, and block-matrix arithmetic | `Block/Basic` |
-| P3 | `Dynamics/Contraction.lean` | Implemented local fixed-point and finite-iterate interfaces; derivative and perturbation extensions await AP-03 | none |
+| P3 | `Dynamics/Contraction.lean` | Implemented local fixed-point and finite-iterate interfaces; derivative extension is next; perturbation extension is deferred | none |
 
 # Bridge and synthesis modules
 
@@ -22,7 +22,7 @@ timestamp: 2026-09-14T00:00:00Z
 |---|---|---|---|
 | P4 | `Integrator/LocalInteractions.lean` | Finite-support physical interactions, conflict graph, and concrete coloring conditions | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Solver-independent convergence from a contractive map to a known implicit-Euler stationary fixed point | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
-| P6 | `Block/Contraction.lean` | Derivative-factor bounds, ordered comparison composition, color-batch estimates, and perturbations | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
+| P6 | `Block/Contraction.lean` | Derivative-factor bounds, ordered comparison composition, proper-color estimates, and deferred perturbation extensions | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Production block-Newton operators, externally controlled serial and buffered executions, derivative bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
 
 These paths are the current module boundaries recorded in the central
@@ -33,10 +33,9 @@ These paths are the current module boundaries recorded in the central
 Phases 1 and 2 are complete. `Block/Update.lean` and `Block/Operator.lean` each depend only on
 `Block/Basic.lean` within the project.
 Phase 3 has an implemented, block-independent core covering CT-01–CT-03 and reusing the pinned
-Mathlib contraction API. The
-[applicability study](/project/roadmap.md#applicability-gate-and-work-order) AP-01–AP-03 then
-assesses the concrete VBD theorem route before CT-04–CT-05 and Phase 4–7 formalization.
-Proceeding requires a supported AP-03 decision. Exploratory derivations and diagnostic scripts
+Mathlib contraction API. The completed [applicability study](/mathematics/applicability-study.md) and
+[AP-03 decision](/project/applicability-decision.md) authorize CT-04 and the exact-execution
+Phase 4–7 route. CT-05 and same-color coupling estimates are deferred. Exploratory derivations and diagnostic scripts
 introduce no cross-foundation Lean imports; the module dependency boundaries stay in force.
 
 The three foundations may be implemented independently:
@@ -56,8 +55,9 @@ fixed-point declarations.
 
 Phase 1 retains `X` as an abstract real Hilbert-space parameter. Phase 2 uses `B : ι → Type*` and
 `BlockSum B := PiLp 2 B`. Coordinate algebra states its typeclass requirements declaration by
-declaration. P6 selects the norm stated by its contraction theorem; the existing finite `ℓ²`
-structure is the initial candidate, while weighted or energy norms remain theorem-local options.
+declaration. P6 uses a theorem-local maximum norm or equivalent metric for the accepted chain certificate,
+with explicit transport to the existing finite `ℓ²` block representation. Generic derivative
+lemmas remain norm-polymorphic; weighted and energy norms are options for later assessments.
 
 # Documentation boundary
 
@@ -76,4 +76,5 @@ identity block rows. All implemented foundation modules are exported by `Vbd.lea
 `Dynamics/Contraction.lean` implements CT-01–CT-03 using Mathlib contraction and Lipschitz
 iteration results. It supplies local fixed-point existence and uniqueness, convergence to a
 supplied fixed point, finite-iterate distance bounds, and a defect-based error estimate, with
-no project imports. CT-04–CT-05 and P4–P7 await the applicability gate. AP-01 is the next item.
+no project imports. AP-01–AP-03 are complete research deliverables. CT-04 is next; exact-execution P4–P7 follows
+the accepted route, while CT-05 and hybrid coupling are deferred.
