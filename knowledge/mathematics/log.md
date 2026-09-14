@@ -1,5 +1,9 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-14
+
+* **Scope and motivation**: Labeled perturbed iteration as an optional extension and explained its role in transferring reference-map accuracy to approximate execution. Distinguished this strategy from direct analysis of exact serial or buffered VBD maps, linked its selection to the applicability study, and clarified that floating-point verification remains deferred.
+
 ## 2026-09-11
 
 * **Stopping criteria**: Added the previous-update a posteriori bound and adaptive stopping interpretation to the contraction specification. Distinguished qualitative termination from a numerical state-error guarantee using an affine counterexample, and linked the adaptive VBD reference assessment.

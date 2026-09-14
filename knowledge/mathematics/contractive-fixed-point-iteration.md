@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Contractive Fixed-Point Iteration
 description: Contraction on invariant complete sets, geometric iterate bounds, derivative criteria, and stability under perturbations.
 tags: [fixed-points, contraction, iteration, perturbations]
-timestamp: 2026-09-11T00:00:00Z
+timestamp: 2026-09-14T00:00:00Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), a timestep is determined
@@ -188,7 +188,21 @@ Using spectral information requires a justified norm change or a contraction the
 iterate. The [curvature and coupling layer](/mathematics/curvature.md) supplies derivative
 bounds for concrete VBD execution maps.
 
-# Perturbed iteration
+# Optional extension: perturbed iteration
+
+Perturbation theory transfers an accuracy guarantee from a contractive reference map to an
+execution that approximates it. Each approximate update introduces fresh error, while subsequent
+contraction damps earlier error. The estimates below quantify the resulting distance to the
+reference fixed point and distinguish an eventual error neighborhood from exact convergence.
+
+This extension is useful when the chosen analysis compares the actual sweep with a simpler
+reference sweep, or when local solves are deliberately approximate. Such a comparison must
+supply a bound on the discrepancy per sweep. Serial and buffered colored VBD can each be
+analyzed directly as their own exact map; their convergence proofs do not inherently require
+perturbation estimates. The [applicability study](/project/roadmap.md#applicability-gate-and-work-order)
+determines whether a reference-map comparison is useful for a concrete target. Floating-point
+error is another possible application, with its error bounds and verification deferred by the
+[backlog](/project/backlog.md#deferred-by-the-current-route).
 
 Let `T` contract on `S` with fixed point `x* ∈ S`. Suppose a sequence `y_k ∈ S` has nonnegative
 step errors `ε_k` satisfying
@@ -241,7 +255,8 @@ Phase 3 is the generic dynamics foundation in the [roadmap](/project/roadmap.md)
 [Mathlib](/references/mathlib.md) supplies the contraction predicate, Banach theorem,
 invariant-subset restriction, iterate convergence, and geometric and defect bounds. Its
 mean-value theory supplies the derivative-to-Lipschitz step. The project layer exposes the
-local-set and perturbation results needed by later bridges. Exact declaration assessment and
+local-set results used by later bridges and optional perturbation results when the selected
+analysis requires a reference-map comparison. Exact declaration assessment and
 implementation progress are tracked by [CT-01–CT-05](/project/backlog.md#phase-3--contractive-fixed-point-iteration).
 
 # Citations
