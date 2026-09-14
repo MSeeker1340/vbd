@@ -2,6 +2,8 @@
 
 ## 2026-09-14
 
+* **Exposition and experiment tooling**: Rewrote the spring study as a mathematical development with physical rail/band examples, rendered equations, results, module connections, and extensions. Moved model-selection rationale and the evaluation contract to the project decision. Added a locked uv experiment, configurable module CLI, full trajectory data, tables and plots, with focused mathematical/CLI checks; the full 336-case regression preserves the measured state/residual results and matrix diagnostics.
+
 * **Generalization and certificate audit**: Added the dimension-independent block derivative interface, a quantified vector spring-graph extension, and adaptation obligations for elasticity, contact and friction. Corrected a missing factor of two in the scalar Hessian-variation estimate by retaining both local inverse denominators; the supported 20-sweep bound remains valid, with regenerated certificate numbers and a residual-reduction factor bounded by 0.804 on the smaller range.
 
 * **Applicability study**: Derived a uniform nonlinear axial-chain certificate, predictor and intermediate-state bounds, independent skip-free consistency, and quantitative residual reduction on a smaller subrange. Added 336 reproducible numerical cases, exact residual-progress and objective-increase counterexamples, norm-conservatism analysis, and explicit production-coverage limits; linked the curvature specification.

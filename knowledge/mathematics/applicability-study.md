@@ -1,210 +1,322 @@
 ---
 type: Mathematical Specification
-title: Applicability of VBD to Coupled Axial Spring Chains
-description: Gives analytic neighborhood and residual certificates, reproducible diagnostics, and coverage limits for quadratic and nonlinear axial chains.
+title: VBD Contraction for Coupled Axial Springs
+description: Develops a coupled mechanical example from its implicit-Euler objective to a finite-sweep contraction bound and extensions to richer models.
 tags: [applicability, vbd, contraction, residual, springs]
 timestamp: 2026-09-14T00:00:00Z
 ---
 
-# Family and evaluation contract (AP-01)
+# Context
 
-The selected family consists of `n ≥ 2` masses constrained to a straight rail, with adjacent
-elastic springs and free endpoints. Write physical positions as rest positions plus `L u_i`.
-Rest spacing is `L = 0.1 m`; displacement differences are spring extensions divided by `L`.
-The incremental energy, divided by `m_min L²/h²`, is
+An end-to-end example connects the [implicit-Euler identities](./implicit-euler.md),
+[block-update algebra](./block-states-and-operators.md), and
+[contractive fixed-point theory](./contractive-fixed-point-iteration.md).
+The example must have genuine coupling between vertices and a nonlinear update, while permitting
+explicit bounds on an invariant neighborhood. A chain of masses and hardening springs provides
+such a system. Its VBD sweep is a nonlinear map whose fixed points are implicit-Euler solutions.
+The analysis below derives a contraction factor and a finite-sweep physical-residual bound.
 
-```
-G(u) = Σ_i a_i (u_i-y_i)²/2 + Σ_edges b_e [d_e²/2 + η d_e⁴/4],
-a_i = m_i/m_min ≥ 1,   b_e = h² k_e/m_min > 0,   d_e = u_i-u_j.
-```
+The derivations are real-arithmetic mathematics awaiting Lean formalization. Numerical
+experiments illustrate the estimates. The [project decision](/project/applicability-decision.md)
+records the model-selection rationale, evaluation policy, and scope of the formalization milestone.
 
-`η = 0` is the coupled quadratic baseline; `0 < η ≤ 1` is a hardening nonlinear spring.
-The quartic law is a chosen constitutive test model, not a claim to reproduce the paper's
-Neo-Hookean materials. These are scalar vertex blocks, a constrained mechanical specialization
-of the full block-Newton rule. There is no damping, contact, friction, acceleration of iterations,
-or line search. Locality is the path graph; positive curvature follows separately from this law.
+# Mechanical model
 
-The physical calibration uses `m_min = 0.001 kg`, `k_max` from `1` to `10⁴ N/m`, timesteps
-from `10⁻⁴` to `0.04 s`, and mass ratios from `1` to `1000`. Spring stiffness contrasts extend
-to `10⁴`. These are explicit synthetic engineering ranges: stiffness has force/length units and
-`√(m_min/k_max)` is the single-spring inertial timescale. They are not measured material data.
-The primary paper motivates spring systems, high mass ratios, stiffness contrasts, and inertia
-initialization, but supplies no calibration for this quartic law; see its [curated reference](/references/vbd-paper.md).
-The certificate therefore establishes applicability to this mechanical family, not to arbitrary
-production meshes or the paper's large-deformation benchmarks.
+Consider beads sliding along a straight frictionless rail, connected by elastic segments.
+This can represent a discretized elastic band constrained to longitudinal motion, or a row of
+sliding masses joined by springs. The hardening law below is an idealized constitutive model;
+a real band's tension-only behavior or material calibration would require additional assumptions.
+Both chain endpoints are free. Each vertex has one positional degree of freedom.
 
-The evaluation contract fixes `Y = 0.05`, the box radius `B = 0.1`, tolerance `10⁻⁶`, and a
-budget of **20 sweeps**. The predictor is the physical inertia position relative to rest,
-`y = (x_old + h v_old + h² a_ext - x_rest)/L`, with `‖y‖∞ ≤ Y`.
-The warm start is `u⁰ = y`; it includes any previous state, velocity and external acceleration
-satisfying that explicit predictor condition, without knowledge of the new solution. It covers
-5 mm predictor displacement, with a 10 mm intermediate-state box. The chosen tolerance means
-0.1 micrometers for the corresponding displacement scale; this is a research accuracy target,
-not an empirically established perceptual requirement or wall-clock budget.
+Let the rest spacing be $\ell>0$, and write the physical position of mass $i$ as
+$x_i=x_i^{\mathrm{rest}}+\ell u_i$. The signed extension of an adjacent spring is
+$\ell(u_i-u_j)$, up to orientation. For stiffness $k_e>0$, use the physical spring energy
 
-The diagnostic grid fixes `n ∈ {4,16,64}`, `α = h² k_max/m_min ∈ {0.01,0.1,0.2,0.25,1,10,100}`,
-`η ∈ {0,1}`, mass ratios `{1,1000}`, and stiffness contrasts `{1,10000}`. Alternating heavy
-masses and alternating stiff/soft edges expose both contrasts. Every grid value has a physical
-realization in the calibration ranges (for example `k_max = 100 N/m` and
-`h = √(α m_min/k_max)`). The deterministic predictor is `y_i = Y cos(1.7 i)`.
-All parameter choices and targets are constants in the diagnostic artifact, independent of its
-measured convergence. A separate large-amplitude stress example uses `η = 100`, `Y = 1`.
+$$
+E_e(s)=\frac{k_e}{2}s^2+\frac{k_e\eta}{4\ell^2}s^4,
+\qquad \eta\ge0.
+$$
 
-# Actual maps and observables
+The case $\eta=0$ is quadratic; $\eta>0$ gives nonlinear hardening. Interaction support
+is the path graph. Positive curvature follows from this particular spring law, independently
+of that support structure.
 
-Let `f = ∇G`, `H = Df`, and `D_i = H_ii`. A visit replaces only coordinate `i` by
-`u_i - f_i(u)/D_i(u)` when `|D_i| > ε`; otherwise it leaves the coordinate unchanged.
-The scalar determinant threshold is `ε = 10⁻¹²` in these normalized units. This is an explicit
-study threshold, not an asserted numerical value from the paper. In physical scalar units it
-corresponds to `10⁻¹² m_min/h² N/m`. The regular family has `D_i ≥ a_i ≥ 1`, hence no skips.
+For timestep $h>0$, define the dimensionless inertia predictor and coefficients
 
-Serial execution visits `0,…,n-1` once each. Proper-color execution reads one snapshot for all
-even vertices, writes that batch, then does the same for all odd vertices. Same-color vertices
-share no edge, so those updates commute and equal any serial ordering within their batch.
-Every coordinate is visited exactly once per complete sweep. Repeated-coordinate schedules
-require a separate consistency argument; disjoint writes alone do not prove commutation.
+$$
+y_i=\frac{x_i^{\mathrm{old}}+h v_i^{\mathrm{old}}+h^2a_i^{\mathrm{ext}}
+                 -x_i^{\mathrm{rest}}}{\ell},
+\qquad a_i=\frac{m_i}{m_{\min}}\ge1,
+\qquad b_e=\frac{h^2k_e}{m_{\min}}.
+$$
 
-The four observables are distinct:
+Dividing the implicit-Euler incremental energy by $m_{\min}\ell^2/h^2$ gives
 
-* State distance: `‖u-u*‖∞`, where the analytic root is unique and a numerical root is independently solved.
-* Physical IE residual: `r_IE(u) = max_i |f_i(u)|/a_i = max_i h² |F_IE,i(x)|/(m_i L)`.
-  This is a weighted maximum norm on physical force, with fixed per-system scaling. A tolerance
-  of `10⁻⁶` implies force imbalance `≤ m_i L 10⁻⁶/h²` on every mass.
-* Sweep defect: `r_T(u) = ‖T(u)-u‖∞`.
-* Objective: the dimensionless `G(u)` above.
+$$
+G(u)=\frac12\sum_i a_i(u_i-y_i)^2
+ +\sum_{e=\{i,j\}}b_e\left(\frac{d_e^2}{2}+\frac{\eta d_e^4}{4}\right),
+\qquad d_e=u_i-u_j.
+$$
 
-# Consistency and existence independent of contraction
+Thus inertia and elasticity contribute to the same objective. The initial iterate is the
+predictor itself, $u^0=y$. This construction uses the old state and external acceleration,
+without access to the new implicit-Euler solution.
 
-The Hessian is `diag(a) +` a weighted path Laplacian with positive edge weights
-`w_e = b_e(1+3η d_e²)`. Thus `G` is coercive and strongly convex and has a unique root.
-At a maximum coordinate of a root, every outgoing elastic force is nonnegative, so
-`u_i* ≤ max y`; the minimum argument gives `‖u*‖∞ ≤ Y`.
-These convexity conclusions are properties of this family, not assumptions of the generic IE foundation.
+# Forces, local solves, and sweeps
 
-A root is preserved by every update. Conversely, if a complete skip-free sweep fixes its input,
-each once-written coordinate must have received zero increment. Induction through the visits
-then shows that every intermediate state equals the input and every component of `f` is zero.
-The same reasoning applies to proper-color batches. This argument uses coverage and the
-nonsingular branch, independently of any metric estimate.
+Write $f=\nabla G$, $H=Df$, and $D_i=H_{ii}$. For neighbors $j\sim i$,
 
-Skipping can create spurious fixed points: take two masses, `a_i=b=1`, `η=0`, `y=(1,-1)`,
-`u=(0,0)` and `ε=2`. Both diagonal entries equal `2`, both visits skip, and the nonzero residual
-is frozen. This exact example explains why the quantitative scope explicitly certifies the branch.
+$$
+f_i(u)=a_i(u_i-y_i)+\sum_{j\sim i}b_{ij}(d_{ij}+\eta d_{ij}^3),
+\qquad
+D_i(u)=a_i+\sum_{j\sim i}b_{ij}(1+3\eta d_{ij}^2).
+$$
 
-# Uniform nonlinear certificate (AP-02)
+The full Newton vertex update is
 
-All following inequalities are analytic real-arithmetic derivations; they remain Lean proof
-obligations. Put `C = {u : ‖u‖∞ ≤ B}`, and assume `b_e ≤ α`, `0 ≤ η ≤ 1`.
-Each vertex has degree at most two. On `C`, `|d_e| ≤ 2B`. Define
+$$
+(U_i(u))_j=
+\begin{cases}
+u_i-f_i(u)/D_i(u),&j=i\text{ and }|D_i(u)|>\varepsilon,\\
+u_j,&\text{otherwise}.
+\end{cases}
+$$
 
-```
-v = 2α,
-S = v(1+12ηB²),
-P = B+Y+2Bv(1+4ηB²),
-c = S/(1+S),
-t = 24ηBvP/(1+v)²,
-q = c+t,
-L_F = 1+4α(1+12ηB²).
-```
+The normalized study threshold is $\varepsilon=10^{-12}$, corresponding to a physical
+scalar Hessian threshold $10^{-12}m_{\min}/h^2$ in force/length units.
+Since $D_i\ge a_i\ge1$, every visit follows the nonsingular branch in this family.
+There is no line search or iteration acceleration.
 
-## Intermediate-state invariance
+A serial sweep visits vertices $0,\ldots,n-1$, exposing each write to subsequent visits:
 
-The updated coordinate has numerator
-`a_i y_i + Σ_j b_ij [u_j + η d_ij²(2u_i+u_j)]` and denominator
-`a_i + Σ_j b_ij(1+3η d_ij²)`.
-Its absolute value is at most
-`[a_i Y + Σ_j b_ij(B+12ηB³)]/[a_i+Σ_j b_ij]`.
-Consequently every individual update preserves `C` whenever
-`24αηB³ ≤ B-Y`. Proper-color batches preserve it coordinatewise too.
-For `α ≤ 1/4`, `η ≤ 1`, the left side is at most `0.006`, below `0.05`.
-This controls all intermediate states before using the chain rule; it avoids assuming that
-invariance of a complete sweep suffices to bound its factors.
+$$
+T_{\mathrm{serial}}=U_{n-1}\circ\cdots\circ U_0.
+$$
 
-## Derivative and comparison matrices
+A proper-color sweep updates even vertices from one snapshot, then odd vertices from the next
+snapshot. Same-color vertices share no spring, so their updates commute. A color batch equals
+any serial order of its members. Every vertex is visited exactly once per complete sweep;
+this coverage condition matters both for consistency and the contraction estimate.
 
-The changed row of the derivative is exactly
+# Stationary solutions and observables
 
-```
-(DU_i)_ij = δ_ij - H_ij/D_i + f_i (∂_j D_i)/D_i².
-```
+The Hessian is a positive diagonal inertia matrix plus a weighted path Laplacian:
 
-The last term vanishes only at a root. At a root the ordered product is the corresponding
-Gauss-Seidel error matrix: writing `H = D + L + R` in the visit order gives
-`DT(u*) = -(D+L)⁻¹ R`. Proper colors use their color-contiguous order.
-This is a linearization at the root, not a formula for the full nonlinear map.
+$$
+H(u)=\operatorname{diag}(a)+L_{w(u)},
+\qquad w_e(u)=b_e(1+3\eta d_e^2)>0.
+$$
 
-For the uniform changed-row bound, the off-diagonal first term sums to
-`Σ w_e/(a_i+Σ w_e) ≤ c`; its diagonal is zero. For the variation term put `v_i = Σ_j b_ij/a_i ≤ v`. Then
-`D_i ≥ a_i(1+v_i)`, `|f_i| ≤ a_i[B+Y+2Bv_i(1+4ηB²)]`, and
-`Σ_j |∂_j D_i| ≤ 24ηB a_i v_i`.
-The remaining row sum is at most
-`24ηB v_i[B+Y+2Bv_i(1+4ηB²)]/(1+v_i)² ≤ t`.
-The last inequality uses monotonicity: for `p=B+Y=0.15` and
-`r=2B(1+4ηB²)≥0.2`, the derivative of `v(p+rv)/(1+v)²` has numerator
-`p+(2r-p)v≥0`. Both factors of the local inverse are retained in this estimate.
-All unchanged rows are identity rows. Nonnegative comparison matrices have these unchanged
-identity rows and changed rows summing to at most `q`.
+Therefore $G$ is coercive and strongly convex, with a unique stationary point $u^*$.
+If $\|y\|_\infty\le Y$, the largest root coordinate has nonnegative outgoing elastic
+forces, and the smallest has nonpositive ones. Their equations imply
 
-When `q < 1`, processing each row exactly once makes the full comparison product's row sums
-at most `q`: before a visit every current error component is bounded by the initial maximum;
-a visited row becomes bounded by `q` times that maximum and stays fixed thereafter.
-The argument applies to serial order and proper-color snapshots. Convexity of `C`, the chain
-rule and the derivative bound give `‖T(u)-T(v)‖∞ ≤ q ‖u-v‖∞` throughout `C`.
-Completeness, invariance and the root bound give the state-contraction route.
+$$
+\min_i y_i\le u_j^*\le\max_i y_i,
+\qquad \|u^*\|_\infty\le Y.
+$$
 
-## Radius, timestep and budget
+A root is preserved by every update. Conversely, if a skip-free once-per-vertex sweep fixes its
+input, each coordinate's sole write must be zero. Induction through the visits shows that all
+intermediate states equal the input and all components of $f$ vanish. Hence
 
-For `α ≤ 1/4` and `η ≤ 1`,
+$$
+T(u)=u\quad\Longleftrightarrow\quad f(u)=0.
+$$
 
-```
-q ≤ 0.494442 < 0.512,    L_F ≤ 2.12,
-h ≤ 0.5 √(m_min/k_max),
-‖T^s(y)-u*‖∞ ≤ 0.1 (0.512)^s,
-r_IE(T^s(y)) ≤ 0.212 (0.512)^s.
-```
+This argument applies to both execution orders and is independent of contraction. With skips,
+the implication can fail: for two masses with $a_i=b=1$, $\eta=0$,
+$y=(1,-1)$, $u=(0,0)$, and $\varepsilon=2$, both updates skip despite nonzero force.
 
-The safe rounded residual bound at 20 sweeps is below `3.25 × 10⁻⁷`, meeting `10⁻⁶`.
-The invariant neighborhood is the explicit box `C`; it contains a radius-`0.05` maximum-norm
-ball around the root, and the predictor belongs to `C` without a root solve. At the chosen
-mass, stiffnesses `1`, `100`, `10000 N/m` allow timesteps up to approximately `15.81`, `1.581`,
-`0.1581 ms`, respectively. This is a substantive but inertia-dominated range: at the endpoint
-an interior vertex has elastic diagonal up to `0.56` against minimum inertia `1`.
-The full sweep box theorem covers all starts in `C`; the stated `0.1` initial-error budget uses
-the predictor restriction (general box starts use `B+Y = 0.15`).
+Four observables describe different properties of an iteration:
 
-## Physical-residual routes
+$$
+\begin{aligned}
+e(u)&=\|u-u^*\|_\infty &&\text{(state error)},\\
+r_{\mathrm{IE}}(u)&=\max_i\frac{|f_i(u)|}{a_i}
+ =\max_i\frac{h^2|F_{\mathrm{IE},i}(x)|}{m_i\ell}
+ &&\text{(scaled physical residual)},\\
+r_T(u)&=\|T(u)-u\|_\infty &&\text{(sweep defect)},\\
+G(u)&&&\text{(incremental objective)}.
+\end{aligned}
+$$
 
-Integrating the Hessian along a segment gives `r_IE(u) ≤ L_F ‖u-u*‖∞` on `C`.
-At a coordinate maximizing the absolute error, the signed Laplacian contribution to
-`f(u)-f(u*)` is nonnegative. Hence `‖u-u*‖∞ ≤ r_IE(u)` even without contraction.
-Together these yield the genuine stepwise estimate
+The physical residual uses a fixed weighted maximum norm on force for each system. A residual
+tolerance $\tau$ means $|F_{\mathrm{IE},i}|\le m_i\ell\tau/h^2$ for every mass.
+It does not assert stepwise energy decrease or identify the defect with the physical residual.
 
-```
-r_IE(T(u)) ≤ θ r_IE(u),    θ = L_F q.
-```
+# A neighborhood preserved by every update
 
-For `α ≤ 0.2`, `η ≤ 1`, `θ ≤ 0.804 < 1`: quantitative residual reduction and strict
-qualitative progress both hold at every non-root in `C`, with root preservation already proved.
-At `α=0.25`, this estimate is `1.0483`, so it establishes neither strict residual progress nor
-stepwise reduction there. State contraction still gives the 20-sweep residual bound above.
-The failure of this sufficient bound is not proof that residual progress fails at that endpoint.
-Sweep-defect contraction follows from state contraction but does not replace these physical-force arguments.
+Assume $0\le Y\le B$, $\|y\|_\infty\le Y$, and
+$b_e\le\alpha=h^2k_{\max}/m_{\min}$. Set
 
-# Reproducible numerical assessment
+$$
+\mathcal C=\{u:\|u\|_\infty\le B\}.
+$$
 
-Run [the diagnostic script](../../experiments/applicability/study.py) using
-[its environment instructions](../../experiments/applicability/README.md).
-[Full results](../../experiments/applicability/results.csv),
+On this box, $|d_{ij}|\le2B$. Expanding the Newton numerator yields
+
+$$
+(U_i(u))_i=
+\frac{a_i y_i+\sum_{j\sim i}b_{ij}
+ [u_j+\eta d_{ij}^2(2u_i+u_j)]}
+ {a_i+\sum_{j\sim i}b_{ij}(1+3\eta d_{ij}^2)}.
+$$
+
+Its absolute value is bounded by
+
+$$
+\frac{a_iY+\sum_{j\sim i}b_{ij}(B+12\eta B^3)}
+     {a_i+\sum_{j\sim i}b_{ij}}.
+$$
+
+Since each vertex has at most two neighbors, the sufficient condition
+
+$$
+24\alpha\eta B^3\le B-Y
+$$
+
+makes every individual update preserve $\mathcal C$. Proper-color snapshots preserve it
+coordinatewise as well. This supplies the intermediate-state control needed to compose local
+derivative bounds, rather than only invariance of the complete sweep.
+
+# From the derivative to contraction
+
+The changed derivative row is
+
+$$
+(DU_i(u))_{ij}=\delta_{ij}-\frac{H_{ij}(u)}{D_i(u)}
+              +\frac{f_i(u)\,\partial_jD_i(u)}{D_i(u)^2}.
+$$
+
+The final term vanishes at a root. In the visit order, decompose the root Hessian into its
+diagonal, strictly lower, and strictly upper parts, $H(u^*)=D+L+R$. Then
+
+$$
+DT(u^*)=-(D+L)^{-1}R,
+$$
+
+the Gauss–Seidel error matrix. Away from the root, the force-dependent variation term remains.
+A root-local spectral radius alone therefore does not certify the nonlinear neighborhood.
+
+For a uniform estimate, define
+
+$$
+\begin{aligned}
+\nu&=2\alpha,& S&=\nu(1+12\eta B^2),\\
+P&=B+Y+2B\nu(1+4\eta B^2),&
+q&=\frac{S}{1+S}+\frac{24\eta B\nu P}{(1+\nu)^2}.
+\end{aligned}
+$$
+
+The off-diagonal Newton row sums to at most $S/(1+S)$, and its diagonal contribution
+cancels. To bound the variation term, put $\nu_i=\sum_j b_{ij}/a_i\le\nu$. Then
+
+$$
+\begin{aligned}
+D_i&\ge a_i(1+\nu_i),\\
+|f_i|&\le a_i[B+Y+2B\nu_i(1+4\eta B^2)],\\
+\sum_j|\partial_jD_i|&\le24\eta B a_i\nu_i.
+\end{aligned}
+$$
+
+Consequently the variation row sum is at most
+
+$$
+\frac{24\eta B\nu_i[B+Y+2B\nu_i(1+4\eta B^2)]}{(1+\nu_i)^2}
+\le \frac{24\eta B\nu P}{(1+\nu)^2}.
+$$
+
+For the final inequality, the derivative of $s(p+rs)/(1+s)^2$ has numerator
+$p+(2r-p)s$, with $p=B+Y$ and $r=2B(1+4\eta B^2)$.
+It is nonnegative because $Y\le B$. Both local inverse factors are retained.
+
+All unchanged derivative rows are identity rows; each changed row has absolute sum at most
+$q$. If $q<1$, the ordered comparison product also has row sums at most $q$:
+before a visit all current components are bounded by the initial maximum, and the visited
+component becomes bounded by $q$ times that maximum. Its value then stays fixed.
+This works for serial and proper-color orders. Convexity of $\mathcal C$ gives
+
+$$
+\|T(u)-T(v)\|_\infty\le q\|u-v\|_\infty,
+\qquad u,v\in\mathcal C.
+$$
+
+Completeness of the closed box, invariance, and fixed-point consistency now connect the local
+estimates to the generic contraction theorem.
+
+# Finite-sweep bounds and physical scales
+
+At $B=0.1$, $Y=0.05$, $0\le\eta\le1$, and $\alpha\le1/4$, the
+invariance condition holds and
+
+$$
+q\le0.494442<0.512,
+\qquad
+L_F=1+4\alpha(1+12\eta B^2)\le2.12.
+$$
+
+Integrating the Hessian along a segment gives
+$r_{\mathrm{IE}}(u)\le L_F\|u-u^*\|_\infty$.
+The predictor and root bounds give $\|y-u^*\|_\infty\le2Y=0.1$, so
+
+$$
+\|T^s(y)-u^*\|_\infty\le0.1(0.512)^s,
+\qquad
+r_{\mathrm{IE}}(T^s(y))\le0.212(0.512)^s.
+$$
+
+After 20 sweeps the latter is below $3.25\times10^{-7}$, meeting a tolerance of
+$10^{-6}$. The box contains a radius-$0.05$ maximum-norm ball around the root;
+initialization requires only the explicit predictor bound. A general start in the box has
+initial state error at most $B+Y=0.15$.
+
+For $\ell=0.1\,\mathrm m$, the predictor permits 5 mm displacement and intermediate
+states permit 10 mm. A dimensionless state error of $10^{-6}$ is 0.1 micrometers;
+the force-residual tolerance retains its mass and timestep scaling above.
+The timestep condition is
+
+$$
+h\le\frac12\sqrt{\frac{m_{\min}}{k_{\max}}}.
+$$
+
+For $m_{\min}=0.001\,\mathrm{kg}$, stiffnesses of $1$, $100$, and
+$10^4\,\mathrm{N/m}$ permit approximately 15.81, 1.581, and 0.1581 ms, respectively.
+At the nonlinear endpoint an interior vertex's elastic diagonal can reach 0.56 against minimum
+inertia 1. These are synthetic physical examples, not measured band material properties.
+
+## Stepwise residual progress
+
+At a coordinate of largest absolute error, the signed Laplacian contribution to
+$f(u)-f(u^*)$ is nonnegative. Thus $\|u-u^*\|_\infty\le r_{\mathrm{IE}}(u)$, and
+
+$$
+r_{\mathrm{IE}}(T(u))\le\theta r_{\mathrm{IE}}(u),
+\qquad \theta=L_Fq.
+$$
+
+For $\alpha\le0.2$, $\eta\le1$, this gives $\theta\le0.804<1$.
+At $\alpha=0.25$, the sufficient bound is approximately 1.0482 and does not establish
+stepwise progress, although the finite-sweep bound still holds. A failing sufficient estimate
+is not a counterexample to progress. Likewise, contraction of the sweep defect is a separate
+consequence of state contraction, not a replacement for the force-residual argument.
+
+# Numerical behavior and limits of the bounds
+
+The [experiment module](../../experiments/applicability/study.py) executes nonlinear VBD
+sweeps and measures all four observables; an independent full Newton solve supplies a reference
+root. Its [README](../../experiments/applicability/README.md) gives runnable commands and
+parameter definitions. The fixed study grid has 336 cases. All 192 cases in the stated
+$\alpha\le0.25$, $\eta\le1$ range reach tolerance within six sweeps.
+These floating-point observations complement the uniform analytic estimate.
+
+[Tables](../../experiments/applicability/report.md),
+[raw results](../../experiments/applicability/results.csv),
 [trajectories](../../experiments/applicability/trajectories.csv), and
-[summary](../../experiments/applicability/summary.json) are checked-in artifacts.
-The script evaluates 336 cases; all 192 cases with `α ≤ 0.25` reach tolerance in at most six
-sweeps. The worst 20-sweep residual there is about `1.22 × 10⁻¹⁷` (roundoff scale).
-Finite-difference checks of the nonlinear sweep derivative at non-root predictors have maximum
-entry discrepancy below `8 × 10⁻¹²`. These are floating-point checks, not proofs of a uniform bound.
+[run configuration](../../experiments/applicability/summary.json) make the results inspectable.
+For 16 vertices, equal masses and stiffnesses, and $\eta=1$:
 
-For `n=16`, equal masses and stiffnesses, and `η=1`:
-
-| α | Order | Root spectral radius | Root ∞ norm | Root 2 norm | Sweeps to tolerance |
+| $\alpha$ | Order | $\rho(DT(u^*))$ | $\|DT(u^*)\|_\infty$ | $\|DT(u^*)\|_2$ | Sweeps to tolerance |
 |---|---|---|---|---|---|
 | 0.25 | serial | 0.10825 | 0.20094 | 0.21061 | 6 |
 | 0.25 | proper color | 0.10825 | 0.33420 | 0.34660 | 4 |
@@ -215,209 +327,184 @@ For `n=16`, equal masses and stiffnesses, and `η=1`:
 | 100 | serial | 0.98943 | 0.99010 | 1.21062 | >20 |
 | 100 | proper color | 0.98943 | 0.99502 | 1.47277 | >20 |
 
-An exact residual-progress counterexample in the quadratic stress range uses two masses,
-`a_i=1`, `b=10`, `η=0`, `y=0`, and `u=(r,r)` with `0<r≤B`. The initial residual is `r`.
-A serial sweep yields `(10r/11,100r/121)` and residual `210r/121 > r`, although the
-quadratic sweep is a global maximum-norm contraction. Thus neither qualitative nor uniform
-factor-below-one physical-residual reduction holds across the full stress range.
+At the root, changed derivative rows are nonnegative, so absolute-factor comparison introduces
+no cancellation loss. Off-root variation terms can have either sign; triangle inequalities
+and independent maxima then introduce conservatism. The maximum-norm bound is independent
+of chain length, but depends on incident coupling. Euclidean transport obeys
 
-Five grid trajectories have a physical-residual increase above roundoff. For example the
-four-node quadratic serial case at `α=10`, mass ratio `1000`, and equal stiffness has a sampled
-successive residual ratio about `1.400`. Both residual routes over the entire stress grid are
-therefore incompatible with those numerical observations. The CSV includes the scaled residual
-map's derivative norm `‖A⁻¹ H DT H⁻¹ A‖∞` at the root as a distinct local diagnostic.
+$$
+\|v\|_\infty\le\|v\|_2\le\sqrt n\,\|v\|_\infty.
+$$
 
-## Conservatism and alternatives
+A one-step norm conversion can therefore destroy contraction (already at $n=16$ for the
+endpoint bound), whereas conversion of the final state-error estimate costs only $\sqrt n$.
+A weighted comparison vector or energy norm can sharpen some estimates. Several-sweep
+contraction can also handle a one-step norm above one. None of these changes makes a fixed
+20-sweep tolerance hold on a trajectory that actually misses it.
+For the quadratic family the global bound $q_0=2\alpha/(1+2\alpha)$ is available, but
+it also becomes slow at large $\alpha$.
 
-At the root all changed derivative rows are nonnegative for this spring law, so multiplying
-absolute factors introduces **no** cancellation loss: the recorded comparison norms equal the
-actual sweep norms. Away from the root, the `f_i ∂D_i` terms can have either sign; triangle
-inequalities and independent maxima introduce loss. At the endpoint the uniform bound `0.512`
-is appreciably larger than both observed root ∞ norms. Only the former certifies the whole box.
+Two exact examples distinguish convergence properties. For two quadratic vertices with
+$a_i=1$, $b=10$, $y=0$, and $u=(r,r)$, a serial sweep gives
 
-The maximum-norm estimate is independent of `n` for degree-two chains and depends on the minimum
-mass and maximum spring stiffness. High mass and low stiffness only improve its inequalities;
-it can be conservative for alternating contrasts. In the native unnormalized Euclidean norm,
-`‖v‖∞ ≤ ‖v‖₂ ≤ √n ‖v‖∞`. Naively converting a one-sweep certificate gives `√n q`, already
-above one at `n=4` for the nonlinear endpoint. Converting the final state-error bound instead
-costs only `√n`; the per-vertex residual target is unchanged. The experiments include all three
-sizes and do not establish mesh-refinement-independent coverage for graphs of increasing degree.
+$$
+T(u)=\left(\frac{10r}{11},\frac{100r}{121}\right),
+\qquad r_{\mathrm{IE}}(u)=r,
+\qquad r_{\mathrm{IE}}(T(u))=\frac{210r}{121}>r\quad(r>0).
+$$
 
-A weighted maximum norm using positive comparison-vector weights can improve a root estimate
-when `Cw ≤ qw`; a spectral radius alone does not provide a uniform nonlinear certificate.
-The unweighted norm already passes the stated budget. For the quadratic family the sharper
-bound `q₀=2α/(1+2α)` holds globally, and SPD Gauss-Seidel also admits an energy-norm analysis.
-At `α=10`, even `q₀≈0.9524` is too slow for this conservative 20-sweep budget; the trajectories
-also miss it. Several-sweep contraction or an adapted norm may handle a one-step 2-norm above
-one, but cannot establish a 20-sweep tolerance contradicted by the observed trajectory.
-They remain options for a revised budget or stronger initial-state restrictions in the stiff
-regime. Any nonlinear extension must retain the intermediate-state box proof.
+Thus global state contraction can coexist with physical-residual increases. For an
+objective-increasing example, take $a_i=b=1$, $\eta=100$, $y=(1,-1)$, and
+$u=(0,0)$. The first update gives $U_0(u)=(1/2,0)$, with
+
+$$
+G(u)=1,\qquad G(U_0(u))=\frac{37}{16}>1.
+$$
+
+This second example is outside the certified box and nonlinear parameter range. The local
+convergence result makes no claim about convergent objective-increasing trajectories.
+
+# Planned formalization modules
+
+The argument factors through the existing foundations and planned bridges in the
+[module map](/formalization/module-map.md):
+
+| Mathematical step | Module | Generic result and instance data |
+|---|---|---|
+| IE objective and derivatives | `Integrator/ImplicitEulerEnergy` | Existing basis-free identities; spring potential supplies the instance |
+| Writes, composition, block derivatives | `Block/Basic`, `Block/Update`, `Block/Operator` | Existing heterogeneous block algebra |
+| Invariant-set convergence and finite iterates | `Dynamics/Contraction` | Existing contraction core; CT-04 adds the derivative bridge |
+| Local interactions and proper colors | `Integrator/LocalInteractions` | Finite-support theory; the path supplies a concrete coloring |
+| Distance-to-physical-residual transport | `Integrator/FixedPoint` | Solver-independent result with supplied residual regularity |
+| Ordered comparison estimates | `Block/Contraction` | Generic block maximum-norm bound |
+| Concrete update and parameter bounds | `Integrator/VBD` | General Newton update and consistency, then chain inverse/box/budget lemmas |
+
+The scalar law and degree-two constants enter through instance lemmas. The derivative,
+composition and convergence statements retain block spaces and physical bound data as parameters.
 
 # Reuse beyond the chain
 
-The chain is the first end-to-end instance of a general block-update theory. The reusable
-result takes a mechanical residual, local solve operators, an execution order, an invariant
-region, and quantitative bounds as inputs. Its output is a finite-sweep guarantee. The chain
-supplies concrete witnesses for those inputs. The scalar spring law, degree two, predictor
-construction, and numerical constants belong to that instance.
-
-| Layer | Reusable result | What a richer model must supply |
-|---|---|---|
-| P1 | Basis-free IE energy, gradient and Hessian identities | Potential and mass operator; a residual extension for forces outside that potential |
-| P2 | Heterogeneous block writes, composition, snapshot merging and block operators | Vertex block spaces and the actual local update |
-| P3 | Contraction, invariant-set and iteration bounds | A complete invariant region and a contraction constant |
-| P4 | Finite-support interactions and proper-color commutation | Interaction supports, including live contact dependencies |
-| P5 | State convergence and quantitative residual transport | Root consistency and a Lipschitz bound for the chosen physical residual |
-| P6 | Ordered derivative comparison in a block maximum norm | Local inverse, coupling and derivative-variation bounds |
-| P7 | Regular block-Newton consistency and sweep linearization | The concrete force law, solve matrix, branch conditions and execution semantics |
-
-The generic declarations quantify over block dimensions and interaction supports. Chain-specific
-lemmas instantiate them at the application boundary. The [module map](/formalization/module-map.md)
-requires that separation as an acceptance condition for the upcoming formalization.
-
 ## General block estimate
 
-Let `R_i(x)` be the residual on a finite-dimensional block and `K_i(x)` the invertible matrix
-actually used for its local solve. The changed coordinate is `x_i - K_i(x)⁻¹ R_i(x)`.
-For a perturbation in block `j`, its derivative is
+For a residual $R_i(x)$ and invertible local solve operator $K_i(x)$, the update
+changes block $i$ to $x_i-K_i(x)^{-1}R_i(x)$. Its derivative in block direction $v_j$ is
 
-```
-(DU_i)_ij[v] = δ_ij v - K_i⁻¹ (D_j R_i)[v]
-              + K_i⁻¹ ((D_j K_i)[v]) K_i⁻¹ R_i.
-```
+$$
+(DU_i)_{ij}[v_j]=\delta_{ij}v_j-K_i^{-1}D_jR_i[v_j]
+ +K_i^{-1}\bigl(D_jK_i[v_j]\bigr)K_i^{-1}R_i.
+$$
 
-Here `δ_ij v` means identity on the diagonal and zero otherwise. With an exact Newton block,
-`K_i = D_i R_i`, the first two diagonal terms cancel. A sufficient changed-row bound is
+For exact Newton blocks, $K_i=D_iR_i$, the diagonal cancellation gives the sufficient bound
 
-```
-Σ_(j≠i) ‖K_i⁻¹ D_j R_i‖
-  + ‖K_i⁻¹‖ ‖K_i⁻¹ R_i‖ Σ_j ‖D_j K_i‖ ≤ q < 1.
-```
+$$
+\sum_{j\ne i}\|K_i^{-1}D_jR_i\|
+ +\|K_i^{-1}\|\,\|K_i^{-1}R_i\|\sum_j\|D_jK_i\|\le q<1.
+$$
 
-All norms are operator or block-vector norms; the state norm is `max_i ‖x_i‖`.
-Uniform bounds and preservation of the region at every intermediate visit let the existing
-row-composition argument apply in any block dimension. For an approximate solve matrix, add
-`‖I-K_i⁻¹ D_i R_i‖` to the row bound. This term can survive even at a root: the Gauss-Seidel
-identification requires exact derivative blocks. Invertibility and once-per-block execution
-still give root consistency for either choice when the update uses the stated residual.
-These are mathematical interfaces and derivations, not additional implemented Lean results.
+These are operator and block-vector norms, with state norm $\max_i\|x_i\|$.
+Uniform estimates and intermediate-state invariance let the same ordered-composition proof
+apply in any block dimension. An approximate solve matrix contributes the additional term
+$\|I-K_i^{-1}D_iR_i\|$; it can persist even at a root. Root consistency still follows
+from invertibility and once-per-block execution, but the exact Gauss–Seidel identification
+requires exact derivative blocks.
 
-## A quantified vector extension
+## Vector springs and general graphs
 
-One explicit extension takes `u_i ∈ ℝ^d` on a finite simple graph and uses
+An explicit vector extension takes $u_i\in\mathbb R^d$ on a finite simple graph and uses
 
-```
-G(u) = Σ_i a_i ‖u_i-y_i‖²/2
-       + Σ_edges b_e [‖u_i-u_j‖²/2 + η ‖u_i-u_j‖⁴/4].
-```
+$$
+G(u)=\frac12\sum_i a_i\|u_i-y_i\|^2
+ +\sum_{e=\{i,j\}}b_e\left(\frac{\|u_i-u_j\|^2}{2}
+                           +\frac{\eta\|u_i-u_j\|^4}{4}\right).
+$$
 
-This is an isotropic displacement-difference spring model. It couples vector coordinates through
-the quartic term; it is not merely independent copies of the scalar quartic solve.
-It is also distinct from a geometric nonzero-rest-length spring energy based on actual vertex
-separation. Set `‖y_i‖ ≤ Y`, `‖u_i‖ ≤ B`, and
-`z = max_i Σ_(e incident i) b_e/a_i`. In physical units,
-`z = max_i h² Σ_(e incident i) k_e/m_i`; a maximum-degree bound `Δ` gives
-`z ≤ Δ h² k_max/m_min`. Thus connectivity, not just spatial dimension, affects coverage.
+The quartic term couples vector components. This displacement-difference model is distinct
+from geometric springs with nonzero rest length based on actual vertex separation.
+Put
 
-For an edge displacement `d_e`, its Hessian is
-`b_e[(1+η‖d_e‖²)I + 2η d_e d_eᵀ]`.
-On the product of radius-`B` balls, its norm is at most `b_e(1+12ηB²)` and its
-variation has norm at most `6b_e η ‖d_e‖ ‖δd_e‖`.
-Consequently `K_i ≽ (a_i+Σ b_e)I` and the block estimate above gives
+$$
+z=\max_i\frac{\sum_{e\ni i}b_e}{a_i}
+ =\max_i\frac{h^2\sum_{e\ni i}k_e}{m_i}
+ \le\Delta\frac{h^2k_{\max}}{m_{\min}},
+$$
 
-```
-P(z) = B+Y+2Bz(1+4ηB²),
-q_vec ≤ z(1+12ηB²)/(1+z) + 24ηB z P(z)/(1+z)².
-```
+where $\Delta$ is maximum graph degree. Connectivity enters through incident stiffness.
+For an edge displacement $d_e$, its Hessian and variation obey
 
-These expressions increase with `z≥0` and `0≤η≤1` at the chosen `B,Y`.
-Intermediate-state preservation follows by writing `K_i u_i - R_i` as
-`a_i y_i + Σ b_e[(1+η‖d_e‖²)u_j + 2η d_e⟨d_e,u_i⟩]`.
-Its norm is at most `a_iY+Σ b_e(B+12ηB³)`. Hence
-`12ηB³ z ≤ B-Y` suffices to preserve the product ball at each visit.
+$$
+H_e=b_e[(1+\eta\|d_e\|^2)I+2\eta d_ed_e^\mathsf T],
+\qquad
+\|DH_e[\delta d_e]\|\le6b_e\eta\|d_e\|\,\|\delta d_e\|.
+$$
+
+On the product of radius-$B$ balls, local inverse and variation bounds give
+
+$$
+\begin{aligned}
+P(z)&=B+Y+2Bz(1+4\eta B^2),\\
+q_{\mathrm{vec}}&\le\frac{z(1+12\eta B^2)}{1+z}
+             +\frac{24\eta BzP(z)}{(1+z)^2}.
+\end{aligned}
+$$
+
+For intermediate-state invariance, expand
+
+$$
+K_iu_i-R_i=a_iy_i+\sum_{j\sim i}b_{ij}
+ [(1+\eta\|d_{ij}\|^2)u_j+2\eta d_{ij}\langle d_{ij},u_i\rangle].
+$$
+
+The numerator norm is at most $a_iY+\sum_jb_{ij}(B+12\eta B^3)$, while
+$K_i\succeq(a_i+\sum_jb_{ij})I$. Hence $12\eta B^3z\le B-Y$ suffices.
 Strong convexity gives a unique root; taking the inner product of its equation with a
-largest-norm root coordinate shows `max_i ‖u_i*‖ ≤ Y`.
+largest-norm coordinate gives $\max_i\|u_i^*\|\le Y$.
+At $B=0.1$, $Y=0.05$, $\eta\le1$, and $z\le0.5$,
 
-At `B=0.1`, `Y=0.05`, `η≤1`, and `z≤0.5`, these estimates give
-`q_vec ≤ 0.5088 < 0.512`, invariance, and Lipschitz constant
-`1+2z(1+12ηB²) ≤ 2.12` for the scaled vector residual
-`r_IE(u)=max_i ‖R_i(u)‖/a_i`. The same 20-sweep state and residual bounds therefore follow
-analytically for `d=2`, `d=3`, or any finite `d`, with serial or proper-color execution.
-This vector extension has an explicit mathematical certificate; the checked-in numerical
-trajectories and the first planned Lean instance remain the scalar chain.
-It demonstrates reuse of the argument without claiming coverage of general 3D materials.
+$$
+q_{\mathrm{vec}}\le0.5088<0.512,
+\qquad L_F\le1+2z(1+12\eta B^2)\le2.12.
+$$
+
+The same 20-sweep bound follows for the vector residual
+$r_{\mathrm{IE}}(u)=\max_i\|R_i(u)\|/a_i$, in 2D, 3D, or any finite dimension.
+This is an analytic extension; the experiment module executes the scalar chain.
 
 ## Geometric elasticity and higher-arity elements
 
-For geometric springs or triangle/tetrahedron energies, interaction support, coloring, the
-block derivative identity, and comparison composition still apply. The model must supply
-bounds for local inverse matrices, mixed derivatives, and their variation on a deformation
-region. Scalar division becomes a 2×2 or 3×3 local solve; scalar signs and the chain maximum
-principle are not generic tools for matrix-valued elasticity. A root can instead be supplied,
-or obtained from a complete invariant-region contraction and independent consistency.
-Quantitative residual transport requires its own Lipschitz constant; stepwise residual progress
-additionally needs an error-to-residual lower bound or a direct residual-map estimate.
+Triangle, tetrahedron, or geometric spring energies reuse interaction support, coloring,
+block differentiation, and comparison composition. Each constitutive law must provide local
+inverse, mixed-derivative and variation bounds on a specified deformation region. A template is
 
-A useful template is `H_ii ≽ (m_i/h²-κ_i)I` when local potential curvature is bounded below
-by `-κ_i I`. Positive `m_i/h²-κ_i` gives an inverse bound, but contraction also requires
-bounds on the mixed blocks. Near collapsed elements, those variation bounds may become
-unbounded. Each accepted material therefore needs a specified deformation region, predictor
-membership, timestep range and sweep budget. Increasing dimension alone does not establish
-these physical hypotheses. The scalar threshold likewise becomes a dimension-dependent
-determinant condition (or the actual implementation's singularity test) and needs explicit units.
+$$
+H_{ii}(x)\succeq\left(\frac{m_i}{h^2}-\kappa_i\right)I,
+\qquad \frac{m_i}{h^2}>\kappa_i,
+$$
 
-## Contact, damping and friction
+when potential curvature has lower bound $-\kappa_i I$. Contraction additionally needs
+mixed-block bounds. Near collapsed elements, derivative variation may become unbounded.
+Scalar maximum principles and sign arguments do not automatically extend to these materials;
+root existence, predictor membership and quantitative residual transport need appropriate replacements.
+The singularity test also becomes dimension-dependent and must retain its physical units.
 
-A smooth additional force law can use the same residual/update interface after its contribution
-to the inverse, mixed derivative, variation, and residual-scaling bounds is included. A linear
-viscous damping term, for example, becomes position-dependent through
-`v_new=(x_new-x_old)/h`; a symmetric positive-semidefinite damping matrix contributes `C/h`
-to the residual derivative. Off-diagonal damping can also increase coupling.
+## Damping, contact, and friction
 
-Contact changes both analysis and scheduling. On a region with a fixed smooth contact branch,
-its derivative bounds can enter the same comparison matrices. Crossing activation boundaries
-requires a direct Lipschitz or suitable piecewise argument rather than a smooth derivative
-assumption across the boundary. A live contact can invalidate a material coloring; the actual
-buffered map then needs BC-04. Lagged contact data and changing schedules require either an
-augmented state or an explicitly varying-map theorem, rather than treating them as a fixed
-function of positions alone.
+Smooth added forces can enter the same residual/update interface through their contributions
+to inverse, coupling and variation bounds. Linear viscous damping with a symmetric
+positive-semidefinite matrix $C$ contributes $C/h$ to the position-residual derivative
+because $v^{\mathrm{new}}=(x^{\mathrm{new}}-x^{\mathrm{old}})/h$.
+Off-diagonal damping can increase coupling as well as diagonal control.
+
+A fixed smooth contact branch admits the same derivative analysis. Activation boundaries need
+a direct Lipschitz or suitable piecewise argument. Live contacts can invalidate material
+coloring, requiring the actual buffered-map estimate in BC-04. Lagged contact data or changing
+schedules require an augmented state or a varying-map theorem.
 
 The [VBD paper, §§3.5–3.6](https://graphics.cs.utah.edu/research/projects/vbd/vbd-siggraph2024.pdf)
-uses regularized friction and an approximate local friction derivative, and omits differentiation
-through contact normals. Accordingly, analysis must specify which quantities are frozen and
-use the derivative of the **actual update map**. The general `K_i` formula above exposes both
-the derivative mismatch and the derivatives of changing coefficients. A lagged friction
-potential can support a conditional fixed-data theorem; identifying its root with the intended
-fully coupled friction equation is a separate obligation.
-
-Ideal sticking/sliding laws can require a nonsmooth inclusion or complementarity solution
-concept. The existing energy-gradient identity cannot be assumed to represent such a law.
-Block-update algebra and metric contraction remain reusable, while the smooth derivative bridge
-and the IE root interpretation may need new results. CT-05 can handle bounded execution errors
-only with a proved error bound and region preservation; it does not by itself turn friction
-into a small perturbation or guarantee convergence to the same physical root.
-
-## Applicability boundary
-
-The supported chain and vector estimates establish a reusable route for a coupled smooth
-mechanical family with explicit constants. Applicability to geometric 3D elasticity, dynamic
-contact, and friction remains an open physical assessment. A model extension is accepted only
-when its actual update and residual, invariant region, relevant initial states, and parameter
-and accuracy budgets discharge the generic hypotheses. The first chain theorem is a milestone
-in that program, not the final extent of the formal library or evidence that all VBD workloads
-meet those hypotheses.
-
-# Objective-increase coverage
-
-The same quartic family has an exact unsafeguarded objective-increasing step outside the
-certified range: `n=2`, `a_0=a_1=b=1`, `η=100`, `y=(1,-1)`, `u=(0,0)`.
-The first visit has `D_0=2`, `f_0=-1`, and gives `(1/2,0)`.
-Direct rational evaluation gives `G(0,0)=1` and `G(1/2,0)=37/16`.
-The script verifies that arithmetic exactly using fractions. This is an analytic example of
-non-descent in the selected constitutive family, not a certified convergent non-descent example.
-Its start is outside `C` and its nonlinear parameter exceeds the quantitative scope.
-No objective increase was observed in the supported grid; the accepted theorem claims no
-coverage of objective-increasing trajectories, indefinite curvature, or large deformation.
-
-The [AP-03 decision](/project/applicability-decision.md) selects the scoped quantitative
-state-contraction route and records the remaining formal proof obligations.
+uses regularized friction and approximate local derivatives, including frozen-normal treatment.
+Its analysis must differentiate the actual update, specifying frozen quantities and retaining
+the $K_i$ mismatch terms above. A fixed-data friction potential can support a conditional
+result; identifying its root with the fully coupled physical equation is another obligation.
+Ideal sticking/sliding laws can instead need a nonsmooth inclusion or complementarity solution
+concept. Block algebra and metric contraction remain reusable, while the smooth derivative bridge
+and energy-gradient interpretation may need new results. A CT-05 perturbation theorem requires
+an actual error bound and region preservation; friction is not automatically a small perturbation.

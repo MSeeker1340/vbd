@@ -1,0 +1,9 @@
+[project]
+name = "vbd-applicability"
+version = "0.1.0"
+description = "Small numerical experiment for the VBD contraction study"
+requires-python = ">=3.11"
+dependencies = ["numpy==2.4.3", "matplotlib>=3.10,<4"]
+
+[tool.uv]
+package = false

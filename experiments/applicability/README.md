@@ -1,51 +1,108 @@
-# Applicability diagnostics
+# VBD applicability experiment
 
-Run from the repository root with Python 3.11+ and NumPy 2.4.3:
+A small Python module for one timestep's nonlinear scalar spring-chain solve. It executes
+actual full-step VBD visits and computes derivative diagnostics alongside them. It is an
+experiment, with dense assembly for inspection, rather than a simulation library or performance
+benchmark. The [mathematical article](../../knowledge/mathematics/applicability-study.md)
+defines the model and the [decision record](../../knowledge/project/applicability-decision.md)
+explains the fixed study grid.
+
+## Run with uv
+
+From the repository root:
 
 ```sh
-uv venv /tmp/vbd-applicability-venv
-uv pip install --python /tmp/vbd-applicability-venv/bin/python numpy==2.4.3
-/tmp/vbd-applicability-venv/bin/python experiments/applicability/study.py
+uv run --directory experiments/applicability --locked python -m study
 ```
 
-## What the script executes
+`uv` creates the local environment and installs the versions in `uv.lock`. Python 3.11 or newer
+is required. The default is a quick 12-case grid. Results go to
+`experiments/applicability/runs/latest/`, which is ignored by Git. A rerun replaces the named
+outputs in that directory. From inside `experiments/applicability`, use
+`uv run --locked python -m study` directly.
 
-`model(...).sweep(...)` implements the actual full-step VBD map for the specified scalar
-spring model. Each visit recomputes the nonlinear force and Hessian at the current state,
-checks the singularity threshold, and performs `x_i -= f_i / H_ii`. Serial visits immediately
-expose their updated coordinate to subsequent visits. A color batch computes its even or odd
-vertices from one snapshot and commits that batch together. A sweep visits every vertex once.
+Select a custom experiment:
 
-The trajectory starts at the inertia predictor `y` and advances through these actual updates.
-The “at most six sweeps” result is the first observed sweep count reaching the specified scaled
-physical-residual tolerance over the supported grid. It is not inferred from eigenvalues or
-from repeatedly applying a matrix linearized at the solution. The analytic 20-sweep guarantee
-is a separate bound valid throughout the certified region.
+```sh
+uv run --directory experiments/applicability --locked python -m study \
+  --n 8 32 --alpha 0.1 0.25 1 --eta 1 --mode serial color \
+  --mass-ratio 1 1000 --sweeps 30 --tolerance 1e-7 --output runs/custom
+```
 
-A separate full-system Newton solve produces a reference root for measuring state errors and
-root-local matrix diagnostics. It does not supply updates or initialization to the VBD
-trajectory. Derivative matrices, their spectral radii and comparison bounds are additional
-analysis outputs. The last recorded state also receives a lookahead sweep to evaluate its
-defect; this does not advance the recorded 20-sweep trajectory.
+Reproduce the 336-case study in a separate output directory:
 
-This is a small NumPy implementation of one timestep's nonlinear solve. Dense global assembly
-and derivative tracking favor inspection over speed. It is not a real-time implementation,
-GPU benchmark or multi-timestep simulator; it has no contact or friction code. The numeric
-runs cover the scalar chain; the vector extension in the study is an analytic derivation.
+```sh
+uv run --directory experiments/applicability --locked python -m study \
+  --preset study --output runs/study
+```
 
-## Outputs and checks
+Maintainers regenerate the checked-in baseline with `--preset study --output .` from the
+experiment directory (or using the same `--directory` option). This also replaces the
+checked-in report and plot. Run `python -m study --help` through `uv` for all options.
 
-The script overwrites the adjacent CSV and JSON results. These are deterministic float64
-experiments, not certified numerical bounds. No Lean or simulation dependency is added.
-`results.csv` has one row per system/execution; `trajectories.csv` records all 21 states
-(initial plus 20 sweeps) for the equal-mass, equal-stiffness 16-node subset.
-An empty tolerance field means the target was not reached in 20 sweeps.
-Root solves are independent full Newton solves with checked scaled residual below 1e-10.
-Derivative checks use centered finite differences at non-root warm starts. The comparison
-matrix column multiplies absolute derivative factors at the root, not a uniform box bound.
-`max_energy_increase` refers to a block step or a simultaneous proper-color batch;
-`max_residual_ratio` ignores denominators below 1e-12 to limit roundoff artifacts.
+## Parameters
 
-The analytic specification, parameter provenance, limitations, and decision are in
-[the study](../../knowledge/mathematics/applicability-study.md) and
-[the route decision](../../knowledge/project/applicability-decision.md).
+Each list-valued option replaces one preset axis; the experiment takes their Cartesian product.
+
+| Option | Meaning |
+|---|---|
+| `--preset quick` / `--preset study` | Small inspection grid / full applicability grid |
+| `--n` | Vertex counts, each at least two |
+| `--alpha` | Positive normalized stiffness `h² k_max / m_min` |
+| `--eta` | Nonnegative quartic hardening coefficient; zero gives the quadratic baseline |
+| `--mass-ratio`, `--stiffness-ratio` | Alternating contrasts, at least one |
+| `--mode serial color` | Serial visits or even/odd snapshot batches |
+| `--sweeps`, `--tolerance` | Iteration budget and scaled physical-residual target |
+| `--amplitude`, `--radius` | Predictor amplitude `Y` and certificate box radius `B`, with `0 ≤ Y ≤ B` |
+| `--threshold` | Nonnegative normalized scalar Hessian skip threshold |
+| `--output` | Output path relative to the experiment working directory |
+| `--table-limit` | Terminal row limit; zero prints all cases |
+| `--plot-cases`, `--no-plots` | Number of representative cases (1–12), or disable plots |
+
+An ineffective certificate or missed tolerance is a reported outcome, not a program failure.
+Malformed arguments and unsuccessful reference solves produce a nonzero exit status.
+CLI settings outside the article's parameter range do not broaden its accepted theorem.
+
+## Read the outputs
+
+The terminal prints a compact table; [report.md](report.md) contains the full table and
+[convergence.png](convergence.png) plots. The plot reserves up to two lines for cases whose analytic bound meets the budget,
+then fills the remaining slots with the largest terminal residuals. Labels give case IDs and
+parameters; dotted residual curves show the corresponding uniform bounds. Four panels distinguish physical residual,
+state error, sweep defect and objective. Logarithmic panels floor values at `1e-18` for display
+only; CSV values are unmodified.
+
+`results.csv` has one row per parameter/execution case. `rho`, `norm_inf`, and `norm_2` are
+root-local sweep-derivative diagnostics; comparison columns multiply absolute local derivative
+factors. `q_bound` is the uniform box candidate. `certificate_valid` additionally checks
+intermediate-state invariance and the skip branch. `bound_final` appears only when all these
+conditions hold, and need not meet the requested tolerance. `first_tolerance` is the first
+observed successful sweep; an empty value means no hit within the budget.
+
+`trajectories.csv` records every state, including sweep zero, for every case, with complete
+parameter keys and a uniform residual envelope when valid. `summary.json` records the resolved
+grid, settings, dependency versions, and aggregate counts. All results use float64 arithmetic;
+they are not interval proofs. At a skip-branch boundary, derivative diagnostics describe the
+executed branch only and do not establish differentiability across that boundary.
+
+Each actual visit recomputes forces and Hessians from the current state and performs
+`x_i -= f_i / H_ii` when the threshold permits it. Serial writes affect subsequent visits;
+proper-color members read a shared snapshot. The trajectory starts from the inertia predictor,
+not a reference root. A separate full Newton solve supplies that root for state-error measurement
+and local matrix analysis. The terminal state gets a lookahead sweep only to measure its defect;
+progress/increase statistics count transitions within the requested budget.
+
+The checked-in study's “within six sweeps” is a measured tolerance hit over its 192 supported
+cases; the analytic 20-sweep guarantee is a distinct neighborhood bound. The module includes
+no contact/friction, vector model, GPU execution or multi-timestep loop.
+
+## Checks
+
+```sh
+uv run --directory experiments/applicability --locked python -m unittest discover -s tests -v
+```
+
+The focused checks compare quadratic sweeps with independently constructed Gauss–Seidel
+matrices, check nonlinear derivatives by finite differences, verify exact certificate arithmetic,
+and exercise CLI validation, custom output and skip behavior. NumPy and Matplotlib are isolated
+experiment dependencies; no Lean dependency or general-purpose solver infrastructure is added.

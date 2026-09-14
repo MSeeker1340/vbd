@@ -1,95 +1,111 @@
 ---
 type: Architecture Decision
 title: First Quantitative VBD Applicability Route
-description: Selects maximum-norm state contraction for bounded nonlinear axial chains and proper-color execution, with explicit accuracy and coverage limits.
+description: Records the rationale, evaluation contract, and implementation scope for the first VBD convergence example.
 tags: [applicability, theorem-route, maximum-norm, execution]
 timestamp: 2026-09-14T00:00:00Z
 ---
 
-# Decision (AP-03)
+# Decision
 
-**Proceed with a scoped quantitative state-contraction theorem and independent root consistency.**
-The [applicability study](/mathematics/applicability-study.md) supplies analytic estimates for
-scalar axial chains with quadratic or hardening quartic springs, `0 ≤ η ≤ 1`, and
-`h² k_max/m_min ≤ 1/4`. The scope includes arbitrary finite chain length, positive heterogeneous
-masses and springs under these bounds, serial once-per-vertex sweeps, and even/odd proper-color
-snapshot batches. The study's fixed predictor and intermediate-state bounds give a uniform
-contraction factor `q < 0.512`, and a physical IE residual below `10⁻⁶` in at most 20 sweeps.
-These are mathematical derivations awaiting Lean formalization, not completed Lean theorems.
-AP-01–AP-03 are complete research deliverables; the quantitative end-to-end acceptance gate VB-08
-remains open until the instantiated theorem is proved.
+**Proceed with maximum-norm state contraction and independent fixed-point/root consistency.**
+The first end-to-end Lean instance is a coupled axial chain with quadratic and hardening
+quartic springs, using exact serial or static proper-color VBD sweeps.
+The [mathematical article](/mathematics/applicability-study.md) develops the model, derives
+its bounds, and explains their extension to richer mechanics.
+
+AP-01–AP-03 is complete for this first family. The analytic result supports a scaled physical
+residual below $10^{-6}$ within 20 sweeps when $h^2k_{\max}/m_{\min}\le1/4$,
+$0\le\eta\le1$, and the stated predictor condition holds. VB-08 remains open until its
+Lean instantiation is proved. Applicability to general production materials, contact, and
+friction remains a separate physical assessment.
+
+# Why this model
+
+The first example must exercise the entire proof chain while allowing explicit physical
+hypotheses to be checked. An axial chain satisfies this requirement with little constitutive
+or geometric machinery:
+
+* Adjacent springs give genuine cross-block coupling, so the sweep is not a collection of
+  independent solves. The path also supplies nontrivial proper-color execution.
+* The quadratic case isolates the Gauss–Seidel mechanism. The quartic case adds a changing
+  Hessian and the force-dependent derivative term needed for a nonlinear neighborhood proof.
+* The rail constraint makes inverse and invariant-region estimates tractable. These scalar
+  estimates can instantiate dimension-independent derivative and composition theorems.
+* Positive inertia and bounded hardening permit explicit timestep, predictor and iteration
+  bounds, instead of an unspecified sufficiently small neighborhood.
+
+The model's simplicity also bounds its evidence: its convex spring law does not test indefinite
+elasticity, contact activation, or friction. The vector extension in the mathematical article
+shows that the proof method supports larger blocks; it does not calibrate real 3D materials.
+The [VBD reference](/references/vbd-paper.md) motivates spring examples, inertia initialization,
+and contrast stress tests. It supplies no measured calibration for this particular quartic law.
+
+# Why this guarantee and norm
+
+State contraction provides a finite-sweep budget across the supported range and permits
+physical-residual transport using a quantitative regularity bound. Strict residual progress
+alone supplies no arbitrary-accuracy budget. Direct quantitative residual reduction is useful
+on the smaller range $h^2k_{\max}/m_{\min}\le0.2$, but the available sufficient estimate
+is ineffective at the full-range endpoint. Exact examples also demonstrate that physical
+residuals can increase under a state-contractive sweep.
+
+The block maximum norm follows the componentwise update structure and avoids a
+$\sqrt n$ conversion penalty in the contraction factor. It preserves a per-vertex error
+interpretation as chain length grows. Weighted or energy norms and several-sweep contraction
+remain options for a broader stiff-regime assessment.
+
+Exact serial and proper-color execution exercise ordering and snapshot semantics while keeping
+physical independence explicit. Dynamic same-color coupling and approximate solves require
+additional derivative or perturbation estimates, so they are follow-on execution scopes.
+
+# Evaluation contract and provenance
+
+The fixed study preset uses the following design parameters, independently of the measured
+iteration counts. They are synthetic engineering examples and stress ranges, not material data
+or a perceptual accuracy standard.
+
+| Quantity | Study value or range | Purpose |
+|---|---|---|
+| Rest spacing $\ell$ | $0.1\,\mathrm m$ | Gives displacements a physical scale |
+| Minimum mass | $0.001\,\mathrm{kg}$ | Sets the inertial scale |
+| Maximum stiffness | $1$–$10^4\,\mathrm{N/m}$ | Exposes timestep restrictions |
+| Timestep calibration | $10^{-4}$–$0.04\,\mathrm s$ | Covers admitted and stress cases |
+| Vertex count | $4,16,64$ | Tests size effects |
+| Normalized stiffness $\alpha$ | $0.01,0.1,0.2,0.25,1,10,100$ | Spans inertia-dominated and stiff solves |
+| Mass ratio | $1,1000$ | Alternating heavy/light vertices |
+| Stiffness ratio | $1,10000$ | Alternating stiff/soft edges |
+| Nonlinearity $\eta$ | $0,1$ | Quadratic baseline and nonlinear case |
+| Predictor | $y_i=0.05\cos(1.7i)$ | Deterministic, nonuniform inertia warm start |
+| Certificate box | $\|u\|_\infty\le0.1$ | Explicit intermediate-state region |
+| Residual tolerance and budget | $10^{-6}$, 20 sweeps | Quantitative evaluation target |
+
+Every normalized grid value has a realization within the calibration ranges: for example,
+$k_{\max}=100\,\mathrm{N/m}$ and $h=\sqrt{\alpha m_{\min}/k_{\max}}$.
+A separate exact large-amplitude example tests objective increase outside the certified range.
+The experiment's [`study` preset](../../experiments/applicability/README.md) reproduces this grid;
+CLI overrides support further inspection without changing the accepted theorem scope.
 
 # Project scope and reuse contract
 
-The formalization targets a reusable theory of block updates for mechanical solves. The chain
-is the first quantitatively supported application and end-to-end Lean instance. Generic
-foundation and bridge statements quantify over block spaces, residuals, interaction supports,
-orders, and bound data; chain geometry and spring constants enter through specialization lemmas.
-The [adaptation analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain) gives the
-block derivative interface, a quantified vector-valued extension, and the additional obligations
-for geometric elasticity, contact and friction. Its vector spring graph also admits the same
-20-sweep bound under an incident-stiffness restriction, as an analytic result awaiting numerical
-and Lean instantiation.
+The chain is the first application of a reusable formal library. Foundation and bridge
+statements retain block spaces, residuals, supports, execution orders and bound data as
+parameters. Chain geometry, scalar signs and constitutive constants enter through instance
+lemmas. A chain-only proof without the generic interfaces does not satisfy the implementation
+acceptance condition in the [module map](/formalization/module-map.md).
 
-AP-01–AP-03 closes the first-family applicability gate. General production applicability remains
-open: a convergent chain example does not establish useful parameter ranges or initial-state
-coverage for arbitrary 3D materials or friction. The next implementation work must expose the
-reusable theorems as well as their chain instantiation; a chain-only proof does not satisfy that
-architecture. Each richer model discharges new physical hypotheses against the common interface,
-and updates that interface where smoothness, solution concept or execution semantics require it.
+The accepted metric is theorem-local: retain `BlockSum` and its existing `PiLp 2` representation,
+with explicit distance transport where needed. CT-04 remains norm-polymorphic. The experiment's
+Python environment is separate from the Lean dependency graph.
 
-# Norm and execution boundary
+CT-04 is next. The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
+physical-residual transport. CT-05, BC-04 and perturbation extensions remain deferred until an
+approximate or hybrid execution variant has an applicability certificate. The generic
+higher-arity coloring example in LI-03 remains required, independently of the chain certificate.
 
-Use the unweighted block maximum norm for the first contraction certificate. Retain `BlockSum`
-and its existing `PiLp 2` representation in the independent algebra foundation; introduce the
-maximum metric through a theorem-local normed representation or explicit equivalent metric
-at the bridge, with distance-transport lemmas. The generic CT-04 derivative result must be
-norm-polymorphic. No new Lean dependency is required by this decision.
-
-The first production theorem covers static proper colors. Same-color live collision coupling,
-approximate solves, floating-point execution, and perturbations are follow-on scope.
-BC-04, CT-05 and the perturbation component of BC-05 are deferred until such an execution
-variant has its own applicability certificate. They are not prerequisites of the initial
-exact-execution theorem. Generic interaction support still includes higher-arity elements;
-LI-03's multi-vertex coloring example remains required but carries no quartic-chain contraction claim.
-
-# Guarantee comparison
-
-State contraction plus skip-free fixed-point consistency supplies the selected full-range
-finite-sweep guarantee. Quantitative physical-residual reduction with `θ ≤ 0.804` is available
-on the smaller range `h² k_max/m_min ≤ 0.2`; it also gives qualitative progress there.
-Strict residual progress alone is a weaker milestone and is not the selected end-to-end route.
-The stress regime admits residual increases, including an exact quadratic example in the study.
-The maximum norm resolves the avoidable Euclidean conversion loss; stronger weights, energy
-norms and several-sweep estimates are optional work for a revised stiff-regime target.
-
-The result applies to one timestep's solve with an inertia predictor within 5 mm of the rest
-configuration at the selected `L=0.1 m` scale. It certifies neither accumulation over timesteps
-nor general VBD production workloads. Non-descent convergence, nonconvex elasticity, contact,
-and large-deformation warm starts remain outside the initial theorem. The separate rational
-objective-increase example belongs to the same constitutive family but lies outside the
-certified region and parameter range.
-
-# Formal proof obligations and work order
-
-1. **CT-04:** connect uniform derivative bounds on a convex neighborhood to the generic
-   contraction interface, retaining freedom of norm and explicit domain hypotheses.
-2. **LI-01–LI-04:** provide finite-support interactions and proper-color commutation, including
-   the generic multi-vertex example and static-color validity boundary.
-3. **IF-01–IF-03:** transport known-root state bounds to the explicitly scaled physical residual;
-   IF-03 is required for the selected residual accuracy target.
-4. **BC-01–BC-03 and exact BC-05:** compose changed-row comparison matrices in the supplied
-   order, certify maximum-norm contraction, and transport distances from the block representation.
-5. **VB-01–VB-04:** define the dimension-independent full-step block update and instantiate its scalar threshold;
-   prove generic skip-free consistency, derive the inverse-operator variation term, and
-   instantiate the chain inverse bounds.
-6. **VB-05–VB-07:** instantiate degree-two coupling bounds, prove every intermediate update
-   preserves the box, derive uniform contraction, and discharge proper-color execution equivalence.
-7. **VB-08:** instantiate `B`, `Y`, `α`, `η`, predictor membership, root existence/bound, norm
-   constants and the safe rounded 20-sweep residual estimate. Include the quadratic baseline and
-   genuinely nonlinear quartic case, with the study's physical calibration and exclusions.
-
-The [backlog](./backlog.md), [roadmap](./roadmap.md), and
-[module map](/formalization/module-map.md) carry these dependencies. Extending the physical
-scope or claiming convergent objective-increasing trajectories requires another applicability
-assessment before broadening the theorem statement.
+The initial guarantee concerns one timestep with the specified predictor region. It excludes
+multi-timestep error accumulation, nonconvex material guarantees, contact/friction, and
+convergent objective-increasing trajectories. Extending the application requires the new
+model's actual update, residual, intermediate-state bounds, initial-state coverage and accuracy
+budget to discharge the reusable hypotheses described in the
+[extension analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain).

@@ -2,6 +2,8 @@
 
 ## 2026-09-14
 
+* **Decision/exposition separation**: Focused the applicability decision on why the model, norm, guarantee and execution scope are selected, with the synthetic evaluation contract and reuse requirement. The mathematics article carries definitions and derivations. Rationale is recorded in the decision concept as explicitly requested; chronological changes remain in this log. The Python module remains an isolated one-timestep experiment.
+
 * **Scope clarification**: Made the chain an explicit first application of reusable generic theorems, with vector-block reuse an implementation acceptance condition. Distinguished completion of the first-family applicability gate from unresolved general production applicability, and linked concrete adaptation obligations.
 
 * **AP-01–AP-03 complete**: Selected a scoped quantitative proceed decision for scalar nonlinear spring chains, maximum-norm contraction, and serial/proper-color execution. Recorded the 20-sweep residual target and remaining Lean obligations; advanced CT-04, deferred perturbation/hybrid scope, added IF-03 to the end-to-end dependencies, and synchronized architecture and repository guidance.
