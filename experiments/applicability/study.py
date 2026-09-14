@@ -11,7 +11,7 @@ B, Y, TOL, BUDGET = 0.1, 0.05, 1e-6, 20
 def certificate(alpha, eta):
     s = 2 * alpha * (1 + 12 * eta * B**2)
     p = B + Y + 4 * alpha * B * (1 + 4 * eta * B**2)
-    q = s / (1 + s) + 24 * alpha * eta * B * p
+    q = s / (1 + s) + 48 * alpha * eta * B * p / (1 + 2*alpha)**2
     lip = 1 + 4 * alpha * (1 + 12 * eta * B**2)
     return q, lip
 
@@ -113,7 +113,7 @@ def main():
                 max_fd=max(max_fd,float(np.max(abs(fd-sw(y,mode)[1]))))
     for name,data in [('results.csv',rows),('trajectories.csv',trajectories)]:
         with (OUT/name).open('w',newline='') as f:
-            w=csv.DictWriter(f,fieldnames=data[0].keys()); w.writeheader(); w.writerows(data)
+            w=csv.DictWriter(f,fieldnames=data[0].keys(),lineterminator="\n"); w.writeheader(); w.writerows(data)
     supported=[r for r in rows if r['alpha']<=.25]
     summary=dict(cases=len(rows),numpy=np.__version__,max_derivative_fd_error=max_fd,supported_cases=len(supported),supported_worst_residual20=max(r['residual20'] for r in supported),supported_max_sweeps=max(r['first_tolerance'] for r in supported),residual_increase_cases=sum(r['max_residual_ratio']>1+1e-8 for r in rows),q_endpoint=certificate(.25,1)[0],theta_endpoint=np.prod(certificate(.25,1)),theta_at_point2=np.prod(certificate(.2,1)))
     assert max_fd < 1e-6
@@ -128,8 +128,11 @@ def main():
     alpha, eta, bb, yy = Q(1,4), Q(1), Q(1,10), Q(1,20)
     ss = 2*alpha*(1+12*eta*bb**2)
     pp = bb+yy+4*alpha*bb*(1+4*eta*bb**2)
-    qq = ss/(1+ss)+24*alpha*eta*bb*pp
+    qq = ss/(1+ss)+48*alpha*eta*bb*pp/(1+2*alpha)**2
     assert qq < Q(512,1000)
+    z = Q(1,2)
+    q_vec = z*(1+12*bb**2)/(1+z)+24*bb*z*pp/(1+z)**2
+    assert q_vec == Q(318,625) < Q(512,1000)
     assert Q(212,1000)*Q(512,1000)**20 < Q(1,10**6)
     assert 24*alpha*eta*bb**3 <= bb-yy
     assert 11*Q(10,11)-10*Q(100,121) == Q(210,121) > 1

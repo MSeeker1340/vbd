@@ -2,6 +2,8 @@
 
 ## 2026-09-14
 
+* **Scope clarification**: Made the chain an explicit first application of reusable generic theorems, with vector-block reuse an implementation acceptance condition. Distinguished completion of the first-family applicability gate from unresolved general production applicability, and linked concrete adaptation obligations.
+
 * **AP-01–AP-03 complete**: Selected a scoped quantitative proceed decision for scalar nonlinear spring chains, maximum-norm contraction, and serial/proper-color execution. Recorded the 20-sweep residual target and remaining Lean obligations; advanced CT-04, deferred perturbation/hybrid scope, added IF-03 to the end-to-end dependencies, and synchronized architecture and repository guidance.
 
 * **Phase 3 core completion**: Completed CT-01–CT-03 and advanced AP-01 to `next`. Synchronized the roadmap and repository status; derivative and optional perturbation extensions remain gated by the applicability study.

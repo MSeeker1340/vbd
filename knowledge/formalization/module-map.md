@@ -59,6 +59,18 @@ declaration. P6 uses a theorem-local maximum norm or equivalent metric for the a
 with explicit transport to the existing finite `ℓ²` block representation. Generic derivative
 lemmas remain norm-polymorphic; weighted and energy norms are options for later assessments.
 
+# Reuse acceptance condition
+
+CT-04, IF-01–IF-03 and BC-01–BC-03/BC-05 expose generic norm, residual-regularity and
+block-comparison hypotheses. They must support vector-valued blocks and finite interaction
+graphs without embedding the chain's degree, constitutive coefficients or scalar sign lemmas.
+P7 separates the general block-Newton map, skip-free consistency and derivative identities
+from the chain's concrete inverse, box-invariance and accuracy instantiations. The chain is the
+first application; these generic results are required deliverables in the same theorem route.
+The [adaptation analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain) specifies
+which hypotheses richer models must discharge and which friction/contact extensions need new
+interfaces. Source file splitting within P7 follows this boundary when implementation warrants it.
+
 # Documentation boundary
 
 Document module APIs, assumptions, representation choices, and proof details in the corresponding

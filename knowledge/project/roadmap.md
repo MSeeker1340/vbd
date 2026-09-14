@@ -27,6 +27,13 @@ The accepted [applicability decision](./applicability-decision.md) selects the
 The first theorem uses maximum-norm state contraction and static proper colors. Hybrid
 execution and perturbation extensions require a further applicability decision.
 
+The chain is the first worked instance of a reusable theorem interface. The generic foundation,
+bridge and block-Newton results remain parameterized by block dimension, interaction support
+and physical bound data. The [adaptation analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain)
+gives a quantified vector extension and explicit obligations for geometric elasticity, contact
+and friction. The first-family gate is complete; applicability to general production models
+remains open and requires further model-specific evidence.
+
 # Goal and dependency graph
 
 The production-facing target is a quantitative theorem for the actual unsafeguarded VBD sweep:

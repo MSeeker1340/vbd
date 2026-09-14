@@ -75,7 +75,11 @@ defines the evidence standard and the response to an ineffective certificate.
 
 The completed [study](/mathematics/applicability-study.md) and
 [proceed decision](./applicability-decision.md) discharge the research gate for the selected
-exact-execution chain theorem. They do not discharge its Lean proof obligations.
+exact-execution chain theorem. They do not discharge its Lean proof obligations or establish general production applicability.
+Generic bridge and synthesis lemmas must remain usable with vector blocks and other interaction
+supports; model-specific chain lemmas instantiate them. The
+[reuse contract](./applicability-decision.md#project-scope-and-reuse-contract) is part of the
+acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 # Phase 4 — local interactions and coloring
 

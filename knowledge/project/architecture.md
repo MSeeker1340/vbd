@@ -34,6 +34,17 @@ Convergence results state a contraction or another stability hypothesis that ent
 conclusion. Fixed-point characterization and scalar energy monotonicity serve as separate
 properties.
 
+# Generic theory and worked instances
+
+The first axial-chain certificate is an application of the formal library. Generic block
+composition, derivative comparison, fixed-point consistency and iteration results retain block
+spaces, interaction support and physical bound data as parameters. Model-specific inverse,
+coupling, invariant-region and predictor lemmas supply those parameters at the synthesis boundary.
+The [adaptation analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain) describes
+how this interface extends to vector blocks and richer mechanics, including the boundaries
+where contact or friction requires additional theory. Quantitative applicability is assessed
+per model; the chain milestone leaves broad production applicability open.
+
 # Locality and curvature
 
 Keep these structures distinct:

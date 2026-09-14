@@ -98,10 +98,11 @@ obligations. Put `C = {u : ‖u‖∞ ≤ B}`, and assume `b_e ≤ α`, `0 ≤ �
 Each vertex has degree at most two. On `C`, `|d_e| ≤ 2B`. Define
 
 ```
-S = 2α(1+12ηB²),
-P = B+Y+4αB(1+4ηB²),
+v = 2α,
+S = v(1+12ηB²),
+P = B+Y+2Bv(1+4ηB²),
 c = S/(1+S),
-t = 24αηBP,
+t = 24ηBvP/(1+v)²,
 q = c+t,
 L_F = 1+4α(1+12ηB²).
 ```
@@ -133,9 +134,14 @@ Gauss-Seidel error matrix: writing `H = D + L + R` in the visit order gives
 This is a linearization at the root, not a formula for the full nonlinear map.
 
 For the uniform changed-row bound, the off-diagonal first term sums to
-`Σ w_e/(a_i+Σ w_e) ≤ c`; its diagonal is zero. Also
-`|f_i|/D_i ≤ P` and `Σ_j |∂_j D_i| ≤ 24αηB`.
-Since `D_i ≥ 1`, the remaining row sum is at most `t`.
+`Σ w_e/(a_i+Σ w_e) ≤ c`; its diagonal is zero. For the variation term put `v_i = Σ_j b_ij/a_i ≤ v`. Then
+`D_i ≥ a_i(1+v_i)`, `|f_i| ≤ a_i[B+Y+2Bv_i(1+4ηB²)]`, and
+`Σ_j |∂_j D_i| ≤ 24ηB a_i v_i`.
+The remaining row sum is at most
+`24ηB v_i[B+Y+2Bv_i(1+4ηB²)]/(1+v_i)² ≤ t`.
+The last inequality uses monotonicity: for `p=B+Y=0.15` and
+`r=2B(1+4ηB²)≥0.2`, the derivative of `v(p+rv)/(1+v)²` has numerator
+`p+(2r-p)v≥0`. Both factors of the local inverse are retained in this estimate.
 All unchanged rows are identity rows. Nonnegative comparison matrices have these unchanged
 identity rows and changed rows summing to at most `q`.
 
@@ -151,7 +157,7 @@ Completeness, invariance and the root bound give the state-contraction route.
 For `α ≤ 1/4` and `η ≤ 1`,
 
 ```
-q ≤ 0.511375 < 0.512,    L_F ≤ 2.12,
+q ≤ 0.494442 < 0.512,    L_F ≤ 2.12,
 h ≤ 0.5 √(m_min/k_max),
 ‖T^s(y)-u*‖∞ ≤ 0.1 (0.512)^s,
 r_IE(T^s(y)) ≤ 0.212 (0.512)^s.
@@ -177,9 +183,9 @@ Together these yield the genuine stepwise estimate
 r_IE(T(u)) ≤ θ r_IE(u),    θ = L_F q.
 ```
 
-For `α ≤ 0.2`, `η ≤ 1`, `θ ≤ 0.799 < 1`: quantitative residual reduction and strict
+For `α ≤ 0.2`, `η ≤ 1`, `θ ≤ 0.804 < 1`: quantitative residual reduction and strict
 qualitative progress both hold at every non-root in `C`, with root preservation already proved.
-At `α=0.25`, this estimate is `1.0842`, so it establishes neither strict residual progress nor
+At `α=0.25`, this estimate is `1.0483`, so it establishes neither strict residual progress nor
 stepwise reduction there. State contraction still gives the 20-sweep residual bound above.
 The failure of this sufficient bound is not proof that residual progress fails at that endpoint.
 Sweep-defect contraction follows from state contraction but does not replace these physical-force arguments.
@@ -246,6 +252,160 @@ also miss it. Several-sweep contraction or an adapted norm may handle a one-step
 one, but cannot establish a 20-sweep tolerance contradicted by the observed trajectory.
 They remain options for a revised budget or stronger initial-state restrictions in the stiff
 regime. Any nonlinear extension must retain the intermediate-state box proof.
+
+# Reuse beyond the chain
+
+The chain is the first end-to-end instance of a general block-update theory. The reusable
+result takes a mechanical residual, local solve operators, an execution order, an invariant
+region, and quantitative bounds as inputs. Its output is a finite-sweep guarantee. The chain
+supplies concrete witnesses for those inputs. The scalar spring law, degree two, predictor
+construction, and numerical constants belong to that instance.
+
+| Layer | Reusable result | What a richer model must supply |
+|---|---|---|
+| P1 | Basis-free IE energy, gradient and Hessian identities | Potential and mass operator; a residual extension for forces outside that potential |
+| P2 | Heterogeneous block writes, composition, snapshot merging and block operators | Vertex block spaces and the actual local update |
+| P3 | Contraction, invariant-set and iteration bounds | A complete invariant region and a contraction constant |
+| P4 | Finite-support interactions and proper-color commutation | Interaction supports, including live contact dependencies |
+| P5 | State convergence and quantitative residual transport | Root consistency and a Lipschitz bound for the chosen physical residual |
+| P6 | Ordered derivative comparison in a block maximum norm | Local inverse, coupling and derivative-variation bounds |
+| P7 | Regular block-Newton consistency and sweep linearization | The concrete force law, solve matrix, branch conditions and execution semantics |
+
+The generic declarations quantify over block dimensions and interaction supports. Chain-specific
+lemmas instantiate them at the application boundary. The [module map](/formalization/module-map.md)
+requires that separation as an acceptance condition for the upcoming formalization.
+
+## General block estimate
+
+Let `R_i(x)` be the residual on a finite-dimensional block and `K_i(x)` the invertible matrix
+actually used for its local solve. The changed coordinate is `x_i - K_i(x)⁻¹ R_i(x)`.
+For a perturbation in block `j`, its derivative is
+
+```
+(DU_i)_ij[v] = δ_ij v - K_i⁻¹ (D_j R_i)[v]
+              + K_i⁻¹ ((D_j K_i)[v]) K_i⁻¹ R_i.
+```
+
+Here `δ_ij v` means identity on the diagonal and zero otherwise. With an exact Newton block,
+`K_i = D_i R_i`, the first two diagonal terms cancel. A sufficient changed-row bound is
+
+```
+Σ_(j≠i) ‖K_i⁻¹ D_j R_i‖
+  + ‖K_i⁻¹‖ ‖K_i⁻¹ R_i‖ Σ_j ‖D_j K_i‖ ≤ q < 1.
+```
+
+All norms are operator or block-vector norms; the state norm is `max_i ‖x_i‖`.
+Uniform bounds and preservation of the region at every intermediate visit let the existing
+row-composition argument apply in any block dimension. For an approximate solve matrix, add
+`‖I-K_i⁻¹ D_i R_i‖` to the row bound. This term can survive even at a root: the Gauss-Seidel
+identification requires exact derivative blocks. Invertibility and once-per-block execution
+still give root consistency for either choice when the update uses the stated residual.
+These are mathematical interfaces and derivations, not additional implemented Lean results.
+
+## A quantified vector extension
+
+One explicit extension takes `u_i ∈ ℝ^d` on a finite simple graph and uses
+
+```
+G(u) = Σ_i a_i ‖u_i-y_i‖²/2
+       + Σ_edges b_e [‖u_i-u_j‖²/2 + η ‖u_i-u_j‖⁴/4].
+```
+
+This is an isotropic displacement-difference spring model. It couples vector coordinates through
+the quartic term; it is not merely independent copies of the scalar quartic solve.
+It is also distinct from a geometric nonzero-rest-length spring energy based on actual vertex
+separation. Set `‖y_i‖ ≤ Y`, `‖u_i‖ ≤ B`, and
+`z = max_i Σ_(e incident i) b_e/a_i`. In physical units,
+`z = max_i h² Σ_(e incident i) k_e/m_i`; a maximum-degree bound `Δ` gives
+`z ≤ Δ h² k_max/m_min`. Thus connectivity, not just spatial dimension, affects coverage.
+
+For an edge displacement `d_e`, its Hessian is
+`b_e[(1+η‖d_e‖²)I + 2η d_e d_eᵀ]`.
+On the product of radius-`B` balls, its norm is at most `b_e(1+12ηB²)` and its
+variation has norm at most `6b_e η ‖d_e‖ ‖δd_e‖`.
+Consequently `K_i ≽ (a_i+Σ b_e)I` and the block estimate above gives
+
+```
+P(z) = B+Y+2Bz(1+4ηB²),
+q_vec ≤ z(1+12ηB²)/(1+z) + 24ηB z P(z)/(1+z)².
+```
+
+These expressions increase with `z≥0` and `0≤η≤1` at the chosen `B,Y`.
+Intermediate-state preservation follows by writing `K_i u_i - R_i` as
+`a_i y_i + Σ b_e[(1+η‖d_e‖²)u_j + 2η d_e⟨d_e,u_i⟩]`.
+Its norm is at most `a_iY+Σ b_e(B+12ηB³)`. Hence
+`12ηB³ z ≤ B-Y` suffices to preserve the product ball at each visit.
+Strong convexity gives a unique root; taking the inner product of its equation with a
+largest-norm root coordinate shows `max_i ‖u_i*‖ ≤ Y`.
+
+At `B=0.1`, `Y=0.05`, `η≤1`, and `z≤0.5`, these estimates give
+`q_vec ≤ 0.5088 < 0.512`, invariance, and Lipschitz constant
+`1+2z(1+12ηB²) ≤ 2.12` for the scaled vector residual
+`r_IE(u)=max_i ‖R_i(u)‖/a_i`. The same 20-sweep state and residual bounds therefore follow
+analytically for `d=2`, `d=3`, or any finite `d`, with serial or proper-color execution.
+This vector extension has an explicit mathematical certificate; the checked-in numerical
+trajectories and the first planned Lean instance remain the scalar chain.
+It demonstrates reuse of the argument without claiming coverage of general 3D materials.
+
+## Geometric elasticity and higher-arity elements
+
+For geometric springs or triangle/tetrahedron energies, interaction support, coloring, the
+block derivative identity, and comparison composition still apply. The model must supply
+bounds for local inverse matrices, mixed derivatives, and their variation on a deformation
+region. Scalar division becomes a 2×2 or 3×3 local solve; scalar signs and the chain maximum
+principle are not generic tools for matrix-valued elasticity. A root can instead be supplied,
+or obtained from a complete invariant-region contraction and independent consistency.
+Quantitative residual transport requires its own Lipschitz constant; stepwise residual progress
+additionally needs an error-to-residual lower bound or a direct residual-map estimate.
+
+A useful template is `H_ii ≽ (m_i/h²-κ_i)I` when local potential curvature is bounded below
+by `-κ_i I`. Positive `m_i/h²-κ_i` gives an inverse bound, but contraction also requires
+bounds on the mixed blocks. Near collapsed elements, those variation bounds may become
+unbounded. Each accepted material therefore needs a specified deformation region, predictor
+membership, timestep range and sweep budget. Increasing dimension alone does not establish
+these physical hypotheses. The scalar threshold likewise becomes a dimension-dependent
+determinant condition (or the actual implementation's singularity test) and needs explicit units.
+
+## Contact, damping and friction
+
+A smooth additional force law can use the same residual/update interface after its contribution
+to the inverse, mixed derivative, variation, and residual-scaling bounds is included. A linear
+viscous damping term, for example, becomes position-dependent through
+`v_new=(x_new-x_old)/h`; a symmetric positive-semidefinite damping matrix contributes `C/h`
+to the residual derivative. Off-diagonal damping can also increase coupling.
+
+Contact changes both analysis and scheduling. On a region with a fixed smooth contact branch,
+its derivative bounds can enter the same comparison matrices. Crossing activation boundaries
+requires a direct Lipschitz or suitable piecewise argument rather than a smooth derivative
+assumption across the boundary. A live contact can invalidate a material coloring; the actual
+buffered map then needs BC-04. Lagged contact data and changing schedules require either an
+augmented state or an explicitly varying-map theorem, rather than treating them as a fixed
+function of positions alone.
+
+The [VBD paper, §§3.5–3.6](https://graphics.cs.utah.edu/research/projects/vbd/vbd-siggraph2024.pdf)
+uses regularized friction and an approximate local friction derivative, and omits differentiation
+through contact normals. Accordingly, analysis must specify which quantities are frozen and
+use the derivative of the **actual update map**. The general `K_i` formula above exposes both
+the derivative mismatch and the derivatives of changing coefficients. A lagged friction
+potential can support a conditional fixed-data theorem; identifying its root with the intended
+fully coupled friction equation is a separate obligation.
+
+Ideal sticking/sliding laws can require a nonsmooth inclusion or complementarity solution
+concept. The existing energy-gradient identity cannot be assumed to represent such a law.
+Block-update algebra and metric contraction remain reusable, while the smooth derivative bridge
+and the IE root interpretation may need new results. CT-05 can handle bounded execution errors
+only with a proved error bound and region preservation; it does not by itself turn friction
+into a small perturbation or guarantee convergence to the same physical root.
+
+## Applicability boundary
+
+The supported chain and vector estimates establish a reusable route for a coupled smooth
+mechanical family with explicit constants. Applicability to geometric 3D elasticity, dynamic
+contact, and friction remains an open physical assessment. A model extension is accepted only
+when its actual update and residual, invariant region, relevant initial states, and parameter
+and accuracy budgets discharge the generic hypotheses. The first chain theorem is a milestone
+in that program, not the final extent of the formal library or evidence that all VBD workloads
+meet those hypotheses.
 
 # Objective-increase coverage
 

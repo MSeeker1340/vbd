@@ -19,6 +19,25 @@ These are mathematical derivations awaiting Lean formalization, not completed Le
 AP-01–AP-03 are complete research deliverables; the quantitative end-to-end acceptance gate VB-08
 remains open until the instantiated theorem is proved.
 
+# Project scope and reuse contract
+
+The formalization targets a reusable theory of block updates for mechanical solves. The chain
+is the first quantitatively supported application and end-to-end Lean instance. Generic
+foundation and bridge statements quantify over block spaces, residuals, interaction supports,
+orders, and bound data; chain geometry and spring constants enter through specialization lemmas.
+The [adaptation analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain) gives the
+block derivative interface, a quantified vector-valued extension, and the additional obligations
+for geometric elasticity, contact and friction. Its vector spring graph also admits the same
+20-sweep bound under an incident-stiffness restriction, as an analytic result awaiting numerical
+and Lean instantiation.
+
+AP-01–AP-03 closes the first-family applicability gate. General production applicability remains
+open: a convergent chain example does not establish useful parameter ranges or initial-state
+coverage for arbitrary 3D materials or friction. The next implementation work must expose the
+reusable theorems as well as their chain instantiation; a chain-only proof does not satisfy that
+architecture. Each richer model discharges new physical hypotheses against the common interface,
+and updates that interface where smoothness, solution concept or execution semantics require it.
+
 # Norm and execution boundary
 
 Use the unweighted block maximum norm for the first contraction certificate. Retain `BlockSum`
@@ -37,7 +56,7 @@ LI-03's multi-vertex coloring example remains required but carries no quartic-ch
 # Guarantee comparison
 
 State contraction plus skip-free fixed-point consistency supplies the selected full-range
-finite-sweep guarantee. Quantitative physical-residual reduction with `θ ≤ 0.799` is available
+finite-sweep guarantee. Quantitative physical-residual reduction with `θ ≤ 0.804` is available
 on the smaller range `h² k_max/m_min ≤ 0.2`; it also gives qualitative progress there.
 Strict residual progress alone is a weaker milestone and is not the selected end-to-end route.
 The stress regime admits residual increases, including an exact quadratic example in the study.
@@ -61,8 +80,9 @@ certified region and parameter range.
    IF-03 is required for the selected residual accuracy target.
 4. **BC-01–BC-03 and exact BC-05:** compose changed-row comparison matrices in the supplied
    order, certify maximum-norm contraction, and transport distances from the block representation.
-5. **VB-01–VB-04:** define the full-step scalar specialization and threshold, prove skip-free
-   consistency independently, derive the full `f_i ∂D_i` derivative term, and prove inverse bounds.
+5. **VB-01–VB-04:** define the dimension-independent full-step block update and instantiate its scalar threshold;
+   prove generic skip-free consistency, derive the inverse-operator variation term, and
+   instantiate the chain inverse bounds.
 6. **VB-05–VB-07:** instantiate degree-two coupling bounds, prove every intermediate update
    preserves the box, derive uniform contraction, and discharge proper-color execution equivalence.
 7. **VB-08:** instantiate `B`, `Y`, `α`, `η`, predictor membership, root existence/bound, norm
