@@ -1,5 +1,9 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-15
+
+* **Reader-guided applicability exposition**: Studied the block-state and implicit-Euler articles and revised the applicability article around the physical meaning of each proof step. Added the quadratic averaging mechanism, explained nonlinear sensitivity and complete-sweep contraction, interpreted the numerical comparison, and replaced the module catalogue with a connected account of the formalization. Retained the quantitative bounds and extension scope.
+
 ## 2026-09-14
 
 * **Exposition and experiment tooling**: Rewrote the spring study as a mathematical development with physical rail/band examples, rendered equations, results, module connections, and extensions. Moved model-selection rationale and the evaluation contract to the project decision. Added a locked uv experiment, configurable module CLI, full trajectory data, tables and plots, with focused mathematical/CLI checks; the full 336-case regression preserves the measured state/residual results and matrix diagnostics.
