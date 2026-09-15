@@ -14,7 +14,7 @@ derives the combinatorial information used by [proper colorings](./coloring.md).
 positive-curvature, invertibility, differentiability, or contraction premise. Those analytic
 properties remain separate from interaction support.
 
-Let `I` be a finite set of block indices, let `X_i` be the configuration space of block `i`, and
+Let $I$ be a finite set of block indices, let $X_i$ be the configuration space of block $i$, and
 write
 
 $$
@@ -22,20 +22,20 @@ X=\bigoplus_{i\in I}^{\ell^2}X_i
 $$
 
 for the candidate-configuration space, as in
-[block states and operators](./block-states-and-operators.md#block-states). Let `\mathcal E` be a
+[block states and operators](./block-states-and-operators.md#block-states). Let $\mathcal E$ be a
 universe of possible interactions. A particular solve has a finite **live set**
-`A \subseteq \mathcal E`; this permits material, constraint, and collision interactions to be
+$A \subseteq \mathcal E$; this permits material, constraint, and collision interactions to be
 distinguished by which elements of the universe are live, without changing the basic definitions.
 
 # Local interactions and the live hypergraph
 
-Each interaction `e \in \mathcal E` has a finite block support
+Each interaction $e \in \mathcal E$ has a finite block support
 
 $$
 N(e)\subseteq I
 $$
 
-and an energy contribution `P_e : X\to\mathbb R`. For states `x` and `z`, write
+and an energy contribution $P_e : X\to\mathbb R$. For states $x$ and $z$, write
 
 $$
 x =_S z \quad\Longleftrightarrow\quad
@@ -54,26 +54,27 @@ $$
 P_A(x)=\sum_{e\in A}P_e(x).
 $$
 
-Together, `(I, (N(e))_{e \in A})` is the live interaction hypergraph. It covers pairwise springs
+Together, $(I, (N(e))_{e \in A})$ is the live interaction hypergraph. It covers pairwise springs
 and edges as two-element hyperedges, and triangle, tetrahedron, bending, contact, and other
 multi-block elements as arbitrary finite hyperedges. Empty and singleton supports are permitted:
 they contribute a constant or one-block term and create no conflict between distinct blocks.
 
 When the assembled potential supplies the potential field in an implicit-Euler step, the Phase 1
-incremental objective uses `E = P_A`. Smoothness assumptions needed for its gradient or Hessian
-are additional properties of the `P_e`; support locality alone is sufficient for the results here.
+incremental objective uses $E = P_A$. Smoothness assumptions needed for its gradient or Hessian
+are additional properties of the $P_e$; support locality alone is sufficient for the results here.
 
 # Incident interactions and exact energy bookkeeping
 
-For a block set `S\subseteq I`, define its live incident interactions by
+For a block set $S\subseteq I$, define its live incident interactions by
 
 $$
 \operatorname{Inc}_A(S)
 =\{e\in A\mid N(e)\cap S\ne\varnothing\}.
 $$
 
-For a single block, use `Inc_A(i) = Inc_A({i})`. If two states agree outside `S`, every live
-interaction outside `Inc_A(S)` has the same value at both states. Therefore
+For a single block, use $\operatorname{Inc}_A(i) = \operatorname{Inc}_A(\{i\})$. If two states
+agree outside $S$, every live interaction outside $\operatorname{Inc}_A(S)$ has the same value at
+both states. Therefore
 
 $$
 P_A(z)-P_A(x)
@@ -82,7 +83,7 @@ P_A(z)-P_A(x)
 \forall i\notin S,\;z_i=x_i.
 $$
 
-In particular, replacing only block `i` by `b` gives
+In particular, replacing only block $i$ by $b$ gives
 
 $$
 P_A(R_i(x,b))-P_A(x)
@@ -104,8 +105,8 @@ i\mathrel{\mathsf{\#}_A}j
 i\ne j\ \land\ \exists e\in A,\;i\in N(e)\land j\in N(e).
 $$
 
-The **physical conflict graph** has vertex set `I` and these edges. The relation is symmetric and
-irreflexive. Its neighbor set is contained in the union of supports of `Inc_A(i)`, with `i`
+The **physical conflict graph** has vertex set $I$ and these edges. The relation is symmetric and
+irreflexive. Its neighbor set is contained in the union of supports of $\operatorname{Inc}_A(i)$, with $i$
 removed. Thus an edge records exactly that the two blocks co-occur in a supplied live support;
 the support itself may be a conservative locality bound. No dense global graph is assumed.
 
@@ -127,7 +128,7 @@ The finite-support interaction model has the following Phase-4 results.
 
 These statements concern combinatorial locality. They do not define a VBD Newton update or infer
 an update's read dependence merely from its write support. The production VBD theorem later proves
-that its concrete update for block `i` reads only the interactions incident to `i`, then uses the
+that its concrete update for block $i$ reads only the interactions incident to $i$, then uses the
 conflict-free condition to establish same-color commutation.
 
 # Concrete support examples
@@ -138,10 +139,11 @@ $$
 \{0,1\},\quad\{1,2\},\quad\{2,3\},
 $$
 
-the induced graph is the path `0—1—2—3`. The parity map `χ(i)=i mod 2` is a valid two-coloring.
+the induced graph is the path $0\text{—}1\text{—}2\text{—}3$. The parity map
+$\chi(i)= i \bmod 2$ is a valid two-coloring.
 
-For one triangular interaction with support `{a,b,c}`, every two distinct vertices conflict. The
-map `χ(a)=0`, `χ(b)=1`, and `χ(c)=2` is a valid three-coloring. This multi-vertex example makes
+For one triangular interaction with support $\{a,b,c\}$, every two distinct vertices conflict. The
+map $\chi(a)=0$, $\chi(b)=1$, and $\chi(c)=2$ is a valid three-coloring. This multi-vertex example makes
 the hypergraph condition explicit: a valid color assigns distinct colors to all vertices in one
 live interaction, rather than merely recording a pairwise element type.
 
