@@ -2,6 +2,12 @@
 
 ## 2026-09-15
 
+* **Phase-4 review specification**: Defined live finite-support interaction hypergraphs, extensional locality, incident interaction sets, exact energy-change cancellation, and the induced symmetric irreflexive conflict relation. Specified proper coloring equivalently as injectivity on every live support, with checked pairwise-chain and triangular examples.
+
+* **Static-color boundary**: Distinguished a static material coloring from properness for the actual live set. Recorded deletion preservation, the exact added-interaction preservation criterion, and the buffered Jacobi-within-color semantics that apply after a violation. Kept concrete VBD update locality, commutation, and hybrid contraction as later production/deferred obligations.
+
+## 2026-09-15
+
 * **Worked-example scope**: Marked the spring-chain article explicitly as an application of the existing convergence framework. Reframed its introduction around checking concrete hypotheses and budgets, distinguished implemented foundations from pending bridges with TODOs, and moved the general block-Newton estimate to the supporting curvature article. Further physical extensions are identified as additional examples to work out.
 
 * **Article identity**: Renamed the mathematical article to `axial-spring-contraction.md`, titled “VBD Contraction for Coupled Axial Springs.” Updated its index entry and incoming links throughout the repository; the applicability decision remains a separate project record.
