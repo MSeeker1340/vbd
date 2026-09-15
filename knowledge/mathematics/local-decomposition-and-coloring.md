@@ -89,20 +89,22 @@ summands must be reevaluated for a proposed block replacement.
 
 # Coloring block updates
 
-Let $K$ be a finite set indexing a partition $(C_c)_{c\in K}$ of $I$: every $C_c$ is nonempty, the
-sets are pairwise disjoint, and their union is $I$. A label $c\in K$ is called a **color**, and
-$C_c$ is its **color class**. This is the standard terminology from parallel algorithms: a color
-has no structure beyond identifying one part of the partition.
+Choose a number $m$ and nonempty block sets
 
-An execution plan is an ordering $(c_1,\ldots,c_m)$ of the colors in $K$. It executes the color
-classes $C_{c_1},\ldots,C_{c_m}$ one after another and attempts to execute the single-block updates
-within each class simultaneously. Coloring therefore exposes parallel work without changing the
-required order between dependent blocks.
+$$
+C_0,\ldots,C_{m-1}
+$$
+
+that are pairwise disjoint and whose union is $I$. The number $r$ is called **color $r$**, and
+$C_r$ is its **color class**. Colors are processed in their natural order: first $C_0$, then
+$C_1$, and so on through $C_{m-1}$. Within a class, the single-block updates are attempted
+simultaneously. Coloring therefore exposes parallel work without changing the required order
+between dependent blocks.
 
 A block update at $i$ can use every component $E_S$ for which $i\in S$. If two blocks $i$ and $j$
-with the same color $c$ occur in one support $S$, their updates can both use $E_S$ and can therefore
+with the same color $r$ occur in one support $S$, their updates can both use $E_S$ and can therefore
 depend on each other. The structural condition needed for a color class to represent independent
-updates is consequently: every support $S\in A$ contains at most one block of $C_c$. The
+updates is consequently: every support $S\in A$ contains at most one block of $C_r$. The
 commutation theorem for concrete VBD updates proves the remaining update-map fact later.
 
 # Induced coloring graph
@@ -126,33 +128,33 @@ energy bookkeeping.
 
 # Proper colorings
 
-A coloring $(C_c)_{c\in K}$ is **proper for $A$** when no color class contains an edge:
+A coloring $C_0,\ldots,C_{m-1}$ is **proper for $A$** when no color class contains an edge:
 
 $$
-\forall c\in K,\;\forall i,j\in C_c,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
+\forall r\in\{0,\ldots,m-1\},\;\forall i,j\in C_r,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
 $$
 
 Equivalently,
 
 $$
-\forall S\in A,\;\forall c\in K,\qquad |S\cap C_c|\le 1.
+\forall S\in A,\;\forall r\in\{0,\ldots,m-1\},\qquad |S\cap C_r|\le 1.
 $$
 
 Thus a proper color class contains at most one block from each support.
 
 For $M\subseteq A$, every coloring proper for $A$ is proper for $M$. Conversely, a coloring proper
-for $M$ is proper for $A$ exactly when $|S\cap C_c|\le 1$ for every $S\in A\setminus M$ and
-$c\in K$. This is the exact condition for extending properness from a smaller support family.
+for $M$ is proper for $A$ exactly when $|S\cap C_r|\le 1$ for every $S\in A\setminus M$ and
+$r\in\{0,\ldots,m-1\}$. This is the exact condition for extending properness from a smaller
+support family.
 
 # Color batches and serial equivalence
 
 Let $U_i:X\to X$ be a single-block update map with write support contained in $\{i\}$. The snapshot
-batch $P_c$ for color $c$ evaluates all $U_i$ for $i\in C_c$ at the common input $x$ and writes
-their selected block outputs simultaneously. For the externally ordered colors $(c_1,\ldots,c_m)$,
-the colored sweep is
+batch $P_r$ for color $r$ evaluates all $U_i$ for $i\in C_r$ at the common input $x$ and writes
+their selected block outputs simultaneously. The colored sweep is
 
 $$
-T_{(c_1,\ldots,c_m)}=P_{c_m}\circ\cdots\circ P_{c_1}.
+T_{C_0,\ldots,C_{m-1}}=P_{m-1}\circ\cdots\circ P_0.
 $$
 
 This definition is valid whether or not the updates commute. It specifies the buffered semantics
@@ -170,7 +172,7 @@ $$
 
 The simultaneous/sequential theorem from
 [block states and operators](./block-states-and-operators.md#theorem-simultaneous-and-sequential-equivalence)
-then identifies $P_c$ with every serial ordering of the $U_i$ in a proper color class. Neither
+then identifies $P_r$ with every serial ordering of the $U_i$ in a proper color class. Neither
 disjoint write supports nor a proper coloring alone proves this equality; the concrete
 component-locality result for the update maps is required.
 
@@ -186,8 +188,8 @@ The Phase-4 results are:
 1. Components outside $A[J]$ cancel from the energy change caused by a modification supported in
    $J$.
 2. The relation $\sim_A$ is symmetric and irreflexive.
-3. A coloring is proper for the induced graph if and only if $|S\cap C_c|\le 1$ for every
-   $S\in A$ and $c\in K$.
+3. A coloring is proper for the induced graph if and only if $|S\cap C_r|\le 1$ for every
+   $S\in A$ and $r\in\{0,\ldots,m-1\}$.
 4. Properness is preserved under restriction to $M\subseteq A$, and the condition above
    characterizes when it extends from $M$ to $A$.
 5. The two-coloring $C_0=\{0,2\}$, $C_1=\{1,3\}$ of the four-block chain is proper.

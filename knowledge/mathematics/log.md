@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Execution-order simplification**: Numbered color classes directly as $C_0,\ldots,C_{m-1}$ and defined the colored sweep as $P_{m-1}\circ\cdots\circ P_0$. The color number now supplies both the conventional color name and the outer sequential order.
+
 * **Color-label clarification**: Defined a color as the conventional label $c\in K$ indexing one part $C_c$ of the finite partition of blocks. Restored colors and color classes as the primary VBD vocabulary while keeping the partition as their exact mathematical content.
 
 * **Partition formulation**: Replaced the coloring-map and arbitrary color-label formulation with a finite partition of the block indices. Its parts are called colors only as conventional parallel-algorithm terminology; an externally supplied ordering turns the partition into an execution plan.
