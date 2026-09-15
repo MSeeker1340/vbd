@@ -14,32 +14,7 @@ explicit stability and accuracy guarantees for systems solved by VBD, together
 with formalization researchers studying modular Lean developments of
 numerical-analysis arguments.
 
-## Our approach
-
-The central tool is contractive fixed-point iteration. In a certified instance,
-the framework proves an inequality of the form
-
-$$
-\|T^s(x_0)-x^*\| \le q^s\|x_0-x^*\|,\qquad 0\le q<1,
-$$
-
-Here T is the *actual* serial or properly colored VBD sweep, x* is an
-implicit-Euler stationary state, and the norm, invariant neighborhood, and
-physical parameter range are explicit. The resulting certificate gives a
-finite sweep budget for a chosen state-error or residual tolerance. This is
-substantially stronger than observing that a few simulated trajectories
-settle, or selecting a fixed iteration count because it fits a runtime budget.
-
-The guarantees are deliberately conditional and local. They do not claim that
-all VBD systems contract, that every stationary point minimizes an energy, or
-that a one-timestep guarantee proves long-horizon simulation stability.
-Collision activation, friction, floating-point/GPU error, approximate local
-solves, accelerated iterations, and dynamic buffered execution each require
-their own analysis. The library does not attempt a catch-all formalization of
-numerical mechanics; it presents one coherent, reusable route whose
-hypotheses can be tested on a concrete system.
-
-## Why analyze VBD this way?
+## Background
 
 VBD was introduced by Chen, Liu, Yang, and Yuksel as a vertex-block
 Gauss–Seidel method for the variational form of implicit Euler [1]. At every
@@ -50,27 +25,42 @@ simulation results, stability in bounded-iteration use, and numerical
 convergence; its production evaluation generally uses the full local Newton
 step without the optional line search [1].
 
-Those are compelling algorithmic and empirical results, but they are not a
-model-specific, finite-sweep convergence theorem for the unsafeguarded sweep.
-In particular, local/global energy bookkeeping does not alone establish a
-unique solution, convergence of the iterates, a rate, or an error after a
-fixed number of sweeps. A full Newton step can also fail to decrease its local
-energy away from the solution; the original paper explicitly presents line
-search as the mechanism that would make that descent conclusion available [1].
-Classical block-coordinate convergence theory likewise has assumptions and
-conclusions that need not match a nonlinear, ordered, block-Newton VBD sweep
-with its chosen execution semantics [2].
+Those are compelling algorithmic and empirical results, but they do not
+provide a model-specific, finite-sweep convergence-check framework for the
+unsafeguarded sweep. In particular, local/global energy bookkeeping does not
+alone establish a unique solution, convergence of the iterates, a rate, or an
+error after a fixed number of sweeps. A full Newton step can also fail to
+decrease its local energy away from the solution; the original paper explicitly
+presents line search as the mechanism that would make that descent conclusion
+available [1]. Classical block-coordinate convergence theory likewise has
+assumptions and conclusions that need not match a nonlinear, ordered,
+block-Newton VBD sweep with its chosen execution semantics [2].
 
-This repository closes a precise part of that gap. Rather than infer a global
-optimization conclusion from VBD's mechanics, it treats one sweep as a map T
-and proves contraction directly on a complete, forward-invariant region.
-Banach's fixed-point theorem then provides the unique fixed point and
-geometric convergence. A separate consistency proof identifies that fixed
-point with the root of the implicit-Euler residual. This separation is
-important: contraction can permit intermediate increases in objective value
-or physical residual while still forcing convergence to the correct state.
+## Our approach
 
-## Certificate framework
+This repository closes a precise part of that gap by treating the actual VBD
+sweep as a map T. Rather than infer a global optimization conclusion from the
+method's mechanics, the formalization proves contraction directly on a
+complete, forward-invariant region. Banach's fixed-point theorem then provides
+a unique fixed point and geometric convergence. A separate consistency proof
+identifies that fixed point with the root of the implicit-Euler residual. This
+separation is important: contraction can permit intermediate increases in
+objective value or physical residual while still forcing convergence to the
+correct state.
+
+The central tool is contractive fixed-point iteration. In a certified instance,
+the framework proves
+
+$$
+\|T^s(x_0)-x^*\| \le q^s\|x_0-x^*\|,\qquad 0\le q<1,
+$$
+
+where T is the *actual* serial or properly colored VBD sweep and x* is an
+implicit-Euler stationary state. The norm, invariant neighborhood, and
+physical parameter range are explicit. This yields a finite sweep budget for
+a chosen state-error or residual tolerance, rather than an empirical judgment
+that several simulated trajectories settle or a fixed iteration count selected
+only to meet a runtime budget.
 
 For a smooth, block-structured implicit-Euler model with an exact serial or
 static proper-color VBD execution, the framework states a theorem with the
@@ -95,6 +85,15 @@ The initial guarantee is a one-timestep theorem. Extending it to a full simulati
 requires an additional argument that the next timestep's input remains in a
 certified region and that accumulated solver and discretization errors are
 controlled.
+
+The guarantees are deliberately conditional and local. They do not claim that
+all VBD systems contract, that every stationary point minimizes an energy, or
+that a one-timestep guarantee proves long-horizon simulation stability.
+Collision activation, friction, floating-point/GPU error, approximate local
+solves, accelerated iterations, and dynamic buffered execution each require
+their own analysis. The library does not attempt a catch-all formalization of
+numerical mechanics; it presents one coherent, reusable route whose
+hypotheses can be tested on a concrete system.
 
 ## Mathematical architecture
 
