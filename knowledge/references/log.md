@@ -1,5 +1,10 @@
 # Curated References Update Log
 
+## 2026-09-15
+
+* **Research**: Reassessed VBD-family formulation and convergence literature against the clarified target of a local, quantitative certificate for the actual VBD sweep. Added the original VBD paper, Augmented VBD, solver-level VBD differentiation, and three nonlinear block-Gauss–Seidel sources to the scoped assessment; no assessed source provides the project’s end-to-end VBD contraction and finite-sweep residual result.
+* **Research**: Added contraction-based numerical studies. Scutari–Palomar–Barbarossa supplies the closest comparison-matrix, weighted block-maximum-norm proof pattern for sequential and simultaneous updates; Ilić-Spong–Katz–Dai–Zaborszky supplies a nonlinear block-GS application with evaluated coupling conditions; radii-polynomial validation supplies a complementary offline-certificate pattern for a Newton-like map.
+
 ## 2026-09-11
 
 * **Research**: Added [Adaptive VBD iterations and stopping criteria](./adaptive-vbd-iterations.md), comparing original VBD initialization/acceleration, AVBD penalties, related adaptive rigid-body substepping, WarpVBD early stopping, and Newton's iteration-budget API. Verified WarpVBD's coordinate-sum stop test against its source. The bounded search did not identify a Banach-certified adaptive VBD iteration paper or establish why production implementations choose fixed budgets; distinguished these limits from the positive implementation evidence.
