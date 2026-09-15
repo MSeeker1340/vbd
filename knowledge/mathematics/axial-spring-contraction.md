@@ -1,34 +1,36 @@
 ---
 type: Mathematical Specification
-title: VBD Contraction for Coupled Axial Springs
-description: Develops a coupled mechanical example from its implicit-Euler objective to a finite-sweep contraction bound and extensions to richer models.
-tags: [vbd, contraction, residual, springs]
+title: "Worked Example: VBD Convergence for an Elastic Spring Chain"
+description: Applies the project’s implicit-Euler, block-update, and contraction results to a concrete spring-chain solve, with numerical checks and explicit pending prerequisites.
+tags: [example, vbd, contraction, residual, springs]
 timestamp: 2026-09-15T00:00:00Z
 ---
 
-In [implicit Euler as optimization](./implicit-euler.md), we turn one timestep into a force-balance
-problem: the old position and velocity determine a prediction, and we seek a new configuration
-where the incremental objective is stationary. In [block states and operators](./block-states-and-operators.md),
-we organize the search into updates that move one part of the candidate configuration at a time.
-We can now bring these two descriptions together and ask how much progress a complete VBD sweep makes.
+This is a **worked example** of the convergence analysis developed in
+[implicit Euler as optimization](./implicit-euler.md),
+[block states and operators](./block-states-and-operators.md), and
+[contractive fixed-point iteration](./contractive-fixed-point-iteration.md).
+We will apply those results to a chain of masses and springs, following one timestep from its
+physical data to an explicit VBD sweep budget. The chain gives us a concrete system to calculate
+with, run, and compare against the hypotheses of the general results.
 
-Imagine holding the timestep fixed and watching the candidate positions change during the solve.
-Moving one vertex changes the forces on its neighbors. Their subsequent updates respond to that
-change, and the effect propagates through the sweep. To use
-[fixed-point contraction](./contractive-fixed-point-iteration.md), we need to show that this
-propagation reduces differences between candidate configurations. We also need to connect the
-configuration where the iteration settles to the force balance we originally wanted to solve.
+The convergence theorem is our starting point. Once a sweep preserves a suitable region,
+contracts distances there, and has the required implicit-Euler solution as its fixed point,
+the geometric iteration bound follows from fixed-point theory. Our work in this example is to
+check those hypotheses for actual spring updates and put physical numbers into the bound.
+Quadratic springs let us see the local averaging mechanism directly; hardening springs exercise
+the additional neighborhood estimates needed for nonlinear updates.
 
-We will follow that argument for a chain of masses joined by elastic springs. The quadratic
-spring law makes the mechanism visible: a vertex update averages its neighbors with the inertia
-prediction. Nonlinear hardening then shows what additional control is needed when the local
-stiffness changes during the solve. The result will be an explicit neighborhood, timestep range,
-and number of sweeps sufficient for a physical-residual tolerance.
+Keep the distinction between the example and its prerequisites in view as we proceed. The
+implicit-Euler identities, block algebra, and basic contraction results are already formalized.
+The general derivative, comparison-matrix, and coloring bridges are described in the supporting
+material and remain pending Lean work; TODO notes below identify the dependencies. The
+spring-specific calculations are mathematical workings for this example, and the accompanying
+experiment supplies numerical checks. Neither is a claim that the end-to-end Lean example is
+already complete.
 
-The estimates here are mathematical derivations awaiting Lean formalization. The accompanying
-experiment checks the behavior of the actual nonlinear sweep. The
-[project decision](/project/applicability-decision.md) records why this family is the first
-formalization target and which broader applications remain open.
+The [project decision](/project/applicability-decision.md) records the example's place in the
+roadmap. Here we concentrate on carrying out the application.
 
 # Mechanical model
 
@@ -139,6 +141,11 @@ The same-color updates commute, so the simultaneous/sequential equivalence from
 [block states and operators](./block-states-and-operators.md#theorem-simultaneous-and-sequential-equivalence)
 lets us treat each batch as any serial ordering of its members.
 Both executions visit every vertex exactly once; we will use that fact twice below.
+
+> **TODO — supporting coloring material:** Complete/review the general coloring treatment in
+> [coloring and parallel sweep structure](./coloring.md), and formalize the physical
+> independence-to-commutation argument (LI-02–LI-04 and VB-07). The even/odd partition here is
+> the concrete path-graph instance; the abstract simultaneous/sequential theorem is already available.
 
 # Where the iteration should settle
 
@@ -283,8 +290,9 @@ the Gauss–Seidel error matrix. This matrix helps explain the observed asymptot
 warm start is not generally the root. To guarantee its progress, we must bound the additional
 term throughout the box.
 
-The resulting estimate has two parts: sensitivity to neighbors and sensitivity to changing
-stiffness. For compactness, write
+We now instantiate the [local derivative bounds](./curvature.md#derivative-of-a-block-newton-update)
+with the spring coefficients. The estimate has two parts: sensitivity to neighbors and
+sensitivity to changing stiffness. For compactness, write
 
 $$
 \begin{aligned}
@@ -343,6 +351,12 @@ We can now apply the generic contraction theorem on the complete closed box. Its
 approach a unique fixed point there, and our earlier consistency argument identifies that point
 with the implicit-Euler solution. The physical model has supplied the hypotheses; the remaining
 iteration estimate is the one already furnished by fixed-point theory.
+
+> **TODO — supporting convergence bridges:** Formalize the derivative-to-contraction result
+> (CT-04) and ordered block-comparison bounds (BC-01–BC-03 and BC-05). The calculation here
+> supplies their spring-chain inputs. The general results belong in
+> [curvature and coupling](./curvature.md) and
+> [contractive fixed-point iteration](./contractive-fixed-point-iteration.md).
 
 # Finite-sweep bounds and physical scales
 
@@ -478,19 +492,22 @@ $$
 This second example is outside the certified box and nonlinear parameter range. The local
 convergence result makes no claim about convergent objective-increasing trajectories.
 
-# Connection to the formalization
+# Instantiating the formal results
 
 The argument follows the same separation as the earlier articles. The spring objective
 instantiates `Integrator/ImplicitEulerEnergy`, and the vertex visits use the algebra in
 `Block/Basic`, `Block/Update`, and `Block/Operator`. Those foundations do not need to know the
 numerical range used in this example.
 
-The new work lies at their boundaries. `Integrator/LocalInteractions` supplies the reason
-same-color visits commute. `Block/Contraction` turns local derivative bounds into a bound for
-the ordered sweep, and the CT-04 extension of `Dynamics/Contraction` connects that derivative
-bound to metric contraction. `Integrator/FixedPoint` then transports the state estimate to the
-physical residual. Finally, `Integrator/VBD` supplies the actual Newton update, its consistency
-argument, and the spring-specific inverse and neighborhood estimates.
+The example also depends on planned bridge results. `Integrator/LocalInteractions` is to
+supply the physical commutation argument; `Block/Contraction` the ordered derivative estimate;
+and CT-04 the passage to metric contraction. `Integrator/FixedPoint` is to transport state error
+to the physical residual. The concrete Newton update and spring-specific hypotheses are then
+instantiated at `Integrator/VBD`.
+
+> **TODO — complete the Lean example:** Apply those bridges to the coefficients, predictor
+> box, and residual scaling used above, and prove the numerical budget (IF-01–IF-03 and
+> VB-01–VB-08). These are example obligations in addition to the pending general prerequisites.
 
 This places the reusable reasoning where another material model can use it. The chain provides
 the coefficients and proves that they satisfy the hypotheses; it does not specialize the block
@@ -499,32 +516,12 @@ algebra or fixed-point theorem to one-dimensional springs. The
 
 # Reuse beyond the chain
 
-## General block estimate
-
-To move beyond the rail, first separate the parts of the argument that used scalar signs from
-those that only used norms and composition. The local derivative belongs to the latter group.
-Replace the scalar force by a block residual $R_i(x)$ and the scalar stiffness by an invertible
-operator $K_i(x)$. The update still subtracts a local solve,
-$x_i-K_i(x)^{-1}R_i(x)$, and differentiation gives
-
-$$
-(DU_i)_{ij}[v_j]=\delta_{ij}v_j-K_i^{-1}D_jR_i[v_j]
- +K_i^{-1}\bigl(D_jK_i[v_j]\bigr)K_i^{-1}R_i.
-$$
-
-For exact Newton blocks, $K_i=D_iR_i$, the diagonal cancellation gives the sufficient bound
-
-$$
-\sum_{j\ne i}\|K_i^{-1}D_jR_i\|
- +\|K_i^{-1}\|\,\|K_i^{-1}R_i\|\sum_j\|D_jK_i\|\le q<1.
-$$
-
-These are operator and block-vector norms, with state norm $\max_i\|x_i\|$.
-Uniform estimates and intermediate-state invariance let the same ordered-composition proof
-apply in any block dimension. An approximate solve matrix contributes the additional term
-$\|I-K_i^{-1}D_iR_i\|$; it can persist even at a root. Root consistency still follows
-from invertibility and once-per-block execution, but the exact Gauss–Seidel identification
-requires exact derivative blocks.
+The same general results can be tested on further instances. The
+[block-Newton derivative estimate](./curvature.md#derivative-of-a-block-newton-update) uses
+operator norms, so it accepts vector-valued blocks as well as scalars. In that notation,
+$R_i$ is the block residual and $K_i$ is the invertible operator used for its local solve.
+We only need to calculate the new instance bounds here; the general estimate remains in the
+supporting article.
 
 ## Vector springs and general graphs
 
@@ -596,7 +593,10 @@ the vectors have two or three components. The price of extra connectivity is alr
 in $z$. This is a concrete analytic extension of the argument; the numerical experiment still
 executes the scalar chain.
 
-## Geometric elasticity and higher-arity elements
+## Further examples still to work out
+
+> **TODO — further worked instances:** Supply a geometric material example and check its
+> hypotheses and budget; the discussion below identifies what would change.
 
 For an elastic triangle or tetrahedron, the algebraic part still looks familiar: an element
 couples its incident vertices, and a visit solves for one vertex while holding the others fixed.
@@ -620,7 +620,7 @@ sign structure. These are the physical estimates a new material must supply befo
 sweep theorem yields a useful guarantee. Its singularity test must also be interpreted in the
 new block dimension and physical units.
 
-## Damping, contact, and friction
+## Adding forces to a future example
 
 Adding a smooth force means revisiting the same local estimates. Linear viscous damping is
 a simple illustration: substituting
@@ -642,7 +642,7 @@ The [VBD paper, §§3.5–3.6](https://graphics.cs.utah.edu/research/projects/vb
 uses regularized friction and approximate local derivatives, including frozen-normal treatment.
 This brings us back to the distinction between the residual and the matrix used to solve it:
 we must differentiate the actual update, specifying which quantities are frozen and retaining
-the $K_i$ mismatch terms above. A fixed-data friction potential can give a conditional result,
+the derivative-mismatch terms in the [general estimate](./curvature.md#derivative-of-a-block-newton-update). A fixed-data friction potential can give a conditional result,
 but we still have to identify its root with the intended fully coupled physical equation.
 Ideal sticking/sliding laws can instead need a nonsmooth inclusion or complementarity solution
 concept. Block algebra and metric contraction remain reusable, while the smooth derivative bridge
