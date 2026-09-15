@@ -9,10 +9,19 @@ timestamp: 2026-09-15T00:00:00Z
 # Purpose and scope
 
 This specification is the locality half of Phase 4. It decomposes the potential in the
-[implicit-Euler problem](./implicit-euler.md) into finitely supported physical interactions and
+[implicit-Euler problem](./implicit-euler.md) into finitely supported elemental energy terms and
 derives the combinatorial information used by [proper colorings](./coloring.md). It records no
 positive-curvature, invertibility, differentiability, or contraction premise. Those analytic
 properties remain separate from interaction support.
+
+# Interactions
+
+An **interaction** is one labeled contribution to a system's potential energy. In a mechanical
+model, a spring joining two particles, an elastic triangle or tetrahedron, a bending element, and
+a contact potential are all interactions. The label distinguishes individual elements even when
+two elements have the same energy formula. A configuration determines the energy contributed by
+each interaction, and the total potential is the sum of the contributions that are live in the
+current solve.
 
 Let $I$ be a finite set of block indices, let $X_i$ be the configuration space of block $i$, and
 write
@@ -23,7 +32,7 @@ $$
 
 for the candidate-configuration space, as in
 [block states and operators](./block-states-and-operators.md#block-states). Let $\mathcal E$ be a
-universe of possible interactions. A particular solve has a finite **live set**
+universe of possible interaction labels. A particular solve has a finite **live set**
 $A \subseteq \mathcal E$; this permits material, constraint, and collision interactions to be
 distinguished by which elements of the universe are live, without changing the basic definitions.
 

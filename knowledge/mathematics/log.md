@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Definition**: Introduced an interaction as a labeled elemental potential-energy contribution before using its support and live-set notation.
+
 * **Rendering correction**: Replaced inline code spans containing mathematical expressions in the Phase-4 interaction and coloring specifications with inline TeX delimiters.
 
 * **Notation correction**: Recast the finite-support interaction specification entirely in mathematical block-space, finite-set, and direct-sum notation. Removed implementation vocabulary from its definitions and theorem statements.
