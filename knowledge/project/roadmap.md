@@ -223,15 +223,15 @@ Status: planned. Module: `Vbd/Integrator/LocalPotential.lean`.
 Dependencies: Phase 1 + Phase 2.
 
 Represent the potential as a finite sum of finite-support components. The component-overlap graph
-joins two blocks when an active component support contains both. Pairwise systems are the
+joins two blocks when a component support contains both. Pairwise systems are the
 two-element-support specialization, while arbitrary higher-arity supports remain covered.
 
-Derive the component-overlap graph and proper-color condition. Any added active component can
+Derive the component-overlap graph and proper-color condition. Any added component can
 invalidate a previously established coloring and must remain visible in the production colored-sweep
 proof.
 
 Acceptance gate: at least one pairwise and one multi-vertex support example has a proved valid
-coloring, and the effect of adding an active component is stated exactly.
+coloring, and the effect of adding a component is stated exactly.
 
 # Phase 5 — Implicit-Euler fixed-point goals
 

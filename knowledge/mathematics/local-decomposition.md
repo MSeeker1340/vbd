@@ -28,9 +28,8 @@ X=\bigoplus_{i\in I}^{\ell^2}X_i
 $$
 
 for the candidate-configuration space, as in
-[block states and operators](./block-states-and-operators.md#block-states). Let $\mathcal E$ be a
-set of component labels and let $A\subseteq\mathcal E$ be a finite active set. Each $e\in\mathcal
-E$ has a finite support
+[block states and operators](./block-states-and-operators.md#block-states). Let $A$ be a finite
+component index set. Each $e\in A$ has a finite support
 
 $$
 N(e)\subseteq I
@@ -49,7 +48,7 @@ $$
 x =_{N(e)} z \quad\Longrightarrow\quad E_e(x)=E_e(z).
 $$
 
-The potential assembled from the active components is
+The potential assembled from the components indexed by $A$ is
 
 $$
 E_A(x)=\sum_{e\in A}E_e(x).
@@ -61,13 +60,13 @@ is sufficient for the results here.
 
 # Exact local energy bookkeeping
 
-For a block set $S\subseteq I$, define the active components that meet $S$ by
+For a block set $S\subseteq I$, define the components indexed by $A$ that meet $S$ by
 
 $$
 A_S=\{e\in A\mid N(e)\cap S\ne\varnothing\}.
 $$
 
-If two states agree outside $S$, every active component outside $A_S$ has the same value at both
+If two states agree outside $S$, every component outside $A_S$ has the same value at both
 states. Therefore
 
 $$
@@ -101,7 +100,7 @@ $$
 
 The graph with vertex set $I$ and edges $\sim_A$ is symmetric and irreflexive. Its neighbor set at
 $i$ is contained in the union of the supports of components in $A_{\{i\}}$, with $i$ removed. Thus
-an edge records exactly that the two blocks co-occur in the supplied support of an active component.
+an edge records exactly that the two blocks co-occur in the supplied support of a component.
 For a two-block component decomposition this is the usual graph of block coupling. In general,
 each component support induces a clique in the graph.
 
@@ -109,12 +108,12 @@ each component support induces a clique in the graph.
 
 The finite-support component model has the following Phase-4 results.
 
-1. Locality is closed under the finite active sum, and components outside $A_S$ cancel from the
+1. Locality is closed under the finite sum, and components outside $A_S$ cancel from the
    energy change caused by a modification supported in $S$.
 2. The relation $\sim_A$ is symmetric and irreflexive.
-3. The graph edge condition is equivalent to two distinct blocks occurring in a common active
-   component support.
-4. Enlarging the active set can only add graph edges; restricting it can only remove them.
+3. The graph edge condition is equivalent to two distinct blocks occurring in a common component
+   support.
+4. Enlarging $A$ can only add graph edges; restricting $A$ can only remove them.
 
 These statements concern a potential decomposition. They do not define a VBD Newton update or
 infer an update's read dependence merely from its write support. The production VBD theorem later
@@ -123,7 +122,7 @@ uses the absence of a common component to establish same-color commutation.
 
 # Concrete support examples
 
-For a four-block chain with active supports
+For a four-block chain with supports
 
 $$
 \{0,1\},\quad\{1,2\},\quad\{2,3\},
@@ -135,4 +134,4 @@ $\chi(i)= i \bmod 2$ is a valid two-coloring.
 For one three-block component with support $\{a,b,c\}$, every two distinct vertices are adjacent.
 The map $\chi(a)=0$, $\chi(b)=1$, and $\chi(c)=2$ is a valid three-coloring. This example makes
 the support condition explicit: a valid coloring assigns distinct colors to all blocks in one
-active component support.
+component support.

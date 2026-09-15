@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Terminology simplification**: Replaced active-component terminology in Phase 4 planning with finite component index sets and their extensions or restrictions.
+
 * **Phase-4 scope**: Renamed the planned locality bridge around finite-support potential components and the component-overlap graph. The route now states coloring validity under active-component changes without assigning a physical origin to the summands.
 
 ## 2026-09-15

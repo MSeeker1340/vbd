@@ -86,9 +86,9 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
 | LI-01 | planned | Finite-support potential components | IE-07, BS-01 | Potential components expose arbitrary finite supports, including pairwise and higher-arity supports |
-| LI-02 | planned | Component-overlap graph and proper coloring | LI-01 | Shared active component supports induce a symmetric graph and a proper-color predicate |
+| LI-02 | planned | Component-overlap graph and proper coloring | LI-01 | Shared component supports induce a symmetric graph and a proper-color predicate |
 | LI-03 | planned | Pairwise and multi-vertex examples | LI-02 | One pairwise and one triangle/tetrahedron-style system has a proved valid coloring |
-| LI-04 | planned | Active-component coloring boundary | LI-02 | Adding active components is shown to preserve or invalidate the proper-color premise explicitly |
+| LI-04 | planned | Component-set coloring boundary | LI-02 | Adding components is shown to preserve or invalidate the proper-color premise explicitly |
 
 # Phase 5 — implicit-Euler fixed-point goals
 

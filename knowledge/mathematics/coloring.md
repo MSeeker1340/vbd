@@ -8,7 +8,7 @@ timestamp: 2026-09-15T00:00:00Z
 
 # Coloring a potential decomposition
 
-Use the active component set $A$, supports $N(e)$, and graph relation $\sim_A$ from
+Use the component index set $A$, supports $N(e)$, and graph relation $\sim_A$ from
 [finite-support potential components](./local-decomposition.md). A coloring is a map
 
 $$
@@ -21,7 +21,7 @@ $$
 i\sim_A j\quad\Longrightarrow\quad\chi(i)\ne\chi(j).
 $$
 
-Equivalently, the restriction of $\chi$ to each active support is injective:
+Equivalently, the restriction of $\chi$ to each component support is injective:
 
 $$
 \forall e\in A,\;\forall i,j\in N(e),\quad
@@ -29,7 +29,7 @@ i\ne j\quad\Longrightarrow\quad\chi(i)\ne\chi(j).
 $$
 
 The support form is the direct condition. A proper color class contains at most one block from
-each active component support. An executable sweep supplies a finite ordered collection of finite
+each component support. An executable sweep supplies a finite ordered collection of finite
 color classes covering the blocks it updates; the coloring itself does not choose that order.
 
 # Color batches and serial equivalence
@@ -48,8 +48,8 @@ of a parallel color pass.
 
 Properness is a property of the potential decomposition, whereas commutation is a property of
 update maps. The production VBD theorem connects them by proving that the new value produced by
-$U_i$ is unchanged when blocks outside the supports of active components containing $i$ are
-changed. For distinct $i,j$ in a proper color class, no active component contains both blocks;
+$U_i$ is unchanged when blocks outside the supports of components containing $i$ are changed. For
+distinct $i,j$ in a proper color class, no component contains both blocks;
 this fact and the single-block write property give
 
 $$
@@ -62,10 +62,10 @@ then identifies $P_C$ with every serial ordering of the $U_i$ in a proper color 
 disjoint write supports nor a proper coloring alone proves this equality; the concrete
 component-locality result for the update maps is required.
 
-# Changing the active component set
+# Changing the component index set
 
-Let $M$ be the active component set for which a coloring was established, and let $A$ be the
-active set of a particular color pass. The coloring is proper for that pass precisely when it is
+Let $M$ be the component index set for which a coloring was established, and let $A$ be the
+component index set of a particular color pass. The coloring is proper for that pass precisely when it is
 proper for $A$, not merely for $M$.
 
 - If $A\subseteq M$, then every coloring proper for $M$ remains proper for $A$.
@@ -73,7 +73,7 @@ proper for $A$, not merely for $M$.
   $e\in D$ contains at most one block of each color.
 
 If an added component contains distinct $i$ and $j$ with $\chi(i)=\chi(j)$, the coloring is not
-proper for the new active set. The same-color snapshot batch $P_C$ remains a well-defined map, but
+proper for the new component index set. The same-color snapshot batch $P_C$ remains a well-defined map, but
 need not equal a serial composition: two updates can use each other's old values. The resulting
 sweep is Jacobi-like within the affected color class and Gauss–Seidel-like between color classes.
 It requires a theorem for its actual simultaneous-batch derivative or an explicitly accepted
@@ -83,12 +83,12 @@ perturbation analysis; the current exact-execution route does not supply that re
 
 The Phase-4 component-and-coloring results are:
 
-1. A coloring is proper for the induced graph if and only if it is injective on every active
+1. A coloring is proper for the induced graph if and only if it is injective on every
    component support.
 2. The parity coloring of the four-block chain is proper.
 3. The three-color assignment of a three-block component is proper.
-4. Properness is preserved when the active set is restricted, and the added-component condition
-   above characterizes preservation when an active set is extended.
+4. Properness is preserved when the component index set is restricted, and the added-component
+   condition above characterizes preservation when it is extended.
 
 The specification supplies the hypotheses used by later concrete update and execution theorems.
 It contains no collision-detection, recoloring, scheduling, or hybrid-contraction theory.
