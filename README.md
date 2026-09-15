@@ -25,16 +25,33 @@ simulation results, stability in bounded-iteration use, and numerical
 convergence; its production evaluation generally uses the full local Newton
 step without the optional line search [1].
 
-Those are compelling algorithmic and empirical results, but they do not
-provide a model-specific, finite-sweep convergence-check framework for the
-unsafeguarded sweep. In particular, local/global energy bookkeeping does not
-alone establish a unique solution, convergence of the iterates, a rate, or an
-error after a fixed number of sweeps. A full Newton step can also fail to
-decrease its local energy away from the solution; the original paper explicitly
-presents line search as the mechanism that would make that descent conclusion
-available [1]. Classical block-coordinate convergence theory likewise has
-assumptions and conclusions that need not match a nonlinear, ordered,
-block-Newton VBD sweep with its chosen execution semantics [2].
+The VBD literature also contains algorithmic extensions and alternative
+formulations. Augmented VBD introduces multiplier, penalty, and regularization
+updates for difficult constraints and stiffness contrast [3]; higher-order VBD
+extends the discretization to isoparametric elements and uses sub-stepping to
+improve observed convergence behavior [4]. Solver-level differentiation work
+also represents a finite VBD solve as an ordered composition of updates and
+proves an exact discrete-adjoint result for that executed solve [5]. These
+results broaden the range of VBD formulations and applications without making
+their convergence questions interchangeable: their state, local update, and
+execution semantics differ.
+
+The literature review recorded in
+[VBD formalization and convergence literature](knowledge/references/vbd-convergence-landscape.md)
+has not identified a proof-assistant formalization of VBD or a quantitative
+convergence theorem for an actual VBD forward sweep. This is a bounded review
+finding, not a claim that no such result exists. The identified VBD sources
+provide algorithmic formulations, empirical convergence comparisons, or an
+exact adjoint theorem, but not a model-specific finite-sweep
+convergence-check framework for the unsafeguarded sweep. In particular,
+local/global energy bookkeeping does not alone establish a unique solution,
+convergence of the iterates, a rate, or an error after a fixed number of
+sweeps. A full Newton step can also fail to decrease its local energy away
+from the solution; the original paper explicitly presents line search as the
+mechanism that would make that descent conclusion available [1]. Classical
+block-coordinate convergence theory likewise has assumptions and conclusions
+that need not match a nonlinear, ordered, block-Newton VBD sweep with its
+chosen execution semantics [2].
 
 ## Our approach
 
@@ -254,7 +271,20 @@ and [backlog](knowledge/project/backlog.md) govern further formalization work.
    Nondifferentiable Minimization,” *SIAM Journal on Optimization* 11(2),
    2001. [DOI](https://doi.org/10.1137/S1052623498336933).
 
-3. S. Banach, “Sur les opérations dans les ensembles abstraits et leur
+3. C. Giles, E. Diaz, and C. Yuksel, “Augmented Vertex Block Descent,” *ACM
+   Transactions on Graphics* 44(4), Article 90, 2025.
+   [DOI](https://doi.org/10.1145/3731195).
+
+4. B. Saillant, F. Zara, F. Jaillet, and G. Damiand, “Going Further With
+   Vertex Block Descent,” *Computer Animation and Virtual Worlds* 36(3),
+   e70039, 2025. [DOI](https://doi.org/10.1002/cav.70039).
+
+5. L. Shu, Y. Jiang, K. Wu, Y. Yang, L. Guibas, and C. Jiang, “Differentiate
+   the Solver, Not the Equation: Reverse-Sweep Adjoints for Block Implicit
+   Simulation,” arXiv:2608.08559, 2026.
+   [Preprint](https://arxiv.org/abs/2608.08559).
+
+6. S. Banach, “Sur les opérations dans les ensembles abstraits et leur
    application aux équations intégrales,” *Fundamenta Mathematicae* 3, 1922.
    The formal fixed-point infrastructure is provided by
    [Mathlib’s contraction library](https://github.com/leanprover-community/mathlib4/blob/de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11/Mathlib/Topology/MetricSpace/Contracting.lean).
