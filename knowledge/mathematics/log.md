@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Operational explanation**: Added the snapshot-versus-serial rationale for proper color classes. A shared same-color component can make the second serial update observe a changed block; properness removes that cross-dependence while retaining shared read-only neighbors.
+
 * **Logical-flow correction**: Defined properness directly from the component-to-update batch criterion before deriving the induced graph as its pairwise test. The graph section now introduces vertices, edges, support examples, and graph equivalence in that order.
 
 * **Expository correction**: Positioned coloring within the VBD analysis as the batching structure for a block-update sweep. Rewrote the coloring and batch sections as affirmative mathematical statements, with the Phase-7 VBD locality theorem supplying their concrete commutation connection.

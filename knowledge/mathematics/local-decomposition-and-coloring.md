@@ -155,6 +155,29 @@ $\{i\}$. An update at $i$ uses the components $E_S$ with $i\in S$. Properness as
 of every support to distinct color classes. The concrete VBD locality theorem turns this support
 separation into commutation of the updates within each color class.
 
+# Why properness yields a parallel batch
+
+Consider two distinct blocks $i,j\in C_r$. If a support $S$ contained both blocks, the component
+$E_S$ would occur in the update formula for $i$ and in the update formula for $j$. A snapshot batch
+would compute both new values from the old pair $(x_i,x_j)$. A serial execution that applies the
+$i$-update first would compute the $j$-update after replacing $x_i$. The two executions can
+therefore produce different states.
+
+For a proper color class, every support containing $i$ omits $j$. The VBD locality theorem then
+gives that the new $i$-block value is independent of $x_j$, and symmetrically the new $j$-block
+value is independent of $x_i$. Each update writes only its own block, so applying either update
+first leaves the other update's computed value unchanged:
+
+$$
+U_i\circ U_j=U_j\circ U_i.
+$$
+
+Same-color updates can share values of a third block $k$. For example, in the chain with supports
+$\{0,1\}$ and $\{1,2\}$, blocks $0$ and $2$ have the same color and both read block $1$. Their
+batch leaves block $1$ unchanged, so both updates use the same value $x_1$ in a snapshot and in
+either serial ordering. Properness therefore provides the exact separation needed for parallel
+updates: each update value is independent of the blocks written by the other updates in its class.
+
 The snapshot batch $P_r$ for color $r$ evaluates all $U_i$ for $i\in C_r$ at the common input $x$
 and writes their selected block outputs simultaneously. The colored sweep executes the batches in
 color-number order:
@@ -165,14 +188,6 @@ $$
 
 This definition supplies the buffered semantics of a parallel color class. The VBD locality and
 properness results identify it with every serial ordering within that class.
-
-The production VBD locality theorem states that the new value produced by $U_i$ is determined by
-the blocks in $\bigcup\{S\in A\mid i\in S\}$. For $i,j\in C_r$, properness and the single-block
-write property give
-
-$$
-U_i\circ U_j=U_j\circ U_i.
-$$
 
 The simultaneous/sequential theorem from
 [block states and operators](./block-states-and-operators.md#theorem-simultaneous-and-sequential-equivalence)
