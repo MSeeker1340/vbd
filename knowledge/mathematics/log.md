@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Notation correction**: Recast the finite-support interaction specification entirely in mathematical block-space, finite-set, and direct-sum notation. Removed implementation vocabulary from its definitions and theorem statements.
+
 * **Phase-4 review specification**: Defined live finite-support interaction hypergraphs, extensional locality, incident interaction sets, exact energy-change cancellation, and the induced symmetric irreflexive conflict relation. Specified proper coloring equivalently as injectivity on every live support, with checked pairwise-chain and triangular examples.
 
 * **Static-color boundary**: Distinguished a static material coloring from properness for the actual live set. Recorded deletion preservation, the exact added-interaction preservation criterion, and the buffered Jacobi-within-color semantics that apply after a violation. Kept concrete VBD update locality, commutation, and hybrid contraction as later production/deferred obligations.

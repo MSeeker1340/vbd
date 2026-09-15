@@ -14,21 +14,28 @@ derives the combinatorial information used by [proper colorings](./coloring.md).
 positive-curvature, invertibility, differentiability, or contraction premise. Those analytic
 properties remain separate from interaction support.
 
-Let `ι` index the blocks, let `B : ι → Type*` be their family, and write `X = BlockSum B` for a
-candidate configuration. Let `ε` index a fixed universe of possible interactions. A particular
-solve has a finite **live set** `A : Finset ε`; this permits material, constraint, and collision
-interactions to be distinguished by which elements of the universe are live, without changing the
-basic definitions.
+Let `I` be a finite set of block indices, let `X_i` be the configuration space of block `i`, and
+write
+
+$$
+X=\bigoplus_{i\in I}^{\ell^2}X_i
+$$
+
+for the candidate-configuration space, as in
+[block states and operators](./block-states-and-operators.md#block-states). Let `\mathcal E` be a
+universe of possible interactions. A particular solve has a finite **live set**
+`A \subseteq \mathcal E`; this permits material, constraint, and collision interactions to be
+distinguished by which elements of the universe are live, without changing the basic definitions.
 
 # Local interactions and the live hypergraph
 
-Each interaction `e : ε` has a finite block support
+Each interaction `e \in \mathcal E` has a finite block support
 
 $$
-N(e) : \operatorname{Finset}\,\iota
+N(e)\subseteq I
 $$
 
-and an energy contribution `P_e : X → ℝ`. For states `x` and `z`, write
+and an energy contribution `P_e : X\to\mathbb R`. For states `x` and `z`, write
 
 $$
 x =_S z \quad\Longleftrightarrow\quad
@@ -47,7 +54,7 @@ $$
 P_A(x)=\sum_{e\in A}P_e(x).
 $$
 
-Together, `(ι, (N(e))_{e ∈ A})` is the live interaction hypergraph. It covers pairwise springs
+Together, `(I, (N(e))_{e \in A})` is the live interaction hypergraph. It covers pairwise springs
 and edges as two-element hyperedges, and triangle, tetrahedron, bending, contact, and other
 multi-block elements as arbitrary finite hyperedges. Empty and singleton supports are permitted:
 they contribute a constant or one-block term and create no conflict between distinct blocks.
@@ -58,7 +65,7 @@ are additional properties of the `P_e`; support locality alone is sufficient for
 
 # Incident interactions and exact energy bookkeeping
 
-For a block set `S : Finset ι`, define its live incident interactions by
+For a block set `S\subseteq I`, define its live incident interactions by
 
 $$
 \operatorname{Inc}_A(S)
@@ -97,7 +104,7 @@ i\mathrel{\mathsf{\#}_A}j
 i\ne j\ \land\ \exists e\in A,\;i\in N(e)\land j\in N(e).
 $$
 
-The **physical conflict graph** has vertex set `ι` and these edges. The relation is symmetric and
+The **physical conflict graph** has vertex set `I` and these edges. The relation is symmetric and
 irreflexive. Its neighbor set is contained in the union of supports of `Inc_A(i)`, with `i`
 removed. Thus an edge records exactly that the two blocks co-occur in a supplied live support;
 the support itself may be a conservative locality bound. No dense global graph is assumed.
@@ -107,10 +114,9 @@ each hyperedge induces a clique on its distinct support vertices. The hypergraph
 primary physical data because it retains which blocks occur together in one interaction; the graph
 is its coloring projection.
 
-# Phase-4 theorem targets
+# Phase-4 theorem statements
 
-The Lean module `Vbd/Integrator/LocalInteractions.lean` packages finite supports, local
-interaction values, a finite live set, and the following results.
+The finite-support interaction model has the following Phase-4 results.
 
 1. Extensional locality is closed under the finite live sum, and interactions not incident to a
    changed block set cancel from its energy difference.
@@ -119,9 +125,9 @@ interaction values, a finite live set, and the following results.
    hyperedge.
 4. Enlarging the live set can only add conflict edges; restricting it can only remove them.
 
-The module exports combinatorial locality. It does not define a VBD Newton update or infer an
-update's read dependence merely from its write support. The production VBD layer later proves that
-its concrete update for block `i` reads only the interactions incident to `i`, then uses the
+These statements concern combinatorial locality. They do not define a VBD Newton update or infer
+an update's read dependence merely from its write support. The production VBD theorem later proves
+that its concrete update for block `i` reads only the interactions incident to `i`, then uses the
 conflict-free condition to establish same-color commutation.
 
 # Concrete support examples
