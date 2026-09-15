@@ -23,7 +23,7 @@ For example, a linear tetrahedral element couples four nodal blocks.
 These models motivate viewing a configuration as a collection of blocks and organizing solver
 updates around subsets of them. Finite-support components couple blocks, so a change to one block can
 affect the computation of updates to neighboring blocks. The
-[finite-support potential-component model](/mathematics/local-decomposition.md) describes that
+[local decomposition and coloring](/mathematics/local-decomposition-and-coloring.md) describes that
 dependency structure. The algebra here provides block states and operations on them, with write
 support identifying the blocks an operation can change. It applies to state maps
 independently of their physical origin or the objective being solved.
@@ -200,9 +200,9 @@ $$
 Any supplied bounds `Wᵣ` therefore give the execution a bound `⋃ᵣ Wᵣ`.
 
 Disjoint write supports alone do not imply commutation: an operator may read a block changed
-by another. The [potential-component layer](/mathematics/local-decomposition.md) supplies support
-information; the production layer uses it to establish commutation for concrete operators under
-a valid [coloring](/mathematics/coloring.md).
+by another. [Local decomposition and coloring](/mathematics/local-decomposition-and-coloring.md)
+supplies the support information and valid-color condition used by the production layer to establish
+commutation for concrete operators.
 
 ## Simultaneous batches
 
@@ -340,7 +340,7 @@ bounds to ensure that the remaining operators preserve its selected output block
 algebraic hypotheses on state maps; the theorem requires no linearity or differentiability.
 
 > This theorem underlies the later treatment of VBD's
-> [colored updates](/mathematics/coloring.md).
+> [local decomposition and coloring](/mathematics/local-decomposition-and-coloring.md).
 
 ## Continuous-linear block representation
 

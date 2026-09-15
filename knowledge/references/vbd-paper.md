@@ -30,7 +30,7 @@ For parallelism, vertices are colored so no elastic force element contains two v
 color. Color classes are processed sequentially and vertices within a class in parallel. Dynamic
 collision interactions complicate this clean model, and buffering can yield partially Jacobi-style
 behavior. The roadmap separates exact proper-color equivalence from contraction bounds for this
-hybrid map; see [coloring](/mathematics/coloring.md).
+hybrid map; see [local decomposition and coloring](/mathematics/local-decomposition-and-coloring.md).
 
 # Claim discipline
 

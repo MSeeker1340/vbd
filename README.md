@@ -147,8 +147,7 @@ then joins them only in explicit bridge layers.
 
 The synthesis is specified in
 [curvature, coupling, and VBD contraction](knowledge/mathematics/curvature.md),
-[finite-support potential components](knowledge/mathematics/local-decomposition.md),
-and [coloring and parallel sweep structure](knowledge/mathematics/coloring.md).
+[local decomposition and coloring](knowledge/mathematics/local-decomposition-and-coloring.md).
 It differentiates the actual local Newton updates, bounds their block effects
 by a nonnegative comparison matrix, propagates those bounds through the real
 execution order, and proves q < 1 in an appropriate block norm. It then

@@ -143,7 +143,7 @@ lets us treat each batch as any serial ordering of its members.
 Both executions visit every vertex exactly once; we will use that fact twice below.
 
 > **TODO — supporting coloring material:** Complete/review the general coloring treatment in
-> [coloring and parallel sweep structure](./coloring.md), and formalize the physical
+> [local decomposition and coloring](./local-decomposition-and-coloring.md), and formalize the physical
 > independence-to-commutation argument (LI-02–LI-04 and VB-07). The even/odd partition here is
 > the concrete path-graph instance; the abstract simultaneous/sequential theorem is already available.
 
