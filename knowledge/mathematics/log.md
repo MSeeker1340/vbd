@@ -2,6 +2,10 @@
 
 ## 2026-09-15
 
+* **Expository correction**: Positioned coloring within the VBD analysis as the batching structure for a block-update sweep. Rewrote the coloring and batch sections as affirmative mathematical statements, with the Phase-7 VBD locality theorem supplying their concrete commutation connection.
+
+* **Logical-flow correction**: Kept the definition of colors purely as numbered block groups, then introduced block updates, batches, and color-number execution order only in the later batch-construction section.
+
 * **Execution-order simplification**: Numbered color classes directly as $C_0,\ldots,C_{m-1}$ and defined the colored sweep as $P_{m-1}\circ\cdots\circ P_0$. The color number now supplies both the conventional color name and the outer sequential order.
 
 * **Color-label clarification**: Defined a color as the conventional label $c\in K$ indexing one part $C_c$ of the finite partition of blocks. Restored colors and color classes as the primary VBD vocabulary while keeping the partition as their exact mathematical content.

@@ -11,8 +11,8 @@ timestamp: 2026-09-15T00:00:00Z
 This Phase-4 specification assumes that the potential $E$ in the
 [implicit-Euler problem](./implicit-euler.md) is a finite sum of block-local components. It derives
 both the exact energy bookkeeping for a block change and the coloring structure used to organize
-block updates. It records no positive-curvature, invertibility, differentiability, or contraction
-premise. Those analytic properties remain separate from the support data.
+VBD block updates. The corresponding curvature, differentiability, and contraction assumptions
+belong to the later analytic bridge and VBD-synthesis results.
 
 # Potential components
 
@@ -38,7 +38,7 @@ $$
 E_{\{i,j\}}(x)=\varphi(x_i,x_j),
 $$
 
-with no occurrence of $x_k$ for $k\notin\{i,j\}$. Equivalently,
+and its value is determined by $x_i$ and $x_j$. Equivalently,
 
 $$
 x_i=z_i\quad(i\in S)
@@ -52,10 +52,10 @@ $$
 E(x)=\sum_{S\in A}E_S(x).
 $$
 
-Thus a component is one summand indexed by the set of blocks on which it may depend. Multiple
-summands with the same support are combined into one component, so no separate component-label type
-or support function is needed. Smoothness assumptions needed for the gradient or Hessian of $E$ are
-additional properties of the $E_S$; support locality alone is sufficient for the results here.
+Thus a component is one summand indexed by the set of blocks on which it may depend. The
+support-indexed family combines summands with the same support. Smoothness assumptions needed for
+the gradient or Hessian of $E$ are additional properties of the $E_S$; support locality supplies
+the results here.
 
 # Exact local energy bookkeeping
 
@@ -83,11 +83,15 @@ E(R_i(x,b))-E(x)
   \bigl(E_S(R_i(x,b))-E_S(x)\bigr).
 $$
 
-This is an equality of energy changes, not a decomposition into disjoint per-block objectives:
-one component can occur in the formula for several block changes. It identifies exactly which
-summands must be reevaluated for a proposed block replacement.
+Components can occur in the energy changes of several blocks. The equality identifies exactly which
+summands are reevaluated for a proposed block replacement.
 
-# Coloring block updates
+# Coloring blocks
+
+VBD obtains one update for each block and combines those updates into a sweep. A serial sweep
+visits the block updates one at a time. A colored sweep groups them into batches: it evaluates the
+updates in each batch together, then proceeds to the next batch. The support family $A$ determines
+which groupings provide the structural premise for the concrete VBD commutation theorem.
 
 Choose a number $m$ and nonempty block sets
 
@@ -96,21 +100,13 @@ C_0,\ldots,C_{m-1}
 $$
 
 that are pairwise disjoint and whose union is $I$. The number $r$ is called **color $r$**, and
-$C_r$ is its **color class**. Colors are processed in their natural order: first $C_0$, then
-$C_1$, and so on through $C_{m-1}$. Within a class, the single-block updates are attempted
-simultaneously. Coloring therefore exposes parallel work without changing the required order
-between dependent blocks.
-
-A block update at $i$ can use every component $E_S$ for which $i\in S$. If two blocks $i$ and $j$
-with the same color $r$ occur in one support $S$, their updates can both use $E_S$ and can therefore
-depend on each other. The structural condition needed for a color class to represent independent
-updates is consequently: every support $S\in A$ contains at most one block of $C_r$. The
-commutation theorem for concrete VBD updates proves the remaining update-map fact later.
+$C_r$ is its **color class**. The classes $C_0,\ldots,C_{m-1}$ are the consecutive batches of the
+colored sweep.
 
 # Induced coloring graph
 
-The induced graph converts the support condition above into the standard proper graph-coloring
-test: it draws an edge for every pair of distinct blocks in a common support.
+The induced graph records which block pairs occur in a common support. It lets the support condition
+for a proper coloring be checked by an ordinary graph condition.
 
 For distinct blocks, define
 
@@ -123,48 +119,50 @@ $$
 The graph with vertex set $I$ and edges $\sim_A$ is symmetric and irreflexive. A two-block support
 $\{i,j\}$ contributes the one edge $i\text{—}j$. A three-block support $\{i,j,k\}$ contributes all
 three pairwise edges, so it forms a triangle. In general, every support induces a clique. The graph
-is used only to test colors; the original support family $A$ remains the data used for locality and
-energy bookkeeping.
+tests color classes, while the support family $A$ supplies locality and energy bookkeeping.
 
 # Proper colorings
 
-A coloring $C_0,\ldots,C_{m-1}$ is **proper for $A$** when no color class contains an edge:
-
-$$
-\forall r\in\{0,\ldots,m-1\},\;\forall i,j\in C_r,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
-$$
-
-Equivalently,
+A coloring $C_0,\ldots,C_{m-1}$ is **proper for $A$** when every support intersects every color
+class in at most one block:
 
 $$
 \forall S\in A,\;\forall r\in\{0,\ldots,m-1\},\qquad |S\cap C_r|\le 1.
 $$
 
+Equivalently, two blocks of one color class that occur together in a support are the same block:
+
+$$
+\forall r\in\{0,\ldots,m-1\},\;\forall i,j\in C_r,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
+$$
+
 Thus a proper color class contains at most one block from each support.
 
-For $M\subseteq A$, every coloring proper for $A$ is proper for $M$. Conversely, a coloring proper
-for $M$ is proper for $A$ exactly when $|S\cap C_r|\le 1$ for every $S\in A\setminus M$ and
-$r\in\{0,\ldots,m-1\}$. This is the exact condition for extending properness from a smaller
-support family.
+For $M\subseteq A$, the same coloring is proper for $M$. The condition
+$|S\cap C_r|\le 1$ for $S\in A\setminus M$ and $r\in\{0,\ldots,m-1\}$ extends properness from
+$M$ to $A$.
 
 # Color batches and serial equivalence
 
-Let $U_i:X\to X$ be a single-block update map with write support contained in $\{i\}$. The snapshot
-batch $P_r$ for color $r$ evaluates all $U_i$ for $i\in C_r$ at the common input $x$ and writes
-their selected block outputs simultaneously. The colored sweep is
+Let every block $i$ have a single-block update $U_i:X\to X$ with write support contained in
+$\{i\}$. An update at $i$ uses the components $E_S$ with $i\in S$. Properness assigns the blocks
+of every support to distinct color classes. The concrete VBD locality theorem turns this support
+separation into commutation of the updates within each color class.
+
+The snapshot batch $P_r$ for color $r$ evaluates all $U_i$ for $i\in C_r$ at the common input $x$
+and writes their selected block outputs simultaneously. The colored sweep executes the batches in
+color-number order:
 
 $$
 T_{C_0,\ldots,C_{m-1}}=P_{m-1}\circ\cdots\circ P_0.
 $$
 
-This definition is valid whether or not the updates commute. It specifies the buffered semantics
-of a parallel color class.
+This definition supplies the buffered semantics of a parallel color class. The VBD locality and
+properness results identify it with every serial ordering within that class.
 
-Properness is a property of the potential decomposition, whereas commutation is a property of
-update maps. The production VBD theorem connects them by proving that the new value produced by
-$U_i$ is unchanged whenever two inputs agree on $\bigcup\{S\in A\mid i\in S\}$. For distinct
-$i,j$ in a proper color class, no support in $A$ contains both blocks; this fact and the
-single-block write property give
+The production VBD locality theorem states that the new value produced by $U_i$ is determined by
+the blocks in $\bigcup\{S\in A\mid i\in S\}$. For $i,j\in C_r$, properness and the single-block
+write property give
 
 $$
 U_i\circ U_j=U_j\circ U_i.
@@ -172,14 +170,8 @@ $$
 
 The simultaneous/sequential theorem from
 [block states and operators](./block-states-and-operators.md#theorem-simultaneous-and-sequential-equivalence)
-then identifies $P_r$ with every serial ordering of the $U_i$ in a proper color class. Neither
-disjoint write supports nor a proper coloring alone proves this equality; the concrete
-component-locality result for the update maps is required.
-
-If a support added to a proper subfamily contains two blocks of the same color, its snapshot batch
-remains well-defined but need not equal a serial composition. It requires a theorem for its actual
-simultaneous-batch derivative or an explicitly accepted perturbation analysis; the current
-exact-execution route does not supply that result.
+identifies $P_r$ with every serial ordering of the $U_i$ in a proper color class. Extending a
+support family uses the properness condition above to determine its color batches.
 
 # Phase-4 theorem statements and examples
 
@@ -188,8 +180,9 @@ The Phase-4 results are:
 1. Components outside $A[J]$ cancel from the energy change caused by a modification supported in
    $J$.
 2. The relation $\sim_A$ is symmetric and irreflexive.
-3. A coloring is proper for the induced graph if and only if $|S\cap C_r|\le 1$ for every
-   $S\in A$ and $r\in\{0,\ldots,m-1\}$.
+3. The support condition $|S\cap C_r|\le 1$ for every $S\in A$ and
+   $r\in\{0,\ldots,m-1\}$ is equivalent to the graph condition
+   $i\sim_A j\Longrightarrow i=j$ for $i,j\in C_r$.
 4. Properness is preserved under restriction to $M\subseteq A$, and the condition above
    characterizes when it extends from $M$ to $A$.
 5. The two-coloring $C_0=\{0,2\}$, $C_1=\{1,3\}$ of the four-block chain is proper.
