@@ -90,6 +90,13 @@ summands must be reevaluated for a proposed block replacement.
 
 # Induced coloring graph
 
+The support family $A$ says which blocks occur together in each component. A coloring needs to
+assign different colors to any two blocks that occur together: equivalently, each support
+$S\in A$ must contain at most one block of each color. The induced graph converts this condition
+on sets into the usual vertex-coloring condition. It draws an edge for every pair of distinct
+blocks belonging to one common support; a proper coloring of the graph is therefore exactly a
+coloring satisfying the condition above.
+
 For distinct blocks, define
 
 $$
@@ -99,10 +106,11 @@ i\ne j\ \land\ \exists S\in A,\;i\in S\land j\in S.
 $$
 
 The graph with vertex set $I$ and edges $\sim_A$ is symmetric and irreflexive. Its neighbor set at
-$i$ is contained in the union of the supports in $A[\{i\}]$, with $i$ removed. Thus an edge records
-exactly that the two blocks co-occur in the support of a component. For a two-block component
-decomposition this is the usual graph of block coupling; every higher-arity support induces a
-clique in the graph.
+$i$ is contained in the union of the supports in $A[\{i\}]$, with $i$ removed. A two-block support
+$\{i,j\}$ contributes the one edge $i\text{—}j$. A three-block support $\{i,j,k\}$ contributes all
+three pairwise edges, so it forms a triangle and forces three distinct colors on these blocks. In
+general, every higher-arity support induces a clique in the graph. The graph is used only for
+coloring; the original support family $A$ remains available for energy bookkeeping and locality.
 
 # Phase-4 theorem statements
 
