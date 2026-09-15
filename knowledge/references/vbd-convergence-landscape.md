@@ -1,28 +1,28 @@
 ---
 type: Research Reference
-title: VBD Formulation and Convergence Literature
-description: Assesses VBD-family and nonlinear block-Gauss–Seidel sources against the project’s target of a quantitative contraction certificate for an actual sweep.
-tags: [vbd, convergence, block-newton, gauss-seidel, literature-review]
+title: VBD Formalization and Convergence Literature
+description: Surveys VBD-family formulations together with identified formalization and convergence analyses.
+tags: [vbd, formalization, convergence, block-newton, gauss-seidel, literature-review]
 timestamp: 2026-09-15T00:00:00Z
 ---
 
-# Scope and conclusion
+# Scope and result
 
-The sources assessed here do not provide a formal, model-parameterized
-contraction theorem for an actual VBD serial or colored sweep with an explicit
-finite-sweep state or implicit-Euler residual error bound. This conclusion is
-limited to the VBD-family publications and directly relevant nonlinear
-block-Gauss–Seidel literature listed below; it is not a claim that no such
-result exists elsewhere.
+This survey covers VBD-family papers that introduce, extend, or instantiate
+the solver, together with identified theorem-level convergence and
+machine-checked formalization work. The publications identified here provide
+algorithmic formulations, empirical convergence comparisons, and an exact
+discrete-adjoint theorem for a VBD-family solver. No identified source
+formalizes VBD in a proof assistant or proves a quantitative convergence theorem
+for an actual VBD sweep. This is a bounded search result, not a claim that no
+such work exists.
 
-The original [VBD paper](./vbd-paper.md) supplies the local variational
+The [original VBD paper](./vbd-paper.md) supplies the local variational
 formulation, full block-Newton update, coloring semantics, and empirical
-convergence evidence. [Augmented VBD](#augmented-vbd) changes the solver by
-adding augmented-Lagrangian state and adaptive penalties. The nonlinear
-block-Gauss–Seidel results below establish that convergence requires
-model-specific conditions even for exact block minimization or root-solving
-schemes. Together, these sources support the project decision to analyze the
-specified VBD execution map directly rather than import a generic BCD result.
+convergence evidence. [Augmented VBD](#augmented-vbd),
+[solver-level VBD differentiation](#solver-level-vbd-formulation), and
+[higher-order VBD](#higher-order-elements-and-sub-stepping) modify or reuse
+the basic update for distinct algorithmic goals.
 
 # VBD-family formulations
 
@@ -39,6 +39,15 @@ The paper is the primary source for the VBD map analyzed by this project. Its
 local/global energy-change identity remains useful bookkeeping, while a
 contraction result requires separate control of the complete sweep and
 fixed-point/root consistency.
+
+## Higher-order elements and sub-stepping
+
+Saillant, Zara, Jaillet, and Damiand extend VBD from linear tetrahedra to
+general isoparametric elements and higher-order shape functions. Their method
+uses sub-stepping to improve convergence behavior and reports visual and
+computational experiments. It changes the discretization and execution
+configuration but does not state a formal convergence theorem or a
+proof-assistant formalization.
 
 ## Solver-level VBD formulation
 
@@ -71,7 +80,7 @@ matter in production, not a direct convergence theorem for the initial
 exact-execution VBD formalization. An AVBD analysis requires an extended state
 and an invariant/contraction or varying-map result for its actual update rules.
 
-# Relevant nonlinear block Gauss–Seidel results
+# Relevant external convergence theory
 
 ## Exact-minimization and M-function routes
 
@@ -100,16 +109,15 @@ expressing local inverse strength relative to cross-block coupling, although
 its nonlinear function class, underrelaxation, and power-flow model differ
 from VBD.
 
-# Consequence for this project
+# Relationship to the project
 
-The first theorem remains a local contraction certificate for the exact,
-skip-free serial or static proper-color VBD map on the selected axial-spring
-region. Existing BCD and nonlinear Gauss–Seidel theory informs the choice of
-hypotheses, but does not replace the required proofs of local block
-regularity, ordered-composition bounds, execution semantics, and
-fixed-point/implicit-Euler consistency. The related
-[contraction-based numerical studies](./contraction-based-numerics.md) provide
-the closest reusable comparison-matrix and certified-neighborhood patterns.
+The first project theorem concerns the exact, skip-free serial or static
+proper-color VBD map on the selected axial-spring region. The external
+nonlinear block-Gauss–Seidel results inform the selection of hypotheses but do
+not replace proofs of local block regularity, ordered-composition bounds,
+execution semantics, and fixed-point/implicit-Euler consistency. The
+[contraction-based numerical studies](./contraction-based-numerics.md) record
+generic contraction patterns separately from this VBD survey.
 
 # Citations
 
@@ -128,16 +136,20 @@ Transactions on Graphics* 44(4), Article 90, 2025.
 Implicit Simulation,” arXiv:2608.08559, 2026.
 [Preprint](https://arxiv.org/abs/2608.08559).
 
-[4] L. Grippo and M. Sciandrone, “On the Convergence of the Block Nonlinear
+[4] B. Saillant, F. Zara, F. Jaillet, and G. Damiand, “Going Further With
+Vertex Block Descent,” *Computer Animation and Virtual Worlds* 36(3), e70039,
+2025. [DOI](https://doi.org/10.1002/cav.70039).
+
+[5] L. Grippo and M. Sciandrone, “On the Convergence of the Block Nonlinear
 Gauss–Seidel Method under Convex Constraints,” *Operations Research Letters*
 26(3), 127–136, 2000.
 [DOI](https://doi.org/10.1016/S0167-6377(99)00074-7).
 
-[5] L. A. Hageman and T. A. Porsching, “Aspects of Nonlinear Block Successive
+[6] L. A. Hageman and T. A. Porsching, “Aspects of Nonlinear Block Successive
 Overrelaxation,” *SIAM Journal on Numerical Analysis* 12(3), 316–335, 1975.
 [DOI](https://doi.org/10.1137/0712026).
 
-[6] M. Ilić-Spong, I. N. Katz, H. Dai, and J. Zaborszky, “Block Diagonal
+[7] M. Ilić-Spong, I. N. Katz, H. Dai, and J. Zaborszky, “Block Diagonal
 Dominance for Systems of Nonlinear Equations with Application to Load Flow
 Calculations in Power Systems,” *Mathematical Modelling* 5(5), 275–297, 1984.
 [DOI](https://doi.org/10.1016/0270-0255(84)90006-X).

@@ -3,8 +3,8 @@
 Reference notes:
 
 - [Vertex Block Descent](./vbd-paper.md) - Primary mechanics and algorithm reference.
-- [VBD formulation and convergence literature](./vbd-convergence-landscape.md) - Assessed VBD-family and nonlinear block-Gauss–Seidel convergence sources against the project theorem target.
-- [Contraction-based numerical convergence studies](./contraction-based-numerics.md) - Block-contraction and validated-numerics patterns relevant to the fixed-point route.
+- [VBD formalization and convergence literature](./vbd-convergence-landscape.md) - VBD-family formulations alongside identified formalization and convergence analyses.
+- [Contraction-based analysis of numerical iterative methods](./contraction-based-numerics.md) - General fixed-point-contraction analyses of executed iterations, discretized successive approximation, and validated numerics.
 - [Adaptive VBD iterations and stopping criteria](./adaptive-vbd-iterations.md) - Distinguishes update-based early stopping, adaptive solver mechanisms, and certified solution-error bounds in VBD-related work.
 - [Tseng 2001](./tseng-2001.md) - Classical block-coordinate convergence assumptions and conclusions.
 - [Mathlib](./mathlib.md) - Primary Lean 4 mathematical foundation.

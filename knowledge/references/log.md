@@ -2,8 +2,8 @@
 
 ## 2026-09-15
 
-* **Research**: Reassessed VBD-family formulation and convergence literature against the clarified target of a local, quantitative certificate for the actual VBD sweep. Added the original VBD paper, Augmented VBD, solver-level VBD differentiation, and three nonlinear block-Gauss–Seidel sources to the scoped assessment; no assessed source provides the project’s end-to-end VBD contraction and finite-sweep residual result.
-* **Research**: Added contraction-based numerical studies. Scutari–Palomar–Barbarossa supplies the closest comparison-matrix, weighted block-maximum-norm proof pattern for sequential and simultaneous updates; Ilić-Spong–Katz–Dai–Zaborszky supplies a nonlinear block-GS application with evaluated coupling conditions; radii-polynomial validation supplies a complementary offline-certificate pattern for a Newton-like map.
+* **Research**: Broadened the VBD review to identified formulation, convergence, and proof-assistant formalization work, independent of the project theorem route. Added higher-order-element/sub-stepping VBD alongside the original VBD, Augmented VBD, solver-level differentiation, and external nonlinear block-Gauss–Seidel sources; no identified VBD source supplies a proof-assistant formalization or theorem-level convergence analysis.
+* **Research**: Reframed the contraction literature as a generic numerical-method survey. It now separates contraction of executed block iterations, contraction in discretized Picard methods for integral equations, and validated contraction of an auxiliary map; VBD’s exact-sweep route is recorded only as one application of the first category.
 
 ## 2026-09-11
 

@@ -1,19 +1,20 @@
 ---
 type: Research Reference
-title: Contraction-Based Numerical Convergence Studies
-description: Identifies numerical-analysis studies that use explicit contraction certificates for iterative maps and assesses their reuse for VBD.
+title: Contraction-Based Analysis of Numerical Iterative Methods
+description: Surveys numerical methods whose convergence or error analysis uses explicit contraction certificates.
 tags: [contraction, fixed-point-iteration, numerical-analysis, comparison-matrix, validated-numerics]
 timestamp: 2026-09-15T00:00:00Z
 ---
 
 # Scope and result
 
-Contraction mapping is used in numerical studies both to prove convergence of
-the executed iteration and to validate the existence of a nearby solution for
-a modified Newton-like map. The distinction is essential for VBD. The first
-route directly matches the project target; the second provides a pattern for an
-offline configuration certificate but does not prove convergence of the
-production VBD sweep without an additional comparison theorem.
+Contraction mapping is a general numerical-analysis mechanism for establishing
+existence, uniqueness, convergence rates, and a priori or a posteriori error
+bounds. The literature below separates three roles: contraction of the
+executed iteration, contraction of a discretized successive-approximation
+method, and validated contraction of an auxiliary map near a numerical
+approximation. These roles have different conclusions even when each invokes
+Banach’s theorem.
 
 # Block-contraction convergence of executed iterations
 
@@ -27,14 +28,11 @@ and linear convergence of the sequential Gauss–Seidel scheme. The same paper
 also treats simultaneous and smoothed variants and interprets the sufficient
 condition in physical channel parameters.
 
-This is the closest assessed proof architecture to the VBD route:
-block-local updates, a nonnegative comparison matrix, a weighted or maximum
-block norm, explicit serial/simultaneous execution semantics, and a
-parameter-level sufficient condition. Its waterfilling map and equilibrium
-problem are unrelated to implicit Euler, so it supplies a proof pattern rather
-than a theorem that can be imported. In particular, VBD still requires bounds
-for the derivative of the *actual* local Newton update, including variation of
-the local inverse.
+The analysis exemplifies a general pattern: block-local maps, a nonnegative
+comparison matrix, a weighted block maximum norm, explicit
+serial/simultaneous execution semantics, and a parameter-level sufficient
+condition. It establishes linear convergence of the iteration that is
+executed, rather than only existence of a solution.
 
 ## Nonlinear power-flow iterations
 
@@ -46,7 +44,25 @@ certificate is evaluated against a concrete system, rather than treated as a
 purely asymptotic statement. Its conditions are recorded in the
 [VBD convergence landscape](./vbd-convergence-landscape.md#block-diagonal-dominance).
 
-# A posteriori contraction validation
+# Contraction in discretized successive approximation
+
+## Integral and integrodifferential equations
+
+Phillips analyzes iterative numerical solution of integral and
+integrodifferential equations by contraction mapping, including the error
+introduced when polynomial approximations replace exact iterates. Rocha,
+Azevedo, Oliveira, and Correa give a later example in which a collocation discretization
+of a nonlinear functional integral equation is solved by Picard iteration.
+Their analysis separates discretization error from fixed-point iteration error,
+uses Banach’s theorem for the latter, derives convergence and an a priori error
+estimate, and compares the conclusions with numerical examples.
+
+This class of studies illustrates that an iteration certificate and a
+discretization certificate are distinct. A contraction factor controls the
+iterations of the stated discrete map; transferring the conclusion to the
+continuous problem additionally requires an approximation-error analysis.
+
+# Validated contraction near a numerical approximation
 
 ## Radii-polynomial method
 
@@ -59,24 +75,20 @@ operator equations and reports applications to ordinary, partial, and delay
 differential equations; the certificate itself is a Banach-space fixed-point
 construction rather than an ODE-specific argument.
 
-The structure is relevant to an offline VBD analyzer: evaluated physical
-parameters, a candidate state, interval or validated bounds, an invariant
-ball, and a computable contraction factor can yield a machine-checkable local
-certificate. The Newton-like validation map is generally different from the
-VBD sweep. Its contraction therefore certifies a root near the candidate, not
-the finite-sweep behavior of VBD, unless a separate bound connects the two
-maps. This distinction preserves the roadmap’s priority on exact-execution
-contraction.
+The structure supports computer-assisted numerical certification: evaluated
+parameters, a candidate state, validated defect and derivative bounds, an
+invariant ball, and a computable contraction factor yield a local certificate.
+The auxiliary map is generally different from the iteration used to obtain the
+candidate. Its contraction therefore certifies a nearby root and uniqueness in
+the stated ball, not necessarily the rate of a separate production iteration.
 
-# Project consequence
+# Relevance to VBD
 
-The direct model for the first VBD theorem is block contraction of the actual
-sweep, following the comparison-matrix architecture exemplified by Scutari,
-Palomar, and Barbarossa. Radii-polynomial validation is a complementary future
-tool for establishing local solution existence or emitting offline
-configuration certificates. Neither source removes the need to prove
-fixed-point/root consistency, intermediate-state invariance, and VBD-specific
-derivative bounds.
+The VBD theorem route belongs to the first category: contraction of the actual
+executed sweep. The waterfilling analysis is consequently the closest generic
+block-iteration pattern. Radii-polynomial validation remains complementary for
+local solution certification, while integral-equation studies emphasize the
+separation between iteration and discretization errors.
 
 # Citations
 
@@ -91,7 +103,16 @@ Dominance for Systems of Nonlinear Equations with Application to Load Flow
 Calculations in Power Systems,” *Mathematical Modelling* 5(5), 275–297, 1984.
 [DOI](https://doi.org/10.1016/0270-0255(84)90006-X).
 
-[3] A. Hungria, J.-P. Lessard, and J. D. Mireles James, “Rigorous Numerics for
+[3] G. M. Phillips, “Analysis of Numerical Iterative Methods for Solving
+Integral and Integrodifferential Equations,” *The Computer Journal* 13(3),
+297–300, 1970. [DOI](https://doi.org/10.1093/comjnl/13.3.297).
+
+[4] A. M. Rocha, J. S. Azevedo, S. P. Oliveira, and M. R. Correa,
+“Numerical Analysis of a Collocation Method for Functional Integral Equations,”
+*Applied Numerical Mathematics* 134, 31–45, 2018.
+[DOI](https://doi.org/10.1016/j.apnum.2018.07.002).
+
+[5] A. Hungria, J.-P. Lessard, and J. D. Mireles James, “Rigorous Numerics for
 Analytic Solutions of Differential Equations: the Radii Polynomial Approach,”
 *Mathematics of Computation* 85(299), 1427–1459, 2016.
 [DOI](https://doi.org/10.1090/mcom/3046).
