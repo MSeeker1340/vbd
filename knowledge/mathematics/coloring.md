@@ -62,18 +62,14 @@ then identifies $P_C$ with every serial ordering of the $U_i$ in a proper color 
 disjoint write supports nor a proper coloring alone proves this equality; the concrete
 component-locality result for the update maps is required.
 
-# Changing the component index set
+# Restricting the component index set
 
-Let $M$ be the component index set for which a coloring was established, and let $A$ be the
-component index set of a particular color pass. The coloring is proper for that pass precisely when it is
-proper for $A$, not merely for $M$.
+Let $M\subseteq A$. Every coloring proper for $A$ is proper for $M$. Conversely, a coloring proper
+for $M$ is proper for $A$ exactly when every $e\in A\setminus M$ contains at most one block of each
+color.
 
-- If $A\subseteq M$, then every coloring proper for $M$ remains proper for $A$.
-- If $A=M\cup D$, then a coloring proper for $M$ remains proper for $A$ exactly when every
-  $e\in D$ contains at most one block of each color.
-
-If an added component contains distinct $i$ and $j$ with $\chi(i)=\chi(j)$, the coloring is not
-proper for the new component index set. The same-color snapshot batch $P_C$ remains a well-defined map, but
+If a component in $A\setminus M$ contains distinct $i$ and $j$ with $\chi(i)=\chi(j)$, a coloring
+proper for $M$ is not proper for $A$. The same-color snapshot batch $P_C$ remains a well-defined map, but
 need not equal a serial composition: two updates can use each other's old values. The resulting
 sweep is Jacobi-like within the affected color class and Gauss–Seidel-like between color classes.
 It requires a theorem for its actual simultaneous-batch derivative or an explicitly accepted
@@ -87,8 +83,8 @@ The Phase-4 component-and-coloring results are:
    component support.
 2. The parity coloring of the four-block chain is proper.
 3. The three-color assignment of a three-block component is proper.
-4. Properness is preserved when the component index set is restricted, and the added-component
-   condition above characterizes preservation when it is extended.
+4. Properness is preserved under restriction to $M\subseteq A$, and the condition above
+   characterizes when it extends from $M$ to $A$.
 
 The specification supplies the hypotheses used by later concrete update and execution theorems.
 It contains no collision-detection, recoloring, scheduling, or hybrid-contraction theory.

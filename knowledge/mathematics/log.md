@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Assumption simplification**: Made the Phase-1 potential $E$ directly a finite sum of component potentials. Removed the auxiliary $E_A$ notation and the conditional bridge between a generic potential and its decomposition.
+
 * **Terminology simplification**: Replaced the active-set terminology with the finite component index set $A$. The decomposition now introduces only the labels required to write $E=\sum_{e\in A}E_e$ and its support-based consequences.
 
 * **Scope simplification**: Recast Phase 4 as a finite-support decomposition of the Phase-1 potential. Replaced interaction, physical-origin, live-set, and physical-conflict terminology with potential components, an active set, and the induced component-overlap graph; retained only the support and update-locality facts needed by later coloring theorems.

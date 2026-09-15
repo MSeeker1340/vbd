@@ -17,8 +17,7 @@ properties remain separate from the support data.
 # Potential components
 
 A **potential component** is one labeled summand in a decomposition of $E$. The label distinguishes
-summands; it carries no additional physical interpretation. The total potential is the sum of the
-components selected for the problem under consideration.
+summands; it carries no additional physical interpretation.
 
 Let $I$ be a finite set of block indices, let $X_i$ be the configuration space of block $i$, and
 write
@@ -28,14 +27,21 @@ X=\bigoplus_{i\in I}^{\ell^2}X_i
 $$
 
 for the candidate-configuration space, as in
-[block states and operators](./block-states-and-operators.md#block-states). Let $A$ be a finite
-component index set. Each $e\in A$ has a finite support
+[block states and operators](./block-states-and-operators.md#block-states). Assume that the
+potential $E$ has a finite component index set $A$ and component potentials $E_e:X\to\mathbb R$
+such that
+
+$$
+E(x)=\sum_{e\in A}E_e(x).
+$$
+
+Each $e\in A$ has a finite support
 
 $$
 N(e)\subseteq I
 $$
 
-and a component potential $E_e:X\to\mathbb R$. For states $x$ and $z$, write
+For states $x$ and $z$, write
 
 $$
 x =_S z \quad\Longleftrightarrow\quad
@@ -48,15 +54,8 @@ $$
 x =_{N(e)} z \quad\Longrightarrow\quad E_e(x)=E_e(z).
 $$
 
-The potential assembled from the components indexed by $A$ is
-
-$$
-E_A(x)=\sum_{e\in A}E_e(x).
-$$
-
-The potential in an implicit-Euler problem has this form when $E=E_A$. Smoothness assumptions
-needed for its gradient or Hessian are additional properties of the $E_e$; support locality alone
-is sufficient for the results here.
+Smoothness assumptions needed for the gradient or Hessian of $E$ are additional properties of the
+$E_e$; support locality alone is sufficient for the results here.
 
 # Exact local energy bookkeeping
 
@@ -70,7 +69,7 @@ If two states agree outside $S$, every component outside $A_S$ has the same valu
 states. Therefore
 
 $$
-E_A(z)-E_A(x)
+E(z)-E(x)
 =\sum_{e\in A_S}\bigl(E_e(z)-E_e(x)\bigr)
 \quad\text{whenever}\quad
 \forall i\notin S,\;z_i=x_i.
@@ -79,7 +78,7 @@ $$
 In particular, replacing only block $i$ by $b$ gives
 
 $$
-E_A(R_i(x,b))-E_A(x)
+E(R_i(x,b))-E(x)
 =\sum_{e\in A_{\{i\}}}
   \bigl(E_e(R_i(x,b))-E_e(x)\bigr).
 $$
