@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Color-label clarification**: Defined a color as the conventional label $c\in K$ indexing one part $C_c$ of the finite partition of blocks. Restored colors and color classes as the primary VBD vocabulary while keeping the partition as their exact mathematical content.
+
 * **Partition formulation**: Replaced the coloring-map and arbitrary color-label formulation with a finite partition of the block indices. Its parts are called colors only as conventional parallel-algorithm terminology; an externally supplied ordering turns the partition into an execution plan.
 
 * **Coloring definition and purpose**: Introduced a coloring as an assignment of blocks to sequentially ordered batches, with simultaneous work inside each class. Explained that a shared component support makes same-color updates potentially dependent, so properness supplies the structural independence premise for the later commutation theorem.
