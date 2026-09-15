@@ -9,13 +9,12 @@ converge to the intended implicit-Euler solve at a stated geometric rate.
 
 ## Intended audience
 
-The repository is intended for simulation engineers and researchers who need
-explicit stability and accuracy guarantees for systems solved by VBD. It is
-also relevant to formalization researchers interested in a modular Lean
-development of numerical-analysis arguments. Familiarity with implicit time
-integration, local Newton methods, and elementary fixed-point theory is useful;
-the mathematical architecture and worked example make the proof obligations
-for a concrete system explicit.
+The intended audience consists of simulation engineers and researchers seeking
+explicit stability and accuracy guarantees for systems solved by VBD, together
+with formalization researchers studying modular Lean developments of
+numerical-analysis arguments.
+
+## Our approach
 
 The central tool is contractive fixed-point iteration. In a certified instance,
 the framework proves an inequality of the form
