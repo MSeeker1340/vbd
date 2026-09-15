@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Locality interpretation**: Defined a component local on $S$ as a formula containing only the block values indexed by $S$, illustrated by a binary term $\varphi(x_i,x_j)$, before giving the extensional equality formulation.
+
 * **Indexing simplification**: Indexed each potential component directly by its finite support $S\subseteq I$, so the finite component family is $A\subseteq\mathcal P(I)$. Combined equal-support summands and removed the separate component-label type and support function.
 
 * **Assumption simplification**: Made the Phase-1 potential $E$ directly a finite sum of component potentials. Removed the auxiliary $E_A$ notation and the conditional bridge between a generic potential and its decomposition.

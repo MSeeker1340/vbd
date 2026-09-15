@@ -31,7 +31,14 @@ A\subseteq\mathcal P(I)
 $$
 
 is a finite family of supports. For every $S\in A$, let $E_S:X\to\mathbb R$ be a component
-potential, local on $S$:
+potential. To say that $E_S$ is **local on $S$** means that its formula uses only the block values
+$x_i$ with $i\in S$. For example, a binary component on $\{i,j\}$ has the form
+
+$$
+E_{\{i,j\}}(x)=\varphi(x_i,x_j),
+$$
+
+with no occurrence of any $x_k$ for $k\notin\{i,j\}$. Mathematically, this is expressed by
 
 $$
 x_i=z_i\quad(i\in S)
