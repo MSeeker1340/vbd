@@ -1,15 +1,15 @@
 # Verified convergence certificates for Vertex Block Descent
 
-This repository develops a Lean 4 formalization of one practical route to
+This repository is a Lean 4 formalization of one practical route to
 **quantified local convergence guarantees for Vertex Block Descent (VBD)**.
-Its intended end product is not a new simulator or an improved VBD algorithm.
-Instead, it is a reusable proof framework through which a simulation engineer
+It is not a new simulator or an improved VBD algorithm. It is a reusable proof
+framework through which a simulation engineer
 or researcher can show, for a stated mechanical model, timestep, execution
 order, and warm-start region, that a prescribed VBD sweep map converges to the
 desired implicit-Euler solve at a stated geometric rate.
 
-The central tool is contractive fixed-point iteration. A successful instance
-will certify an inequality of the form
+The central tool is contractive fixed-point iteration. In a certified instance,
+the framework proves an inequality of the form
 
 $$
 \|T^s(x_0)-x^*\| \le q^s\|x_0-x^*\|,\qquad 0\le q<1,
@@ -28,7 +28,7 @@ VBD systems contract, that every stationary point minimizes an energy, or that
 a one-timestep guarantee proves long-horizon simulation stability. Collision
 activation, friction, floating-point/GPU error, approximate local solves,
 accelerated iterations, and dynamic buffered execution each require their own
-analysis. The library is also not intended as a catch-all formalization of
+analysis. The library does not attempt a catch-all formalization of
 numerical mechanics: it presents one coherent, reusable analysis route whose
 hypotheses can be tested on concrete systems.
 
@@ -63,11 +63,11 @@ point with the root of the implicit-Euler residual. This separation is
 important: contraction can permit intermediate increases in objective value
 or physical residual while still forcing convergence to the correct state.
 
-## The result users will be able to obtain
+## Certificate framework
 
 For a smooth, block-structured implicit-Euler model with an exact serial or
-static proper-color VBD execution, the completed library is intended to
-support a theorem with the following shape.
+static proper-color VBD execution, the framework states a theorem with the
+following shape.
 
 > Given explicit local block-inverse bounds, cross-block coupling and Hessian
 > variation bounds, a proved invariant region, a valid execution plan, and a
@@ -84,7 +84,7 @@ covered in this region, with this factor and this sweep budget.” The proof
 does not replace physical modelling or numerical testing; it makes the
 assumptions behind a quantitative claim visible and machine-checked.
 
-The first target is a one-timestep theorem. Extending it to a full simulation
+The initial guarantee is a one-timestep theorem. Extending it to a full simulation
 requires an additional argument that the next timestep's input remains in a
 certified region and that accumulated solver and discretization errors are
 controlled.
@@ -127,7 +127,7 @@ norm. It then connects the sweep's fixed point back to the implicit-Euler
 stationarity equation and transports state error to a physical residual when
 the model supplies the needed regularity.
 
-## Lean library status and planned result chain
+## Lean library status and result chain
 
 The current package is pinned to Lean and Mathlib v4.34.0-rc1. The implemented
 modules are small foundations, exported from [Vbd.lean](Vbd.lean):
@@ -200,7 +200,7 @@ $$
 it derives an invariant maximum-norm box and a conservative sweep factor
 q ≤ 0.512. With the specified warm start, this implies a scaled
 implicit-Euler residual below 10⁻⁶ in 20 sweeps (the calculation gives
-3.25 × 10⁻⁷). The result is presently an analytic worked derivation,
+3.25 × 10⁻⁷). This is currently an analytic worked derivation,
 supported by a reproducible numerical study—not yet an end-to-end Lean
 theorem. The experiments show the assumptions are meaningful rather than a
 purely diagonal or asymptotic toy, while remaining clearly separate from a
@@ -216,19 +216,19 @@ friction need additional material- and execution-specific hypotheses; dynamic
 contacts can invalidate a static coloring, and nonsmooth laws may require a
 different solution interface.
 
-## Using the repository today
+## Using the repository
 
-Today the repository is useful as a checked foundation and a transparent
-specification of the pending VBD theorem. It also includes the worked
-spring-chain derivation and its reproducible diagnostics:
+The repository provides checked foundations, a transparent specification of
+the unfinished VBD theorem layers, the worked spring-chain derivation, and
+reproducible diagnostics:
 
-\`\`\`bash
+```bash
 lake exe cache get
 lake build
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v
-\`\`\`
+```
 
 The Python experiment is evidence and a diagnostic aid; it is not part of the
 Lean proof chain. See [its README](experiments/applicability/README.md) for
