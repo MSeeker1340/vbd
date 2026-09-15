@@ -2,6 +2,10 @@
 
 ## 2026-09-15
 
+* **Phase-4 scope**: Renamed the planned locality bridge around finite-support potential components and the component-overlap graph. The route now states coloring validity under active-component changes without assigning a physical origin to the summands.
+
+## 2026-09-15
+
 * **Shared Python tooling**: Moved uv configuration and locking to the repository root for current and future scripts. Updated root module commands, test imports, default output paths and documentation; retained the experiment-specific source and output directory.
 
 ## 2026-09-14

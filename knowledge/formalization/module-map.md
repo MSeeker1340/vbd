@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-09-14T00:00:00Z
+timestamp: 2026-09-15T00:00:00Z
 ---
 
 # Foundation modules
@@ -20,7 +20,7 @@ timestamp: 2026-09-14T00:00:00Z
 
 | Phase | Module | Responsibility | Direct project dependencies |
 |---|---|---|---|
-| P4 | `Integrator/LocalInteractions.lean` | Finite-support physical interactions, conflict graph, and concrete coloring conditions | `ImplicitEulerEnergy`, `Block/Basic` |
+| P4 | `Integrator/LocalPotential.lean` | Finite-support potential components, component-overlap graph, and proper-color conditions | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Solver-independent convergence from a contractive map to a known implicit-Euler stationary fixed point | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
 | P6 | `Block/Contraction.lean` | Derivative-factor bounds, ordered comparison composition, proper-color estimates, and deferred perturbation extensions | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Production block-Newton operators, externally controlled serial and buffered executions, derivative bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
@@ -62,8 +62,8 @@ lemmas remain norm-polymorphic; weighted and energy norms are options for later 
 # Reuse acceptance condition
 
 CT-04, IF-01–IF-03 and BC-01–BC-03/BC-05 expose generic norm, residual-regularity and
-block-comparison hypotheses. They must support vector-valued blocks and finite interaction
-graphs without embedding the chain's degree, constitutive coefficients or scalar sign lemmas.
+block-comparison hypotheses. They must support vector-valued blocks and finite component-support
+systems without embedding the chain's degree, constitutive coefficients or scalar sign lemmas.
 P7 separates the general block-Newton map, skip-free consistency and derivative identities
 from the chain's concrete inverse, box-invariance and accuracy instantiations. The chain is the
 first application; these generic results are required deliverables in the same theorem route.

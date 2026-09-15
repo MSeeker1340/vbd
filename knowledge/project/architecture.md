@@ -18,7 +18,7 @@ The project has three self-contained foundations:
 3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, derivative,
    and perturbation results for arbitrary self-maps.
 
-Pairwise bridge layers combine implicit Euler with local interactions, implicit Euler with generic
+Pairwise bridge layers combine implicit Euler with finite-support potential components, implicit Euler with generic
 fixed-point results, and block operators with contraction bounds. Production VBD is the first
 layer that may depend on all three foundations. The central [roadmap](/project/roadmap.md) gives the
 complete dependency graph and current status.
@@ -38,7 +38,7 @@ properties.
 
 The first axial-chain certificate is an application of the formal library. Generic block
 composition, derivative comparison, fixed-point consistency and iteration results retain block
-spaces, interaction support and physical bound data as parameters. Model-specific inverse,
+spaces, potential-component support and bound data as parameters. Model-specific inverse,
 coupling, invariant-region and predictor lemmas supply those parameters at the synthesis boundary.
 The [adaptation analysis](/mathematics/axial-spring-contraction.md#reuse-beyond-the-chain) describes
 how this interface extends to vector blocks and richer mechanics, including the boundaries
@@ -49,8 +49,8 @@ per model; the chain milestone leaves broad production applicability open.
 
 Keep these structures distinct:
 
-- **Locality/sparsity** records which blocks a physical interaction contains. It supports conflict
-  graphs, valid colors, and sparse block entries.
+- **Locality/sparsity** records which blocks a potential component contains. It supports the
+  component-overlap graph, valid colors, and sparse block entries.
 - **Curvature and coupling** control block invertibility and derivatives of the supplied update
   operators. Their bounds compose according to the actual external execution semantics.
 
@@ -58,16 +58,15 @@ These structures are independent. A contraction factor for serial or colored exe
 from positive diagonal control, off-diagonal coupling, and the externally supplied composition or
 simultaneous-batch semantics in the chosen block norm.
 
-# Interaction boundary
+# Potential-component boundary
 
-Physical interactions are represented by arbitrary finite block supports. These supports form a
-hypergraph, covering pairwise forces as well as triangle, tetrahedron, bending, and other
-multi-vertex elements. Theorems involving graph coloring derive a conflict graph from shared
-hyperedges.
+The potential is represented by arbitrary finite-support components, including pairwise and
+higher-arity terms. Theorems involving graph coloring derive a component-overlap graph from shared
+supports.
 
-The production VBD layer proves how a static proper coloring relates its concrete buffered sweep to
-serial execution. Dynamic collision interactions may create same-color coupling; the corresponding
-complete sweep requires a separate hybrid or perturbation bound.
+The production VBD layer proves how a proper coloring relates its concrete buffered sweep to serial
+execution. Adding a component that contains two same-colored blocks creates same-color coupling;
+the corresponding complete sweep requires a separate hybrid or perturbation bound.
 
 # Representation boundary
 

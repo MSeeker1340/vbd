@@ -21,7 +21,7 @@ $$
 $$
 
 In the standard implicit-Euler specialization, `A = M / h²`. VBD analysis combines this identity
-with the concrete block-update operators, interaction supports, externally supplied execution
+with the concrete block-update operators, potential-component supports, externally supplied execution
 plan, and selected norm.
 
 # Block inverse bounds
@@ -49,7 +49,7 @@ The contraction factor of a serial or colored execution depends on these terms a
 ordered-composition or simultaneous-batch semantics. A Gauss–Seidel contraction theorem combines
 diagonal positivity with quantitative off-diagonal coupling propagated through that composition.
 
-A quantitative contraction proof bounds the diagonal inverses and off-diagonal interaction coupling
+A quantitative contraction proof bounds the diagonal inverses and off-diagonal component coupling
 separately, composes them according to the external execution plan, and proves `q < 1` in a stated
 block norm.
 

@@ -147,7 +147,7 @@ then joins them only in explicit bridge layers.
 
 The synthesis is specified in
 [curvature, coupling, and VBD contraction](knowledge/mathematics/curvature.md),
-[finite-support physical interactions](knowledge/mathematics/local-decomposition.md),
+[finite-support potential components](knowledge/mathematics/local-decomposition.md),
 and [coloring and parallel sweep structure](knowledge/mathematics/coloring.md).
 It differentiates the actual local Newton updates, bounds their block effects
 by a nonnegative comparison matrix, propagates those bounds through the real
@@ -175,9 +175,9 @@ VBD certificate.
 - **TODO — derivative-to-contraction bridge:** Turn uniform derivative bounds
   on convex neighborhoods into the normed-space contraction interface.
 
-- **TODO — local interaction and coloring theorem:** Formalize finite-support
-  mechanical interactions, their conflict graph, and the physical
-  independence conditions that make a static proper-color batch commute.
+- **TODO — potential-component and coloring theorem:** Formalize finite-support
+  components of the potential, their overlap graph, and the component-locality
+  conditions that make a proper-color batch commute.
 
 - **TODO — implicit-Euler fixed-point bridge:** Prove, for an arbitrary solver
   map with a designated stationary fixed point, the state and residual

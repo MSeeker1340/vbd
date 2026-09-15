@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-09-14T00:00:00Z
+timestamp: 2026-09-15T00:00:00Z
 ---
 
 # Current phase status
@@ -14,7 +14,7 @@ timestamp: 2026-09-14T00:00:00Z
 | Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
 | Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-03 are implemented; CT-04 is next and CT-05 is deferred |
 | Applicability study — AP-01–AP-03 | complete | Quantitative proceed for nonlinear axial chains in the maximum norm with serial and proper-color execution |
-| Phase 4 — local interactions and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives physical conflict structure |
+| Phase 4 — finite-support potential components and coloring | planned | combines the Phase 1 potential with Phase 2 block states and derives the component-overlap graph |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
 | Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
 | Phase 7 — production VBD synthesis | planned | combines the bridge phases to analyze the actual serial and colored VBD sweep |
@@ -28,7 +28,7 @@ The first theorem uses maximum-norm state contraction and static proper colors. 
 execution and perturbation extensions require a further applicability decision.
 
 The chain is the first worked instance of a reusable theorem interface. The generic foundation,
-bridge and block-Newton results remain parameterized by block dimension, interaction support
+bridge and block-Newton results remain parameterized by block dimension, potential-component support
 and physical bound data. The [adaptation analysis](/mathematics/axial-spring-contraction.md#reuse-beyond-the-chain)
 gives a quantified vector extension and explicit obligations for geometric elasticity, contact
 and friction. The first-family gate is complete; applicability to general production models
@@ -216,23 +216,22 @@ appropriate equivalent norm or an iterate theorem.
 Acceptance gate: the results apply to an arbitrary self-map of a complete metric or normed space
 using the generic dynamics layer and Mathlib.
 
-# Phase 4 — Local interactions and coloring
+# Phase 4 — Finite-support potential components and coloring
 
-Status: planned. Module: `Vbd/Integrator/LocalInteractions.lean`.
+Status: planned. Module: `Vbd/Integrator/LocalPotential.lean`.
 
 Dependencies: Phase 1 + Phase 2.
 
-Represent the potential as finitely many finite-support interactions. Supports form a hypergraph;
-the conflict graph joins two blocks when a live interaction contains both. Pairwise systems are the
-two-element-support specialization, while triangle, tetrahedron, bending, and other multi-vertex
-elements remain covered.
+Represent the potential as a finite sum of finite-support components. The component-overlap graph
+joins two blocks when an active component support contains both. Pairwise systems are the
+two-element-support specialization, while arbitrary higher-arity supports remain covered.
 
-Derive the physical conflict graph and concrete coloring validity conditions. Newly introduced
-collision interactions may invalidate a static coloring and must remain visible in the production
-colored-sweep proof.
+Derive the component-overlap graph and proper-color condition. Any added active component can
+invalidate a previously established coloring and must remain visible in the production colored-sweep
+proof.
 
-Acceptance gate: at least one pairwise and one multi-vertex example has a proved valid coloring,
-and the effect of adding a live interaction is stated exactly.
+Acceptance gate: at least one pairwise and one multi-vertex support example has a proved valid
+coloring, and the effect of adding an active component is stated exactly.
 
 # Phase 5 — Implicit-Euler fixed-point goals
 

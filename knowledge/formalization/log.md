@@ -1,5 +1,9 @@
 # Lean Formalization Update Log
 
+## 2026-09-15
+
+* **Module plan**: Renamed the planned Phase-4 module to `Integrator/LocalPotential.lean` and aligned its responsibility with finite-support potential components and their component-overlap graph.
+
 ## 2026-09-14
 
 * **Reuse contract**: Required generic bridge and block-Newton declarations alongside chain instantiations, preserving block-dimension and interaction-support parameters. Recorded the boundary for future contact/friction interfaces.

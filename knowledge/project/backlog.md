@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-09-14T00:00:00Z
+timestamp: 2026-09-15T00:00:00Z
 ---
 
 # Status vocabulary
@@ -76,19 +76,19 @@ defines the evidence standard and the response to an ineffective certificate.
 The [axial-spring contraction analysis](/mathematics/axial-spring-contraction.md) and
 [proceed decision](./applicability-decision.md) discharge the research gate for the selected
 exact-execution chain theorem. They do not discharge its Lean proof obligations or establish general production applicability.
-Generic bridge and synthesis lemmas must remain usable with vector blocks and other interaction
+Generic bridge and synthesis lemmas must remain usable with vector blocks and other potential-component
 supports; model-specific chain lemmas instantiate them. The
 [reuse contract](./applicability-decision.md#project-scope-and-reuse-contract) is part of the
 acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
-# Phase 4 — local interactions and coloring
+# Phase 4 — finite-support potential components and coloring
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| LI-01 | planned | Finite-support interaction hypergraph | IE-07, BS-01 | Multi-block interactions expose arbitrary finite supports, including pairwise and higher-arity elements |
-| LI-02 | planned | Physical conflict graph and proper coloring | LI-01 | Shared live interactions induce a symmetric conflict graph and a proper-color predicate |
+| LI-01 | planned | Finite-support potential components | IE-07, BS-01 | Potential components expose arbitrary finite supports, including pairwise and higher-arity supports |
+| LI-02 | planned | Component-overlap graph and proper coloring | LI-01 | Shared active component supports induce a symmetric graph and a proper-color predicate |
 | LI-03 | planned | Pairwise and multi-vertex examples | LI-02 | One pairwise and one triangle/tetrahedron-style system has a proved valid coloring |
-| LI-04 | planned | Static-color validity boundary | LI-02 | New collision interactions are shown to preserve or invalidate the static independence premise explicitly |
+| LI-04 | planned | Active-component coloring boundary | LI-02 | Adding active components is shown to preserve or invalidate the proper-color premise explicitly |
 
 # Phase 5 — implicit-Euler fixed-point goals
 
@@ -116,9 +116,9 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | VB-02 | planned | Regular fixed-point consistency | VB-01, IE-05 | A complete skip-free sweep fixes exactly an IE root in the stated regular region, with block coverage and execution assumptions explicit; the equivalence is proved independently of contraction |
 | VB-03 | planned | Execution derivative and block entries | VB-01, BS-06, BC-02 | The derivative at an IE root is derived from the externally ordered operator composition and identified with the corresponding Gauss-Seidel error operator |
 | VB-04 | planned | Inertia-based block inverse bounds | IE-07, VB-01 | `M/h² + ∇²P` yields explicit coercivity and inverse-norm bounds on a neighborhood |
-| VB-05 | planned | Serial coupling and contraction factor | VB-03, VB-04, BC-02 | Off-diagonal interaction bounds produce an explicit `q < 1` for the actual serial execution over the AP-03 parameter range, with norm-conversion constants stated |
+| VB-05 | planned | Serial coupling and contraction factor | VB-03, VB-04, BC-02 | Off-diagonal component bounds produce an explicit `q < 1` for the actual serial execution over the AP-03 parameter range, with norm-conversion constants stated |
 | VB-06 | planned | Nonlinear contraction neighborhood | VB-05, CT-04 | Hessian variation produces an explicit invariant radius with a uniform contraction bound and a proved initial-state membership condition instantiated for the selected warm starts |
-| VB-07 | planned | Proper-color VBD | LI-04, VB-06, BC-03 | Physical independence discharges commutation and snapshot equivalence for the selected static proper colors; hybrid collision coupling requires a further applicability decision |
+| VB-07 | planned | Proper-color VBD | LI-04, VB-06, BC-03 | Component separation discharges commutation and snapshot equivalence for the selected proper colors; same-color coupling requires a further applicability decision |
 | VB-08 | planned | End-to-end finite-sweep theorem | VB-02, VB-06, VB-07, IF-03 | The AP-03 parameterized coupled family, including its nonlinear case, has Lean-proved system-to-certificate and finite-sweep bounds meeting the selected accuracy budget; quantitative parameter ranges and warm-start coverage are instantiated, conservatism and exclusions are assessed reproducibly, and any non-descent coverage claim has a certified objective-increase example |
 
 # Deferred by the current route

@@ -499,7 +499,7 @@ instantiates `Integrator/ImplicitEulerEnergy`, and the vertex visits use the alg
 `Block/Basic`, `Block/Update`, and `Block/Operator`. Those foundations do not need to know the
 numerical range used in this example.
 
-The example also depends on planned bridge results. `Integrator/LocalInteractions` is to
+The example also depends on planned bridge results. `Integrator/LocalPotential` is to
 supply the physical commutation argument; `Block/Contraction` the ordered derivative estimate;
 and CT-04 the passage to metric contraction. `Integrator/FixedPoint` is to transport state error
 to the physical residual. The concrete Newton update and spring-specific hypotheses are then

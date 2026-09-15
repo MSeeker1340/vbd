@@ -3,7 +3,7 @@ type: Dependency Decision Record
 title: Optimization Library Dependency Assessment
 description: Records the pinned foundation and the roles of candidate Lean optimization libraries.
 tags: [dependencies, mathlib, optlib, cvxlean]
-timestamp: 2026-09-04T00:00:00Z
+timestamp: 2026-09-15T00:00:00Z
 ---
 
 # Current decision
@@ -40,7 +40,7 @@ operator, Fréchet and limiting subdifferential, and KL stack.
 The two libraries address different theorem interfaces:
 
 - This project uses arbitrary finite, possibly heterogeneous blocks; Optlib specializes to two.
-- This project uses heterogeneous block-operator entries, physical conflict colorings, and
+- This project uses heterogeneous block-operator entries, component-overlap colorings, and
   quantitative sweep-derivative bounds; Optlib supplies proximal-gradient BCD abstractions.
 - Production VBD uses unsafeguarded full block-Newton updates; Optlib's scheme uses descending
   proximal-gradient steps.

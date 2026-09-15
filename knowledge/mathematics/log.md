@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Scope simplification**: Recast Phase 4 as a finite-support decomposition of the Phase-1 potential. Replaced interaction, physical-origin, live-set, and physical-conflict terminology with potential components, an active set, and the induced component-overlap graph; retained only the support and update-locality facts needed by later coloring theorems.
+
 * **Definition**: Introduced an interaction as a labeled elemental potential-energy contribution before using its support and live-set notation.
 
 * **Rendering correction**: Replaced inline code spans containing mathematical expressions in the Phase-4 interaction and coloring specifications with inline TeX delimiters.

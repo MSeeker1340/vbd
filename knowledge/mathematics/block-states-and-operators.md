@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Block States and Operators
 description: Describes block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
-timestamp: 2026-09-08T00:00:00Z
+timestamp: 2026-09-15T00:00:00Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), the unknown `x ∈ X` is the
@@ -17,13 +17,13 @@ Mechanical models often give these degrees of freedom a natural block structure.
 multibody models group degrees of freedom by particle or body, with springs, joints, or contacts coupling
 the participating blocks. In a nodal finite-element discretization of an elastic body, a block
 can hold one node's position or displacement. Each element contributes an energy depending on
-its incident nodes; assembling the elements produces a global energy with local interactions.
+its incident nodes; assembling the elements produces a global energy with finite-support components.
 For example, a linear tetrahedral element couples four nodal blocks.
 
 These models motivate viewing a configuration as a collection of blocks and organizing solver
-updates around subsets of them. Local interactions couple blocks, so a change to one block can
+updates around subsets of them. Finite-support components couple blocks, so a change to one block can
 affect the computation of updates to neighboring blocks. The
-[finite-support interaction model](/mathematics/local-decomposition.md) describes that physical
+[finite-support potential-component model](/mathematics/local-decomposition.md) describes that
 dependency structure. The algebra here provides block states and operations on them, with write
 support identifying the blocks an operation can change. It applies to state maps
 independently of their physical origin or the objective being solved.
@@ -200,7 +200,7 @@ $$
 Any supplied bounds `Wᵣ` therefore give the execution a bound `⋃ᵣ Wᵣ`.
 
 Disjoint write supports alone do not imply commutation: an operator may read a block changed
-by another. The [interaction layer](/mathematics/local-decomposition.md) supplies physical locality
+by another. The [potential-component layer](/mathematics/local-decomposition.md) supplies support
 information; the production layer uses it to establish commutation for concrete operators under
 a valid [coloring](/mathematics/coloring.md).
 
