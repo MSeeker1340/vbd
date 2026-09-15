@@ -87,29 +87,26 @@ This is an equality of energy changes, not a decomposition into disjoint per-blo
 one component can occur in the formula for several block changes. It identifies exactly which
 summands must be reevaluated for a proposed block replacement.
 
-# Coloring block updates
+# Partitioning block updates
 
-A **coloring** assigns every block to a color:
-
-$$
-\chi:I\to\kappa,
-$$
-
-where $\kappa$ is a set of color names. Blocks with the same color form one color class. An
-ordered colored sweep executes the classes one after another, while attempting to execute the
-single-block updates within each class simultaneously. Coloring therefore exposes parallel work
+The relevant mathematical datum is a finite partition $\mathcal C$ of $I$: its members are
+nonempty pairwise-disjoint subsets whose union is $I$. In parallel-algorithm terminology, the
+members $C\in\mathcal C$ are called **colors**. The color names themselves carry no information;
+only the partition matters. An execution plan is an ordering
+$\mathbf C=(C_1,\ldots,C_m)$ of its parts. It executes these parts one after another and attempts
+to execute the single-block updates within each part simultaneously. This exposes parallel work
 without changing the required order between dependent blocks.
 
 A block update at $i$ can use every component $E_S$ for which $i\in S$. If two blocks $i$ and $j$
-in the same class occur in one support $S$, their updates can both use $E_S$ and can therefore
-depend on each other. The structural condition needed for a same-color class to represent
-independent updates is consequently: every support $S\in A$ contains at most one block of that
-class. The commutation theorem for concrete VBD updates proves the remaining update-map fact later.
+in the same part occur in one support $S$, their updates can both use $E_S$ and can therefore
+depend on each other. The structural condition needed for a part to represent independent updates
+is consequently: every support $S\in A$ contains at most one block of that part. The commutation
+theorem for concrete VBD updates proves the remaining update-map fact later.
 
-# Induced coloring graph
+# Induced overlap graph
 
-The induced graph converts the support condition above into ordinary vertex coloring: it draws an
-edge for every pair of distinct blocks in a common support.
+The induced graph converts the support condition above into the standard graph-partition test: it
+draws an edge for every pair of distinct blocks in a common support.
 
 For distinct blocks, define
 
@@ -122,50 +119,49 @@ $$
 The graph with vertex set $I$ and edges $\sim_A$ is symmetric and irreflexive. A two-block support
 $\{i,j\}$ contributes the one edge $i\text{—}j$. A three-block support $\{i,j,k\}$ contributes all
 three pairwise edges, so it forms a triangle. In general, every support induces a clique. The graph
-is used only to test colors; the original support family $A$ remains the data used for locality and
+is used only to test the partition; the original support family $A$ remains the data used for locality and
 energy bookkeeping.
 
-# Proper colorings
+# Proper partitions
 
-A coloring is **proper for $A$** when
-
-$$
-i\sim_A j\quad\Longrightarrow\quad\chi(i)\ne\chi(j).
-$$
-
-Equivalently, the restriction of $\chi$ to every $S\in A$ is injective:
+A partition $\mathcal C$ is **proper for $A$** when no part contains an edge:
 
 $$
-\forall S\in A,\;\forall i,j\in S,\quad
-i\ne j\quad\Longrightarrow\quad\chi(i)\ne\chi(j).
+\forall C\in\mathcal C,\;\forall i,j\in C,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
 $$
 
-Thus a proper color class contains at most one block from each support. A particular sweep supplies
-the finite ordered collection of color classes that it executes; the coloring itself does not
-choose that order.
+Equivalently,
 
-For $M\subseteq A$, every coloring proper for $A$ is proper for $M$. Conversely, a coloring proper
-for $M$ is proper for $A$ exactly when every $S\in A\setminus M$ contains at most one block of each
-color. This is the exact condition for extending a coloring from a smaller support family.
+$$
+\forall S\in A,\;\forall C\in\mathcal C,\qquad |S\cap C|\le 1.
+$$
 
-# Color batches and serial equivalence
+Thus a proper part contains at most one block from each support. This is precisely a proper graph
+coloring when the parts are conventionally called colors.
 
-Let $U_i:X\to X$ be a single-block update map with write support contained in $\{i\}$. For a color
-class $C$, its snapshot batch $P_C$ evaluates all $U_i$ for $i\in C$ at the common input $x$ and
+For $M\subseteq A$, every partition proper for $A$ is proper for $M$. Conversely, a partition
+proper for $M$ is proper for $A$ exactly when $|S\cap C|\le 1$ for every $S\in A\setminus M$ and
+$C\in\mathcal C$. This is the exact condition for extending properness from a smaller support
+family.
+
+# Partition batches and serial equivalence
+
+Let $U_i:X\to X$ be a single-block update map with write support contained in $\{i\}$. For a part
+$C$, its snapshot batch $P_C$ evaluates all $U_i$ for $i\in C$ at the common input $x$ and
 writes their selected block outputs simultaneously. For an externally ordered list of classes
-$(C_1,\ldots,C_m)$, the colored sweep is
+$\mathbf C=(C_1,\ldots,C_m)$, the partitioned sweep is
 
 $$
-T_\chi=P_{C_m}\circ\cdots\circ P_{C_1}.
+T_{\mathbf C}=P_{C_m}\circ\cdots\circ P_{C_1}.
 $$
 
 This definition is valid whether or not the updates commute. It specifies the buffered semantics
-of a parallel color pass.
+of a parallel part.
 
 Properness is a property of the potential decomposition, whereas commutation is a property of
 update maps. The production VBD theorem connects them by proving that the new value produced by
 $U_i$ is unchanged whenever two inputs agree on $\bigcup\{S\in A\mid i\in S\}$. For distinct
-$i,j$ in a proper color class, no support in $A$ contains both blocks; this fact and the
+$i,j$ in a proper part, no support in $A$ contains both blocks; this fact and the
 single-block write property give
 
 $$
@@ -174,11 +170,11 @@ $$
 
 The simultaneous/sequential theorem from
 [block states and operators](./block-states-and-operators.md#theorem-simultaneous-and-sequential-equivalence)
-then identifies $P_C$ with every serial ordering of the $U_i$ in a proper color class. Neither
-disjoint write supports nor a proper coloring alone proves this equality; the concrete
+then identifies $P_C$ with every serial ordering of the $U_i$ in a proper part. Neither disjoint
+write supports nor a proper partition alone proves this equality; the concrete
 component-locality result for the update maps is required.
 
-If a support added to a proper subfamily contains two blocks of the same color, its snapshot batch
+If a support added to a proper subfamily contains two blocks of the same part, its snapshot batch
 remains well-defined but need not equal a serial composition. It requires a theorem for its actual
 simultaneous-batch derivative or an explicitly accepted perturbation analysis; the current
 exact-execution route does not supply that result.
@@ -190,11 +186,13 @@ The Phase-4 results are:
 1. Components outside $A[J]$ cancel from the energy change caused by a modification supported in
    $J$.
 2. The relation $\sim_A$ is symmetric and irreflexive.
-3. A coloring is proper for the induced graph if and only if it is injective on every $S\in A$.
+3. A partition is proper for the induced graph if and only if $|S\cap C|\le 1$ for every
+   $S\in A$ and $C\in\mathcal C$.
 4. Properness is preserved under restriction to $M\subseteq A$, and the condition above
    characterizes when it extends from $M$ to $A$.
-5. The parity coloring of the four-block chain is proper.
-6. The three-color assignment of the one-support family $\{\{a,b,c\}\}$ is proper.
+5. The partition $\{\{0,2\},\{1,3\}\}$ of the four-block chain is proper.
+6. The singleton partition $\{\{a\},\{b\},\{c\}\}$ is proper for the one-support family
+   $\{\{a,b,c\}\}$.
 
 For the chain example, take
 
@@ -202,6 +200,6 @@ $$
 A=\bigl\{\{0,1\},\{1,2\},\{2,3\}\bigr\}.
 $$
 
-The induced graph is the path $0\text{—}1\text{—}2\text{—}3$, and
-$\chi(i)=i\bmod 2$ is a valid two-coloring. For $A=\{\{a,b,c\}\}$, every two distinct vertices
-are adjacent and $\chi(a)=0$, $\chi(b)=1$, $\chi(c)=2$ is a valid three-coloring.
+The induced graph is the path $0\text{—}1\text{—}2\text{—}3$, and its two-part partition is
+$\{\{0,2\},\{1,3\}\}$. For $A=\{\{a,b,c\}\}$, every two distinct vertices are adjacent, so the
+singleton partition $\{\{a\},\{b\},\{c\}\}$ is proper.

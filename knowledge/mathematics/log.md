@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Partition formulation**: Replaced the coloring-map and arbitrary color-label formulation with a finite partition of the block indices. Its parts are called colors only as conventional parallel-algorithm terminology; an externally supplied ordering turns the partition into an execution plan.
+
 * **Coloring definition and purpose**: Introduced a coloring as an assignment of blocks to sequentially ordered batches, with simultaneous work inside each class. Explained that a shared component support makes same-color updates potentially dependent, so properness supplies the structural independence premise for the later commutation theorem.
 
 * **Concept consolidation**: Merged the potential-component, induced-graph, proper-coloring, and color-batch specifications into [Local decomposition and coloring](./local-decomposition-and-coloring.md). Removed the separate coloring concept and updated incoming links and indexes.
