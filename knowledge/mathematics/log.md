@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Coloring definition and purpose**: Introduced a coloring as an assignment of blocks to sequentially ordered batches, with simultaneous work inside each class. Explained that a shared component support makes same-color updates potentially dependent, so properness supplies the structural independence premise for the later commutation theorem.
+
 * **Concept consolidation**: Merged the potential-component, induced-graph, proper-coloring, and color-batch specifications into [Local decomposition and coloring](./local-decomposition-and-coloring.md). Removed the separate coloring concept and updated incoming links and indexes.
 
 * **Coloring motivation**: Explained that the induced graph converts the requirement of at most one block of each color per support into ordinary proper vertex coloring. Added the pair-support edge and three-block-support triangle examples, while retaining $A$ as the source of energy-locality information.

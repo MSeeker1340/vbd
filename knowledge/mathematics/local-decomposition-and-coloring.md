@@ -87,12 +87,29 @@ This is an equality of energy changes, not a decomposition into disjoint per-blo
 one component can occur in the formula for several block changes. It identifies exactly which
 summands must be reevaluated for a proposed block replacement.
 
+# Coloring block updates
+
+A **coloring** assigns every block to a color:
+
+$$
+\chi:I\to\kappa,
+$$
+
+where $\kappa$ is a set of color names. Blocks with the same color form one color class. An
+ordered colored sweep executes the classes one after another, while attempting to execute the
+single-block updates within each class simultaneously. Coloring therefore exposes parallel work
+without changing the required order between dependent blocks.
+
+A block update at $i$ can use every component $E_S$ for which $i\in S$. If two blocks $i$ and $j$
+in the same class occur in one support $S$, their updates can both use $E_S$ and can therefore
+depend on each other. The structural condition needed for a same-color class to represent
+independent updates is consequently: every support $S\in A$ contains at most one block of that
+class. The commutation theorem for concrete VBD updates proves the remaining update-map fact later.
+
 # Induced coloring graph
 
-The support family $A$ says which blocks occur together in each component. To perform same-color
-updates in parallel, a color class must contain at most one block from each $S\in A$. The induced
-graph converts this condition on supports into ordinary vertex coloring: it draws an edge for every
-pair of distinct blocks in a common support.
+The induced graph converts the support condition above into ordinary vertex coloring: it draws an
+edge for every pair of distinct blocks in a common support.
 
 For distinct blocks, define
 
@@ -110,13 +127,7 @@ energy bookkeeping.
 
 # Proper colorings
 
-A coloring is a map
-
-$$
-\chi:I\to\kappa,
-$$
-
-where $\kappa$ is any color type. It is **proper for $A$** when
+A coloring is **proper for $A$** when
 
 $$
 i\sim_A j\quad\Longrightarrow\quad\chi(i)\ne\chi(j).
@@ -129,9 +140,9 @@ $$
 i\ne j\quad\Longrightarrow\quad\chi(i)\ne\chi(j).
 $$
 
-Thus a proper color class contains at most one block from each support. An executable sweep
-supplies a finite ordered collection of finite color classes covering the blocks it updates; the
-coloring itself does not choose that order.
+Thus a proper color class contains at most one block from each support. A particular sweep supplies
+the finite ordered collection of color classes that it executes; the coloring itself does not
+choose that order.
 
 For $M\subseteq A$, every coloring proper for $A$ is proper for $M$. Conversely, a coloring proper
 for $M$ is proper for $A$ exactly when every $S\in A\setminus M$ contains at most one block of each
