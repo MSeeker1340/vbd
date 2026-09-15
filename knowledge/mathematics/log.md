@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Logical-flow correction**: Defined properness directly from the component-to-update batch criterion before deriving the induced graph as its pairwise test. The graph section now introduces vertices, edges, support examples, and graph equivalence in that order.
+
 * **Expository correction**: Positioned coloring within the VBD analysis as the batching structure for a block-update sweep. Rewrote the coloring and batch sections as affirmative mathematical statements, with the Phase-7 VBD locality theorem supplying their concrete commutation connection.
 
 * **Logical-flow correction**: Kept the definition of colors purely as numbered block groups, then introduced block updates, batches, and color-number execution order only in the later batch-construction section.

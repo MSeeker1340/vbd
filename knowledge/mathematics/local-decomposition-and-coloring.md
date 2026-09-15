@@ -103,37 +103,15 @@ that are pairwise disjoint and whose union is $I$. The number $r$ is called **co
 $C_r$ is its **color class**. The classes $C_0,\ldots,C_{m-1}$ are the consecutive batches of the
 colored sweep.
 
-# Induced coloring graph
-
-The induced graph records which block pairs occur in a common support. It lets the support condition
-for a proper coloring be checked by an ordinary graph condition.
-
-For distinct blocks, define
-
-$$
-i\sim_A j
-\quad\Longleftrightarrow\quad
-i\ne j\ \land\ \exists S\in A,\;i\in S\land j\in S.
-$$
-
-The graph with vertex set $I$ and edges $\sim_A$ is symmetric and irreflexive. A two-block support
-$\{i,j\}$ contributes the one edge $i\text{—}j$. A three-block support $\{i,j,k\}$ contributes all
-three pairwise edges, so it forms a triangle. In general, every support induces a clique. The graph
-tests color classes, while the support family $A$ supplies locality and energy bookkeeping.
-
 # Proper colorings
 
-A coloring $C_0,\ldots,C_{m-1}$ is **proper for $A$** when every support intersects every color
-class in at most one block:
+A component $E_S$ can enter the update associated with every block in $S$. The color-batch
+criterion is that a component is associated with at most one update in each color class. A coloring
+$C_0,\ldots,C_{m-1}$ is **proper for $A$** when every support intersects every color class in at
+most one block:
 
 $$
 \forall S\in A,\;\forall r\in\{0,\ldots,m-1\},\qquad |S\cap C_r|\le 1.
-$$
-
-Equivalently, two blocks of one color class that occur together in a support are the same block:
-
-$$
-\forall r\in\{0,\ldots,m-1\},\;\forall i,j\in C_r,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
 $$
 
 Thus a proper color class contains at most one block from each support.
@@ -141,6 +119,34 @@ Thus a proper color class contains at most one block from each support.
 For $M\subseteq A$, the same coloring is proper for $M$. The condition
 $|S\cap C_r|\le 1$ for $S\in A\setminus M$ and $r\in\{0,\ldots,m-1\}$ extends properness from
 $M$ to $A$.
+
+# Induced coloring graph
+
+The properness condition concerns pairs of blocks: a class fails the condition precisely when two
+of its blocks occur in one support. The induced coloring graph records these pairs. Its vertices are
+the block indices in $I$, and two distinct vertices are joined when they occur together in a support:
+
+$$
+i\sim_A j
+\quad\Longleftrightarrow\quad
+i\ne j\ \land\ \exists S\in A,\;i\in S\land j\in S.
+$$
+
+Every support $S$ contributes an edge for each pair of distinct blocks in $S$. Hence a two-block
+support $\{i,j\}$ contributes the edge $i\text{—}j$, while a three-block support $\{i,j,k\}$
+contributes the three edges of a triangle. In general, each support induces a clique. The relation
+$\sim_A$ is symmetric and irreflexive.
+
+For blocks $i,j$ in one color class $C_r$, the relation $i\sim_A j$ means that $i$ and $j$ occur
+together in a support. Therefore the support definition of properness is equivalent to the graph
+condition
+
+$$
+\forall r\in\{0,\ldots,m-1\},\;\forall i,j\in C_r,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
+$$
+
+The graph tests the color classes, while the support family $A$ supplies the component potentials
+and the energy bookkeeping.
 
 # Color batches and serial equivalence
 
