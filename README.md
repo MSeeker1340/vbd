@@ -101,8 +101,9 @@ controlled.
 The formalization preserves three foundations that are useful independently,
 then joins them only in explicit bridge layers.
 
-1. **Implicit Euler as stationarity.** With predictor y, mass operator M,
-   timestep h, and potential P, the incremental objective is
+1. **[Implicit Euler as stationarity](knowledge/mathematics/implicit-euler.md).**
+   With predictor y, mass operator M, timestep h, and potential P, the
+   incremental objective is
 
    $$
    G_{IE}(x)=\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+P(x),
@@ -113,26 +114,31 @@ then joins them only in explicit bridge layers.
    F_IE(x)=0. This avoids accidentally assuming convexity, minimization,
    uniqueness, or a rate where the model has not supplied them.
 
-2. **Block updates and execution semantics.** A state is a heterogeneous
-   family of vertex blocks. The library represents single-block writes,
-   supports under composition, simultaneous disjoint updates, and continuous
-   linear block operators. This provides a precise language for what a serial
-   order changes and when a same-color batch is equivalent to any sequential
-   ordering. Read dependencies remain a separate physical fact; write support
-   alone does not prove that updates commute.
+2. **[Block updates and execution semantics](knowledge/mathematics/block-states-and-operators.md).**
+   A state is a heterogeneous family of vertex blocks. The library represents
+   single-block writes, supports under composition, simultaneous disjoint
+   updates, and continuous linear block operators. This provides a precise
+   language for what a serial order changes and when a same-color batch is
+   equivalent to any sequential ordering. Read dependencies remain a separate
+   physical fact; write support alone does not prove that updates commute.
 
-3. **Contractive dynamics.** On a nonempty complete invariant set S, if
-   T(S) ⊆ S and T has factor q < 1, then T has a unique fixed point in S and
-   its iterates converge geometrically. The framework also supplies a priori
-   and defect-based error estimates. A derivative/operator bound on a convex
-   region is the usual way to establish the required Lipschitz factor.
+3. **[Contractive dynamics](knowledge/mathematics/contractive-fixed-point-iteration.md).**
+   On a nonempty complete invariant set S, if T(S) ⊆ S and T has factor q < 1,
+   then T has a unique fixed point in S and its iterates converge
+   geometrically. The framework also supplies a priori and defect-based error
+   estimates. A derivative/operator bound on a convex region is the usual way
+   to establish the required Lipschitz factor.
 
-The synthesis differentiates the actual local Newton updates, bounds their
-block effects by a nonnegative comparison matrix, propagates those bounds
-through the real execution order, and proves q < 1 in an appropriate block
-norm. It then connects the sweep's fixed point back to the implicit-Euler
-stationarity equation and transports state error to a physical residual when
-the model supplies the needed regularity.
+The synthesis is specified in
+[curvature, coupling, and VBD contraction](knowledge/mathematics/curvature.md),
+[finite-support physical interactions](knowledge/mathematics/local-decomposition.md),
+and [coloring and parallel sweep structure](knowledge/mathematics/coloring.md).
+It differentiates the actual local Newton updates, bounds their block effects
+by a nonnegative comparison matrix, propagates those bounds through the real
+execution order, and proves q < 1 in an appropriate block norm. It then
+connects the sweep's fixed point back to implicit-Euler stationarity and
+transports state error to a physical residual when the model supplies the
+needed regularity.
 
 ## Lean library status and result chain
 
