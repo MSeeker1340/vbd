@@ -12,33 +12,33 @@ explains the fixed study grid.
 From the repository root:
 
 ```sh
-uv run --directory experiments/applicability --locked python -m study
+uv run --locked python -m experiments.applicability.study
 ```
 
-`uv` creates the local environment and installs the versions in `uv.lock`. Python 3.11 or newer
+`uv` uses the repository-root `pyproject.toml` and `uv.lock`, creating a shared root `.venv`
+for Python experiments and scripts. It installs the locked dependency versions. Python 3.11 or newer
 is required. The default is a quick 12-case grid. Results go to
 `experiments/applicability/runs/latest/`, which is ignored by Git. A rerun replaces the named
-outputs in that directory. From inside `experiments/applicability`, use
-`uv run --locked python -m study` directly.
+outputs in that directory. Run these commands from the repository root.
 
 Select a custom experiment:
 
 ```sh
-uv run --directory experiments/applicability --locked python -m study \
+uv run --locked python -m experiments.applicability.study \
   --n 8 32 --alpha 0.1 0.25 1 --eta 1 --mode serial color \
-  --mass-ratio 1 1000 --sweeps 30 --tolerance 1e-7 --output runs/custom
+  --mass-ratio 1 1000 --sweeps 30 --tolerance 1e-7 --output experiments/applicability/runs/custom
 ```
 
 Reproduce the 336-case study in a separate output directory:
 
 ```sh
-uv run --directory experiments/applicability --locked python -m study \
-  --preset study --output runs/study
+uv run --locked python -m experiments.applicability.study \
+  --preset study --output experiments/applicability/runs/study
 ```
 
-Maintainers regenerate the checked-in baseline with `--preset study --output .` from the
-experiment directory (or using the same `--directory` option). This also replaces the
-checked-in report and plot. Run `python -m study --help` through `uv` for all options.
+Maintainers regenerate the checked-in baseline with
+`--preset study --output experiments/applicability` from the repository root. This also replaces
+the checked-in report and plot. Add `--help` to the module command for all options.
 
 ## Parameters
 
@@ -55,7 +55,7 @@ Each list-valued option replaces one preset axis; the experiment takes their Car
 | `--sweeps`, `--tolerance` | Iteration budget and scaled physical-residual target |
 | `--amplitude`, `--radius` | Predictor amplitude `Y` and certificate box radius `B`, with `0 ≤ Y ≤ B` |
 | `--threshold` | Nonnegative normalized scalar Hessian skip threshold |
-| `--output` | Output path relative to the experiment working directory |
+| `--output` | Output path relative to the current working directory (repository root in these commands) |
 | `--table-limit` | Terminal row limit; zero prints all cases |
 | `--plot-cases`, `--no-plots` | Number of representative cases (1–12), or disable plots |
 
@@ -99,10 +99,10 @@ no contact/friction, vector model, GPU execution or multi-timestep loop.
 ## Checks
 
 ```sh
-uv run --directory experiments/applicability --locked python -m unittest discover -s tests -v
+uv run --locked python -m unittest discover -s experiments/applicability/tests -v
 ```
 
 The focused checks compare quadratic sweeps with independently constructed Gauss–Seidel
 matrices, check nonlinear derivatives by finite differences, verify exact certificate arithmetic,
-and exercise CLI validation, custom output and skip behavior. NumPy and Matplotlib are isolated
-experiment dependencies; no Lean dependency or general-purpose solver infrastructure is added.
+and exercise CLI validation, custom output and skip behavior. NumPy and Matplotlib are shared Python
+script dependencies; no Lean dependency or general-purpose solver infrastructure is added.

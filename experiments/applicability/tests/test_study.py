@@ -9,7 +9,7 @@ import tempfile
 import unittest
 
 import numpy as np
-import study
+from experiments.applicability import study
 
 
 class StudyTests(unittest.TestCase):

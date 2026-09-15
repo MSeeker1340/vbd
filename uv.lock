@@ -654,7 +654,7 @@ wheels = [
 ]
 
 [[package]]
-name = "vbd-applicability"
+name = "vbd-scripts"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

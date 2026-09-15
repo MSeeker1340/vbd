@@ -1,4 +1,4 @@
-"""One-timestep scalar VBD experiment; run with ``uv run python -m study``."""
+"""One-timestep scalar VBD experiment; run with ``uv run python -m experiments.applicability.study``."""
 import argparse
 import csv
 import itertools
@@ -154,7 +154,7 @@ def parse_args(argv=None):
     parser.add_argument('--amplitude', type=float, default=0.05, help='inertia predictor amplitude Y')
     parser.add_argument('--radius', type=float, default=0.1, help='certificate box radius B')
     parser.add_argument('--threshold', type=float, default=1e-12, help='normalized scalar skip threshold')
-    parser.add_argument('--output', type=Path, default=Path('runs/latest'), help='output directory; files replaced on rerun')
+    parser.add_argument('--output', type=Path, default=Path('experiments/applicability/runs/latest'), help='output directory; files replaced on rerun')
     parser.add_argument('--table-limit', type=int, default=24, help='terminal rows (0 prints all); report contains all cases')
     parser.add_argument('--plot-cases', type=int, default=6, help='plot stress cases and up to two cases meeting the analytic budget (1–12)')
     parser.add_argument('--no-plots', action='store_true', help='write only tables and numeric data')

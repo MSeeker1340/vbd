@@ -3,7 +3,7 @@ type: Architecture Decision
 title: Mathematical and Module Architecture
 description: Separates implicit-Euler physics, block-update and operator algebra, contraction theory, and their explicit bridge layers.
 tags: [architecture, dependencies, locality, contraction]
-timestamp: 2026-09-14T00:00:00Z
+timestamp: 2026-09-15T00:00:00Z
 ---
 
 # Independent foundations
@@ -91,6 +91,14 @@ block assumptions at their declaration sites.
 Mathematical specifications present finite indexed families of block operators as operator-valued
 block matrices. This notation leaves the interior of each block basis-free. Each implementing Lean
 module selects its concrete source representation locally.
+
+# Python tooling boundary
+
+Python experiments and development scripts share the repository-root `pyproject.toml`,
+`uv.lock`, and `.venv`. Modules run from the repository root, such as
+`uv run --locked python -m experiments.applicability.study`. Experiment-specific sources and
+outputs stay under `experiments/`; Python dependencies remain separate from the Lean foundation.
+The [experiment README](../../experiments/applicability/README.md) documents its commands.
 
 # Documentation boundary
 

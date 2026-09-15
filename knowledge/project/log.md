@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-09-15
+
+* **Shared Python tooling**: Moved uv configuration and locking to the repository root for current and future scripts. Updated root module commands, test imports, default output paths and documentation; retained the experiment-specific source and output directory.
+
 ## 2026-09-14
 
 * **Decision/exposition separation**: Focused the applicability decision on why the model, norm, guarantee and execution scope are selected, with the synthetic evaluation contract and reuse requirement. The mathematics article carries definitions and derivations. Rationale is recorded in the decision concept as explicitly requested; chronological changes remain in this log. The Python module remains an isolated one-timestep experiment.

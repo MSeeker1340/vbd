@@ -36,6 +36,20 @@ Run only the knowledge-base check with:
 
 `okflint validate --manifest knowledge/okf-base.yaml knowledge/`
 
+## Python experiments and scripts
+
+The repository-root `pyproject.toml` and `uv.lock` manage a shared Python environment for
+experiments and future scripts. From the repository root, run:
+
+```sh
+uv run --locked python -m experiments.applicability.study
+uv run --locked python -m unittest discover -s experiments/applicability/tests -v
+```
+
+`uv` creates `.venv` and installs the locked dependencies. See the
+[applicability experiment](experiments/applicability/README.md) for CLI options and outputs.
+Python dependencies remain separate from Lean's Lake dependencies.
+
 ## GitHub configuration
 
 To set up your new GitHub repository, follow these steps:
