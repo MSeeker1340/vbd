@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Indexing simplification**: Indexed each potential component directly by its finite support $S\subseteq I$, so the finite component family is $A\subseteq\mathcal P(I)$. Combined equal-support summands and removed the separate component-label type and support function.
+
 * **Assumption simplification**: Made the Phase-1 potential $E$ directly a finite sum of component potentials. Removed the auxiliary $E_A$ notation and the conditional bridge between a generic potential and its decomposition.
 
 * **Terminology simplification**: Replaced the active-set terminology with the finite component index set $A$. The decomposition now introduces only the labels required to write $E=\sum_{e\in A}E_e$ and its support-based consequences.
