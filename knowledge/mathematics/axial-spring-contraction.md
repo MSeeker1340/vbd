@@ -2,7 +2,7 @@
 type: Mathematical Specification
 title: VBD Contraction for Coupled Axial Springs
 description: Develops a coupled mechanical example from its implicit-Euler objective to a finite-sweep contraction bound and extensions to richer models.
-tags: [applicability, vbd, contraction, residual, springs]
+tags: [vbd, contraction, residual, springs]
 timestamp: 2026-09-15T00:00:00Z
 ---
 
@@ -105,7 +105,7 @@ u_j,&\text{otherwise}.
 \end{cases}
 $$
 
-The normalized study threshold is $\varepsilon=10^{-12}$, corresponding to a physical
+The normalized experiment threshold is $\varepsilon=10^{-12}$, corresponding to a physical
 scalar Hessian threshold $10^{-12}m_{\min}/h^2$ in force/length units.
 Since $D_i\ge a_i\ge1$, every visit follows the nonsingular branch in this family.
 There is no line search or iteration acceleration.
@@ -181,7 +181,7 @@ The once-per-vertex condition rules out a later write undoing an earlier one. Th
 condition rules out a bead staying still merely because its solve was bypassed. For example,
 with two masses, $a_i=b=1$, $\eta=0$, $y=(1,-1)$, $u=(0,0)$, and
 $\varepsilon=2$, both updates skip despite nonzero force. Our bound $D_i\ge1$ and the
-much smaller study threshold exclude that behavior. None of this identification of fixed
+much smaller experiment threshold exclude that behavior. None of this identification of fixed
 points has used contraction.
 
 ## Reading progress during a solve
@@ -413,7 +413,7 @@ We can compare the guarantee with what the iteration actually does. The
 and local stiffnesses at every visit, then applies the full VBD step. An independent full
 Newton solve supplies a reference root for measuring state error; it does not drive the VBD
 trajectory. Its [README](../../experiments/applicability/README.md) gives runnable commands and
-parameter definitions. The fixed study grid has 336 cases. All 192 cases in the stated
+parameter definitions. The fixed experimental grid has 336 cases. All 192 cases in the stated
 $\alpha\le0.25$, $\eta\le1$ range reach tolerance within six sweeps.
 These floating-point observations complement the uniform analytic estimate.
 

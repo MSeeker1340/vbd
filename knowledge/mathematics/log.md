@@ -2,6 +2,8 @@
 
 ## 2026-09-15
 
+* **Article identity**: Renamed the mathematical article to `axial-spring-contraction.md`, titled “VBD Contraction for Coupled Axial Springs.” Updated its index entry and incoming links throughout the repository; the applicability decision remains a separate project record.
+
 * **Reader-guided applicability exposition**: Studied the block-state and implicit-Euler articles and revised the applicability article around the physical meaning of each proof step. Added the quadratic averaging mechanism, explained nonlinear sensitivity and complete-sweep contraction, interpreted the numerical comparison, and replaced the module catalogue with a connected account of the formalization. Retained the quantitative bounds and extension scope.
 
 ## 2026-09-14

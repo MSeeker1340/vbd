@@ -33,7 +33,7 @@ These paths are the current module boundaries recorded in the central
 Phases 1 and 2 are complete. `Block/Update.lean` and `Block/Operator.lean` each depend only on
 `Block/Basic.lean` within the project.
 Phase 3 has an implemented, block-independent core covering CT-01–CT-03 and reusing the pinned
-Mathlib contraction API. The completed [applicability study](/mathematics/applicability-study.md) and
+Mathlib contraction API. The [axial-spring contraction analysis](/mathematics/axial-spring-contraction.md) and
 [AP-03 decision](/project/applicability-decision.md) authorize CT-04 and the exact-execution
 Phase 4–7 route. CT-05 and same-color coupling estimates are deferred. Exploratory derivations and diagnostic scripts
 introduce no cross-foundation Lean imports; the module dependency boundaries stay in force.
@@ -67,7 +67,7 @@ graphs without embedding the chain's degree, constitutive coefficients or scalar
 P7 separates the general block-Newton map, skip-free consistency and derivative identities
 from the chain's concrete inverse, box-invariance and accuracy instantiations. The chain is the
 first application; these generic results are required deliverables in the same theorem route.
-The [adaptation analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain) specifies
+The [adaptation analysis](/mathematics/axial-spring-contraction.md#reuse-beyond-the-chain) specifies
 which hypotheses richer models must discharge and which friction/contact extensions need new
 interfaces. Source file splitting within P7 follows this boundary when implementation warrants it.
 

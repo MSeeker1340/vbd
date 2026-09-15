@@ -3,7 +3,7 @@
 A small Python module for one timestep's nonlinear scalar spring-chain solve. It executes
 actual full-step VBD visits and computes derivative diagnostics alongside them. It is an
 experiment, with dense assembly for inspection, rather than a simulation library or performance
-benchmark. The [mathematical article](../../knowledge/mathematics/applicability-study.md)
+benchmark. The [mathematical article](../../knowledge/mathematics/axial-spring-contraction.md)
 defines the model and the [decision record](../../knowledge/project/applicability-decision.md)
 explains the fixed study grid.
 

@@ -68,7 +68,7 @@ then supplies a unique fixed point in `N`, local convergence, and finite-sweep e
 
 # Instantiated applicability certificate
 
-The [axial-chain study](./applicability-study.md) instantiates these bounds for quadratic and
+The [axial-spring contraction analysis](./axial-spring-contraction.md) instantiates these bounds for quadratic and
 quartic springs. It retains the off-root derivative term `f_i ∂D_i/D_i²`, controls every
 intermediate block state, and gives a maximum-norm factor below `0.512` for
 `h² k_max/m_min ≤ 1/4` on its explicit box. The result supports the selected 20-sweep

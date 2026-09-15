@@ -73,7 +73,7 @@ defines the evidence standard and the response to an ineffective certificate.
 | AP-02 | done | Comparison of state-contraction and physical-residual certificates | AP-01 | Derive the sweep linearization and candidate neighborhood bounds; assess fixed-point/root consistency including skips independently of contraction; compare state contraction, qualitative physical-residual progress and quantitative residual reduction over the same selected range; report timestep, radius, warm-start coverage, iteration budget where supported, system-size dependence and objective-increase cases, separating analytic guarantees from numerical evidence and sweep-defect decrease |
 | AP-03 | done | Proceed or revise decision with an explicit guarantee level | AP-02 | Record the selected norm, family, execution scope, route, coverage and proof obligations; quantitative proceed requires an analytically supported parameter range, relevant warm-start membership and target budget; qualitative proceed authorizes only a scoped physical-residual progress milestone; assess sharper bounds, alternative norms or several-sweep contraction when needed, and synchronize downstream targets/dependencies for the selected route before implementation |
 
-The completed [study](/mathematics/applicability-study.md) and
+The [axial-spring contraction analysis](/mathematics/axial-spring-contraction.md) and
 [proceed decision](./applicability-decision.md) discharge the research gate for the selected
 exact-execution chain theorem. They do not discharge its Lean proof obligations or establish general production applicability.
 Generic bridge and synthesis lemmas must remain usable with vector blocks and other interaction

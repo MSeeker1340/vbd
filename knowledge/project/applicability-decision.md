@@ -11,7 +11,7 @@ timestamp: 2026-09-14T00:00:00Z
 **Proceed with maximum-norm state contraction and independent fixed-point/root consistency.**
 The first end-to-end Lean instance is a coupled axial chain with quadratic and hardening
 quartic springs, using exact serial or static proper-color VBD sweeps.
-The [mathematical article](/mathematics/applicability-study.md) develops the model, derives
+The [mathematical article](/mathematics/axial-spring-contraction.md) develops the model, derives
 its bounds, and explains their extension to richer mechanics.
 
 AP-01–AP-03 is complete for this first family. The analytic result supports a scaled physical
@@ -108,4 +108,4 @@ multi-timestep error accumulation, nonconvex material guarantees, contact/fricti
 convergent objective-increasing trajectories. Extending the application requires the new
 model's actual update, residual, intermediate-state bounds, initial-state coverage and accuracy
 budget to discharge the reusable hypotheses described in the
-[extension analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain).
+[extension analysis](/mathematics/axial-spring-contraction.md#reuse-beyond-the-chain).

@@ -22,14 +22,14 @@ timestamp: 2026-09-14T00:00:00Z
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
 
 The accepted [applicability decision](./applicability-decision.md) selects the
-[axial-chain certificate](/mathematics/applicability-study.md): `h² k_max/m_min ≤ 1/4`,
+[axial-chain certificate](/mathematics/axial-spring-contraction.md): `h² k_max/m_min ≤ 1/4`,
 `0 ≤ η ≤ 1`, the stated predictor box, and a physical residual below `10⁻⁶` in 20 sweeps.
 The first theorem uses maximum-norm state contraction and static proper colors. Hybrid
 execution and perturbation extensions require a further applicability decision.
 
 The chain is the first worked instance of a reusable theorem interface. The generic foundation,
 bridge and block-Newton results remain parameterized by block dimension, interaction support
-and physical bound data. The [adaptation analysis](/mathematics/applicability-study.md#reuse-beyond-the-chain)
+and physical bound data. The [adaptation analysis](/mathematics/axial-spring-contraction.md#reuse-beyond-the-chain)
 gives a quantified vector extension and explicit obligations for geometric elasticity, contact
 and friction. The first-family gate is complete; applicability to general production models
 remains open and requires further model-specific evidence.
