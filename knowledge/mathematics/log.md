@@ -1,5 +1,9 @@
 # Mathematical Specifications Update Log
 
+## 2026-09-16
+
+* **Graph-first presentation**: Reorganized the locality-and-coloring specification around the component interaction graph. Component supports first define its edges; standard proper graph coloring then defines color classes; the final section derives their role as parallel VBD batches.
+
 ## 2026-09-15
 
 * **Causal clarification**: Placed the serial-order rationale before the properness definition: a shared same-color support lets either first update change data read by the second. Derived the graph from the equivalent pairwise failure of the support condition.

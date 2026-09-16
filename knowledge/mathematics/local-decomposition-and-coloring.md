@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Local Decomposition and Coloring
 description: Defines support-indexed components of the implicit-Euler potential, exact local energy bookkeeping, proper coloring, and color-batch execution.
 tags: [locality, sparsity, potential-decomposition, graph-coloring, parallelism, phase-4]
-timestamp: 2026-09-15T00:00:00Z
+timestamp: 2026-09-16T00:00:00Z
 ---
 
 # Purpose and scope
@@ -86,12 +86,24 @@ $$
 Components can occur in the energy changes of several blocks. The equality identifies exactly which
 summands are reevaluated for a proposed block replacement.
 
-# Coloring blocks
+# Component interaction graph
 
-VBD obtains one update for each block and combines those updates into a sweep. A serial sweep
-visits the block updates one at a time. A colored sweep groups them into batches: it evaluates the
-updates in each batch together, then proceeds to the next batch. The support family $A$ determines
-which groupings provide the structural premise for the concrete VBD commutation theorem.
+The support family $A$ determines an undirected graph $G_A$ with vertex set $I$. Distinct blocks
+$i$ and $j$ are joined by an edge exactly when they occur together in one component support:
+
+$$
+i\sim_A j
+\quad\Longleftrightarrow\quad
+i\ne j\ \land\ \exists S\in A,\;\{i,j\}\subseteq S.
+$$
+
+The graph $G_A$ is the **component interaction graph**. It records which pairs of block-update
+formulas can involve a common component. Every support $S$ contributes an edge for each pair of
+distinct blocks in $S$. Hence a two-block support $\{i,j\}$ contributes the edge $i\text{—}j$,
+while a three-block support $\{i,j,k\}$ contributes the three edges of a triangle. In general, each
+support induces a clique. The relation $\sim_A$ is symmetric and irreflexive.
+
+# Coloring blocks
 
 Choose a number $m$ and nonempty block sets
 
@@ -99,83 +111,56 @@ $$
 C_0,\ldots,C_{m-1}
 $$
 
-that are pairwise disjoint and whose union is $I$. The number $r$ is called **color $r$**, and
-$C_r$ is its **color class**. The classes $C_0,\ldots,C_{m-1}$ are the consecutive batches of the
-colored sweep.
+that are pairwise disjoint and whose union is $I$. This is a graph coloring: the number $r$ is
+called **color $r$**, and $C_r$ is its **color class**. The color labels are conventional names for
+the parts of this partition; their numbering $0,\ldots,m-1$ also fixes the order of the color
+batches in a VBD sweep.
 
-# Proper colorings
-
-A color class represents block updates evaluated in parallel. Its exact-execution interpretation
-requires the resulting state to agree with every serial ordering of those updates. A component
-$E_S$ can enter the update associated with every block in $S$. Thus, if $i,j\in S\cap C_r$, the
-$i$-update can change $x_i$ before the $j$-update reads it, while the reverse ordering can change
-$x_j$ before the $i$-update reads it. The two serial orderings can consequently give different
-state mappings.
-
-Properness is the support condition that provides order independence from the component structure:
-a coloring $C_0,\ldots,C_{m-1}$ is **proper for $A$** when every support intersects every color
-class in at most one block:
-
-$$
-\forall S\in A,\;\forall r\in\{0,\ldots,m-1\},\qquad |S\cap C_r|\le 1.
-$$
-
-Thus a proper color class contains at most one block from each support.
-
-For $M\subseteq A$, the same coloring is proper for $M$. The condition
-$|S\cap C_r|\le 1$ for $S\in A\setminus M$ and $r\in\{0,\ldots,m-1\}$ extends properness from
-$M$ to $A$.
-
-# Induced coloring graph
-
-The support condition has a pairwise form. If it fails, some $S\cap C_r$ contains distinct blocks
-$i$ and $j$, so those blocks occur together in one support. Conversely, such a pair gives
-$|S\cap C_r|\ge 2$. The induced coloring graph records exactly these pairs. Its vertices are the
-block indices in $I$, and two distinct vertices are joined when they occur together in a support:
-
-$$
-i\sim_A j
-\quad\Longleftrightarrow\quad
-i\ne j\ \land\ \exists S\in A,\;i\in S\land j\in S.
-$$
-
-Every support $S$ contributes an edge for each pair of distinct blocks in $S$. Hence a two-block
-support $\{i,j\}$ contributes the edge $i\text{—}j$, while a three-block support $\{i,j,k\}$
-contributes the three edges of a triangle. In general, each support induces a clique. The relation
-$\sim_A$ is symmetric and irreflexive.
-
-For blocks $i,j$ in one color class $C_r$, the relation $i\sim_A j$ means that $i$ and $j$ occur
-together in a support. Therefore the support definition of properness is equivalent to the graph
-condition
+A coloring is **proper for $A$** when the endpoints of every edge have different colors. In terms
+of its color classes, this is
 
 $$
 \forall r\in\{0,\ldots,m-1\},\;\forall i,j\in C_r,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
 $$
 
-The graph tests the color classes, while the support family $A$ supplies the component potentials
-and the energy bookkeeping.
+Thus properness is exactly the traditional notion of proper vertex coloring for $G_A$. Equivalently,
+every support meets every color class in at most one block:
+
+$$
+\forall S\in A,\;\forall r\in\{0,\ldots,m-1\},\qquad |S\cap C_r|\le 1.
+$$
+
+Indeed, two distinct blocks in $S\cap C_r$ form an edge with one color, and every same-color edge
+arises from a support containing both endpoints. The graph supplies the standard coloring language,
+while the support family $A$ supplies the component potentials and energy bookkeeping.
+
+For $M\subseteq A$, the same coloring is proper for $M$. The condition
+$|S\cap C_r|\le 1$ for $S\in A\setminus M$ and $r\in\{0,\ldots,m-1\}$ extends properness from
+$M$ to $A$.
 
 # Color batches and serial equivalence
 
-Let every block $i$ have a single-block update $U_i:X\to X$ with write support contained in
-$\{i\}$. An update at $i$ uses the components $E_S$ with $i\in S$. Properness assigns the blocks
-of every support to distinct color classes. The concrete VBD locality theorem turns this support
-separation into commutation of the updates within each color class.
+VBD obtains one update for each block and combines those updates into a sweep. A serial sweep
+visits the block updates one at a time. A colored sweep evaluates the updates in each color class
+together, then proceeds through the color classes in their numerical order. Let every block $i$
+have a single-block update $U_i:X\to X$ with write support contained in $\{i\}$.
 
-For distinct $i,j\in C_r$ in a proper color class, every support containing $i$ omits $j$. The VBD
-locality theorem then gives that the new $i$-block value is independent of $x_j$, and symmetrically
-the new $j$-block value is independent of $x_i$. Each update writes only its own block, so applying
-either update first leaves the other update's computed value unchanged:
+For distinct $i,j\in C_r$ in a proper color class, the graph has no edge between $i$ and $j$.
+Equivalently, no component support contains both blocks. The VBD locality theorem then gives that
+the new $i$-block value is independent of $x_j$, and symmetrically the new $j$-block value is
+independent of $x_i$. Each update writes only its own block, so applying either update first leaves
+the other update's computed value unchanged:
 
 $$
 U_i\circ U_j=U_j\circ U_i.
 $$
 
-Same-color updates can share values of a third block $k$. For example, in the chain with supports
-$\{0,1\}$ and $\{1,2\}$, blocks $0$ and $2$ have the same color and both read block $1$. Their
-batch leaves block $1$ unchanged, so both updates use the same value $x_1$ in a snapshot and in
-either serial ordering. Properness therefore provides the exact separation needed for parallel
-updates: each update value is independent of the blocks written by the other updates in its class.
+If an edge joined two blocks in one color class, a common component could let the first serial
+update change data read by the second. The two serial orderings could then give different state
+mappings. Proper coloring removes this obstruction. Same-color updates can share values of a third
+block $k$: in the chain with supports $\{0,1\}$ and $\{1,2\}$, blocks $0$ and $2$ can have one
+color and both read block $1$. Their batch leaves block $1$ unchanged, so both updates use the same
+value $x_1$ in a snapshot and in either serial ordering.
 
 The snapshot batch $P_r$ for color $r$ evaluates all $U_i$ for $i\in C_r$ at the common input $x$
 and writes their selected block outputs simultaneously. The colored sweep executes the batches in
@@ -215,6 +200,6 @@ $$
 A=\bigl\{\{0,1\},\{1,2\},\{2,3\}\bigr\}.
 $$
 
-The induced graph is the path $0\text{—}1\text{—}2\text{—}3$, and the two colors have classes
+The component interaction graph is the path $0\text{—}1\text{—}2\text{—}3$, and the two colors have classes
 $C_0=\{0,2\}$ and $C_1=\{1,3\}$. For $A=\{\{a,b,c\}\}$, every two distinct vertices are adjacent,
 so the three colors have singleton classes $C_0=\{a\}$, $C_1=\{b\}$, and $C_2=\{c\}$.
