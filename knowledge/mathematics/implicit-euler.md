@@ -140,7 +140,7 @@ $$
 
 The Lean interface records one timestep problem and its constraints in an `ImplicitEulerStep` value: mass operator, twice-differentiable potential energy, timestep, predicted state, self-adjointness proof, and timestep-positivity proof. The module calls the objective `energy`, proves that it is globally differentiable, and identifies Mathlib's canonical `∇ ie.energy` with `ie.energyGradient`. Its Hessian is the inertia Hessian plus the canonical potential Hessian. The later implicit-Euler fixed-point bridge uses this gradient as its nonlinear residual. The API derives its gradient and Hessian from the energy. VBD synthesis supplies the local particle-mass formula.
 
-The implemented Phase 1 module, `Vbd/Integrator/ImplicitEulerEnergy.lean`, selects the Fréchet derivative of the gradient as its Hessian representation. It establishes Hessian existence from differentiability assumptions. Quantitative lower bounds from the inertia term, including their dependence on `h`, belong to the final VBD synthesis. API details and the representation rationale live in the source documentation.
+The implemented Phase 1 module, `Vbd/Integrator/ImplicitEulerEnergy.lean`, selects the Fréchet derivative of the gradient as its Hessian representation. It establishes Hessian existence from differentiability assumptions. The [implicit-Euler fixed-point bridge](./implicit-euler-fixed-points.md) uses `energyGradient` as the residual for its solver-independent convergence statement. Quantitative lower bounds from the inertia term, including their dependence on `h`, belong to the final VBD synthesis. API details and the representation rationale live in the source documentation.
 
 # Citations
 

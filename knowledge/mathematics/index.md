@@ -1,6 +1,7 @@
 # Mathematical Core
 
 - [Implicit Euler as optimization](./implicit-euler.md) - Objective, derivatives, stationarity equivalence, and assumptions.
+- [Implicit-Euler fixed-point bridge](./implicit-euler-fixed-points.md) - Solver-independent stationary convergence and transport from state error to residual error.
 - [Local decomposition and coloring](./local-decomposition-and-coloring.md) - Potential components, energy bookkeeping, proper colors, and color batches.
 - [Block states and operators](./block-states-and-operators.md) - Block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 - [Contractive fixed-point iteration](./contractive-fixed-point-iteration.md) - Contraction on invariant complete sets, geometric iterate bounds, derivative criteria, and stability under perturbations.

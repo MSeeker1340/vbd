@@ -236,7 +236,8 @@ Status: planned. Module: `Vbd/Integrator/FixedPoint.lean`.
 
 Dependencies: Phase 1 + Phase 3.
 
-For an arbitrary solver map `T : X → X` and an implicit-Euler stationary point `x*`, prove that a
+The [implicit-Euler fixed-point bridge](/mathematics/implicit-euler-fixed-points.md) specifies
+the solver-independent interface. For an arbitrary solver map `T : X → X` and an implicit-Euler stationary point `x*`, prove that a
 forward-invariant local contraction with `T x* = x*` yields convergence to an implicit-Euler
 solution and the corresponding finite-iteration bound
 

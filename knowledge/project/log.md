@@ -2,6 +2,10 @@
 
 ## 2026-09-16
 
+* **Phase-5 preparation**: Added the solver-independent implicit-Euler fixed-point specification and linked the Phase-5 roadmap to it. IF-01–IF-03 retain their planned status; concrete VBD fixed-point consistency and model-specific residual regularity remain Phase-7 obligations.
+
+## 2026-09-16
+
 * **Phase-4 implementation**: Completed LI-01–LI-04 in `Integrator/LocalPotential.lean`: finite-support local components, exact local cancellation, the component interaction graph, Mathlib proper-color bridges, support-family extension criteria, and pair/triple examples compile and are exported.
 
 * **Phase-4 reuse decision**: Assigned proper-color representation to Mathlib's `SimpleGraph.Coloring (Fin m)`. The project scope is the finite-support component graph and the equivalence between graph coloring and support-wise injectivity.

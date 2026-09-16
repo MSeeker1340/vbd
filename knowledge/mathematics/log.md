@@ -2,6 +2,10 @@
 
 ## 2026-09-16
 
+* **Phase-5 preparation**: Added [Implicit-Euler fixed-point bridge](./implicit-euler-fixed-points.md), specifying the solver-independent stationary-point, finite-iterate, and Lipschitz residual-transport theorems. It separates solver-fixed-point uniqueness from stationary-point uniqueness and leaves concrete VBD consistency and residual scaling to Phase 7.
+
+## 2026-09-16
+
 * **Phase-4 formalization**: Completed the finite-support potential and proper-color layer in `Integrator/LocalPotential.lean`, including exact cancellation, support graphs, Mathlib colorings, support-family extension criteria, and pair/triple examples. Concrete VBD update commutation remains in the later production layer.
 
 * **Visual and structural refinement**: Moved the coloring examples into the coloring section and added vector diagrams for proper colorings and sequential color-batch execution.
