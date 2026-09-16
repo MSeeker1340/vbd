@@ -2,6 +2,10 @@
 
 ## 2026-09-16
 
+* **Phase-5 implementation**: Completed IF-01–IF-03 in `Integrator/FixedPoint.lean`. The module defines `UnbiasedOn`, obtains an IE stationary solution from Banach existence and unbiasedness, exposes finite iterate state convergence, and derives the Lipschitz implicit-Euler residual bound without a VBD import. Updated the axial-chain example to retain only its pending instantiation obligations.
+
+## 2026-09-16
+
 * **Phase-5 consistency refinement**: Recast the implicit-Euler fixed-point specification around `UnbiasedOn`: a fixed point of the solver must solve the residual equation. Separated self-map, contractive, and unbiased guarantees; recorded residual transport after Banach existence. The specification retains only the Phase-1 × Phase-3 interface; the VBD source assessment is scoped to the reference and Phase-7 plan.
 
 ## 2026-09-16

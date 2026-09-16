@@ -15,7 +15,7 @@ timestamp: 2026-09-16T00:00:00Z
 | Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-03 are implemented; CT-04 is next and CT-05 is deferred |
 | Applicability study — AP-01–AP-03 | complete | Quantitative proceed for nonlinear axial chains in the maximum norm with serial and proper-color execution |
 | Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
-| Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
+| Phase 5 — implicit-Euler fixed-point goals | complete | `Integrator/FixedPoint.lean` supplies unbiased fixed-point identification, finite state error, and residual transport |
 | Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
 | Phase 7 — production VBD synthesis | planned | combines the bridge phases to analyze the actual serial and colored VBD sweep |
 
@@ -232,25 +232,26 @@ and higher-arity cases.
 
 # Phase 5 — Implicit-Euler fixed-point goals
 
-Status: planned. Module: `Vbd/Integrator/FixedPoint.lean`.
+Status: complete. Module: `Vbd/Integrator/FixedPoint.lean`.
 
 Dependencies: Phase 1 + Phase 3.
 
 The [implicit-Euler solver-consistency specification](/mathematics/implicit-euler-fixed-points.md)
 defines an **unbiased** solver as one whose fixed points solve the IE residual. For an arbitrary
-solver map `T : X → X`, prove that an unbiased forward-invariant local contraction on a nonempty
-complete region has a unique solver fixed point, that this point is an implicit-Euler solution,
-and that the corresponding finite-iteration bound is
+solver map `T : X → X`, `Integrator/FixedPoint.lean` proves that an unbiased forward-invariant
+local contraction on a nonempty complete region has a unique solver fixed point, that this point
+is an implicit-Euler solution, and that the corresponding finite-iteration bound is
 
 $$
 \|T^{k}(x)-x^*\|\le q^k\|x-x^*\|.
 $$
 
-Where quantitative regularity of `F_IE` is available, transport distance bounds to residual
-bounds. Phase 5 takes the solver map and unbiasedness proof as parameters. Phase 7 supplies the
-concrete VBD map and proves unbiasedness on its stated regular branch.
+Where quantitative regularity of `F_IE` is available, it transports distance bounds to residual
+bounds. The module takes the solver map and unbiasedness proof as parameters. Phase 7 supplies
+the concrete VBD map and proves unbiasedness on its stated regular branch.
 
-Acceptance gate: the theorem is solver-independent and uses the Phase 1 and Phase 3 interfaces.
+Acceptance gate: satisfied. The theorem is solver-independent, uses only the Phase 1 and Phase 3
+interfaces, and is exported by `Vbd.lean`.
 
 # Phase 6 — Contraction of composed updates
 

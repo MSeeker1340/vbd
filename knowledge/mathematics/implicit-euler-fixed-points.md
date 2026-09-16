@@ -114,10 +114,10 @@ This is an upper bound on residual from state error. It supplies neither a rever
 bound nor per-sweep residual decrease. Those stronger results need a residual lower bound or a
 separate model-specific argument.
 
-# Formalization target
+# Formalization interface
 
 `Vbd.Integrator.FixedPoint` imports only `Vbd.Integrator.ImplicitEulerEnergy` and
-`Vbd.Dynamics.Contraction`. It defines the generic `UnbiasedOn` predicate and proves:
+`Vbd.Dynamics.Contraction`. It defines the generic `UnbiasedOn` predicate and implements:
 
 | Backlog item | Premises added at the bridge | Conclusion |
 |---|---|---|
@@ -125,8 +125,10 @@ separate model-specific argument.
 | IF-02 | IF-01 and `x₀ ∈ S` | The iterates converge to that solution with the geometric distance bound. |
 | IF-03 | IF-02 and `LipschitzOnWith L (energyGradient ie) S` | The IE residual has the displayed geometric upper bound. |
 
-The generic module does not prove unbiasedness for a particular update formula. `Integrator/VBD`
-proves it for the regular concrete sweep; its result discharges the IF-01 premise. Metric distance
-stays at the contraction boundary, with `dist_eq_norm` used only for the normed residual statement.
-No block decomposition, coloring, Hessian inverse, chain coefficient, or concrete execution order
-belongs in the generic bridge.
+The module exports `energyGradient_eq_zero_of_unbiased_fixedPoint`,
+`exists_unbiased_fixedPoint`, `dist_iterate_fixedPoint_le`, `tendsto_iterate_fixedPoint`, and
+`norm_energyGradient_iterate_le`. The generic module does not prove unbiasedness for a particular
+update formula. `Integrator/VBD` proves it for the regular concrete sweep; its result discharges
+the IF-01 premise. Metric distance stays at the contraction boundary, with `dist_eq_norm` used
+only for the normed residual statement. No block decomposition, coloring, Hessian inverse, chain
+coefficient, or concrete execution order belongs in the generic bridge.

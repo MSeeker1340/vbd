@@ -4,4 +4,5 @@ import Vbd.Block.Update
 import Vbd.Block.Operator
 import Vbd.Dynamics.Contraction
 import Vbd.Integrator.ImplicitEulerEnergy
+import Vbd.Integrator.FixedPoint
 import Vbd.Integrator.LocalPotential

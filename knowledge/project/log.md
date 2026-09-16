@@ -2,6 +2,10 @@
 
 ## 2026-09-16
 
+* **Phase-5 implementation**: Completed IF-01–IF-03 and marked Phase 5 complete. The solver-independent module is exported through `Vbd.lean`; regular VBD unbiasedness remains the Phase-7 premise-discharge theorem.
+
+## 2026-09-16
+
 * **Phase-5 consistency refinement**: Replaced the designated-root formulation with an explicit unbiasedness premise: a solver fixed point in the certified region solves the IE residual. IF-01 now combines that premise with Banach existence; IF-02–IF-03 derive state and residual guarantees. The VBD theorem that discharges this premise remains Phase 7, with its source assessment and execution boundaries recorded separately.
 
 ## 2026-09-16

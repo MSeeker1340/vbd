@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: "Worked Example: VBD Convergence for an Elastic Spring Chain"
 description: Applies the project’s implicit-Euler, block-update, and contraction results to a concrete spring-chain solve, with numerical checks and explicit pending prerequisites.
 tags: [example, vbd, contraction, residual, springs]
-timestamp: 2026-09-15T00:00:00Z
+timestamp: 2026-09-16T00:00:00Z
 ---
 
 This is a **worked example** of the convergence analysis developed in
@@ -499,15 +499,16 @@ instantiates `Integrator/ImplicitEulerEnergy`, and the vertex visits use the alg
 `Block/Basic`, `Block/Update`, and `Block/Operator`. Those foundations do not need to know the
 numerical range used in this example.
 
-The example also depends on planned bridge results. `Integrator/LocalPotential` is to
-supply the physical commutation argument; `Block/Contraction` the ordered derivative estimate;
-and CT-04 the passage to metric contraction. `Integrator/FixedPoint` is to transport state error
-to the physical residual. The concrete Newton update and spring-specific hypotheses are then
-instantiated at `Integrator/VBD`.
+The example depends on the implemented `Integrator/LocalPotential` support/coloring bridge and
+the implemented `Integrator/FixedPoint` state-to-residual bridge. `Block/Contraction` supplies
+the pending ordered derivative estimate, and CT-04 supplies the pending passage to metric
+contraction. The concrete Newton update and spring-specific hypotheses are then instantiated at
+`Integrator/VBD`.
 
 > **TODO — complete the Lean example:** Apply those bridges to the coefficients, predictor
-> box, and residual scaling used above, and prove the numerical budget (IF-01–IF-03 and
-> VB-01–VB-08). These are example obligations in addition to the pending general prerequisites.
+> box, and residual scaling used above, then prove the numerical budget through VB-01–VB-08.
+> The generic IF-01–IF-03 bridge is complete; the remaining obligations instantiate its
+> hypotheses for this example in addition to the pending general prerequisites.
 
 This places the reusable reasoning where another material model can use it. The chain provides
 the coefficients and proves that they satisfy the hypotheses; it does not specialize the block

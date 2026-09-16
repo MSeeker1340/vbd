@@ -2,6 +2,10 @@
 
 ## 2026-09-16
 
+* **Phase-5 implementation**: Added and exported `Integrator/FixedPoint.lean`. It compiles the generic `UnbiasedOn` predicate, IE-stationary fixed-point existence, finite iterate distance and convergence interfaces, and a Lipschitz residual-error bound using only the Phase-1 and Phase-3 modules.
+
+## 2026-09-16
+
 * **Phase-5 consistency refinement**: The planned `Integrator/FixedPoint.lean` interface now takes `UnbiasedOn (energyGradient ie) T S` rather than a designated point assumed both stationary and fixed. Banach existence yields the point; the residual premise identifies it as an IE solution. Concrete VBD unbiasedness remains an `Integrator/VBD` proof.
 
 ## 2026-09-16
