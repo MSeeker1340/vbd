@@ -2,6 +2,8 @@
 
 ## 2026-09-16
 
+* **Graph and example enrichment**: Added the component-interaction intuition, its usual sparse-neighbor realization in spatial VBD systems, and one-dimensional-chain, two-dimensional-grid, and three-block-component coloring examples. Separated generic graph coloring from its subsequent VBD batch interpretation.
+
 * **Graph-first presentation**: Reorganized the locality-and-coloring specification around the component interaction graph. Component supports first define its edges; standard proper graph coloring then defines color classes; the final section derives their role as parallel VBD batches.
 
 ## 2026-09-15
