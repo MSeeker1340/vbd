@@ -105,10 +105,16 @@ colored sweep.
 
 # Proper colorings
 
-A component $E_S$ can enter the update associated with every block in $S$. The color-batch
-criterion is that a component is associated with at most one update in each color class. A coloring
-$C_0,\ldots,C_{m-1}$ is **proper for $A$** when every support intersects every color class in at
-most one block:
+A color class represents block updates evaluated in parallel. Its exact-execution interpretation
+requires the resulting state to agree with every serial ordering of those updates. A component
+$E_S$ can enter the update associated with every block in $S$. Thus, if $i,j\in S\cap C_r$, the
+$i$-update can change $x_i$ before the $j$-update reads it, while the reverse ordering can change
+$x_j$ before the $i$-update reads it. The two serial orderings can consequently give different
+state mappings.
+
+Properness is the support condition that provides order independence from the component structure:
+a coloring $C_0,\ldots,C_{m-1}$ is **proper for $A$** when every support intersects every color
+class in at most one block:
 
 $$
 \forall S\in A,\;\forall r\in\{0,\ldots,m-1\},\qquad |S\cap C_r|\le 1.
@@ -122,9 +128,10 @@ $M$ to $A$.
 
 # Induced coloring graph
 
-The properness condition concerns pairs of blocks: a class fails the condition precisely when two
-of its blocks occur in one support. The induced coloring graph records these pairs. Its vertices are
-the block indices in $I$, and two distinct vertices are joined when they occur together in a support:
+The support condition has a pairwise form. If it fails, some $S\cap C_r$ contains distinct blocks
+$i$ and $j$, so those blocks occur together in one support. Conversely, such a pair gives
+$|S\cap C_r|\ge 2$. The induced coloring graph records exactly these pairs. Its vertices are the
+block indices in $I$, and two distinct vertices are joined when they occur together in a support:
 
 $$
 i\sim_A j
@@ -155,18 +162,10 @@ $\{i\}$. An update at $i$ uses the components $E_S$ with $i\in S$. Properness as
 of every support to distinct color classes. The concrete VBD locality theorem turns this support
 separation into commutation of the updates within each color class.
 
-# Why properness yields a parallel batch
-
-Consider two distinct blocks $i,j\in C_r$. If a support $S$ contained both blocks, the component
-$E_S$ would occur in the update formula for $i$ and in the update formula for $j$. A snapshot batch
-would compute both new values from the old pair $(x_i,x_j)$. A serial execution that applies the
-$i$-update first would compute the $j$-update after replacing $x_i$. The two executions can
-therefore produce different states.
-
-For a proper color class, every support containing $i$ omits $j$. The VBD locality theorem then
-gives that the new $i$-block value is independent of $x_j$, and symmetrically the new $j$-block
-value is independent of $x_i$. Each update writes only its own block, so applying either update
-first leaves the other update's computed value unchanged:
+For distinct $i,j\in C_r$ in a proper color class, every support containing $i$ omits $j$. The VBD
+locality theorem then gives that the new $i$-block value is independent of $x_j$, and symmetrically
+the new $j$-block value is independent of $x_i$. Each update writes only its own block, so applying
+either update first leaves the other update's computed value unchanged:
 
 $$
 U_i\circ U_j=U_j\circ U_i.
