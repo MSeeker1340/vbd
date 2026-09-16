@@ -20,7 +20,7 @@ timestamp: 2026-09-16T00:00:00Z
 
 | Phase | Module | Responsibility | Direct project dependencies |
 |---|---|---|---|
-| P4 | `Integrator/LocalPotential.lean` | Finite-support potential components and support-to-Mathlib-graph/coloring bridge lemmas | `ImplicitEulerEnergy`, `Block/Basic` |
+| P4 | `Integrator/LocalPotential.lean` | Implemented finite-support potential components, exact cancellation, and support-to-Mathlib-graph/coloring bridge lemmas | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Solver-independent convergence from a contractive map to a known implicit-Euler stationary fixed point | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
 | P6 | `Block/Contraction.lean` | Derivative-factor bounds, ordered comparison composition, proper-color estimates, and deferred perturbation extensions | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Production block-Newton operators, externally controlled serial and buffered executions, derivative bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
@@ -90,3 +90,8 @@ iteration results. It supplies local fixed-point existence and uniqueness, conve
 supplied fixed point, finite-iterate distance bounds, and a defect-based error estimate, with
 no project imports. AP-01–AP-03 are complete research deliverables. CT-04 is next; exact-execution P4–P7 follows
 the accepted route, while CT-05 and hybrid coupling are deferred.
+
+`Integrator/LocalPotential.lean` implements Phase 4. It sums support-indexed local components,
+proves cancellation outside the affected supports of a block change, constructs the component
+interaction graph, and uses Mathlib's numbered proper colorings for the support-local coloring
+bridges. It is exported by `Vbd.lean`.

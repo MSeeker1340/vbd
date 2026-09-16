@@ -2,6 +2,8 @@
 
 ## 2026-09-16
 
+* **Phase-4 implementation**: Added and exported `Integrator/LocalPotential.lean`. It compiles finite-support local potentials, exact energy-change cancellation, support-induced graph adjacency and monotonicity, Mathlib-coloring bridges, support-family restriction and extension criteria, and pair/triple examples.
+
 * **Phase-4 reuse decision**: Confirmed pinned Mathlib's `SimpleGraph.fromRel`, proper vertex coloring, color-class, and graph-partition APIs. Phase 4 will use `G.Coloring (Fin m)` directly and add only the support-induced graph and support-local bridge lemmas.
 
 ## 2026-09-15

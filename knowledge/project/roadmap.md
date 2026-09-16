@@ -14,7 +14,7 @@ timestamp: 2026-09-16T00:00:00Z
 | Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
 | Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-03 are implemented; CT-04 is next and CT-05 is deferred |
 | Applicability study — AP-01–AP-03 | complete | Quantitative proceed for nonlinear axial chains in the maximum norm with serial and proper-color execution |
-| Phase 4 — finite-support potential components and coloring | planned | combines the Phase 1 potential with Phase 2 block states and bridges component supports to Mathlib graph coloring |
+| Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
 | Phase 5 — implicit-Euler fixed-point goals | planned | combines Phase 1 stationary solutions with Phase 3 solver-independent iteration bounds |
 | Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
 | Phase 7 — production VBD synthesis | planned | combines the bridge phases to analyze the actual serial and colored VBD sweep |
@@ -218,22 +218,17 @@ using the generic dynamics layer and Mathlib.
 
 # Phase 4 — Finite-support potential components and coloring
 
-Status: planned. Module: `Vbd/Integrator/LocalPotential.lean`.
+Status: complete. Module: `Vbd/Integrator/LocalPotential.lean`.
 
 Dependencies: Phase 1 + Phase 2.
 
-Represent the potential as a finite sum of finite-support components. The component-overlap graph
-joins two blocks when a component support contains both. Pairwise systems are the
-two-element-support specialization, while arbitrary higher-arity supports remain covered.
-
-Define the component-overlap graph with Mathlib's `SimpleGraph.fromRel` and represent numbered
-proper colorings with Mathlib's `G.Coloring (Fin m)`. Prove only the support-specific bridges:
-adjacency is common-support membership, a graph coloring is injective on every support, and a
-support-family extension has the stated coloring criterion. Any added component can invalidate a
-previously established coloring and must remain visible in the production colored-sweep proof.
-
-Acceptance gate: at least one pairwise and one multi-vertex support example has a proved valid
-coloring, and the effect of adding a component is stated exactly.
+`LocalPotential` represents the potential as a finite sum of finite-support components and proves
+exact cancellation for components disjoint from a block change. Its component-overlap graph uses
+Mathlib's `SimpleGraph.fromRel`, while numbered proper colorings use `G.Coloring (Fin m)`. The
+module proves common-support adjacency, support-wise injectivity of proper colorings, construction
+of a coloring from that condition, restriction to smaller support families, and the exact criterion
+for extending a fixed coloring. Compiled two-block and three-block examples witness the pairwise
+and higher-arity cases.
 
 # Phase 5 — Implicit-Euler fixed-point goals
 

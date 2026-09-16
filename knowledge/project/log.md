@@ -2,6 +2,8 @@
 
 ## 2026-09-16
 
+* **Phase-4 implementation**: Completed LI-01–LI-04 in `Integrator/LocalPotential.lean`: finite-support local components, exact local cancellation, the component interaction graph, Mathlib proper-color bridges, support-family extension criteria, and pair/triple examples compile and are exported.
+
 * **Phase-4 reuse decision**: Assigned proper-color representation to Mathlib's `SimpleGraph.Coloring (Fin m)`. The project scope is the finite-support component graph and the equivalence between graph coloring and support-wise injectivity.
 
 ## 2026-09-15

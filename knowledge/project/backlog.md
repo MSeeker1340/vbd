@@ -85,10 +85,10 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| LI-01 | planned | Finite-support potential components | IE-07, BS-01 | Potential components expose arbitrary finite supports, including pairwise and higher-arity supports |
-| LI-02 | planned | Component-overlap graph and proper coloring | LI-01 | Component supports induce a `SimpleGraph`; Mathlib's `Coloring (Fin m)` represents the proper coloring, with proved equivalence to support-wise injectivity |
-| LI-03 | planned | Pairwise and multi-vertex examples | LI-02 | One pairwise and one triangle/tetrahedron-style system has a proved valid coloring |
-| LI-04 | planned | Component-set coloring boundary | LI-02 | Adding components is shown to preserve or invalidate the proper-color premise explicitly |
+| LI-01 | done | Finite-support potential components | IE-07, BS-01 | `LocalPotential` exposes arbitrary finite supports, local component functions, their finite-sum energy, and exact cancellation outside affected supports |
+| LI-02 | done | Component-overlap graph and proper coloring | LI-01 | Component supports induce a `SimpleGraph`; Mathlib's `Coloring (Fin m)` represents the proper coloring, with a proved equivalence to support-wise injectivity |
+| LI-03 | done | Pairwise and multi-vertex examples | LI-02 | Compiled two-block and three-block support examples have valid numbered Mathlib colorings |
+| LI-04 | done | Component-set coloring boundary | LI-02 | Restriction to a smaller support family and the exact support-wise criterion for extending a fixed coloring both compile |
 
 # Phase 5 — implicit-Euler fixed-point goals
 

@@ -142,9 +142,9 @@ The same-color updates commute, so the simultaneous/sequential equivalence from
 lets us treat each batch as any serial ordering of its members.
 Both executions visit every vertex exactly once; we will use that fact twice below.
 
-> **TODO — supporting coloring material:** Complete/review the general coloring treatment in
-> [local decomposition and coloring](./local-decomposition-and-coloring.md), and formalize the physical
-> independence-to-commutation argument (LI-02–LI-04 and VB-07). The even/odd partition here is
+> **Supporting coloring material:** [Local decomposition and coloring](./local-decomposition-and-coloring.md)
+> and LI-01–LI-04 formalize the general support and proper-color layer. The physical
+> independence-to-commutation argument remains a production VBD result (VB-07). The even/odd partition here is
 > the concrete path-graph instance; the abstract simultaneous/sequential theorem is already available.
 
 # Where the iteration should settle

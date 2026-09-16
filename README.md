@@ -167,16 +167,13 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Block/Update.lean](Vbd/Block/Update.lean) | Write support under composition and simultaneous merging of disjoint writes. |
 | [Vbd/Block/Operator.lean](Vbd/Block/Operator.lean) | Continuous-linear block entries, finite assembly, reconstruction, and arithmetic. |
 | [Vbd/Dynamics/Contraction.lean](Vbd/Dynamics/Contraction.lean) | Invariant-set fixed-point interface, convergence to a supplied fixed point, finite-iterate bounds, and a defect estimate. |
+| [Vbd/Integrator/LocalPotential.lean](Vbd/Integrator/LocalPotential.lean) | Finite-support component potentials, exact local energy cancellation, and bridges from support graphs to Mathlib proper colorings. |
 
 The following TODOs identify the unfinished pieces required for an end-to-end
 VBD certificate.
 
 - **TODO — derivative-to-contraction bridge:** Turn uniform derivative bounds
   on convex neighborhoods into the normed-space contraction interface.
-
-- **TODO — potential-component and coloring theorem:** Formalize finite-support
-  components of the potential, their overlap graph, and the component-locality
-  conditions that make a proper-color batch commute.
 
 - **TODO — implicit-Euler fixed-point bridge:** Prove, for an arbitrary solver
   map with a designated stationary fixed point, the state and residual

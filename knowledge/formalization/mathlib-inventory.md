@@ -89,6 +89,10 @@ support-specific bridge lemmas: characterization of adjacency by a common suppor
 between a Mathlib coloring and injectivity on each support, and monotonicity under changing the
 support family.
 
+`Vbd/Integrator/LocalPotential.lean` compiles this reuse boundary. Its project-local declarations
+are limited to support-indexed potentials, their locality and cancellation facts, the
+support-induced graph, and bridges between support-wise injectivity and Mathlib colorings.
+
 # Contractive fixed points
 
 The pinned `Mathlib/Topology/MetricSpace/Contracting.lean` supplies Banach theory, including
