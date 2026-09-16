@@ -2,7 +2,7 @@
 
 ## 2026-09-16
 
-* **Phase-5 consistency refinement**: Replaced the designated-root formulation with an explicit unbiasedness premise: a solver fixed point in the certified region solves the IE residual. IF-01 now combines that premise with Banach existence; IF-02–IF-03 derive state and residual guarantees. The regular serial and buffered VBD sweep discharges this premise, while skip, constraint, changing-data, and acceleration branches retain explicit scope conditions.
+* **Phase-5 consistency refinement**: Replaced the designated-root formulation with an explicit unbiasedness premise: a solver fixed point in the certified region solves the IE residual. IF-01 now combines that premise with Banach existence; IF-02–IF-03 derive state and residual guarantees. The VBD theorem that discharges this premise remains Phase 7, with its source assessment and execution boundaries recorded separately.
 
 ## 2026-09-16
 

@@ -2,7 +2,7 @@
 
 ## 2026-09-16
 
-* **Phase-5 consistency refinement**: Recast the implicit-Euler fixed-point specification around `UnbiasedOn`: a fixed point of the solver must solve the residual equation. Separated self-map, contractive, and unbiased guarantees; recorded residual transport after Banach existence. Verified that regular serial and buffered VBD sweeps are unbiased by their once-per-free-block writes, while singular-block skips, constrained residuals, changing collision data, and acceleration require stated boundaries.
+* **Phase-5 consistency refinement**: Recast the implicit-Euler fixed-point specification around `UnbiasedOn`: a fixed point of the solver must solve the residual equation. Separated self-map, contractive, and unbiased guarantees; recorded residual transport after Banach existence. The specification retains only the Phase-1 × Phase-3 interface; the VBD source assessment is scoped to the reference and Phase-7 plan.
 
 ## 2026-09-16
 

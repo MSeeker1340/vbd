@@ -56,8 +56,8 @@ F(x)=0\ \Longrightarrow\ T(x)=x,
 $$
 
 is **root preservation**. It is useful when describing all roots and fixed points, but it is not
-needed to identify the Banach fixed point as a solution. Exact regular VBD satisfies both
-directions; the generic Phase-5 theorem requires only unbiasedness.
+needed to identify the Banach fixed point as a solution. A later concrete solver theorem may
+establish either or both directions; the generic Phase-5 theorem requires only unbiasedness.
 
 # Unbiased contractive convergence
 
@@ -114,70 +114,6 @@ This is an upper bound on residual from state error. It supplies neither a rever
 bound nor per-sweep residual decrease. Those stronger results need a residual lower bound or a
 separate model-specific argument.
 
-# Canonical VBD consistency check
-
-Consider free blocks indexed by `i`. On a regular branch of the canonical local VBD update, let
-the local residual be the corresponding block of the same global residual, `F_i(x)`, and let
-`B_i(x)` be invertible. The paper's force convention is `f_i = -F_i`; its Newton update is
-equivalently
-
-$$
-U_i(x)_i=x_i-B_i(x)^{-1}F_i(x),
-\qquad
-U_i(x)_j=x_j\quad(j\ne i).
-$$
-
-The matrix `B_i` need not be the exact block Hessian for this fixed-point argument; invertibility
-and the displayed residual identity suffice. In particular, a root is preserved because every
-correction is zero.
-
-For a serial sweep that visits each free block exactly once, the converse follows by induction in
-the visit order. If the completed sweep fixes `x`, the first block is never written again, so its
-local correction is zero. Invertibility gives `F_i(x)=0`, and the first update has left the state
-unchanged. Repeating this argument shows that every update is zero at the original `x`, hence
-`F(x)=0`. Therefore the regular serial sweep is unbiased, and in fact
-
-$$
-T_{\mathrm{serial}}(x)=x
-\quad\Longleftrightarrow\quad F(x)=0.
-$$
-
-For a buffered color batch, every vertex writes only its own output block computed from the common
-pre-batch snapshot. If a completed colored sweep fixes `x`, no later color rewrites a block from
-an earlier color. The same induction over colors shows every block correction is zero and hence
-`F(x)=0`. This argument does not require same-color commutation: proper coloring is needed to
-identify the buffered batch with a serial ordering and to obtain the selected contraction bound,
-not for fixed-point-to-residual consistency. Thus a regular buffered sweep is also unbiased. A
-proper static coloring gives the stronger equality with its serial counterpart.
-
-These conclusions apply to a fixed smooth energy and a fixed execution plan. They match the
-paper's per-vertex Newton equation and its buffered color-pass semantics [1]. The Phase-7
-formalization packages the once-per-free-block and regularity assumptions into the concrete
-execution theorem.
-
-## Production boundaries
-
-The literal production algorithm described in the VBD paper is not unconditionally unbiased for
-the Phase-1 residual.
-
-- The implementation bypasses a vertex update when its local Hessian is nearly singular. A skipped
-  block can have `F_i(x) ≠ 0` while making a zero correction; the paper explicitly notes that all
-  vertices can then freeze. The fixed-point-to-residual implication fails without a regular-region
-  premise excluding this branch.
-- Fixed positional constraints require the residual projected to the free or constrained subspace.
-  A prescribed coordinate may legitimately have a nonzero full-space gradient because it carries a
-  reaction force.
-- Collision detection schedules, frozen contact geometry, and friction approximations must define
-  one fixed residual and one fixed map before this property can be stated. Their relationship to
-  the exact gradient of a fully coupled implicit-Euler energy is an additional model-specific
-  proof obligation. Acceleration similarly requires an augmented state because it depends on
-  earlier iterates.
-
-The accepted first theorem avoids these boundaries: it uses the skip-free nonlinear axial chain,
-a static proper coloring, and the stated fixed potential. The general VBD theorem records exactly
-which branch and residual it analyzes rather than assigning the property to every implementation
-feature at once.
-
 # Formalization target
 
 `Vbd.Integrator.FixedPoint` imports only `Vbd.Integrator.ImplicitEulerEnergy` and
@@ -194,9 +130,3 @@ proves it for the regular concrete sweep; its result discharges the IF-01 premis
 stays at the contraction boundary, with `dist_eq_norm` used only for the normed residual statement.
 No block decomposition, coloring, Hessian inverse, chain coefficient, or concrete execution order
 belongs in the generic bridge.
-
-# Citation
-
-[1] [Vertex Block Descent reference note](/references/vbd-paper.md), especially the local Newton
-equation and color-buffer execution described in the [source transcript](/references/vbd-paper-full.md#31-global-optimization)
-and [parallelization section](/references/vbd-paper-full.md#39-parallelization).
