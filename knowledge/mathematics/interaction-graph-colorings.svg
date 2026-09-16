@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="360" viewBox="0 0 1100 360" role="img" aria-labelledby="title desc">
+  <title id="title">Examples of proper colorings of component interaction graphs</title>
+  <desc id="desc">A blue-orange one-dimensional chain, a blue-orange checkerboard grid, and a blue-orange-purple triangle.</desc>
+  <rect width="1100" height="360" fill="#ffffff"/>
+  <style>
+    .panel { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 2; }
+    .edge { stroke: #475569; stroke-width: 3; stroke-linecap: round; }
+    .node { stroke: #1e293b; stroke-width: 2.5; }
+    .blue { fill: #60a5fa; }
+    .orange { fill: #fbbf24; }
+    .purple { fill: #c084fc; }
+    .heading { font: 700 22px system-ui, sans-serif; fill: #0f172a; }
+    .label { font: 600 18px system-ui, sans-serif; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+    .caption { font: 16px system-ui, sans-serif; fill: #334155; text-anchor: middle; }
+  </style>
+  <rect class="panel" x="15" y="15" width="345" height="330" rx="16"/>
+  <text class="heading" x="187" y="52" text-anchor="middle">1D chain</text>
+  <line class="edge" x1="75" y1="175" x2="150" y2="175"/>
+  <line class="edge" x1="150" y1="175" x2="225" y2="175"/>
+  <line class="edge" x1="225" y1="175" x2="300" y2="175"/>
+  <circle class="node blue" cx="75" cy="175" r="25"/><text class="label" x="75" y="175">0</text>
+  <circle class="node orange" cx="150" cy="175" r="25"/><text class="label" x="150" y="175">1</text>
+  <circle class="node blue" cx="225" cy="175" r="25"/><text class="label" x="225" y="175">2</text>
+  <circle class="node orange" cx="300" cy="175" r="25"/><text class="label" x="300" y="175">3</text>
+  <circle class="blue" cx="132" cy="275" r="10"/><text class="caption" x="178" y="281">C₀</text>
+  <circle class="orange" cx="212" cy="275" r="10"/><text class="caption" x="258" y="281">C₁</text>
+  <rect class="panel" x="378" y="15" width="345" height="330" rx="16"/>
+  <text class="heading" x="550" y="52" text-anchor="middle">2D grid</text>
+  <g class="edge">
+    <line x1="475" y1="120" x2="550" y2="120"/><line x1="550" y1="120" x2="625" y2="120"/>
+    <line x1="475" y1="190" x2="550" y2="190"/><line x1="550" y1="190" x2="625" y2="190"/>
+    <line x1="475" y1="260" x2="550" y2="260"/><line x1="550" y1="260" x2="625" y2="260"/>
+    <line x1="475" y1="120" x2="475" y2="190"/><line x1="475" y1="190" x2="475" y2="260"/>
+    <line x1="550" y1="120" x2="550" y2="190"/><line x1="550" y1="190" x2="550" y2="260"/>
+    <line x1="625" y1="120" x2="625" y2="190"/><line x1="625" y1="190" x2="625" y2="260"/>
+  </g>
+  <g class="node">
+    <circle class="blue" cx="475" cy="120" r="20"/><circle class="orange" cx="550" cy="120" r="20"/><circle class="blue" cx="625" cy="120" r="20"/>
+    <circle class="orange" cx="475" cy="190" r="20"/><circle class="blue" cx="550" cy="190" r="20"/><circle class="orange" cx="625" cy="190" r="20"/>
+    <circle class="blue" cx="475" cy="260" r="20"/><circle class="orange" cx="550" cy="260" r="20"/><circle class="blue" cx="625" cy="260" r="20"/>
+  </g>
+  <text class="caption" x="550" y="315">checkerboard coloring</text>
+  <rect class="panel" x="741" y="15" width="344" height="330" rx="16"/>
+  <text class="heading" x="913" y="52" text-anchor="middle">three-block component</text>
+  <line class="edge" x1="850" y1="245" x2="975" y2="245"/>
+  <line class="edge" x1="850" y1="245" x2="913" y2="120"/>
+  <line class="edge" x1="913" y1="120" x2="975" y2="245"/>
+  <circle class="node blue" cx="913" cy="120" r="25"/><text class="label" x="913" y="120">a</text>
+  <circle class="node orange" cx="850" cy="245" r="25"/><text class="label" x="850" y="245">b</text>
+  <circle class="node purple" cx="975" cy="245" r="25"/><text class="label" x="975" y="245">c</text>
+  <text class="caption" x="913" y="315">three colors are required</text>
+</svg>

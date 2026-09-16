@@ -139,9 +139,37 @@ Indeed, two distinct blocks in $S\cap C_r$ form an edge with one color, and ever
 arises from a support containing both endpoints. The graph supplies the standard coloring language,
 while the support family $A$ supplies the component potentials and energy bookkeeping.
 
-For $M\subseteq A$, the same coloring is proper for $M$. The condition
-$|S\cap C_r|\le 1$ for $S\in A\setminus M$ and $r\in\{0,\ldots,m-1\}$ extends properness from
-$M$ to $A$.
+## Coloring examples
+
+![Three properly colored component interaction graphs: a one-dimensional chain, a two-dimensional grid, and a three-block component.](./interaction-graph-colorings.svg)
+
+For the four-block chain
+
+$$
+A=\bigl\{\{0,1\},\{1,2\},\{2,3\}\bigr\},
+$$
+
+the graph is the path $0\text{—}1\text{—}2\text{—}3$. The classes
+$C_0=\{0,2\}$ and $C_1=\{1,3\}$ give its even/odd two-coloring. The same construction applies to
+every finite nearest-neighbor chain.
+
+For a rectangular grid
+
+$$
+I=\{0,\ldots,p-1\}\times\{0,\ldots,q-1\},
+$$
+
+take $A$ to contain the horizontal and vertical nearest-neighbor supports. Its interaction graph
+has the checkerboard coloring
+
+$$
+C_0=\{(a,b)\in I\mid a+b\text{ is even}\},
+\qquad
+C_1=\{(a,b)\in I\mid a+b\text{ is odd}\}.
+$$
+
+For $A=\{\{a,b,c\}\}$, the one three-block support induces a triangle. Its three vertices have
+the singleton color classes $C_0=\{a\}$, $C_1=\{b\}$, and $C_2=\{c\}$.
 
 # Color batches and serial equivalence
 
@@ -151,6 +179,8 @@ together, then proceeds through the color classes in the numerical order $0,\ldo
 numbering of a graph coloring provides the outer sequential order, and each color class provides
 one inner parallel batch. Let every block $i$ have a single-block update $U_i:X\to X$ with write
 support contained in $\{i\}$.
+
+![A colored VBD sweep executes numbered color batches sequentially and the updates inside each batch in parallel.](./colored-sweep.svg)
 
 For distinct $i,j\in C_r$ in a proper color class, the graph has no edge between $i$ and $j$.
 Equivalently, no component support contains both blocks. The VBD locality theorem then gives that
@@ -197,44 +227,3 @@ The Phase-4 results are:
    $i\sim_A j\Longrightarrow i=j$ for $i,j\in C_r$.
 4. Properness is preserved under restriction to $M\subseteq A$, and the condition above
    characterizes when it extends from $M$ to $A$.
-
-# Interaction-graph coloring examples
-
-For the following examples, each color class contains no pair joined by an edge of the component
-interaction graph, and its color number can be used as the corresponding VBD batch number.
-
-## One-dimensional chain
-
-Take the four-block chain with
-
-$$
-A=\bigl\{\{0,1\},\{1,2\},\{2,3\}\bigr\}.
-$$
-
-The component interaction graph is the path $0\text{—}1\text{—}2\text{—}3$, and the two colors have classes
-$C_0=\{0,2\}$ and $C_1=\{1,3\}$. The same even/odd coloring works for every finite
-nearest-neighbor chain.
-
-## Two-dimensional grid
-
-Let $I=\{0,\ldots,p-1\}\times\{0,\ldots,q-1\}$, and let $A$ consist of the horizontal and
-vertical nearest-neighbor supports. Thus $A$ contains $\{(a,b),(a+1,b)\}$ whenever both blocks
-belong to $I$, and contains $\{(a,b),(a,b+1)\}$ whenever both blocks belong to $I$. The component
-interaction graph is the rectangular grid. Its checkerboard coloring is
-
-$$
-C_0=\{(a,b)\in I\mid a+b\text{ is even}\},
-\qquad
-C_1=\{(a,b)\in I\mid a+b\text{ is odd}\}.
-$$
-
-Every horizontal or vertical edge joins opposite parities, so this is a proper two-coloring.
-
-## A three-block component
-
-For $A=\{\{a,b,c\}\}$, the one component support induces a triangle. Every two distinct vertices
-are adjacent, so a proper coloring has the singleton classes
-
-$$
-C_0=\{a\},\qquad C_1=\{b\},\qquad C_2=\{c\}.
-$$

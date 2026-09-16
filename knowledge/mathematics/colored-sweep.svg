@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="270" viewBox="0 0 1100 270" role="img" aria-labelledby="title desc">
+  <title id="title">A two-color VBD sweep</title>
+  <desc id="desc">The first color batch runs updates U0 and U2 in parallel, then the second color batch runs updates U1 and U3 in parallel.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475569"/></marker>
+  </defs>
+  <style>
+    .outline { fill: #f8fafc; stroke: #94a3b8; stroke-width: 2.5; }
+    .batchBlue { fill: #dbeafe; stroke: #2563eb; stroke-width: 2.5; }
+    .batchOrange { fill: #fef3c7; stroke: #d97706; stroke-width: 2.5; }
+    .arrow { stroke: #475569; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .heading { font: 700 20px system-ui, sans-serif; fill: #0f172a; text-anchor: middle; }
+    .label { font: 600 18px system-ui, sans-serif; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+    .caption { font: 16px system-ui, sans-serif; fill: #334155; text-anchor: middle; }
+  </style>
+  <rect width="1100" height="270" fill="#ffffff"/>
+  <rect class="outline" x="30" y="104" width="120" height="62" rx="12"/><text class="label" x="90" y="135">input x</text>
+  <line class="arrow" x1="151" y1="135" x2="225" y2="135"/>
+  <rect class="batchBlue" x="230" y="50" width="250" height="170" rx="16"/>
+  <text class="heading" x="355" y="84">color 0: P₀</text>
+  <rect class="outline" x="260" y="110" width="80" height="55" rx="10"/><text class="label" x="300" y="137">U₀</text>
+  <rect class="outline" x="370" y="110" width="80" height="55" rx="10"/><text class="label" x="410" y="137">U₂</text>
+  <text class="caption" x="355" y="198">parallel within C₀</text>
+  <line class="arrow" x1="481" y1="135" x2="580" y2="135"/>
+  <rect class="batchOrange" x="585" y="50" width="250" height="170" rx="16"/>
+  <text class="heading" x="710" y="84">color 1: P₁</text>
+  <rect class="outline" x="615" y="110" width="80" height="55" rx="10"/><text class="label" x="655" y="137">U₁</text>
+  <rect class="outline" x="725" y="110" width="80" height="55" rx="10"/><text class="label" x="765" y="137">U₃</text>
+  <text class="caption" x="710" y="198">parallel within C₁</text>
+  <line class="arrow" x1="836" y1="135" x2="925" y2="135"/>
+  <rect class="outline" x="930" y="104" width="140" height="62" rx="12"/><text class="label" x="1000" y="135">sweep output</text>
+  <text class="caption" x="550" y="252">sequential outer order: P₀, then P₁</text>
+</svg>
