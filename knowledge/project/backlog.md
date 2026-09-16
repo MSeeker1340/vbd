@@ -94,8 +94,8 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| IF-01 | planned | Solver-independent IE fixed-point theorem | IE-05, CT-02 | A known IE stationary fixed point of an arbitrary local contraction is the unique fixed point in its certified region |
-| IF-02 | planned | Finite-iteration IE error | IF-01, CT-03 | Iterates have an explicit geometric distance bound to the IE solution |
+| IF-01 | planned | Solver-independent unbiased IE fixed-point theorem | IE-05, CT-02 | A contraction on a nonempty complete invariant region whose fixed points are IE roots has a unique solver fixed point, and that point is an IE solution |
+| IF-02 | planned | Finite-iteration IE error | IF-01, CT-03 | Iterates have an explicit geometric distance bound to the IE solution selected by IF-01 |
 | IF-03 | planned | Distance-to-residual bound | IF-02, quantitative regularity of `F_IE` | A stated Lipschitz bound converts iterate error into an IE residual bound |
 
 # Phase 6 — contraction of composed updates

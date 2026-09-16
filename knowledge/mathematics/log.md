@@ -2,7 +2,7 @@
 
 ## 2026-09-16
 
-* **Phase-5 preparation**: Added [Implicit-Euler fixed-point bridge](./implicit-euler-fixed-points.md), specifying the solver-independent stationary-point, finite-iterate, and Lipschitz residual-transport theorems. It separates solver-fixed-point uniqueness from stationary-point uniqueness and leaves concrete VBD consistency and residual scaling to Phase 7.
+* **Phase-5 consistency refinement**: Recast the implicit-Euler fixed-point specification around `UnbiasedOn`: a fixed point of the solver must solve the residual equation. Separated self-map, contractive, and unbiased guarantees; recorded residual transport after Banach existence. Verified that regular serial and buffered VBD sweeps are unbiased by their once-per-free-block writes, while singular-block skips, constrained residuals, changing collision data, and acceleration require stated boundaries.
 
 ## 2026-09-16
 

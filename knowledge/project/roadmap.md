@@ -236,18 +236,19 @@ Status: planned. Module: `Vbd/Integrator/FixedPoint.lean`.
 
 Dependencies: Phase 1 + Phase 3.
 
-The [implicit-Euler fixed-point bridge](/mathematics/implicit-euler-fixed-points.md) specifies
-the solver-independent interface. For an arbitrary solver map `T : X → X` and an implicit-Euler stationary point `x*`, prove that a
-forward-invariant local contraction with `T x* = x*` yields convergence to an implicit-Euler
-solution and the corresponding finite-iteration bound
+The [implicit-Euler solver-consistency specification](/mathematics/implicit-euler-fixed-points.md)
+defines an **unbiased** solver as one whose fixed points solve the IE residual. For an arbitrary
+solver map `T : X → X`, prove that an unbiased forward-invariant local contraction on a nonempty
+complete region has a unique solver fixed point, that this point is an implicit-Euler solution,
+and that the corresponding finite-iteration bound is
 
 $$
 \|T^{k}(x)-x^*\|\le q^k\|x-x^*\|.
 $$
 
 Where quantitative regularity of `F_IE` is available, transport distance bounds to residual
-bounds. Phase 5 takes the solver map and its designated fixed point as parameters. Phase 7 supplies
-the concrete VBD map and its fixed-point identification.
+bounds. Phase 5 takes the solver map and unbiasedness proof as parameters. Phase 7 supplies the
+concrete VBD map and proves unbiasedness on its stated regular branch.
 
 Acceptance gate: the theorem is solver-independent and uses the Phase 1 and Phase 3 interfaces.
 
@@ -302,7 +303,8 @@ execution is exposed as a map on `BlockSum B`; controller ordering and buffer se
 explicit inputs to its construction. The required result chain is:
 
 1. identify regular states where every block update follows the nonsingular branch;
-2. show that a regular fixed point of a complete sweep is an implicit-Euler solution;
+2. prove that the regular complete sweep is unbiased for the stated IE residual, and prove root
+   preservation where the exact fixed-point equivalence is required;
 3. differentiate the externally ordered serial composition and identify its derivative with the
    corresponding block Gauss-Seidel error operator;
 4. use `M / h² + ∇²P` to prove block invertibility and quantitative inverse bounds;

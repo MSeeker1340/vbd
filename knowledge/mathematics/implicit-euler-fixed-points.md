@@ -1,144 +1,202 @@
 ---
 type: Mathematical Specification
-title: Implicit-Euler Fixed-Point Bridge
-description: Connects a certified solver fixed point to implicit-Euler stationarity and transports contraction error to an implicit-Euler residual bound.
-tags: [implicit-euler, fixed-points, contraction, residual, iteration]
+title: Implicit-Euler Solver Consistency and Fixed-Point Convergence
+description: Specifies the unbiasedness condition that identifies contractive solver fixed points with implicit-Euler solutions and transports state error to residual error.
+tags: [implicit-euler, fixed-points, contraction, residual, solver-consistency]
 timestamp: 2026-09-16T00:00:00Z
 ---
 
-The [implicit-Euler formulation](./implicit-euler.md) defines one timestep by stationarity of
-its incremental energy. The [contractive fixed-point foundation](./contractive-fixed-point-iteration.md)
-certifies convergence of an arbitrary solver map once a fixed point and an invariant contraction
-region are supplied. This bridge states exactly how those facts combine without assuming a
-particular block-update formula. The production VBD map enters only in Phase 7.
+The [implicit-Euler formulation](./implicit-euler.md) supplies the equation to solve, while
+[contractive fixed-point iteration](./contractive-fixed-point-iteration.md) supplies convergence
+facts for an arbitrary self-map. This specification identifies the additional solver-consistency
+property that connects those independent layers. It applies to any solver map; the concrete VBD
+proof is a Phase-7 obligation.
 
-# Setting
+# Three layers of a solver guarantee
 
 Let `X` be a real normed space, let `ie` be an implicit-Euler step, and write
 
 $$
-F_{\mathrm{IE}}(x)=\nabla G_{\mathrm{IE}}(x)
+F(x)=F_{\mathrm{IE}}(x)=\nabla G_{\mathrm{IE}}(x)
 =\operatorname{energyGradient}_{ie}(x).
 $$
 
-The equality is the Phase-1 gradient identity. A point `p : X` is an implicit-Euler solution
-when
+The Phase-1 gradient identity gives the displayed equality. An implicit-Euler solution is a point
+`p` with `F(p) = 0`; it is a stationary point of `G_IE`. No minimization or uniqueness of such
+points is implicit in this terminology.
+
+For a solver map `T : X → X` and a certified region `S ⊆ X`, the guarantees form a strict chain:
+
+| Available property | Supported conclusion |
+|---|---|
+| `T` is only a self-map | Iteration is defined; it has no general convergence or equation-solving guarantee. |
+| `T(S) ⊆ S` and `T` contracts on complete nonempty `S` | A unique solver fixed point exists in `S`; iterates converge geometrically to it with a state-distance bound. The fixed point need not solve `F(x) = 0`. |
+| The contraction premises and `T` is unbiased for `F` on `S` | The unique solver fixed point is an implicit-Euler solution. A Lipschitz bound for `F` further turns state error into a residual bound. |
+
+The second layer is entirely objective-free. The third is the first point at which the solver map
+is connected to the equation it is intended to solve.
+
+# Unbiasedness
+
+The map `T` is **unbiased for `F` on `S`** when every fixed point in its certified region solves
+the equation:
 
 $$
-F_{\mathrm{IE}}(p)=0.
+\operatorname{UnbiasedOn}(F,T,S)
+\quad\Longleftrightarrow\quad
+\forall x\in S,\quad T(x)=x\ \Longrightarrow\ F(x)=0.
 $$
 
-It is therefore a stationary point of `G_IE`. This is the solution concept used by this bridge;
-neither minimization nor uniqueness of stationary points is assumed.
-
-Let `S ⊆ X` be a certified region and `T : X → X` a solver map. The bridge takes the following
-data as independent premises:
+This is a consistency condition, not a convergence condition. It says that the solver has no
+spurious fixed point in `S`; it does not say that a solution exists, that `T` is continuous, or
+that the iteration converges. The converse,
 
 $$
-p\in S,\qquad F_{\mathrm{IE}}(p)=0,\qquad T(p)=p,
+F(x)=0\ \Longrightarrow\ T(x)=x,
 $$
 
+is **root preservation**. It is useful when describing all roots and fixed points, but it is not
+needed to identify the Banach fixed point as a solution. Exact regular VBD satisfies both
+directions; the generic Phase-5 theorem requires only unbiasedness.
+
+# Unbiased contractive convergence
+
+Suppose `S` is nonempty and complete in its induced metric, `T(S) ⊆ S`, and
+
 $$
-T(S)\subseteq S,\qquad
 \lVert T(x)-T(y)\rVert\le q\lVert x-y\rVert
-\quad(x,y\in S),\qquad 0\le q<1.
+\qquad(x,y\in S),\qquad 0\le q<1.
 $$
 
-The stationary and solver-fixed-point statements are deliberately separate. They are the
-root-preservation and root-identification obligation for the concrete solver. For a VBD sweep,
-Phase 7 proves them from the actual local-update semantics, including the selected skip behavior.
-
-# Solver-independent stationary convergence
-
-Under the setting above, `p` is the unique fixed point of `T` in `S`. Every `x₀ ∈ S` has
-iterates `x_k = T^k(x₀)` remaining in `S` and satisfying
+If `T` is unbiased for `F` on `S`, then there is a point `p ∈ S` such that
 
 $$
-\lVert x_k-p\rVert\le q^k\lVert x_0-p\rVert.
+T(p)=p,
+\qquad F(p)=0,
 $$
 
-Consequently `x_k → p`, and the solver converges geometrically to the designated
-implicit-Euler stationary point. Completeness of `S` is unnecessary for this conclusion because
-`p` is supplied. If the solver fixed point is not known beforehand, nonemptiness and completeness
-of the invariant region give existence through the Banach theorem; showing that the resulting
-point solves the implicit-Euler equation still requires solver consistency.
+and `p` is the unique **solver fixed point** in `S`. For every `x₀ ∈ S`, with
+`x_k = T^k(x₀)`,
 
-The conclusion is uniqueness of a **solver fixed point** in `S`. It does not assert that `p` is
-the only stationary point of `G_IE` in `S`: that stronger claim needs a converse such as
-`F_IE(x) = 0 → T(x) = x`, together with the displayed fixed-point uniqueness, or independent
-curvature hypotheses. Likewise, a contraction certificate alone does not identify an arbitrary
-fixed point with a physical solution.
+$$
+\lVert x_k-p\rVert\le q^k\lVert x_0-p\rVert,
+\qquad x_k\longrightarrow p.
+$$
 
-This result is IF-01. Its finite-iteration form is IF-02; both reuse the generic local
-contraction interface rather than reproving Banach theory for implicit Euler.
+The conclusion does not claim that `p` is the unique implicit-Euler stationary point in `S`.
+That requires root preservation as well, or an independent uniqueness theorem for the residual.
+Completeness is used only to obtain an unknown fixed point. When a fixed point is already supplied,
+the geometric state estimate needs neither completeness nor unbiasedness; unbiasedness adds the
+equation-solving interpretation.
 
 # Residual transport
 
-State convergence becomes a quantitative implicit-Euler residual guarantee when the residual is
-Lipschitz on the same region. Suppose a constant `L ≥ 0` satisfies
+Suppose in addition that `F` is `L`-Lipschitz on `S`:
 
 $$
-\lVert F_{\mathrm{IE}}(x)-F_{\mathrm{IE}}(y)\rVert
-\le L\lVert x-y\rVert\qquad(x,y\in S).
+\lVert F(x)-F(y)\rVert\le L\lVert x-y\rVert
+\qquad(x,y\in S).
 $$
 
-Since `F_IE(p) = 0`, the iterate bound gives
+Unbiasedness gives `F(p)=0`, so the contraction estimate yields
 
 $$
-\lVert F_{\mathrm{IE}}(x_k)\rVert
+\lVert F(x_k)\rVert
 \le L\lVert x_k-p\rVert
 \le Lq^k\lVert x_0-p\rVert.
 $$
 
-Thus an initial state-error allowance `R` and a residual tolerance `ε` are certified by
+Thus `Lq^kR ≤ ε` certifies residual at most `ε` whenever the initial state error is at most `R`.
+A physically scaled residual requires its own Lipschitz bound. A derivative operator-norm bound
+for `F` on a convex region is one route to the required Lipschitz premise.
+
+This is an upper bound on residual from state error. It supplies neither a reverse state-error
+bound nor per-sweep residual decrease. Those stronger results need a residual lower bound or a
+separate model-specific argument.
+
+# Canonical VBD consistency check
+
+Consider free blocks indexed by `i`. On a regular branch of the canonical local VBD update, let
+the local residual be the corresponding block of the same global residual, `F_i(x)`, and let
+`B_i(x)` be invertible. The paper's force convention is `f_i = -F_i`; its Newton update is
+equivalently
 
 $$
-\lVert x_0-p\rVert\le R,
-\qquad Lq^kR\le\varepsilon.
+U_i(x)_i=x_i-B_i(x)^{-1}F_i(x),
+\qquad
+U_i(x)_j=x_j\quad(j\ne i).
 $$
 
-The same statement applies to a physically scaled residual `R_phys = A ∘ F_IE` after supplying
-its own Lipschitz constant on `S`. The scaling and the bound belong to the concrete model; Phase
-5 only transports any such established regularity. A derivative bound
-`‖DF_IE(x)‖op ≤ L` on a convex region is one sufficient route to this premise, but is not part of
-the solver-independent theorem.
+The matrix `B_i` need not be the exact block Hessian for this fixed-point argument; invertibility
+and the displayed residual identity suffice. In particular, a root is preserved because every
+correction is zero.
 
-This transport is one-way. The upper residual estimate does not give a state-error estimate or
-stepwise residual decrease. Either conclusion needs an additional residual lower bound,
-monotonicity argument, or problem-specific result. In particular, state contraction can permit an
-intermediate increase of the physical residual while still forcing it to zero at the geometric
-rate above.
+For a serial sweep that visits each free block exactly once, the converse follows by induction in
+the visit order. If the completed sweep fixes `x`, the first block is never written again, so its
+local correction is zero. Invertibility gives `F_i(x)=0`, and the first update has left the state
+unchanged. Repeating this argument shows that every update is zero at the original `x`, hence
+`F(x)=0`. Therefore the regular serial sweep is unbiased, and in fact
+
+$$
+T_{\mathrm{serial}}(x)=x
+\quad\Longleftrightarrow\quad F(x)=0.
+$$
+
+For a buffered color batch, every vertex writes only its own output block computed from the common
+pre-batch snapshot. If a completed colored sweep fixes `x`, no later color rewrites a block from
+an earlier color. The same induction over colors shows every block correction is zero and hence
+`F(x)=0`. This argument does not require same-color commutation: proper coloring is needed to
+identify the buffered batch with a serial ordering and to obtain the selected contraction bound,
+not for fixed-point-to-residual consistency. Thus a regular buffered sweep is also unbiased. A
+proper static coloring gives the stronger equality with its serial counterpart.
+
+These conclusions apply to a fixed smooth energy and a fixed execution plan. They match the
+paper's per-vertex Newton equation and its buffered color-pass semantics [1]. The Phase-7
+formalization packages the once-per-free-block and regularity assumptions into the concrete
+execution theorem.
+
+## Production boundaries
+
+The literal production algorithm described in the VBD paper is not unconditionally unbiased for
+the Phase-1 residual.
+
+- The implementation bypasses a vertex update when its local Hessian is nearly singular. A skipped
+  block can have `F_i(x) ≠ 0` while making a zero correction; the paper explicitly notes that all
+  vertices can then freeze. The fixed-point-to-residual implication fails without a regular-region
+  premise excluding this branch.
+- Fixed positional constraints require the residual projected to the free or constrained subspace.
+  A prescribed coordinate may legitimately have a nonzero full-space gradient because it carries a
+  reaction force.
+- Collision detection schedules, frozen contact geometry, and friction approximations must define
+  one fixed residual and one fixed map before this property can be stated. Their relationship to
+  the exact gradient of a fully coupled implicit-Euler energy is an additional model-specific
+  proof obligation. Acceleration similarly requires an augmented state because it depends on
+  earlier iterates.
+
+The accepted first theorem avoids these boundaries: it uses the skip-free nonlinear axial chain,
+a static proper coloring, and the stated fixed potential. The general VBD theorem records exactly
+which branch and residual it analyzes rather than assigning the property to every implementation
+feature at once.
 
 # Formalization target
 
 `Vbd.Integrator.FixedPoint` imports only `Vbd.Integrator.ImplicitEulerEnergy` and
-`Vbd.Dynamics.Contraction`. Its public declarations take the solver map, certified set,
-designated point, contraction premises, and residual-regularity constant as parameters. The
-Phase-1 API supplies `ie.energyGradient` and its equality with the canonical gradient of
-`ie.energy`; the Phase-3 API supplies set invariance, fixed-point uniqueness, convergence, and
-the finite distance bound.
-
-The intended theorem family is:
+`Vbd.Dynamics.Contraction`. It defines the generic `UnbiasedOn` predicate and proves:
 
 | Backlog item | Premises added at the bridge | Conclusion |
 |---|---|---|
-| IF-01 | `energyGradient ie p = 0` and `IsFixedPt T p`, plus local contraction | `p` is the unique solver fixed point in `S` and is an IE stationary solution |
-| IF-02 | IF-01 premises and `x₀ ∈ S` | `dist (T^[k] x₀) p ≤ q^k * dist x₀ p` and convergence to `p` |
-| IF-03 | IF-02 premises and `LipschitzOnWith L (energyGradient ie) S` | `‖energyGradient ie (T^[k] x₀)‖ ≤ L q^k ‖x₀-p‖` |
+| IF-01 | Complete nonempty invariant contraction region and `UnbiasedOn (energyGradient ie) T S` | The unique solver fixed point in `S` exists and is an IE stationary solution. |
+| IF-02 | IF-01 and `x₀ ∈ S` | The iterates converge to that solution with the geometric distance bound. |
+| IF-03 | IF-02 and `LipschitzOnWith L (energyGradient ie) S` | The IE residual has the displayed geometric upper bound. |
 
-The formal theorem should state metric distance at the generic contraction boundary and use
-`dist_eq_norm` only where the residual norm is required. Completeness remains local to an
-existence theorem for an unknown solver fixed point. No block decomposition, component support,
-coloring, Hessian inverse, or chain-specific coefficient occurs in this module.
+The generic module does not prove unbiasedness for a particular update formula. `Integrator/VBD`
+proves it for the regular concrete sweep; its result discharges the IF-01 premise. Metric distance
+stays at the contraction boundary, with `dist_eq_norm` used only for the normed residual statement.
+No block decomposition, coloring, Hessian inverse, chain coefficient, or concrete execution order
+belongs in the generic bridge.
 
-# Role in the theorem chain
+# Citation
 
-Phase 5 consumes the stationary-point identity from Phase 1 and the iteration facts from Phase 3.
-Phase 6 establishes contraction certificates for supplied block-update executions. Phase 7 supplies
-the concrete VBD sweep, proves the solver consistency premises, and instantiates the residual
-regularity bound for the accepted axial-chain certificate. The resulting finite-sweep conclusion
-concerns the stated local region and one implicit-Euler timestep.
-
-The [axial-spring analysis](./axial-spring-contraction.md) supplies a worked `L` and a scaled
-residual for its predictor box. Its 20-sweep target is an application obligation, not a restriction
-on this generic bridge.
+[1] [Vertex Block Descent reference note](/references/vbd-paper.md), especially the local Newton
+equation and color-buffer execution described in the [source transcript](/references/vbd-paper-full.md#31-global-optimization)
+and [parallelization section](/references/vbd-paper-full.md#39-parallelization).

@@ -21,7 +21,7 @@ timestamp: 2026-09-16T00:00:00Z
 | Phase | Module | Responsibility | Direct project dependencies |
 |---|---|---|---|
 | P4 | `Integrator/LocalPotential.lean` | Implemented finite-support potential components, exact cancellation, and support-to-Mathlib-graph/coloring bridge lemmas | `ImplicitEulerEnergy`, `Block/Basic` |
-| P5 | `Integrator/FixedPoint.lean` | Solver-independent convergence from a contractive map to a known [implicit-Euler stationary fixed point](/mathematics/implicit-euler-fixed-points.md) | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
+| P5 | `Integrator/FixedPoint.lean` | Solver-independent [unbiased fixed-point convergence](/mathematics/implicit-euler-fixed-points.md) from a contractive map to an implicit-Euler stationary solution | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
 | P6 | `Block/Contraction.lean` | Derivative-factor bounds, ordered comparison composition, proper-color estimates, and deferred perturbation extensions | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Production block-Newton operators, externally controlled serial and buffered executions, derivative bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
 

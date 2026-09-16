@@ -4,7 +4,7 @@ title: Vertex Block Descent
 description: Curated notes on Chen, Liu, Yang, and Yuksel's VBD method and its formalization-relevant claims.
 resource: https://doi.org/10.1145/3658179
 tags: [vbd, implicit-euler, gauss-seidel, graphics]
-timestamp: 2026-08-20T00:00:00Z
+timestamp: 2026-09-16T00:00:00Z
 ---
 
 # Bibliography
@@ -31,6 +31,23 @@ color. Color classes are processed sequentially and vertices within a class in p
 collision interactions complicate this clean model, and buffering can yield partially Jacobi-style
 behavior. The roadmap separates exact proper-color equivalence from contraction bounds for this
 hybrid map; see [local decomposition and coloring](/mathematics/local-decomposition-and-coloring.md).
+
+# Fixed-point consistency boundary
+
+On a fixed smooth energy branch, each free vertex's regular local Newton update changes only that
+vertex and is zero exactly when its block residual is zero. A serial sweep that writes every free
+vertex exactly once is therefore unbiased for the global residual: a fixed sweep has zero update
+at every visit and hence zero residual at every vertex. The buffered color-pass sweep has the same
+fixed-point-to-residual implication because each output block is written once from its color's
+snapshot; proper coloring is needed for equivalence with serial execution and for the selected
+contraction analysis, not for this consistency implication.
+
+The paper's literal production behavior needs additional qualifications. Its near-singular Hessian
+test bypasses an update, so a nonzero residual can remain fixed. Fixed positional constraints use
+reduced coordinates, and collision scheduling, frozen contact geometry, friction approximations,
+and momentum acceleration require a residual and state space matched to the selected execution
+branch. The [solver-consistency specification](/mathematics/implicit-euler-fixed-points.md)
+records the resulting regular, fixed-data theorem boundary.
 
 # Claim discipline
 

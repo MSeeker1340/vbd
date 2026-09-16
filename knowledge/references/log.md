@@ -1,5 +1,9 @@
 # Curated References Update Log
 
+## 2026-09-16
+
+* **Fixed-point consistency assessment**: Checked the paper's local Newton update, singular-Hessian bypass, and buffered color-pass semantics against the new unbiasedness interface. Exact regular serial and buffered sweeps have fixed-point-to-residual consistency; the production skip branch and changing/approximated execution data require explicit boundaries.
+
 ## 2026-09-15
 
 * **Research**: Broadened the VBD review to identified formulation, convergence, and proof-assistant formalization work, independent of the project theorem route. Added higher-order-element/sub-stepping VBD alongside the original VBD, Augmented VBD, solver-level differentiation, and external nonlinear block-Gauss–Seidel sources; no identified VBD source supplies a proof-assistant formalization or theorem-level convergence analysis.

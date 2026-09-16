@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Contractive Fixed-Point Iteration
 description: Contraction on invariant complete sets, geometric iterate bounds, derivative criteria, and stability under perturbations.
 tags: [fixed-points, contraction, iteration, perturbations]
-timestamp: 2026-09-14T00:00:00Z
+timestamp: 2026-09-16T00:00:00Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), a timestep is determined
@@ -30,8 +30,8 @@ does decrease distance to its fixed point in the certified metric.
 For VBD, the substantive certificate comes from controlling block inverses, cross-block
 coupling, and their propagation through the actual execution order or simultaneous-batch
 semantics. The [curvature and coupling analysis](/mathematics/curvature.md) supplies these
-bounds, and the [implicit-Euler fixed-point bridge](./implicit-euler-fixed-points.md)
-connects a designated fixed point to stationarity. The theory here provides the independent,
+bounds, and the [implicit-Euler solver-consistency specification](./implicit-euler-fixed-points.md)
+identifies a solver fixed point with stationarity under an explicit consistency premise. The theory here provides the independent,
 objective-free iteration estimates used by those layers. Its guarantees apply within the
 certified region; practical convergence alone does not establish a contraction certificate.
 
@@ -121,7 +121,7 @@ $$
 A fixed-point defect is a property of the solver map. Identifying it with, or comparing it to,
 a physical equation residual requires an additional bridge. For example, if a residual map `F`
 is `L`-Lipschitz on `S` and `F(x*) = 0`, then `‖F(x_k)‖ ≤ L d(x_k,x*)`.
-The [implicit-Euler fixed-point bridge](./implicit-euler-fixed-points.md)
+The [implicit-Euler solver-consistency specification](./implicit-euler-fixed-points.md)
 supplies this connection to [stationarity](/mathematics/implicit-euler.md).
 
 # Adaptive stopping from the last update

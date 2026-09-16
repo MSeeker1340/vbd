@@ -2,7 +2,7 @@
 
 ## 2026-09-16
 
-* **Phase-5 preparation**: Added the solver-independent implicit-Euler fixed-point specification and linked the Phase-5 roadmap to it. IF-01–IF-03 retain their planned status; concrete VBD fixed-point consistency and model-specific residual regularity remain Phase-7 obligations.
+* **Phase-5 consistency refinement**: Replaced the designated-root formulation with an explicit unbiasedness premise: a solver fixed point in the certified region solves the IE residual. IF-01 now combines that premise with Banach existence; IF-02–IF-03 derive state and residual guarantees. The regular serial and buffered VBD sweep discharges this premise, while skip, constraint, changing-data, and acceleration branches retain explicit scope conditions.
 
 ## 2026-09-16
 
