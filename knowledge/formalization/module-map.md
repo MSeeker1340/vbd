@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-09-15T00:00:00Z
+timestamp: 2026-09-16T00:00:00Z
 ---
 
 # Foundation modules
@@ -20,7 +20,7 @@ timestamp: 2026-09-15T00:00:00Z
 
 | Phase | Module | Responsibility | Direct project dependencies |
 |---|---|---|---|
-| P4 | `Integrator/LocalPotential.lean` | Finite-support potential components, component-overlap graph, and proper-color conditions | `ImplicitEulerEnergy`, `Block/Basic` |
+| P4 | `Integrator/LocalPotential.lean` | Finite-support potential components and support-to-Mathlib-graph/coloring bridge lemmas | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Solver-independent convergence from a contractive map to a known implicit-Euler stationary fixed point | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
 | P6 | `Block/Contraction.lean` | Derivative-factor bounds, ordered comparison composition, proper-color estimates, and deferred perturbation extensions | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Production block-Newton operators, externally controlled serial and buffered executions, derivative bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |

@@ -1,5 +1,9 @@
 # Lean Formalization Update Log
 
+## 2026-09-16
+
+* **Phase-4 reuse decision**: Confirmed pinned Mathlib's `SimpleGraph.fromRel`, proper vertex coloring, color-class, and graph-partition APIs. Phase 4 will use `G.Coloring (Fin m)` directly and add only the support-induced graph and support-local bridge lemmas.
+
 ## 2026-09-15
 
 * **Module plan**: Renamed the planned Phase-4 module to `Integrator/LocalPotential.lean` and aligned its responsibility with finite-support potential components and their component-overlap graph.

@@ -1,10 +1,10 @@
 ---
 type: Library Inventory
 title: Pinned Mathlib API Inventory
-description: Records calculus, block-product, and fixed-point APIs confirmed in the repository's pinned Mathlib checkout.
-resource: ../.lake/packages/mathlib/Mathlib
-tags: [mathlib, lean4, gradient, block-product, contraction]
-timestamp: 2026-09-14T00:00:00Z
+description: Records calculus, block-product, graph-coloring, and fixed-point APIs confirmed in the repository's pinned Mathlib checkout.
+resource: ../../.lake/packages/mathlib/Mathlib
+tags: [mathlib, lean4, gradient, block-product, graph-coloring, contraction]
+timestamp: 2026-09-16T00:00:00Z
 ---
 
 # Audit basis
@@ -63,6 +63,32 @@ inverse of `PiLp.continuousLinearEquiv`; `PiLp.single` is its pointwise value-le
 analytic boundary retains the same representation. Exact finite-factor results support
 infinite-dimensional blocks.
 
+# Simple graphs and vertex coloring
+
+The pinned `Mathlib/Combinatorics/SimpleGraph/Basic.lean` and
+`Mathlib/Combinatorics/SimpleGraph/Coloring/Vertex.lean` supply the Phase-4 graph and coloring
+foundation. `SimpleGraph.fromRel` constructs a simple undirected graph from a binary relation,
+automatically symmetrizing it and removing loops. The support-induced graph is therefore a project
+definition only at the boundary from a finite family of supports to the relation
+
+$$
+i,j\longmapsto\exists S\in A,\;\{i,j\}\subseteq S.
+$$
+
+For a graph $G$, `G.Coloring (Fin m)` is Mathlib's proper vertex-coloring type with the numbered
+colors required by a VBD sweep. `SimpleGraph.Coloring.mk` constructs a coloring from a vertex-to-
+color function and an adjacent-vertices-have-distinct-colors proof. `Coloring.valid` supplies that
+proof as a reusable theorem, and `Coloring.colorClass` gives the set of blocks assigned a fixed
+color. `Coloring.isIndepSet_colorClass` and `Coloring.colorClasses_isPartition` provide the
+independence and partition facts for color classes.
+
+`Mathlib/Combinatorics/SimpleGraph/Partition.lean` also provides `SimpleGraph.Partition` and its
+equivalence with colorings. Phase 4 uses `G.Coloring (Fin m)` as its primary representation because
+the `Fin m` labels directly give the numbered outer execution order. The project proves only the
+support-specific bridge lemmas: characterization of adjacency by a common support, equivalence
+between a Mathlib coloring and injectivity on each support, and monotonicity under changing the
+support family.
+
 # Contractive fixed points
 
 The pinned `Mathlib/Topology/MetricSpace/Contracting.lean` supplies Banach theory, including
@@ -103,3 +129,6 @@ belongs to CT-04.
 [2] [Mathlib strong-convexity source](https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/Analysis/Convex/Strong.lean)
 [3] [Mathlib positive-definite matrix source](https://github.com/leanprover-community/mathlib4/blob/master/Mathlib/LinearAlgebra/Matrix/PosDef.lean)
 [4] [Mathlib contractive-map source](https://github.com/leanprover-community/mathlib4/blob/de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11/Mathlib/Topology/MetricSpace/Contracting.lean)
+[5] [Pinned Mathlib simple-graph source](../../.lake/packages/mathlib/Mathlib/Combinatorics/SimpleGraph/Basic.lean)
+[6] [Pinned Mathlib vertex-coloring source](../../.lake/packages/mathlib/Mathlib/Combinatorics/SimpleGraph/Coloring/Vertex.lean)
+[7] [Pinned Mathlib graph-partition source](../../.lake/packages/mathlib/Mathlib/Combinatorics/SimpleGraph/Partition.lean)

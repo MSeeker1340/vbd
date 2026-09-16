@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-09-16
+
+* **Phase-4 reuse decision**: Assigned proper-color representation to Mathlib's `SimpleGraph.Coloring (Fin m)`. The project scope is the finite-support component graph and the equivalence between graph coloring and support-wise injectivity.
+
 ## 2026-09-15
 
 * **Terminology simplification**: Replaced active-component terminology in Phase 4 planning with finite component index sets and their extensions or restrictions.

@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-09-15T00:00:00Z
+timestamp: 2026-09-16T00:00:00Z
 ---
 
 # Status vocabulary
@@ -86,7 +86,7 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
 | LI-01 | planned | Finite-support potential components | IE-07, BS-01 | Potential components expose arbitrary finite supports, including pairwise and higher-arity supports |
-| LI-02 | planned | Component-overlap graph and proper coloring | LI-01 | Shared component supports induce a symmetric graph and a proper-color predicate |
+| LI-02 | planned | Component-overlap graph and proper coloring | LI-01 | Component supports induce a `SimpleGraph`; Mathlib's `Coloring (Fin m)` represents the proper coloring, with proved equivalence to support-wise injectivity |
 | LI-03 | planned | Pairwise and multi-vertex examples | LI-02 | One pairwise and one triangle/tetrahedron-style system has a proved valid coloring |
 | LI-04 | planned | Component-set coloring boundary | LI-02 | Adding components is shown to preserve or invalidate the proper-color premise explicitly |
 
