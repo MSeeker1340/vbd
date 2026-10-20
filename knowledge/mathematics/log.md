@@ -1,5 +1,9 @@
 # Mathematical Specifications Update Log
 
+## 2026-10-20
+
+* **Norm interface clarification**: Defined the physical Hilbert block sum and modeler-specified calibrated block norms in the Phase-2 specification. The calibrated norms induce the finite block-product family used for state-error metrics, while the implicit-Euler bridge retains the Hilbert inner-product geometry and physical norm for the vector residual. The Phase-3 through Phase-5 specifications and axial-chain example now use that separation explicitly and consistently name the residual $R_{\mathrm{IE}}$.
+
 ## 2026-09-16
 
 * **Phase-5 implementation**: Completed IF-01–IF-03 in `Integrator/FixedPoint.lean`. The module defines `UnbiasedOn`, obtains an IE stationary solution from Banach existence and unbiasedness, exposes finite iterate state convergence, and derives the Lipschitz implicit-Euler residual bound without a VBD import. Updated the axial-chain example to retain only its pending instantiation obligations.

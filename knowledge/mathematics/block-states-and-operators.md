@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Block States and Operators
 description: Describes block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
-timestamp: 2026-09-15T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), the unknown `x ∈ X` is the
@@ -30,8 +30,8 @@ independently of their physical origin or the objective being solved.
 
 # Block states
 
-Let `I` be a finite set of block indices and `Xᵢ` a real normed vector space for each block. The total
-state space has the decomposition
+Let `I` be a finite set of block indices and `Xᵢ` a real Hilbert space for each block. The physical
+candidate-configuration space is their Hilbert block sum
 
 $$
 X=\bigoplus_{i\in I}^{\ell^2}X_i.
@@ -46,12 +46,52 @@ x=(x_i)_{i\in I}=\begin{bmatrix}x_1\\ \vdots\\ x_n\end{bmatrix}\in X,
 $$
 
 Each `xᵢ` contains the entire configuration block at block index `i`. In a particle or body
-model, `i` identifies a particle or body; its internal scalar coordinates belong to `Xᵢ`.
-The `ℓ²` norm combines the block norms:
+model, `i` identifies a particle or body; its internal scalar coordinates belong to `Xᵢ`. The
+physical Hilbert norm is
 
 $$
-\|x\|_X^2=\sum_{i\in I}\|x_i\|_{X_i}^2.
+\lVert x\rVert_X^2=\sum_{i\in I}\lVert x_i\rVert_{X_i}^2.
 $$
+
+## Calibrated block norms and induced product norms
+
+The Hilbert inner product supplies the geometry in the incremental energy, and the displayed
+physical Hilbert norm is the norm it induces. That norm does not by itself prescribe how
+differences between candidate states are compared for blockwise solver analysis. A modeled system
+may contain blocks with different physical dimensions, or a single rigid-body block whose
+translation and rotation need distinct scales before their errors can be compared.
+
+When specifying the modeled system, the modeler should therefore declare, for each block $X_i$, the
+scales and combination rule used to turn a block difference into a dimensionless error magnitude.
+This specification determines a function
+
+$$
+\lvert\cdot\rvert_i:X_i\to[0,\infty).
+$$
+
+Thus a positional block may be normalized by a length tolerance; a rigid-body block may combine
+translation and rotation after their declared scalings; and a deformable block may use a norm of
+its normalized displacement field. The modeling contract requires this function to satisfy the
+norm axioms. A function so specified is a **calibrated block norm**. It need not equal the physical
+Hilbert norm $\lVert\cdot\rVert_{X_i}$.
+
+For every $1 \le p < \infty$, these norms induce the ordinary finite block-product norm
+
+$$
+\lVert x\rVert_p=\left(\sum_{i\in I}\lvert x_i\rvert_i^p\right)^{1/p},
+$$
+
+and for $p=\infty$,
+
+$$
+\lVert x\rVert_\infty=\max_{i\in I}\lvert x_i\rvert_i.
+$$
+
+The block operations below are algebra on the underlying tuples. They require neither the physical
+Hilbert norm nor any induced $\ell^p$ norm. Introducing the norm family here makes those later
+analytic choices explicit without making the algebra depend on them.
+
+# Block projection, injection, and replacement
 
 Projection reads one block:
 

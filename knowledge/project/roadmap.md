@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 # Current phase status
@@ -74,7 +74,7 @@ cross-foundation Lean imports and requires no general simulation infrastructure.
    full-step serial sweep, skip threshold, and at least one proper-color execution. Document
    parameter ranges and their physical or published provenance, warm-start construction, and
    target error and sweep budgets before assessing the certificate. Define the physical residual
-   `r_IE(x) = ‖F_IE(x)‖`, its norm and scaling, and the sweep defect `r_T(x) = d(x,T(x))`
+   `r_IE(x) = ‖R_IE(x)‖`, its norm and scaling, and the sweep defect `r_T(x) = d(x,T(x))`
    separately. Include timestep, stiffness,
    mass-ratio, and coupling variation sufficient to expose restrictive assumptions.
 2. **AP-02 — Compare the certificates.** Derive the actual sweep linearization and candidate
@@ -140,12 +140,12 @@ Status: complete. Module: `Vbd/Integrator/ImplicitEulerEnergy.lean`.
 Phase 1 supplies the incremental objective `G_IE`, its canonical gradient, and its Hessian:
 
 $$
-F_{IE}(x)=\nabla G_{IE}(x),
+R_{IE}(x)=\nabla G_{IE}(x),
 \qquad
-DF_{IE}(x)=\frac{M}{h^2}+\nabla^2P(x).
+DR_{IE}(x)=\frac{M}{h^2}+\nabla^2P(x).
 $$
 
-Its solution concept is stationarity of `G_IE`, equivalently a root of `F_IE`. Its scope consists of
+Its solution concept is stationarity of `G_IE`, equivalently a root of `R_IE`. Its scope consists of
 the objective and its differential identities.
 
 # Phase 2 — Block-state and update-operator algebra
@@ -170,6 +170,13 @@ Phase 2 develops the objective-independent algebra of block-indexed states and o
    for commuting families, giving the generic color-batch algebra;
 6. continuous-linear block entries, finite assembly, and block-matrix arithmetic for linear update
    operators and derivatives.
+
+Mathematically, the same block decomposition carries the Hilbert inner product of the
+implicit-Euler formulation and its induced physical norm $\lVert\cdot\rVert_X$. The modeler also
+specifies a calibrated norm on each whole block; these induce the finite block-product norms
+$\lVert\cdot\rVert_p$. Phase 2 records this norm family before any contraction theorem chooses a
+particular $p$; its update and support algebra remains norm-independent. The `PiLp 2` declaration
+above is the current Lean representation, not a choice of every later analytic norm.
 
 Write support contains exactly those block indices at which the operator changes some input
 state. A write-support bound is any set containing that support. These bounds express preservation
@@ -246,9 +253,11 @@ $$
 \|T^{k}(x)-x^*\|\le q^k\|x-x^*\|.
 $$
 
-Where quantitative regularity of `F_IE` is available, it transports distance bounds to residual
-bounds. The module takes the solver map and unbiasedness proof as parameters. Phase 7 supplies
-the concrete VBD map and proves unbiasedness on its stated regular branch.
+Where quantitative regularity of `R_IE` is available, it transports distance bounds to residual
+bounds. For a block-product state metric, this regularity has the explicit cross-norm form
+$\lVert R_{\mathrm{IE}}(x)-R_{\mathrm{IE}}(y)\rVert_X \le L\lVert x-y\rVert_p$. The module takes the solver map and unbiasedness proof as
+parameters. Phase 7 supplies the concrete VBD map and proves unbiasedness on its stated regular
+branch.
 
 Acceptance gate: satisfied. The theorem is solver-independent, uses only the Phase 1 and Phase 3
 interfaces, and is exported by `Vbd.lean`.
@@ -294,7 +303,7 @@ Define the actual unsafeguarded VBD block-update operators. External serial and 
 execution plans apply those operators. The block computation is the full block-Newton update
 
 $$
-H_{ii}(x)p_i=-F_{IE,i}(x),
+H_{ii}(x)p_i=-R_{IE,i}(x),
 \qquad
 U_i(x)=x+\iota_i p_i,
 $$

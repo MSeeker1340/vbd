@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Local Decomposition and Coloring
 description: Defines support-indexed components of the implicit-Euler potential, exact local energy bookkeeping, proper coloring, and color-batch execution.
 tags: [locality, sparsity, potential-decomposition, graph-coloring, parallelism, phase-4]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 # Purpose and scope
@@ -13,6 +13,11 @@ This Phase-4 specification assumes that the potential $E$ in the
 both the exact energy bookkeeping for a block change and the coloring structure used to organize
 VBD block updates. The corresponding curvature, differentiability, and contraction assumptions
 belong to the later analytic bridge and VBD-synthesis results.
+
+The potential and its components are functions on the physical Hilbert block sum `X`. The
+calibrated block norms and their induced product norms from
+[block states and operators](./block-states-and-operators.md) measure solver state error; no
+locality or coloring result in this phase depends on a choice among them.
 
 # Potential components
 

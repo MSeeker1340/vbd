@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 # Status vocabulary
@@ -96,7 +96,7 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 |---|---|---|---|---|
 | IF-01 | done | Solver-independent unbiased IE fixed-point theorem | IE-05, CT-02 | A contraction on a nonempty complete invariant region whose fixed points are IE roots has a unique solver fixed point, and that point is an IE solution |
 | IF-02 | done | Finite-iteration IE error | IF-01, CT-03 | Iterates have an explicit geometric distance bound to the IE solution selected by IF-01 |
-| IF-03 | done | Distance-to-residual bound | IF-02, quantitative regularity of `F_IE` | A stated Lipschitz bound converts iterate error into an IE residual bound |
+| IF-03 | done | Distance-to-residual bound | IF-02, quantitative regularity of `R_IE` | A stated Lipschitz bound converts iterate error into an IE residual bound |
 
 # Phase 6 — contraction of composed updates
 

@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-10-20
+
+* **Norm-interface synchronization**: Recorded the Phase-2 calibrated block-product norm family in the roadmap and architecture. The AP-03 maximum-norm choice is the state-error metric for the first contraction certificate; the implicit-Euler residual remains measured in the physical Hilbert norm. Synchronized the Phase-1, Phase-5, and Phase-7 roadmap references and the IF-03 backlog item on the established residual notation $R_{\mathrm{IE}}$.
+
 ## 2026-09-16
 
 * **Phase-5 implementation**: Completed IF-01–IF-03 and marked Phase 5 complete. The solver-independent module is exported through `Vbd.lean`; regular VBD unbiasedness remains the Phase-7 premise-discharge theorem.

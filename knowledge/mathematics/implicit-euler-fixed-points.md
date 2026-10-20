@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Implicit-Euler Solver Consistency and Fixed-Point Convergence
 description: Specifies the unbiasedness condition that identifies contractive solver fixed points with implicit-Euler solutions and transports state error to residual error.
 tags: [implicit-euler, fixed-points, contraction, residual, solver-consistency]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 The [implicit-Euler formulation](./implicit-euler.md) supplies the equation to solve, while
@@ -17,13 +17,19 @@ proof is a Phase-7 obligation.
 Let `X` be a real normed space, let `ie` be an implicit-Euler step, and write
 
 $$
-F(x)=F_{\mathrm{IE}}(x)=\nabla G_{\mathrm{IE}}(x)
+F(x)=R_{\mathrm{IE}}(x)=\nabla G_{\mathrm{IE}}(x)
 =\operatorname{energyGradient}_{ie}(x).
 $$
 
 The Phase-1 gradient identity gives the displayed equality. An implicit-Euler solution is a point
 `p` with `F(p) = 0`; it is a stationary point of `G_IE`. No minimization or uniqueness of such
 points is implicit in this terminology.
+
+For a block representation of this same $X$, Phase 2 separately supplies induced block-product
+norms $\lVert\cdot\rVert_p$ for solver state error. The fixed-point statements below are
+metric-generic: a later block certificate instantiates their state metric with a selected
+$\lVert\cdot\rVert_p$. The implicit-Euler energy retains its Hilbert inner-product geometry, and
+the vector residual $R_{\mathrm{IE}}$ is measured in the physical norm $\lVert\cdot\rVert_X$.
 
 For a solver map `T : X → X` and a certified region `S ⊆ X`, the guarantees form a strict chain:
 
@@ -109,6 +115,17 @@ $$
 Thus `Lq^kR ≤ ε` certifies residual at most `ε` whenever the initial state error is at most `R`.
 A physically scaled residual requires its own Lipschitz bound. A derivative operator-norm bound
 for `F` on a convex region is one route to the required Lipschitz premise.
+
+When the contraction state metric is an induced block norm $\lVert\cdot\rVert_p$, the corresponding
+residual-regularity premise is explicitly
+
+$$
+\lVert R_{\mathrm{IE}}(x)-R_{\mathrm{IE}}(y)\rVert_X
+\le L\lVert x-y\rVert_p.
+$$
+
+It is a cross-norm residual-regularity condition. It does not assert that contraction in
+$\lVert\cdot\rVert_p$ is contraction in $\lVert\cdot\rVert_X$.
 
 This is an upper bound on residual from state error. It supplies neither a reverse state-error
 bound nor per-sweep residual decrease. Those stronger results need a residual lower bound or a

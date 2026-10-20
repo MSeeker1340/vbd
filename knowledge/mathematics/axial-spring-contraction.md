@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: "Worked Example: VBD Convergence for an Elastic Spring Chain"
 description: Applies the project’s implicit-Euler, block-update, and contraction results to a concrete spring-chain solve, with numerical checks and explicit pending prerequisites.
 tags: [example, vbd, contraction, residual, springs]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 This is a **worked example** of the convergence analysis developed in
@@ -199,11 +199,11 @@ however, evaluate the remaining force imbalance. We measure it with
 
 $$
 r_{\mathrm{IE}}(u)=\max_i\frac{|f_i(u)|}{a_i}
- =\max_i\frac{h^2|F_{\mathrm{IE},i}(x)|}{m_i\ell}.
+ =\max_i\frac{h^2|R_{\mathrm{IE},i}(x)|}{m_i\ell}.
 $$
 
 This scaling puts the residual in displacement units relative to $\ell$: a tolerance $\tau$
-means $|F_{\mathrm{IE},i}|\le m_i\ell\tau/h^2$ for every mass. It gives us a physical
+means $|R_{\mathrm{IE},i}|\le m_i\ell\tau/h^2$ for every mass. It gives us a physical
 quantity to control after a prescribed number of sweeps.
 
 We can also measure how far a sweep moves the candidate,

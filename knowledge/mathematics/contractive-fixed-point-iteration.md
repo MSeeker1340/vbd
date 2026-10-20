@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Contractive Fixed-Point Iteration
 description: Contraction on invariant complete sets, geometric iterate bounds, derivative criteria, and stability under perturbations.
 tags: [fixed-points, contraction, iteration, perturbations]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), a timestep is determined
@@ -55,6 +55,13 @@ The factor and the metric are part of the certificate. In a normed space the met
 `d(x,y) = ‖x-y‖`, using the norm stated by the theorem. These assumptions concern an arbitrary
 map; block structure, an objective, and mechanics enter through the bridge layers of the
 [project architecture](/project/architecture.md).
+
+For a block state $x=(x_i)$, Phase 2 has already defined the induced product metrics
+$d_p(x,y)=\lVert x-y\rVert_p$ from the calibrated block norms specified for the modeled system. This generic
+phase does not choose $p$. The implicit-Euler bridge supplies the Hilbert inner product for the
+energy and measures the vector residual $R_{\mathrm{IE}}$ in the physical norm
+$\lVert\cdot\rVert_X$. A later VBD certificate chooses a block-product metric for its state-error
+statement.
 
 # Banach fixed-point theorem on an invariant set
 
