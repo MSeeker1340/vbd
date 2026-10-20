@@ -28,6 +28,13 @@ For second derivatives, Mathlib has `fderiv`, differentiability of continuous-li
 maps, and `iteratedFDeriv`. The project represents a Hessian as the Fréchet derivative of the
 gradient.
 
+For the production root derivative, `HasFDerivAt.clm_apply` in
+`Mathlib.Analysis.Calculus.FDeriv.CompCLM` supplies the operator/vector product rule.
+`DifferentiableAt.inverse` in `Mathlib.Analysis.Calculus.FDeriv.Mul` supplies local inversion
+regularity for units, with `ContinuousLinearMap.ringInverse_eq_inverse` identifying the operator
+inverse. `ContinuousLinearMap.continuous_det` and `ContinuousAt.eventually_lt` keep a strictly
+accepted determinant test valid near the root.
+
 # Convexity and extrema
 
 `Mathlib/Analysis/Convex/Strong.lean` provides `StrongConvexOn`, defined through uniform convexity with modulus `m/2 * r²`, plus:

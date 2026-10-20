@@ -78,9 +78,23 @@ $\|I-K_i^{-1}D_iR_i\|$; it can persist even at a root. Root consistency still fo
 from invertibility and once-per-block execution, but the exact Gauss–Seidel identification
 requires exact derivative blocks.
 
-These are general analytic inputs to the implemented Phase 6 comparison interface and CT-04
-uniform derivative-to-Lipschitz bridge. The concrete block-Newton derivative calculation and
-physical estimates remain VB-03–VB-06 obligations. The
+At a regular residual root, the inverse-variation term vanishes. With $H=DR(x^*)$ and exact
+diagonal blocks, the local derivative is
+
+$$
+DU_i(x^*)=I-\iota_i H_{ii}^{-1}\pi_i H.
+$$
+
+Its unchanged rows are identity rows; its changed diagonal entry is zero, and its changed
+off-diagonal entries are $-H_{ii}^{-1}H_{ij}$. Applied to an error vector $v$, the changed block
+is $-H_{ii}^{-1}\sum_{j\ne i}H_{ij}v_j$. Chronological composition is therefore the block
+Gauss–Seidel error sweep in the supplied visit order.
+
+`Integrator/VBDDerivative.lean` implements this root derivative and ordered Gauss–Seidel
+identification under explicit residual and local-Hessian differentiability hypotheses and strict
+acceptance of the production skip test. These are general analytic inputs to the implemented
+Phase 6 comparison interface and CT-04 uniform derivative-to-Lipschitz bridge. Off-root
+inverse-variation bounds and physical estimates remain VB-04–VB-06 obligations. The
 [spring-chain example](./axial-spring-contraction.md) calculates concrete values for these bounds.
 
 # Nonlinear neighborhood

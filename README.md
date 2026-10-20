@@ -170,6 +170,7 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Integrator/LocalPotential.lean](Vbd/Integrator/LocalPotential.lean) | Finite-support component potentials, exact local energy cancellation, and bridges from support graphs to Mathlib proper colorings. |
 | [Vbd/Integrator/FixedPoint.lean](Vbd/Integrator/FixedPoint.lean) | Unbiased contractive fixed-point existence and finite residual bounds with separate state and residual norms. |
 | [Vbd/Integrator/VBD.lean](Vbd/Integrator/VBD.lean) | Exact block-Newton updates, external serial/buffered plans, and complete regular-sweep fixed-point/root consistency. |
+| [Vbd/Integrator/VBDDerivative.lean](Vbd/Integrator/VBDDerivative.lean) | Production sweep derivatives at regular IE roots and their ordered block Gauss–Seidel error operators. |
 
 The following TODOs identify the unfinished pieces required for an end-to-end
 VBD certificate.
@@ -246,6 +247,7 @@ lake exe cache get
 lake build
 lake lean tests/FixedPoint.lean
 lake lean tests/VBD.lean
+lake lean tests/VBDDerivative.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v

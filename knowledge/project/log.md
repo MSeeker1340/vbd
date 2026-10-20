@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-03 completion**: Completed production root derivatives, their continuous-linear block entries, and identification with the externally ordered block Gauss–Seidel error sweep. The proof reuses Phase-6 ordered differentiation on the root singleton, with the planned diagonal-Hessian differentiability and strict skip-test hypotheses explicit. Added chronological-order and nonlinear cancellation checks to pre-commit. Marked VB-03 done and advanced VB-04; physical inverse, coupling, and neighborhood certificates remain open.
+
+## 2026-10-20
+
 * **VB-02 completion**: Completed independent fixed-point/root consistency and root preservation for exact serial and buffered production maps. The concrete consistency proof composes with Phase-5 maximum-state/Hilbert-residual existence in a checked integration example. Marked VB-02 done and advanced VB-03; the theorem route and physical applicability obligations remain unchanged.
 
 ## 2026-10-20

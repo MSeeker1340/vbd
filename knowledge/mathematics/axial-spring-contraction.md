@@ -296,6 +296,12 @@ the Gauss–Seidel error matrix. This matrix helps explain the observed asymptot
 warm start is not generally the root. To guarantee its progress, we must bound the additional
 term throughout the box.
 
+> **Formal root linearization:** `Integrator/VBDDerivative.lean` proves the local root derivative,
+> its block entries, and the ordered block Gauss–Seidel forward-substitution representation.
+> Residual roots, strict block regularity, and differentiable local Hessian maps are explicit
+> premises. Uniform off-root derivative bounds and the physical chain instantiation are
+> subsequent synthesis obligations.
+
 We now instantiate the [local derivative bounds](./curvature.md#derivative-of-a-block-newton-update)
 with the spring coefficients. The estimate has two parts: sensitivity to neighbors and
 sensitivity to changing stiffness. For compactness, write

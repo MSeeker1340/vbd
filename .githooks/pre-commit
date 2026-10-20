@@ -20,3 +20,4 @@ okflint validate --manifest knowledge/okf-base.yaml knowledge/
 lake build
 lake lean tests/FixedPoint.lean
 lake lean tests/VBD.lean
+lake lean tests/VBDDerivative.lean

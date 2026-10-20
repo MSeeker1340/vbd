@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-03 implementation**: Added and exported `Integrator/VBDDerivative.lean`. Derived production single-block root derivatives through Mathlib inversion and operator/vector calculus, then used the Phase-6 ordered chain rule on the invariant root singleton. Proved normalized changed-row entries, zero diagonal under exact inversion, untouched identity rows, the Gauss–Seidel forward-substitution equation, and the chronological sweep identification. The IE specialization derives the residual derivative from stored Phase-1 assumptions and exposes diagonal-Hessian differentiability separately. Added concrete order-sensitive coupled linear checks and a changing-Hessian cubic-residual check; recorded reused Mathlib APIs and the synthesis module split.
+
+## 2026-10-20
+
 * **VB-02 implementation**: Proved regular block fixed-point equivalence, root preservation for arbitrary serial/buffered plans, and complete regular sweep fixed-point/root equivalence for once-per-block serial orders and pairwise-disjoint buffered passes. The proof uses write preservation and exact local inverse action, independently of contraction and within-pass commutation. Added production `UnbiasedOn` certificates and a cross-norm integration check feeding the concrete IE serial consistency proof into Phase-5 Banach existence. Advanced the module map to VB-03.
 
 ## 2026-10-20

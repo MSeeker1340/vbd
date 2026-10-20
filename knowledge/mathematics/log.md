@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Root linearization**: Recorded implemented VB-03 local and sweep derivatives at regular residual roots, exact Newton diagonal cancellation, normalized off-diagonal couplings, and the ordered Gauss–Seidel forward-substitution equation. Kept the differentiable local-Hessian premise explicit and separated the root result from uniform off-root estimates and physical contraction certificates. Synchronized the curvature specification and axial-chain article.
+
+## 2026-10-20
+
 * **Production consistency**: Recorded implemented VB-02 equivalence for complete regular once-written serial/buffered sweeps and unconditional preservation of residual roots. Regularity at the candidate fixed point suffices because the write-preservation argument makes every intermediate visit see that state. Buffered consistency needs disjoint output passes and coverage, not within-pass independence or contraction; synchronized the solver-consistency specification and chain article.
 
 ## 2026-10-20

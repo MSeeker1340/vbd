@@ -23,7 +23,8 @@ timestamp: 2026-10-20T00:00:00Z
 | P4 | `Integrator/LocalPotential.lean` | Implemented finite-support potential components, exact cancellation, and support-to-Mathlib-graph/coloring bridge lemmas | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Implemented solver-independent [unbiased fixed-point convergence](/mathematics/implicit-euler-fixed-points.md) from a contractive map to an implicit-Euler stationary solution | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
 | P6 | `Block/Contraction.lean` | Implemented derivative-factor comparisons, ordered composition, commuting batches, and covered maximum-norm contraction certificates | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
-| P7 | `Integrator/VBD.lean` | Implemented VB-01–VB-02 exact executions and regular-sweep consistency; derivative bounds and finite-sweep synthesis are subsequent targets | `Block/Operator`, `Block/Update`, `Integrator/FixedPoint` |
+| P7 | `Integrator/VBD.lean` | Implemented VB-01–VB-02 exact executions and regular-sweep consistency | `Block/Operator`, `Block/Update`, `Integrator/FixedPoint` |
+| P7 | `Integrator/VBDDerivative.lean` | Implemented VB-03 root derivatives, block entries, and ordered Gauss–Seidel identification | `Integrator/VBD`, `Block/Contraction` |
 
 These paths are the current module boundaries recorded in the central
 [roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
@@ -123,5 +124,13 @@ inertia-plus-potential identity inherited from Phase 1. Buffered passes retain s
 for coupled updates; conditional equivalence with serial execution uses the Phase-2 commuting
 merge theorem. Complete once-per-block serial and disjoint buffered plans fix exactly the residual
 roots at regular states, independently of contraction or within-pass commutation. All plans
-preserve residual roots. The consistency theorems discharge the Phase-5 unbiasedness premise;
-physical commutation and derivative/contraction certificates remain subsequent obligations.
+preserve residual roots. The consistency theorems discharge the Phase-5 unbiasedness premise.
+
+`Integrator/VBDDerivative.lean` implements VB-03 and is exported by `Vbd.lean`. Strict acceptance
+of a differentiable local Hessian map makes the regular branch valid near the root. The local
+root derivative has the normalized Hessian row, and Phase-6 composition gives the sweep derivative
+in the externally supplied order. Exact diagonal blocks identify it with the block Gauss–Seidel
+error operator, represented by chronological linear row updates with a proved forward-substitution
+equation. The concrete IE specialization derives its residual derivative from Phase 1.
+Physical inverse/coupling bounds, uniform nonlinear-neighborhood estimates, and component-based
+commutation remain subsequent obligations.
