@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-10-20T20:38:44Z
+timestamp: 2026-10-20T21:12:52Z
 ---
 
 # Foundation modules
@@ -47,8 +47,10 @@ Phases 1 and 2 are complete. `Block/Update.lean` and `Block/Operator.lean` each 
 Phase 3 has an implemented, block-independent core covering CT-01–CT-03 and reusing the pinned
 Mathlib contraction API. The [axial-spring contraction analysis](/mathematics/axial-spring-contraction.md) and
 [AP-03 decision](/project/applicability-decision.md) authorize CT-04 and the exact-execution
-Phase 4–7 route. Same-color coupling estimates in exact arithmetic are deferred. Exploratory
-derivations and diagnostic scripts introduce no cross-foundation Lean imports; the module dependency boundaries stay in force.
+Phase 4–7 route. Its contraction certificates cover serial and commuting proper-color
+execution. [Coupled-batch certificates](/project/whats-next.md#coupled-batches-and-evolving-contacts)
+are an optional extension. Exploratory derivations and diagnostic scripts introduce no
+cross-foundation Lean imports; the module dependency boundaries stay in force.
 
 The three foundations may be implemented independently:
 
@@ -108,7 +110,7 @@ identity block rows. All implemented foundation modules are exported by `Vbd.lea
 iteration results. It supplies local fixed-point existence and uniqueness, convergence to a
 supplied fixed point, finite-iterate distance bounds, and a defect-based error estimate, with
 no project imports. Its norm-polymorphic CT-04 derivative bridge implements the convex-set
-mean-value step. AP-01–AP-03 are complete research deliverables; exact hybrid coupling analysis is deferred.
+mean-value step. AP-01–AP-03 are complete research deliverables for serial and commuting proper-color execution.
 
 `Integrator/LocalPotential.lean` implements Phase 4. It sums support-indexed local components,
 proves cancellation outside the affected supports of a block change, constructs the component

@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Completed-program scope**: Replaced deferred-work language in the module map with the implemented serial/commuting-color contraction boundary and a link to the optional coupled-batch extension. Preserved all module and dependency interfaces.
+
+## 2026-10-20
+
 * **End-to-end implementation**: Added/exported `AxialSpringEnergy`, `AxialSpringResidual`, `AxialSpringConvergence`, and `AxialSpringChain`. Identified the symmetric pair potential gradient and diagonal mass IE constructor with the existing polynomial Newton data. Combined the scalar maximum principle, mass-scaled residual derivative bound, Phase-5 Banach existence and finite-iterate transport, and actual serial/proper-color consistency. Proved finite-chain degree and physical coefficient normalization, common stationary point, physical-gradient scaling, and exact 20-sweep arithmetic. Added high-contrast physical fixtures at the timestep endpoint, a 64-vertex dual-plan target check, quadratic coverage, and force/energy-unit anchors. Synchronized module boundaries, mass representation, and Mathlib inventory.
 
 ## 2026-10-20

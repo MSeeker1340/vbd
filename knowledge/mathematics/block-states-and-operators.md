@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Block States and Operators
 description: Describes block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T21:12:52Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), the unknown `x ∈ X` is the
@@ -465,5 +465,7 @@ full-sweep bound $q$. Repeated visits and multi-block writes are permitted.
 For commuting updates with disjoint write-support bounds, every enumeration implements the
 same simultaneous merge. Their ordered derivatives are equal, and a certificate for one
 enumeration bounds the common batch map. Sequences of these batch maps use the same ordered
-composition theorem. Concrete potential support and coloring establish commutation in Phase 7;
-same-color coupling estimates are deferred.
+composition theorem. Concrete potential support and coloring establish commutation in Phase 7.
+A batch with coupled reads generally differs from its sequential enumerations and requires
+a bound for its actual simultaneous map; this is an
+[optional extension](/project/whats-next.md#coupled-batches-and-evolving-contacts).

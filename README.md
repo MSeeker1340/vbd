@@ -194,6 +194,10 @@ boundaries and dependencies. The internal [roadmap](knowledge/project/roadmap.md
 records implementation sequencing; this README explains the result, whereas
 the roadmap explains its build order.
 
+The accepted seven-phase theorem program is complete.
+[What’s next](knowledge/project/whats-next.md) describes optional projects extending
+the library and the additional mathematics they require.
+
 ## Worked applicability example: nonlinear axial spring chains
 
 The first application is deliberately modest but nontrivial: masses move on a

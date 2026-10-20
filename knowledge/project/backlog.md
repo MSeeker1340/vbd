@@ -1,22 +1,24 @@
 ---
 type: Project Backlog
 title: VBD Formalization Backlog
-description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
+description: Records completed deliverables, proof dependencies, and acceptance criteria for the concluded theorem program.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-10-20T20:38:44Z
+timestamp: 2026-10-20T21:12:52Z
 ---
 
 # Project scope
 
 The project studies VBD in exact arithmetic, including finite-iteration state and residual errors. Floating-point rounding, errors from approximate local solves, and GPU implementation verification are outside its scope.
 
-# Status vocabulary
+# Completion status
 
-- `next`: first eligible work.
-- `planned`: scoped but blocked by dependencies or an applicability decision.
-- `research`: requires a focused API or theorem assessment.
-- `deferred`: intentionally postponed by the roadmap.
-- `done`: acceptance criteria satisfied and documented; formal deliverables compile.
+The accepted Phase 1–7 theorem program and its supporting research and tooling are complete.
+This backlog records its completed deliverables and acceptance criteria. Every listed item is
+`done`: its acceptance criteria are satisfied and documented, and formal deliverables compile.
+There are no outstanding tasks required for this program.
+
+[What’s next](./whats-next.md) describes optional projects that extend the checked library,
+with their additional mathematical obligations and scope.
 
 # Project maintenance
 
@@ -77,12 +79,14 @@ defines the evidence standard and the response to an ineffective certificate.
 | AP-03 | done | Proceed or revise decision with an explicit guarantee level | AP-02 | Record the selected norm, family, execution scope, route, coverage and proof obligations; quantitative proceed requires an analytically supported parameter range, relevant warm-start membership and target budget; qualitative proceed authorizes only a scoped physical-residual progress milestone; assess sharper bounds, alternative norms or several-sweep contraction when needed, and synchronize downstream targets/dependencies for the selected route before implementation |
 
 The [axial-spring contraction analysis](/mathematics/axial-spring-contraction.md) and
-[proceed decision](./applicability-decision.md) discharge the research gate for the selected
-exact-execution chain theorem. They do not discharge its Lean proof obligations or establish general production applicability.
+[proceed decision](./applicability-decision.md) satisfy the research gate for the selected
+exact-execution chain theorem. The implemented VB-01–VB-08 results discharge the corresponding
+Lean proof obligations. The guarantee covers the accepted family and parameter range;
+broader production applicability requires its own assessment.
 Generic bridge and synthesis lemmas must remain usable with vector blocks and other potential-component
 supports; model-specific chain lemmas instantiate them. The
 [reuse contract](./applicability-decision.md#project-scope-and-reuse-contract) is part of the
-acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
+acceptance criteria for BC-01–BC-03, BC-05, and VB-01–VB-08.
 
 # Phase 4 — finite-support potential components and coloring
 
@@ -108,7 +112,6 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | BC-01 | done | Blockwise derivative-factor bounds | BS-06, CT-04 | Bounds on each block entry of each supplied update derivative produce nonnegative comparison matrices |
 | BC-02 | done | Ordered composition bound | BS-03, BC-01 | Comparison matrices compose in the same externally supplied order as the update operators |
 | BC-03 | done | Commuting color-batch bound | BS-04, BS-05, BC-02 | A commuting batch has an order-independent derivative and an explicit block-norm bound |
-| BC-04 | deferred | Buffered simultaneous-batch bound | BS-05, BC-01 | Same-color coupling is bounded using the actual simultaneous snapshot semantics |
 | BC-05 | done | Exact-execution contraction bounds | BC-02, BC-03 | Serial and proper-color execution maps obtain explicit maximum-norm contraction bounds |
 
 # Phase 7 — production VBD synthesis
@@ -121,20 +124,8 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | VB-04 | done | Inertia-based block inverse bounds | IE-07, VB-01 | `M/h² + ∇²P` yields explicit coercivity and inverse-norm bounds on a neighborhood |
 | VB-05 | done | Serial coupling and contraction factor | VB-03, VB-04, BC-02 | Off-diagonal component bounds produce an explicit `q < 1` for the actual serial execution over the AP-03 parameter range, with norm-conversion constants stated |
 | VB-06 | done | Nonlinear contraction neighborhood | VB-05, CT-04 | Hessian variation produces an explicit invariant radius with a uniform contraction bound and a proved initial-state membership condition instantiated for the selected warm starts |
-| VB-07 | done | Proper-color VBD | LI-04, VB-06, BC-03 | Component separation discharges commutation and snapshot equivalence for the selected proper colors; same-color coupling requires a further applicability decision |
+| VB-07 | done | Proper-color VBD | LI-04, VB-06, BC-03 | Component separation discharges commutation and snapshot equivalence for the selected proper colors |
 | VB-08 | done | End-to-end finite-sweep theorem | VB-02, VB-06, VB-07, IF-03 | The AP-03 parameterized coupled family, including its nonlinear case, has Lean-proved system-to-certificate and finite-sweep bounds meeting the selected accuracy budget; quantitative parameter ranges and warm-start coverage are instantiated, conservatism and exclusions are assessed reproducibly, and any non-descent coverage claim has a certified objective-increase example |
-
-# Deferred by the current route
-
-| ID | Status | Deliverable | Reactivation condition |
-|---|---|---|---|
-| EN-01 | deferred | Energy-descent and line-search theory | A named production or safeguarded-solver theorem requires it |
-| PR-01 | deferred | Probabilistic convergence | A concrete source of randomness and verifiable drift hypothesis are identified |
-| GL-01 | deferred | Global convergence outside a contractive neighborhood | Suitable global hypotheses matching the production update are identified |
-| ER-01 | deferred | Solver-error accumulation across timesteps | The single-step finite-sweep theorem VB-08 is stable |
-| ER-02 | deferred | Separate discretization and solver error | Both error components have independent definitions and bounds |
-| DC-01 | deferred | Fully dynamic collision scheduling | The first static/hybrid colored theorem is complete |
-| MM-01 | deferred | Generalized non-diagonal mass specialization | The first accepted production theorem identifies the needed locality assumptions |
 
 # Architecture decisions
 
@@ -149,7 +140,6 @@ Both accepted execution plans converge to the same unique physical stationary po
 mass-scaled maximum residual below `3.25 × 10⁻⁷ < 10⁻⁶` after 20 sweeps. The nonlinear
 serial and proper-color factor is `318/625 < 0.512` on the
 invariant radius-`0.1` box, with the selected cosine predictor and rest-state warm starts covered.
-BC-04 requires a further applicability assessment for same-color coupling in exact arithmetic.
 
 Project-wide architecture decisions are maintained as accepted-state Architecture Decision
 concepts. Source-local representation choices belong in the relevant Lean module documentation.

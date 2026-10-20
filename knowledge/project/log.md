@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Project conclusion and backlog cleanup**: Recorded completion of the accepted Phase 1–7 program with no outstanding obligations. Removed BC-04 and the deferred EN-01, PR-01, GL-01, ER-01, ER-02, DC-01, and MM-01 task rows rather than marking unimplemented extensions done. Added “What’s next” for optional model, certificate, coupled-execution, multi-timestep, and tooling projects. Retained descent/global arguments only as conditional routes for a named extension and dropped the unmotivated probabilistic placeholder. Synchronized the roadmap, applicability decision, project index, README, and always-on guidance; corrected the stale LI-03 wording to its implemented status.
+
+## 2026-10-20
+
 * **VB-08 completion**: Completed the physical-input finite-chain theorem for increasing-index serial and buffered even/odd execution. Derived energy-gradient/Newton-data identification, root existence and global stationary-point uniqueness, predictor-box root location, residual Lipschitz constant `53/25`, and physical length/timestep normalization. Both plans meet scaled maximum residual `< 3.25 × 10⁻⁷ < 10⁻⁶` after 20 sweeps over the accepted timestep/hardening range, with no supplied root or analytic certificate. Marked VB-08 and the first-family Phase-7 program complete. Recorded the continuous-linear mass representation in the architecture decision and removed its stale open item. Added endpoint/contrast/quadratic/nonlinear and physical-unit integration checks; the prepared interfaces supported the result without a prerequisite mismatch.
 
 ## 2026-10-20

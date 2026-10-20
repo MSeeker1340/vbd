@@ -1,9 +1,9 @@
 ---
 type: Project Roadmap
 title: VBD Formalization Roadmap
-description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
+description: Records the completed seven-phase theorem program, its dependency structure, and satisfied acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-10-20T20:38:44Z
+timestamp: 2026-10-20T21:12:52Z
 ---
 
 # Project scope
@@ -20,10 +20,12 @@ The project studies VBD in exact arithmetic, including finite-iteration state an
 | Applicability study — AP-01–AP-03 | complete | Quantitative proceed for nonlinear axial chains in the maximum norm with serial and proper-color execution |
 | Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
 | Phase 5 — implicit-Euler fixed-point goals | complete | `Integrator/FixedPoint.lean` supplies unbiased fixed-point identification, finite state error, and residual transport |
-| Phase 6 — contraction of composed updates | complete | `Block/Contraction.lean` supplies comparison composition, commuting batches, and maximum-norm sweep certificates; BC-04 remains deferred |
+| Phase 6 — contraction of composed updates | complete | `Block/Contraction.lean` supplies comparison composition, commuting batches, and maximum-norm sweep certificates for serial and commuting-batch execution |
 | Phase 7 — production VBD synthesis | complete | VB-01–VB-08 derive serial/proper-color convergence and a physical residual below `10⁻⁶` in 20 sweeps from the accepted finite-chain system assumptions |
 
-The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
+The accepted seven-phase program is complete. The [backlog](/project/backlog.md) records
+completed deliverables and acceptance criteria; [What’s next](./whats-next.md) describes
+optional extensions beyond that program.
 
 The accepted [applicability decision](./applicability-decision.md) selects the
 [axial-chain certificate](/mathematics/axial-spring-contraction.md): `h² k_max/m_min ≤ 1/4`,
@@ -42,8 +44,8 @@ remains open and requires further model-specific evidence.
 
 The production-facing target is a quantitative theorem for the actual unsafeguarded VBD sweep:
 on an explicitly described neighborhood of an implicit-Euler solution, the serial or colored sweep
-is contractive with factor `q < 1`, giving a finite-sweep error bound. The main route uses direct
-operator estimates; energy-descent results form a secondary route for compatible solver variants.
+is contractive with factor `q < 1`, giving a finite-sweep error bound. The completed route uses direct
+operator estimates to certify the accepted nonlinear chain family.
 
 ```text
 P1 implicit Euler          P2 block algebra          P3 contraction theory
@@ -270,7 +272,7 @@ interfaces, and is exported by `Vbd.lean`.
 
 # Phase 6 — Contraction of composed updates
 
-Status: complete for BC-01–BC-03 and BC-05; BC-04 remains deferred. Module: `Vbd/Block/Contraction.lean`.
+Status: complete for the accepted serial and commuting-batch route (BC-01–BC-03 and BC-05). Module: `Vbd/Block/Contraction.lean`.
 
 Dependencies: Phase 2 + Phase 3.
 
@@ -291,8 +293,7 @@ The exact-execution results comprise:
 1. reconstruction of global operator bounds from block-entry bounds;
 2. propagation of comparison bounds through externally ordered composition;
 3. bounds for commuting color batches using their order-independent composition;
-4. deferred bounds for buffered simultaneous batches with same-color coupling;
-5. an explicit contraction criterion in a stated block norm.
+4. an explicit contraction criterion in a stated block norm.
 
 Acceptance gate: satisfied for the accepted exact-execution route. Explicit block-entry bounds
 compose through derivatives evaluated at the actual intermediate states. Uniform nonnegative
@@ -354,7 +355,7 @@ explicit inputs to its construction. The required result chain is:
 5. bound cross-block coupling and obtain an explicit contraction factor `q`;
 6. control Hessian variation on a neighborhood so the linear bound extends to the nonlinear sweep;
 7. prove commutation of concrete same-color operators under a valid static coloring and relate their
-   simultaneous batches to serial composition; hybrid collision coupling requires a further assessment;
+   simultaneous batches to serial composition;
 8. conclude convergence and the selected finite-sweep physical-residual bound through Phase 5,
    including IF-03 quantitative distance-to-residual transport.
 
@@ -382,25 +383,9 @@ conservatism of these bounds against observed behavior and identifies excluded r
 of non-descent coverage require the corresponding certified objective-increase example; sampling
 alone does not establish it. All analytic certificate obligations are proved in Lean.
 
-# Secondary and deferred routes
+# Optional extensions
 
-One potential engineering extension is an offline configuration analyzer that selects parameter
-ranges for a VBD solver and emits a lightweight adaptive iteration loop. Symbolic estimates or
-validated numerical bounds could certify contraction over a stated family of configurations and
-state regions; sampling supplies empirical guidance rather than a uniform certificate. A known
-factor can be compiled into a displacement threshold for a requested solution-error tolerance,
-leaving the expensive analysis outside runtime. Runtime validity requires either an offline
-guarantee covering evolving states and contacts or checks with a fallback outside the certified
-range. Analysis failure should be distinguished from demonstrated noncontraction, and performance
-depends on certificate conservatism and monitoring cost. This extension is outside the active
-roadmap; the [adaptive VBD reference note](/references/adaptive-vbd-iterations.md) describes
-related mechanisms and the distinction between heuristic stopping and certified accuracy.
-
-Energy-change identities, local or sweep monotonicity, line search, convex minimization, and KL
-arguments form secondary routes activated by a named target theorem or compatible solver variant.
-
-Deferred work includes global behavior beyond a certified contractive neighborhood, probabilistic
-convergence after a concrete randomness model is selected, fully dynamic collision scheduling,
-optimization-error accumulation across time steps,
-discretization error, and generalized mass-matrix specializations beyond the first accepted
-production theorem.
+[What’s next](./whats-next.md) describes independent extensions involving richer mechanical
+models, broader certificates, coupled buffered execution and evolving contacts, simulation-wide
+error bounds, and certificate-guided solver tooling. Each has additional hypotheses beyond
+the completed single-timestep theorem.

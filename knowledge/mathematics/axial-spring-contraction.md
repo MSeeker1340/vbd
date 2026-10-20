@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: "Worked Example: VBD Convergence for an Elastic Spring Chain"
 description: Gives the Lean-proved physical finite-chain convergence and 20-sweep residual certificate, its derivation, and reproducible numerical comparisons.
 tags: [example, vbd, contraction, residual, springs]
-timestamp: 2026-10-20T20:38:44Z
+timestamp: 2026-10-20T21:12:52Z
 ---
 
 This is a **worked example** of the convergence analysis developed in
@@ -673,10 +673,10 @@ the vectors have two or three components. The price of extra connectivity is alr
 in $z$. This is a concrete analytic extension of the argument; the numerical experiment still
 executes the scalar chain.
 
-## Further examples still to work out
+## Geometric material extension requirements
 
-> **TODO — further worked instances:** Supply a geometric material example and check its
-> hypotheses and budget; the discussion below identifies what would change.
+Geometric elasticity is an [optional further application](/project/whats-next.md#richer-mechanical-models).
+Its constitutive law determines the additional certificate obligations.
 
 For an elastic triangle or tetrahedron, the algebraic part still looks familiar: an element
 couples its incident vertices, and a visit solves for one vertex while holding the others fixed.
@@ -713,10 +713,12 @@ Contact introduces a second difficulty: the force law and the read dependencies 
 as vertices move. On one fixed smooth contact branch we can perform the same differentiation.
 Across activation boundaries we need a direct Lipschitz or suitable piecewise argument.
 A new contact may also join two vertices that share a material color, removing the independence
-that justified their simultaneous updates. We then need the actual buffered-map estimate in
-BC-04. If contact data is lagged, two identical position vectors can produce different updates
-depending on that data; a fixed-map analysis must include it in the state or be replaced by a
-varying-map theorem.
+that justified their simultaneous updates. Such execution requires a bound on the actual
+buffered map, as described in the
+[coupled-batch extension](/project/whats-next.md#coupled-batches-and-evolving-contacts).
+If contact data is lagged, two identical position vectors can produce different updates
+depending on that data; a fixed-map analysis must include it in the state or be replaced
+by a varying-map theorem.
 
 The [VBD paper, §§3.5–3.6](https://graphics.cs.utah.edu/research/projects/vbd/vbd-siggraph2024.pdf)
 uses regularized friction and approximate local derivatives, including frozen-normal treatment.

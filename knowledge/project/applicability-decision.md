@@ -3,7 +3,7 @@ type: Architecture Decision
 title: First Quantitative VBD Applicability Route
 description: Defines the selected family, guarantee, evaluation contract, and implementation scope for the first VBD convergence example.
 tags: [applicability, theorem-route, maximum-norm, execution]
-timestamp: 2026-10-20T20:38:44Z
+timestamp: 2026-10-20T21:12:52Z
 ---
 
 # Decision
@@ -102,9 +102,10 @@ The physical-input theorem derives these premises from masses, nearest-neighbor 
 timestep, length scale, and hardening bounds; it supplies the root rather than assuming one.
 The mass-scaled physical residual is below `3.25 × 10⁻⁷` after 20 sweeps for both plans.
 The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
-physical-residual transport. BC-04 remains deferred until an exact hybrid execution variant
-with same-color coupling has an applicability certificate. The generic
-higher-arity coloring example in LI-03 remains required, independently of the chain certificate.
+physical-residual transport. The generic pairwise and higher-arity coloring examples in LI-03
+are implemented independently of the chain certificate.
+[Coupled buffered execution](./whats-next.md#coupled-batches-and-evolving-contacts) is an
+optional extension with its own applicability obligations.
 
 The initial guarantee concerns one timestep with the specified predictor region. It excludes
 multi-timestep error accumulation, nonconvex material guarantees, contact/friction, and
