@@ -1,9 +1,9 @@
 ---
 type: Architecture Decision
 title: First Quantitative VBD Applicability Route
-description: Records the rationale, evaluation contract, and implementation scope for the first VBD convergence example.
+description: Defines the selected family, guarantee, evaluation contract, and implementation scope for the first VBD convergence example.
 tags: [applicability, theorem-route, maximum-norm, execution]
-timestamp: 2026-09-14T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 # Decision
@@ -20,28 +20,22 @@ $0\le\eta\le1$, and the stated predictor condition holds. VB-08 remains open unt
 Lean instantiation is proved. Applicability to general production materials, contact, and
 friction remains a separate physical assessment.
 
-# Why this model
+# Model and coverage
 
-The first example must exercise the entire proof chain while allowing explicit physical
-hypotheses to be checked. An axial chain satisfies this requirement with little constitutive
-or geometric machinery:
+The axial chain has substantive cross-block coupling from adjacent springs and a nontrivial
+proper-color execution. Its quadratic case supplies a Gauss–Seidel baseline. The quartic
+case has a changing Hessian and a force-dependent derivative term for the nonlinear
+neighborhood theorem. The rail constraint supports scalar inverse and invariant-region
+estimates that instantiate dimension-independent derivative and composition interfaces.
+Positive inertia and bounded hardening give explicit timestep, predictor and iteration bounds.
 
-* Adjacent springs give genuine cross-block coupling, so the sweep is not a collection of
-  independent solves. The path also supplies nontrivial proper-color execution.
-* The quadratic case isolates the Gauss–Seidel mechanism. The quartic case adds a changing
-  Hessian and the force-dependent derivative term needed for a nonlinear neighborhood proof.
-* The rail constraint makes inverse and invariant-region estimates tractable. These scalar
-  estimates can instantiate dimension-independent derivative and composition theorems.
-* Positive inertia and bounded hardening permit explicit timestep, predictor and iteration
-  bounds, instead of an unspecified sufficiently small neighborhood.
+The convex spring law covers the selected coupled nonlinear family. Indefinite elasticity,
+contact activation and friction require separate applicability certificates. The vector
+extension in the mathematical article describes larger-block proof obligations. The
+[VBD reference](/references/vbd-paper.md) supplies the spring, inertia-initialization and
+stress-test context; the quartic-law calibration is the synthetic evaluation contract below.
 
-The model's simplicity also bounds its evidence: its convex spring law does not test indefinite
-elasticity, contact activation, or friction. The vector extension in the mathematical article
-shows that the proof method supports larger blocks; it does not calibrate real 3D materials.
-The [VBD reference](/references/vbd-paper.md) motivates spring examples, inertia initialization,
-and contrast stress tests. It supplies no measured calibration for this particular quartic law.
-
-# Why this guarantee and norm
+# Guarantee and state norm
 
 State contraction provides a finite-sweep budget across the supported range and permits
 physical-residual transport using a quantitative regularity bound. Strict residual progress
@@ -98,7 +92,8 @@ The accepted metric is theorem-local: retain `BlockSum` and its existing `PiLp 2
 with explicit distance transport where needed. CT-04 remains norm-polymorphic. The experiment's
 Python environment is separate from the Lean dependency graph.
 
-CT-04 is next. The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
+CT-04 and the exact-execution Phase 6 bridge are complete. Production VBD synthesis starts
+with VB-01. The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
 physical-residual transport. CT-05, BC-04 and perturbation extensions remain deferred until an
 approximate or hybrid execution variant has an applicability certificate. The generic
 higher-arity coloring example in LI-03 remains required, independently of the chain certificate.

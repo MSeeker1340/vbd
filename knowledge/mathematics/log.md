@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Exact-execution comparison certificate**: Recorded the implemented derivative, ordered-comparison, commuting-batch, and complete-coverage maximum-norm bridges. Clarified repeated visits and multi-block writes; retained concrete Newton derivatives and physical axial-chain instantiation as Phase 7 obligations.
+
+## 2026-10-20
+
 * **Norm interface clarification**: Defined the physical Hilbert block sum and modeler-specified calibrated block norms in the Phase-2 specification. The calibrated norms induce the finite block-product family used for state-error metrics, while the implicit-Euler bridge retains the Hilbert inner-product geometry and physical norm for the vector residual. The Phase-3 through Phase-5 specifications and axial-chain example now use that separation explicitly and consistently name the residual $R_{\mathrm{IE}}$.
 
 ## 2026-09-16

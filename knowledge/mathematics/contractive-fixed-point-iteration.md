@@ -261,7 +261,8 @@ require their own hypotheses.
 Phase 3 is the generic dynamics foundation in the [roadmap](/project/roadmap.md).
 [Mathlib](/references/mathlib.md) supplies the contraction predicate, Banach theorem,
 invariant-subset restriction, iterate convergence, and geometric and defect bounds. Its
-mean-value theory supplies the derivative-to-Lipschitz step. The project layer exposes the
+mean-value theory supplies the implemented CT-04 derivative-to-Lipschitz step, including
+within-set derivatives on convex regions. The project layer exposes the
 local-set results used by later bridges and optional perturbation results when the selected
 analysis requires a reference-map comparison. Exact declaration assessment and
 implementation progress are tracked by [CT-01–CT-05](/project/backlog.md#phase-3--contractive-fixed-point-iteration).

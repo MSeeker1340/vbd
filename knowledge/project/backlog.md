@@ -55,7 +55,7 @@ timestamp: 2026-10-20T00:00:00Z
 | CT-01 | done | Pinned Mathlib contraction API assessment | none | Exact reusable `ContractingWith`, restricted-map, fixed-point, and iterate-bound declarations are recorded |
 | CT-02 | done | Local invariant-set contraction wrapper | CT-01 | A contraction on a forward-invariant complete subset yields a unique local fixed point and iterate convergence |
 | CT-03 | done | Finite-iteration distance bound | CT-02 | The public theorem exposes a geometric `q^k` bound suitable for a fixed iteration budget |
-| CT-04 | next | Derivative-bound bridge | CT-02, AP-03 | A uniform derivative/operator-norm bound on a stated convex neighborhood yields the Lipschitz contraction needed by the AP-03 route |
+| CT-04 | done | Derivative-bound bridge | CT-02, AP-03 | A uniform derivative/operator-norm bound on a stated convex neighborhood yields the Lipschitz contraction needed by the AP-03 route |
 | CT-05 | deferred | Perturbed contraction bounds | CT-03, AP-03 | Persistent, vanishing, and summable perturbations have explicitly separated conclusions and explicit perturbed-region membership premises; implementation serves the accepted execution analysis |
 
 # Early applicability study
@@ -102,17 +102,17 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| BC-01 | planned | Blockwise derivative-factor bounds | BS-06, CT-04 | Bounds on each block entry of each supplied update derivative produce nonnegative comparison matrices |
-| BC-02 | planned | Ordered composition bound | BS-03, BC-01 | Comparison matrices compose in the same externally supplied order as the update operators |
-| BC-03 | planned | Commuting color-batch bound | BS-04, BS-05, BC-02 | A commuting batch has an order-independent derivative and an explicit block-norm bound |
+| BC-01 | done | Blockwise derivative-factor bounds | BS-06, CT-04 | Bounds on each block entry of each supplied update derivative produce nonnegative comparison matrices |
+| BC-02 | done | Ordered composition bound | BS-03, BC-01 | Comparison matrices compose in the same externally supplied order as the update operators |
+| BC-03 | done | Commuting color-batch bound | BS-04, BS-05, BC-02 | A commuting batch has an order-independent derivative and an explicit block-norm bound |
 | BC-04 | deferred | Buffered simultaneous-batch bound | BS-05, BC-01 | Same-color coupling is bounded using the actual simultaneous snapshot semantics |
-| BC-05 | planned | Exact-execution contraction bounds | BC-02, BC-03 | Serial and proper-color execution maps obtain explicit maximum-norm contraction bounds; perturbation extensions depend on deferred BC-04 and CT-05 |
+| BC-05 | done | Exact-execution contraction bounds | BC-02, BC-03 | Serial and proper-color execution maps obtain explicit maximum-norm contraction bounds; perturbation extensions depend on deferred BC-04 and CT-05 |
 
 # Phase 7 — production VBD synthesis
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| VB-01 | planned | Production VBD update operators and execution plans | LI-01, BS-03, BS-05 | Supplied block-Newton operators and externally controlled serial or buffered plans match the paper, including singular-block skipping |
+| VB-01 | next | Production VBD update operators and execution plans | LI-01, BS-03, BS-05 | Supplied block-Newton operators and externally controlled serial or buffered plans match the paper, including singular-block skipping |
 | VB-02 | planned | Regular fixed-point consistency | VB-01, IE-05 | A complete skip-free sweep fixes exactly an IE root in the stated regular region, with block coverage and execution assumptions explicit; the equivalence is proved independently of contraction |
 | VB-03 | planned | Execution derivative and block entries | VB-01, BS-06, BC-02 | The derivative at an IE root is derived from the externally ordered operator composition and identified with the corresponding Gauss-Seidel error operator |
 | VB-04 | planned | Inertia-based block inverse bounds | IE-07, VB-01 | `M/h² + ∇²P` yields explicit coercivity and inverse-norm bounds on a neighborhood |
@@ -140,7 +140,8 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 The [AP-03 decision](./applicability-decision.md) fixes the first certificate to the maximum norm
 and static proper colors. Its scalar nonlinear chain, predictor box, and 20-sweep residual target
-instantiate VB-05–VB-08. CT-04 is next; CT-05 and BC-04 require a later execution-scope assessment.
+instantiate VB-05–VB-08. CT-04 and the exact-execution Phase 6 bridge are complete; VB-01 is next.
+CT-05 and BC-04 require a later execution-scope assessment.
 
 Every resolved project-wide architecture decision should become an Architecture Decision concept
 and be removed from this list in the same change. Source-local representation choices belong in

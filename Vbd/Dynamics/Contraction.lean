@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: VBD contributors
 -/
 import Mathlib.Topology.MetricSpace.Contracting
+import Mathlib.Analysis.Calculus.MeanValue
 
 /-!
 # Iteration on invariant sets
@@ -14,7 +15,8 @@ restriction to the subtype is handled inside the proofs; the ambient space need 
 Mathlib supplies existence and uniqueness, and its Lipschitz iteration API supplies the finite
 bounds. Convergence to a supplied fixed point follows from the geometric bound without a
 completeness assumption. Closed subsets of complete metric spaces, including nonempty closed
-balls, use `IsClosed.isComplete` with `exists_fixedPoint`.
+balls, use `IsClosed.isComplete` with `exists_fixedPoint`. The normed-space derivative bridge
+uses Mathlib's mean-value inequality on convex regions and keeps invariance separate.
 -/
 
 namespace Vbd.Contraction
@@ -75,5 +77,21 @@ theorem exists_fixedPoint (hcomplete : IsComplete S) (hne : S.Nonempty)
     (show ContractingWith q (hS.restrict T S S) from ⟨hq, hT.mapsToRestrict hS⟩).exists_fixedPoint'
       hcomplete hS hx (edist_ne_top x (T x))
   exact ⟨p, hp, hfix, fun y hy hfy ↦ fixedPoint_unique hS hT hq hy hp hfy hfix⟩
+
+end Vbd.Contraction
+
+namespace Vbd.Contraction
+open scoped NNReal
+
+variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
+
+/-- Uniform derivative bounds on a convex region give the metric estimate used by
+our invariant-set iteration theorems. Boundary points use within-set derivatives. -/
+theorem lipschitzOnWith_of_derivative_bound {f : E → F} {D : E → E →L[ℝ] F}
+    {S : Set E} {q : ℝ≥0} (hS : Convex ℝ S)
+    (hD : ∀ x ∈ S, HasFDerivWithinAt f (D x) S x)
+    (hbound : ∀ x ∈ S, ‖D x‖ ≤ q) : LipschitzOnWith q f S :=
+  hS.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le hD hbound
 
 end Vbd.Contraction

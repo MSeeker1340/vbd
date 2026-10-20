@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Phase 6 completion**: Completed CT-04 and BC-01–BC-03/BC-05 for exact execution, marked Phase 6 complete, and advanced VB-01. Preserved deferral of CT-05 and BC-04 and synchronized repository guidance and the applicability decision.
+
+## 2026-10-20
+
 * **Norm-interface synchronization**: Recorded the Phase-2 calibrated block-product norm family in the roadmap and architecture. The AP-03 maximum-norm choice is the state-error metric for the first contraction certificate; the implicit-Euler residual remains measured in the physical Hilbert norm. Synchronized the Phase-1, Phase-5, and Phase-7 roadmap references and the IF-03 backlog item on the established residual notation $R_{\mathrm{IE}}$.
 
 ## 2026-09-16

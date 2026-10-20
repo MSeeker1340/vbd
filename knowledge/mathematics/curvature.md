@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Curvature, Coupling, and VBD Contraction
 description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
 tags: [curvature, coupling, hessian, contraction]
-timestamp: 2026-09-15T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 # Implicit-Euler Hessian
@@ -78,9 +78,9 @@ $\|I-K_i^{-1}D_iR_i\|$; it can persist even at a root. Root consistency still fo
 from invertibility and once-per-block execution, but the exact Gauss–Seidel identification
 requires exact derivative blocks.
 
-These are general analytic bounds for the planned derivative and comparison interfaces.
-Their Lean implementation remains TODO in VB-03 and BC-01–BC-05, with CT-04 supplying the
-uniform derivative-to-contraction bridge. The
+These are general analytic inputs to the implemented Phase 6 comparison interface and CT-04
+uniform derivative-to-Lipschitz bridge. The concrete block-Newton derivative calculation and
+physical estimates remain VB-03–VB-06 obligations. The
 [spring-chain example](./axial-spring-contraction.md) calculates concrete values for these bounds.
 
 # Nonlinear neighborhood

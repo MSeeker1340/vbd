@@ -4,7 +4,7 @@ title: Pinned Mathlib API Inventory
 description: Records calculus, block-product, graph-coloring, and fixed-point APIs confirmed in the repository's pinned Mathlib checkout.
 resource: ../../.lake/packages/mathlib/Mathlib
 tags: [mathlib, lean4, gradient, block-product, graph-coloring, contraction]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 # Audit basis
@@ -122,10 +122,13 @@ any nonnegative Lipschitz factor; for a factor below one, convergence follows by
 bound with Mathlib's geometric-limit theorem. The source documents the individual wrappers.
 The generic metric formulation leaves the choice of block norm to the later analysis.
 
-Derivative-bound and perturbation extensions are subject to the
-[applicability gate](/project/roadmap.md#applicability-gate-and-work-order). The derivative
-candidate is Mathlib's convex-set mean-value theory; full theorem selection for that extension
-belongs to CT-04.
+The implemented CT-04 bridge uses
+`Convex.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le` from
+`Mathlib.Analysis.Calculus.MeanValue`. It supports within-set derivatives at boundary points.
+Phase 6 uses Mathlib's finite dependent-function maximum norm, continuous-linear equivalence
+with `PiLp 2`, operator-norm estimates, matrix multiplication, and derivative chain rule.
+Perturbation extensions remain subject to the
+[applicability gate](/project/roadmap.md#applicability-gate-and-work-order).
 
 # Citations
 

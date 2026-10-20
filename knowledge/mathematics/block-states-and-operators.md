@@ -439,3 +439,31 @@ Preserved output blocks give identity block rows in the derivative. Simultaneous
 block rows evaluated at a common input. These two execution semantics determine the linear operators
 whose bounds are studied in the [contraction analysis](/mathematics/curvature.md). Differentiability,
 norm estimates, and concrete VBD formulas enter in those later phases.
+
+
+# Maximum-norm comparison certificate
+
+For a differentiable update sequence on a common invariant region, let each nonnegative
+matrix $C^{(r)}$ bound the operator norm of every block entry of the corresponding derivative.
+The chain rule at intermediate states and block reconstruction give
+
+$$
+\bigl\|[DS_{\mathcal E}(x)]_{ij}\bigr\|
+\le [C^{(m)}\cdots C^{(1)}]_{ij}.
+$$
+
+The maximum row sum of this product bounds the sweep derivative in the calibrated block
+maximum norm. On a convex region, a uniform bound $q<1$ therefore gives the Lipschitz
+contraction used by the [dynamics foundation](./contractive-fixed-point-iteration.md).
+
+A sufficient certificate assigns a write set to every comparison factor, uses identity
+rows outside that set, and bounds each changed-row sum by the same $q<1$. Every intermediate
+comparison remains nonexpansive. Each visited row acquires the bound $q$, and subsequent
+steps preserve that bound on previously visited rows. Coverage of every block gives the
+full-sweep bound $q$. Repeated visits and multi-block writes are permitted.
+
+For commuting updates with disjoint write-support bounds, every enumeration implements the
+same simultaneous merge. Their ordered derivatives are equal, and a certificate for one
+enumeration bounds the common batch map. Sequences of these batch maps use the same ordered
+composition theorem. Concrete potential support and coloring establish commutation in Phase 7;
+same-color coupling estimates are deferred.

@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-09-16T00:00:00Z
+timestamp: 2026-10-20T00:00:00Z
 ---
 
 # Foundation modules
@@ -14,7 +14,7 @@ timestamp: 2026-09-16T00:00:00Z
 | P2 | `Block/Basic.lean` | `BlockSum B`, native coordinate access, injections, and replacements | none |
 | P2 | `Block/Update.lean` | Write support under composition and simultaneous merging | `Block/Basic` |
 | P2 | `Block/Operator.lean` | Continuous block entries, finite assembly and reconstruction, and block-matrix arithmetic | `Block/Basic` |
-| P3 | `Dynamics/Contraction.lean` | Implemented local fixed-point and finite-iterate interfaces; derivative extension is next; perturbation extension is deferred | none |
+| P3 | `Dynamics/Contraction.lean` | Implemented local fixed-point and finite-iterate interfaces; derivative bridge is implemented; perturbation extension is deferred | none |
 
 # Bridge and synthesis modules
 
@@ -22,7 +22,7 @@ timestamp: 2026-09-16T00:00:00Z
 |---|---|---|---|
 | P4 | `Integrator/LocalPotential.lean` | Implemented finite-support potential components, exact cancellation, and support-to-Mathlib-graph/coloring bridge lemmas | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Implemented solver-independent [unbiased fixed-point convergence](/mathematics/implicit-euler-fixed-points.md) from a contractive map to an implicit-Euler stationary solution | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
-| P6 | `Block/Contraction.lean` | Derivative-factor bounds, ordered comparison composition, proper-color estimates, and deferred perturbation extensions | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
+| P6 | `Block/Contraction.lean` | Implemented derivative-factor comparisons, ordered composition, commuting batches, and covered maximum-norm contraction certificates | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Production block-Newton operators, externally controlled serial and buffered executions, derivative bounds, and end-to-end finite-sweep result | P4, P5, P6 modules |
 
 These paths are the current module boundaries recorded in the central
@@ -88,8 +88,8 @@ identity block rows. All implemented foundation modules are exported by `Vbd.lea
 `Dynamics/Contraction.lean` implements CT-01–CT-03 using Mathlib contraction and Lipschitz
 iteration results. It supplies local fixed-point existence and uniqueness, convergence to a
 supplied fixed point, finite-iterate distance bounds, and a defect-based error estimate, with
-no project imports. AP-01–AP-03 are complete research deliverables. CT-04 is next; exact-execution P4–P7 follows
-the accepted route, while CT-05 and hybrid coupling are deferred.
+no project imports. Its norm-polymorphic CT-04 derivative bridge implements the convex-set
+mean-value step. AP-01–AP-03 are complete research deliverables; CT-05 and hybrid coupling are deferred.
 
 `Integrator/LocalPotential.lean` implements Phase 4. It sums support-indexed local components,
 proves cancellation outside the affected supports of a block change, constructs the component
@@ -100,3 +100,11 @@ bridges. It is exported by `Vbd.lean`.
 residual, derives existence and stationarity of the unique fixed point on a complete invariant
 contractive set, and transports finite iterate state error to an implicit-Euler residual bound.
 It imports only `ImplicitEulerEnergy` and `Dynamics/Contraction` and is exported by `Vbd.lean`.
+
+`Block/Contraction.lean` implements BC-01–BC-03 and BC-05. It combines only the block and
+dynamics foundations and is exported by `Vbd.lean`. Comparisons compose in execution order,
+with derivatives evaluated at intermediate states in an explicitly invariant region.
+The finite dependent function space supplies the theorem-local maximum norm via an explicit
+continuous-linear equivalence with `BlockSum`. Complete coverage of changed rows with a common
+bound below one gives the sweep certificate. Commuting disjoint-write merges inherit bounds
+and derivatives from their enumerations. Phase 7 supplies the concrete VBD and physical premises.

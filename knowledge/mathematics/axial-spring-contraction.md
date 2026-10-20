@@ -352,11 +352,10 @@ approach a unique fixed point there, and our earlier consistency argument identi
 with the implicit-Euler solution. The physical model has supplied the hypotheses; the remaining
 iteration estimate is the one already furnished by fixed-point theory.
 
-> **TODO — supporting convergence bridges:** Formalize the derivative-to-contraction result
-> (CT-04) and ordered block-comparison bounds (BC-01–BC-03 and BC-05). The calculation here
-> supplies their spring-chain inputs. The general results belong in
-> [curvature and coupling](./curvature.md) and
-> [contractive fixed-point iteration](./contractive-fixed-point-iteration.md).
+> **Formal convergence bridges:** CT-04 and BC-01–BC-03/BC-05 are implemented. The calculation
+> here supplies their spring-chain inputs; proving these model-specific premises is part of
+> Phase 7. The generic results combine the [curvature and coupling](./curvature.md) comparison
+> bounds with [contractive fixed-point iteration](./contractive-fixed-point-iteration.md).
 
 # Finite-sweep bounds and physical scales
 
@@ -501,14 +500,14 @@ numerical range used in this example.
 
 The example depends on the implemented `Integrator/LocalPotential` support/coloring bridge and
 the implemented `Integrator/FixedPoint` state-to-residual bridge. `Block/Contraction` supplies
-the pending ordered derivative estimate, and CT-04 supplies the pending passage to metric
-contraction. The concrete Newton update and spring-specific hypotheses are then instantiated at
+the ordered derivative estimate and complete-coverage comparison certificate, and CT-04
+supplies the passage to metric contraction. The concrete Newton update and spring-specific hypotheses are then instantiated at
 `Integrator/VBD`.
 
 > **TODO — complete the Lean example:** Apply those bridges to the coefficients, predictor
 > box, and residual scaling used above, then prove the numerical budget through VB-01–VB-08.
 > The generic IF-01–IF-03 bridge is complete; the remaining obligations instantiate its
-> hypotheses for this example in addition to the pending general prerequisites.
+> hypotheses and the implemented Phase 6 certificate for this example.
 
 This places the reusable reasoning where another material model can use it. The chain provides
 the coefficients and proves that they satisfy the hypotheses; it does not specialize the block

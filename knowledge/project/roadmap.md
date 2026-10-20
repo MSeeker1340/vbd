@@ -12,11 +12,11 @@ timestamp: 2026-10-20T00:00:00Z
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
 | Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
-| Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-03 are implemented; CT-04 is next and CT-05 is deferred |
+| Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-04 are implemented; CT-05 is deferred |
 | Applicability study — AP-01–AP-03 | complete | Quantitative proceed for nonlinear axial chains in the maximum norm with serial and proper-color execution |
 | Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
 | Phase 5 — implicit-Euler fixed-point goals | complete | `Integrator/FixedPoint.lean` supplies unbiased fixed-point identification, finite state error, and residual transport |
-| Phase 6 — contraction of composed updates | planned | combines Phase 2 update composition and block linearization with Phase 3 contraction theory |
+| Phase 6 — contraction of composed updates | complete | `Block/Contraction.lean` supplies comparison composition, commuting batches, and maximum-norm sweep certificates; BC-04 remains deferred |
 | Phase 7 — production VBD synthesis | planned | combines the bridge phases to analyze the actual serial and colored VBD sweep |
 
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
@@ -199,7 +199,7 @@ block matrices. Simultaneous merging is available for noncommuting operators as 
 
 # Phase 3 — Contractive fixed-point iteration
 
-Status: CT-01–CT-03 complete; CT-04 next under the accepted AP-03 route; CT-05 deferred. Module: `Vbd/Dynamics/Contraction.lean`.
+Status: CT-01–CT-04 complete; CT-05 deferred. Module: `Vbd/Dynamics/Contraction.lean`.
 
 The [contractive iteration specification](/mathematics/contractive-fixed-point-iteration.md)
 provides the mathematical interface. CT-01–CT-03 supply the initial API assessment, invariant-set
@@ -264,7 +264,7 @@ interfaces, and is exported by `Vbd.lean`.
 
 # Phase 6 — Contraction of composed updates
 
-Status: planned. Module: `Vbd/Block/Contraction.lean`.
+Status: complete for BC-01–BC-03 and BC-05; BC-04 remains deferred. Module: `Vbd/Block/Contraction.lean`.
 
 Dependencies: Phase 2 + Phase 3.
 
@@ -273,14 +273,14 @@ comparison matrices with changed-row sum bounds in the block maximum norm suppor
 selected chain and parameter range. A broader certificate or several-sweep route requires an
 updated applicability assessment and synchronized theorem targets before implementation.
 
-For an externally ordered differentiable update sequence, record block bounds for each derivative
-factor through nonnegative matrices `C⁽ʳ⁾` satisfying
+For an externally ordered differentiable update sequence, block bounds for each derivative
+factor use nonnegative matrices `C⁽ʳ⁾` satisfying
 
 $$
 \|(DU_r(x_{r-1}))_{ij}v_j\| \le C^{(r)}_{ij}\|v_j\|.
 $$
 
-Prove:
+The exact-execution results comprise:
 
 1. reconstruction of global operator bounds from block-entry bounds;
 2. propagation of comparison bounds through externally ordered composition;
@@ -289,9 +289,15 @@ Prove:
 5. an explicit contraction criterion in a stated block norm;
 6. deferred perturbation bounds for approximate derivatives or execution maps.
 
-Acceptance gate: explicit block-entry bounds for supplied serial or color-batched update operators
-compose according to their actual execution semantics and produce a `q < 1` contraction
-certificate using the block and dynamics foundations.
+Acceptance gate: satisfied for the accepted exact-execution route. Explicit block-entry bounds
+compose through derivatives evaluated at the actual intermediate states. Uniform nonnegative
+comparison matrices with identity rows outside each write set and changed-row sums at most
+`q < 1` give a maximum-norm contraction when the execution covers every block. Commuting,
+disjoint-write batches inherit the estimate of any enumeration and have an order-independent
+derivative. Region invariance and convexity are explicit premises. The maximum-norm state map
+uses an explicit continuous-linear equivalence with the finite `BlockSum` representation and
+feeds the generic dynamics layer. Concrete VBD update formulas, commutation, and physical
+certificates are Phase 7 obligations.
 
 # Phase 7 — Production VBD synthesis
 
