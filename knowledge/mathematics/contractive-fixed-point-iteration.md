@@ -1,8 +1,8 @@
 ---
 type: Mathematical Specification
 title: Contractive Fixed-Point Iteration
-description: Contraction on invariant complete sets, geometric iterate bounds, derivative criteria, and stability under perturbations.
-tags: [fixed-points, contraction, iteration, perturbations]
+description: Contraction on invariant complete sets, geometric iterate bounds, and derivative criteria.
+tags: [fixed-points, contraction, iteration]
 timestamp: 2026-10-20T00:00:00Z
 ---
 
@@ -195,67 +195,6 @@ Using spectral information requires a justified norm change or a contraction the
 iterate. The [curvature and coupling layer](/mathematics/curvature.md) supplies derivative
 bounds for concrete VBD execution maps.
 
-# Optional extension: perturbed iteration
-
-Perturbation theory transfers an accuracy guarantee from a contractive reference map to an
-execution that approximates it. Each approximate update introduces fresh error, while subsequent
-contraction damps earlier error. The estimates below quantify the resulting distance to the
-reference fixed point and distinguish an eventual error neighborhood from exact convergence.
-
-This extension is useful when the chosen analysis compares the actual sweep with a simpler
-reference sweep, or when local solves are deliberately approximate. Such a comparison must
-supply a bound on the discrepancy per sweep. Serial and buffered colored VBD can each be
-analyzed directly as their own exact map; their convergence proofs do not inherently require
-perturbation estimates. The [applicability study](/project/roadmap.md#applicability-gate-and-work-order)
-determines whether a reference-map comparison is useful for a concrete target. Floating-point
-error is another possible application, with its error bounds and verification deferred by the
-[backlog](/project/backlog.md#deferred-by-the-current-route).
-
-Let `T` contract on `S` with fixed point `x* ∈ S`. Suppose a sequence `y_k ∈ S` has nonnegative
-step errors `ε_k` satisfying
-
-$$
-d(y_{k+1},T(y_k))\le\varepsilon_k.
-$$
-
-Writing `e_k = d(y_k,x*)`, the triangle inequality gives `e_{k+1} ≤ q e_k + ε_k`.
-Unrolling this recurrence yields
-
-$$
-e_k\le q^k e_0+\sum_{j=0}^{k-1}q^{k-1-j}\varepsilon_j.
-$$
-
-The empty sum for `k = 0` is zero. This convolution bound separates three useful conclusions:
-
-- **Persistent bounded errors:** if `ε_k ≤ ε̄`, then
-  `e_k ≤ q^k e₀ + ε̄(1-q^k)/(1-q)` and `limsup e_k ≤ ε̄/(1-q)`.
-  This guarantees an error neighborhood, not convergence to a point.
-- **Vanishing errors:** if `ε_k → 0`, then `e_k → 0`. Split the convolution into a finite
-  prefix, whose geometric weights vanish, and a tail bounded by an arbitrarily small
-  constant times `1/(1-q)`. A geometric rate requires quantitative decay information.
-- **Summable errors:** if `Σ ε_k < ∞`, then `e_k → 0` and additionally
-  `Σ e_k ≤ (e₀ + Σ ε_k)/(1-q)`. Summing the nonnegative convolution proves the latter bound.
-
-Membership `y_k ∈ S` must be established for the perturbed sequence as well. Invariance under
-`T` alone controls exact iterates. For example, on `closedBall(c,r)`, the stronger margin
-
-$$
-\|T(c)-c\|+\bar\varepsilon\le(1-q)r
-$$
-
-ensures perturbed invariance by induction whenever `y₀` lies in the ball and every step error
-is at most `ε̄`.
-
-A related fixed-point stability bound compares maps. If `T` contracts on `S`, `T(x*) = x*`,
-`U(y*) = y*`, both points lie in `S`, and `d(T(y*),U(y*)) ≤ δ`, then
-
-$$
-d(x^*,y^*)\le\frac{\delta}{1-q}.
-$$
-
-This estimate assumes the fixed point of `U` is supplied; existence and uniqueness for `U`
-require their own hypotheses.
-
 # Formalization foundation
 
 Phase 3 is the generic dynamics foundation in the [roadmap](/project/roadmap.md).
@@ -263,9 +202,8 @@ Phase 3 is the generic dynamics foundation in the [roadmap](/project/roadmap.md)
 invariant-subset restriction, iterate convergence, and geometric and defect bounds. Its
 mean-value theory supplies the implemented CT-04 derivative-to-Lipschitz step, including
 within-set derivatives on convex regions. The project layer exposes the
-local-set results used by later bridges and optional perturbation results when the selected
-analysis requires a reference-map comparison. Exact declaration assessment and
-implementation progress are tracked by [CT-01–CT-05](/project/backlog.md#phase-3--contractive-fixed-point-iteration).
+local-set results used by later bridges. Exact declaration assessment and
+implementation progress are tracked by [CT-01–CT-04](/project/backlog.md#phase-3--contractive-fixed-point-iteration).
 
 # Citations
 

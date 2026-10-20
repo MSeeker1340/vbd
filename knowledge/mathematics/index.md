@@ -4,7 +4,7 @@
 - [Implicit-Euler solver consistency and fixed-point convergence](./implicit-euler-fixed-points.md) - Unbiased solver fixed points, contraction convergence, and residual-error transport.
 - [Local decomposition and coloring](./local-decomposition-and-coloring.md) - Potential components, energy bookkeeping, proper colors, and color batches.
 - [Block states and operators](./block-states-and-operators.md) - Block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
-- [Contractive fixed-point iteration](./contractive-fixed-point-iteration.md) - Contraction on invariant complete sets, geometric iterate bounds, derivative criteria, and stability under perturbations.
+- [Contractive fixed-point iteration](./contractive-fixed-point-iteration.md) - Contraction on invariant complete sets, geometric iterate bounds, and derivative criteria.
 - [Curvature, coupling, and VBD contraction](./curvature.md) - Block inverse, coupling, and nonlinear-neighborhood theorem targets.
 - [Worked example: VBD convergence for an elastic spring chain](./axial-spring-contraction.md) - Applies the project’s implicit-Euler, block-update, and contraction results to a concrete spring-chain solve, with numerical checks and explicit pending prerequisites.
 - [Update log](./log.md) - Newest-first changes to mathematical specifications.

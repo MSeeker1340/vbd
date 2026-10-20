@@ -127,8 +127,6 @@ The implemented CT-04 bridge uses
 `Mathlib.Analysis.Calculus.MeanValue`. It supports within-set derivatives at boundary points.
 Phase 6 uses Mathlib's finite dependent-function maximum norm, continuous-linear equivalence
 with `PiLp 2`, operator-norm estimates, matrix multiplication, and derivative chain rule.
-Perturbation extensions remain subject to the
-[applicability gate](/project/roadmap.md#applicability-gate-and-work-order).
 
 # Citations
 

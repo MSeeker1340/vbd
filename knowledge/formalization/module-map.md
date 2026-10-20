@@ -14,7 +14,7 @@ timestamp: 2026-10-20T00:00:00Z
 | P2 | `Block/Basic.lean` | `BlockSum B`, native coordinate access, injections, and replacements | none |
 | P2 | `Block/Update.lean` | Write support under composition and simultaneous merging | `Block/Basic` |
 | P2 | `Block/Operator.lean` | Continuous block entries, finite assembly and reconstruction, and block-matrix arithmetic | `Block/Basic` |
-| P3 | `Dynamics/Contraction.lean` | Implemented local fixed-point and finite-iterate interfaces; derivative bridge is implemented; perturbation extension is deferred | none |
+| P3 | `Dynamics/Contraction.lean` | Implemented local fixed-point and finite-iterate interfaces; derivative bridge is implemented | none |
 
 # Bridge and synthesis modules
 
@@ -35,8 +35,8 @@ Phases 1 and 2 are complete. `Block/Update.lean` and `Block/Operator.lean` each 
 Phase 3 has an implemented, block-independent core covering CT-01–CT-03 and reusing the pinned
 Mathlib contraction API. The [axial-spring contraction analysis](/mathematics/axial-spring-contraction.md) and
 [AP-03 decision](/project/applicability-decision.md) authorize CT-04 and the exact-execution
-Phase 4–7 route. CT-05 and same-color coupling estimates are deferred. Exploratory derivations and diagnostic scripts
-introduce no cross-foundation Lean imports; the module dependency boundaries stay in force.
+Phase 4–7 route. Same-color coupling estimates in exact arithmetic are deferred. Exploratory
+derivations and diagnostic scripts introduce no cross-foundation Lean imports; the module dependency boundaries stay in force.
 
 The three foundations may be implemented independently:
 
@@ -89,7 +89,7 @@ identity block rows. All implemented foundation modules are exported by `Vbd.lea
 iteration results. It supplies local fixed-point existence and uniqueness, convergence to a
 supplied fixed point, finite-iterate distance bounds, and a defect-based error estimate, with
 no project imports. Its norm-polymorphic CT-04 derivative bridge implements the convex-set
-mean-value step. AP-01–AP-03 are complete research deliverables; CT-05 and hybrid coupling are deferred.
+mean-value step. AP-01–AP-03 are complete research deliverables; exact hybrid coupling analysis is deferred.
 
 `Integrator/LocalPotential.lean` implements Phase 4. It sums support-indexed local components,
 proves cancellation outside the affected supports of a block change, constructs the component

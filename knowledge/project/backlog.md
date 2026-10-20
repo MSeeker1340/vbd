@@ -6,6 +6,10 @@ tags: [backlog, roadmap, lean4, theorem-status]
 timestamp: 2026-10-20T00:00:00Z
 ---
 
+# Project scope
+
+The project studies VBD in exact arithmetic, including finite-iteration state and residual errors. Floating-point rounding, errors from approximate local solves, and GPU implementation verification are outside its scope.
+
 # Status vocabulary
 
 - `next`: first eligible work.
@@ -56,13 +60,12 @@ timestamp: 2026-10-20T00:00:00Z
 | CT-02 | done | Local invariant-set contraction wrapper | CT-01 | A contraction on a forward-invariant complete subset yields a unique local fixed point and iterate convergence |
 | CT-03 | done | Finite-iteration distance bound | CT-02 | The public theorem exposes a geometric `q^k` bound suitable for a fixed iteration budget |
 | CT-04 | done | Derivative-bound bridge | CT-02, AP-03 | A uniform derivative/operator-norm bound on a stated convex neighborhood yields the Lipschitz contraction needed by the AP-03 route |
-| CT-05 | deferred | Perturbed contraction bounds | CT-03, AP-03 | Persistent, vanishing, and summable perturbations have explicitly separated conclusions and explicit perturbed-region membership premises; implementation serves the accepted execution analysis |
 
 # Early applicability study
 
-Execution order is CT-01–CT-03, AP-01–AP-03, then the selected derivative, perturbation, and
+Execution order is CT-01–CT-03, AP-01–AP-03, then the selected derivative bridge and
 Phase 4–7 formalization. AP-03 is a research decision dependency, not a Lean import. Every
-Phase 4–7 item and CT-04–CT-05 requires an AP-03 proceed decision for its route in addition to
+Phase 4–7 item and CT-04 requires an AP-03 proceed decision for its route in addition to
 its listed dependencies. A completed revise decision keeps dependent formalization gated until
 an updated assessment supports proceeding. The [roadmap](./roadmap.md#applicability-gate-and-work-order)
 defines the evidence standard and the response to an ineffective certificate.
@@ -106,7 +109,7 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | BC-02 | done | Ordered composition bound | BS-03, BC-01 | Comparison matrices compose in the same externally supplied order as the update operators |
 | BC-03 | done | Commuting color-batch bound | BS-04, BS-05, BC-02 | A commuting batch has an order-independent derivative and an explicit block-norm bound |
 | BC-04 | deferred | Buffered simultaneous-batch bound | BS-05, BC-01 | Same-color coupling is bounded using the actual simultaneous snapshot semantics |
-| BC-05 | done | Exact-execution contraction bounds | BC-02, BC-03 | Serial and proper-color execution maps obtain explicit maximum-norm contraction bounds; perturbation extensions depend on deferred BC-04 and CT-05 |
+| BC-05 | done | Exact-execution contraction bounds | BC-02, BC-03 | Serial and proper-color execution maps obtain explicit maximum-norm contraction bounds |
 
 # Phase 7 — production VBD synthesis
 
@@ -131,7 +134,6 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | ER-01 | deferred | Solver-error accumulation across timesteps | The single-step finite-sweep theorem VB-08 is stable |
 | ER-02 | deferred | Separate discretization and solver error | Both error components have independent definitions and bounds |
 | DC-01 | deferred | Fully dynamic collision scheduling | The first static/hybrid colored theorem is complete |
-| FP-01 | deferred | Floating-point and GPU execution error | The exact-arithmetic production map and contraction result are stable |
 | MM-01 | deferred | Generalized non-diagonal mass specialization | The first accepted production theorem identifies the needed locality assumptions |
 
 # Open decisions
@@ -141,7 +143,7 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 The [AP-03 decision](./applicability-decision.md) fixes the first certificate to the maximum norm
 and static proper colors. Its scalar nonlinear chain, predictor box, and 20-sweep residual target
 instantiate VB-05–VB-08. CT-04 and the exact-execution Phase 6 bridge are complete; VB-01 is next.
-CT-05 and BC-04 require a later execution-scope assessment.
+BC-04 requires a further applicability assessment for same-color coupling in exact arithmetic.
 
 Every resolved project-wide architecture decision should become an Architecture Decision concept
 and be removed from this list in the same change. Source-local representation choices belong in

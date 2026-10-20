@@ -6,6 +6,10 @@ tags: [architecture, dependencies, locality, contraction]
 timestamp: 2026-10-20T00:00:00Z
 ---
 
+# Arithmetic and error scope
+
+The project studies VBD in exact arithmetic, including finite-iteration state and residual errors. Floating-point rounding, errors from approximate local solves, and GPU implementation verification are outside its scope.
+
 # Independent foundations
 
 The project has three self-contained foundations:
@@ -15,8 +19,8 @@ The project has three self-contained foundations:
 2. **Block-update algebra** defines heterogeneous block sums, write-local state transformations,
    composition, commutation, simultaneous batches, and block-matrix
    representations of continuous linear operators.
-3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, derivative,
-   and perturbation results for arbitrary self-maps.
+3. **Contractive fixed-point iteration** provides local fixed-point, finite-iterate, and derivative
+   results for arbitrary self-maps.
 
 Pairwise bridge layers combine implicit Euler with finite-support potential components, implicit Euler with generic
 fixed-point results, and block operators with contraction bounds. Production VBD is the first
@@ -66,7 +70,7 @@ supports.
 
 The production VBD layer proves how a proper coloring relates its concrete buffered sweep to serial
 execution. Adding a component that contains two same-colored blocks creates same-color coupling;
-the corresponding complete sweep requires a separate hybrid or perturbation bound.
+the corresponding complete sweep requires a bound for its exact simultaneous update map.
 
 # Representation boundary
 

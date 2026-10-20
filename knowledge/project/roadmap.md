@@ -6,13 +6,17 @@ tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
 timestamp: 2026-10-20T00:00:00Z
 ---
 
+# Project scope
+
+The project studies VBD in exact arithmetic, including finite-iteration state and residual errors. Floating-point rounding, errors from approximate local solves, and GPU implementation verification are outside its scope.
+
 # Current phase status
 
 | Phase | Status | Current boundary |
 |---|---|---|
 | Phase 1 — implicit Euler mathematics | complete | `Vbd/Integrator/ImplicitEulerEnergy.lean` provides the basis-free objective, gradient, and Hessian identities |
 | Phase 2 — block-state and update-operator algebra | complete | `Block/Basic`, `Block/Update`, and `Block/Operator` implement BS-01–BS-06 |
-| Phase 3 — contractive fixed-point iteration | core complete | CT-01–CT-04 are implemented; CT-05 is deferred |
+| Phase 3 — contractive fixed-point iteration | complete | CT-01–CT-04 are implemented |
 | Applicability study — AP-01–AP-03 | complete | Quantitative proceed for nonlinear axial chains in the maximum norm with serial and proper-color execution |
 | Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
 | Phase 5 — implicit-Euler fixed-point goals | complete | `Integrator/FixedPoint.lean` supplies unbiased fixed-point identification, finite state error, and residual transport |
@@ -25,7 +29,7 @@ The accepted [applicability decision](./applicability-decision.md) selects the
 [axial-chain certificate](/mathematics/axial-spring-contraction.md): `h² k_max/m_min ≤ 1/4`,
 `0 ≤ η ≤ 1`, the stated predictor box, and a physical residual below `10⁻⁶` in 20 sweeps.
 The first theorem uses maximum-norm state contraction and static proper colors. Hybrid
-execution and perturbation extensions require a further applicability decision.
+execution with same-color coupling requires a further applicability decision.
 
 The chain is the first worked instance of a reusable theorem interface. The generic foundation,
 bridge and block-Newton results remain parameterized by block dimension, potential-component support
@@ -65,7 +69,7 @@ stability across timesteps and convergence from arbitrary initial configurations
 separate results.
 
 Work proceeds through the thin Phase 3 core CT-01–CT-03, then the bounded applicability study
-AP-01–AP-03, before CT-04–CT-05 or Phase 4–7 formalization. The study anticipates production
+AP-01–AP-03, before CT-04 or Phase 4–7 formalization. The study anticipates production
 mathematics through derivations and reproducible diagnostic experiments. It introduces no
 cross-foundation Lean imports and requires no general simulation infrastructure.
 
@@ -199,14 +203,14 @@ block matrices. Simultaneous merging is available for noncommuting operators as 
 
 # Phase 3 — Contractive fixed-point iteration
 
-Status: CT-01–CT-04 complete; CT-05 deferred. Module: `Vbd/Dynamics/Contraction.lean`.
+Status: complete (CT-01–CT-04). Module: `Vbd/Dynamics/Contraction.lean`.
 
 The [contractive iteration specification](/mathematics/contractive-fixed-point-iteration.md)
 provides the mathematical interface. CT-01–CT-03 supply the initial API assessment, invariant-set
 wrapper, and finite-iterate bound. The implemented metric-space interface also exposes convergence
 to a supplied fixed point and the defect bound, with completeness required only for existence.
-The derivative extension serves the accepted maximum-norm route; perturbation extensions
-serve future approximate or hybrid execution assessments; the initial core remains independent of VBD assumptions.
+The derivative bridge serves the accepted maximum-norm route. The foundation remains
+independent of VBD assumptions.
 
 Reuse Mathlib's `ContractingWith` and Banach fixed-point results. Add the project-relevant
 bridges that are absent or awkward at the call site:
@@ -214,8 +218,7 @@ bridges that are absent or awkward at the call site:
 1. contraction on a forward-invariant complete subset or closed ball;
 2. explicit finite-iterate distance bounds;
 3. derivative bounds on a convex neighborhood implying a Lipschitz contraction there;
-4. local convergence to a known fixed point;
-5. deferred persistent, vanishing, and summable perturbation bounds for an accepted approximate-execution scope.
+4. local convergence to a known fixed point.
 
 Use direct Lipschitz or operator-norm bounds first. A spectral-radius hypothesis enters through an
 appropriate equivalent norm or an iterate theorem.
@@ -286,8 +289,7 @@ The exact-execution results comprise:
 2. propagation of comparison bounds through externally ordered composition;
 3. bounds for commuting color batches using their order-independent composition;
 4. deferred bounds for buffered simultaneous batches with same-color coupling;
-5. an explicit contraction criterion in a stated block norm;
-6. deferred perturbation bounds for approximate derivatives or execution maps.
+5. an explicit contraction criterion in a stated block norm.
 
 Acceptance gate: satisfied for the accepted exact-execution route. Explicit block-entry bounds
 compose through derivatives evaluated at the actual intermediate states. Uniform nonnegative
@@ -374,6 +376,6 @@ arguments form secondary routes activated by a named target theorem or compatibl
 
 Deferred work includes global behavior beyond a certified contractive neighborhood, probabilistic
 convergence after a concrete randomness model is selected, fully dynamic collision scheduling,
-floating-point and GPU execution error, optimization-error accumulation across time steps,
+optimization-error accumulation across time steps,
 discretization error, and generalized mass-matrix specializations beyond the first accepted
 production theorem.

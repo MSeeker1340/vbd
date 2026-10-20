@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Scope cleanup**: Removed the optional perturbed-iteration program from the contraction specification and its index description. Replaced the axial-chain extension’s CT-05 dependency with obligations on the actual mathematical map; finite-iteration contraction and residual estimates remain in scope.
+
+## 2026-10-20
+
 * **Exact-execution comparison certificate**: Recorded the implemented derivative, ordered-comparison, commuting-batch, and complete-coverage maximum-norm bridges. Clarified repeated visits and multi-block writes; retained concrete Newton derivatives and physical axial-chain instantiation as Phase 7 obligations.
 
 ## 2026-10-20

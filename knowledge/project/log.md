@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Exact-arithmetic scope**: At the user’s direction, removed CT-05 (inexact/perturbed iteration) and FP-01 (floating-point/GPU execution error) from project tasks and removed their roadmap extensions. Execution-error verification is outside project scope; finite-iteration error remains central. Retained BC-04 as deferred exact-arithmetic mathematics for interacting simultaneous updates and synchronized repository guidance, architecture, and the applicability decision.
+
+## 2026-10-20
+
 * **Phase 6 completion**: Completed CT-04 and BC-01–BC-03/BC-05 for exact execution, marked Phase 6 complete, and advanced VB-01. Preserved deferral of CT-05 and BC-04 and synchronized repository guidance and the applicability decision.
 
 ## 2026-10-20

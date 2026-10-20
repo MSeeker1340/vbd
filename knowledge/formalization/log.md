@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Scope cleanup**: Removed inexact-iteration and execution-error extension references from the module plan and Mathlib inventory. The dynamics foundation covers CT-01–CT-04; same-color coupling remains a separate exact-arithmetic analysis.
+
+## 2026-10-20
+
 * **Phase 6 implementation**: Added and exported `Block/Contraction.lean` with block-action and operator-norm comparisons, intermediate-state derivatives, ordered matrix bounds, maximum-norm transport, commuting merges, and covered changed-row contraction. Implemented CT-04 through Mathlib convex-set mean-value theory and synchronized the module map and API inventory.
 
 ## 2026-09-16

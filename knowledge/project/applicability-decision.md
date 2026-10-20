@@ -50,8 +50,8 @@ interpretation as chain length grows. Weighted or energy norms and several-sweep
 remain options for a broader stiff-regime assessment.
 
 Exact serial and proper-color execution exercise ordering and snapshot semantics while keeping
-physical independence explicit. Dynamic same-color coupling and approximate solves require
-additional derivative or perturbation estimates, so they are follow-on execution scopes.
+physical independence explicit. Dynamic same-color coupling requires additional bounds on the
+exact simultaneous map and a separate applicability assessment.
 
 # Evaluation contract and provenance
 
@@ -94,8 +94,8 @@ Python environment is separate from the Lean dependency graph.
 
 CT-04 and the exact-execution Phase 6 bridge are complete. Production VBD synthesis starts
 with VB-01. The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
-physical-residual transport. CT-05, BC-04 and perturbation extensions remain deferred until an
-approximate or hybrid execution variant has an applicability certificate. The generic
+physical-residual transport. BC-04 remains deferred until an exact hybrid execution variant
+with same-color coupling has an applicability certificate. The generic
 higher-arity coloring example in LI-03 remains required, independently of the chain certificate.
 
 The initial guarantee concerns one timestep with the specified predictor region. It excludes

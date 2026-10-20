@@ -646,5 +646,5 @@ the derivative-mismatch terms in the [general estimate](./curvature.md#derivativ
 but we still have to identify its root with the intended fully coupled physical equation.
 Ideal sticking/sliding laws can instead need a nonsmooth inclusion or complementarity solution
 concept. Block algebra and metric contraction remain reusable, while the smooth derivative bridge
-and energy-gradient interpretation may need new results. A CT-05 perturbation theorem requires
-an actual error bound and region preservation; friction is not automatically a small perturbation.
+and energy-gradient interpretation may need new results. Friction requires a certificate
+for its actual mathematical update map and explicit region-preservation premises.
