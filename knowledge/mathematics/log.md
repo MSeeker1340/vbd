@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Quantitative root coupling**: Recorded the normalized block-row bound, propagation through covered chronological Gauss–Seidel sweeps, and separate maximum/ℓ² conversion constants `1` and `sqrt(n)`. Recorded the scalar spring estimate `sᵢ ≤ (14/25) aᵢ`, hence root factor `14/39 < 1`, and the degree-two `α ≤ 1/4` implication. Distinguished this implemented actual root derivative bound from the off-root `0.512` neighborhood and finite-sweep obligations.
+
+## 2026-10-20
+
 * **Inertia-based inverse bounds**: Recorded the implemented constant `μᵢ = mᵢ / h² − κᵢ`, uniform block inverse bound `1 / μᵢ`, and scalar regularity certificate when the production threshold is strictly below `μᵢ`. Kept positive determinant-threshold acceptance separate from mere invertibility in higher dimensions and the physical spring-law instantiation separate from the generic theorem. Synchronized the curvature specification and chain article.
 
 ## 2026-10-20

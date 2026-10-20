@@ -26,6 +26,8 @@ timestamp: 2026-10-20T00:00:00Z
 | P7 | `Integrator/VBD.lean` | Implemented VB-01–VB-02 exact executions and regular-sweep consistency | `Block/Operator`, `Block/Update`, `Integrator/FixedPoint` |
 | P7 | `Integrator/VBDDerivative.lean` | Implemented VB-03 root derivatives, block entries, and ordered Gauss–Seidel identification | `Integrator/VBD`, `Block/Contraction` |
 | P7 | `Integrator/VBDCurvature.lean` | Implemented VB-04 inertia-based block coercivity, inverse bounds, and scalar regularity certificates | `Integrator/VBD` |
+| P7 | `Integrator/VBDCoupling.lean` | Implemented VB-05 normalized coupling, covered root-sweep bounds, and quantitative norm conversions | `Integrator/VBDDerivative`, `Integrator/VBDCurvature` |
+| P7 | `Examples/AxialSpring.lean` | Implemented spring residual, Jacobian, exact Newton blocks, and AP-03 serial root derivative factor | `Integrator/VBDCoupling` |
 
 These paths are the current module boundaries recorded in the central
 [roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
@@ -138,5 +140,14 @@ equation. The concrete IE specialization derives its residual derivative from Ph
 curvature bounds give explicit coercivity and inverse-norm control of the actual IE Newton blocks
 throughout a supplied region. The inverse result supports heterogeneous finite-dimensional real
 Hilbert blocks. Scalar coercivity above the production threshold supplies regularity for the
-consistency and derivative interfaces. Physical coupling, uniform nonlinear-neighborhood estimates,
-and component-based commutation remain subsequent obligations.
+consistency and derivative interfaces.
+
+`Integrator/VBDCoupling.lean` implements the generic VB-05 coupling-to-root-sweep bound and
+explicit maximum/ℓ² state norm conversions. It preserves heterogeneous vector-block parameters
+and reuses Phase-6 comparison multiplication and covered row certificates.
+`Examples/AxialSpring.lean` supplies the scalar physical instantiation: the polynomial residual
+has its Jacobian, exact Newton diagonal entries, smoothness and skip-free regularity proved.
+The degree-two AP-03 parameter range bounds the actual covered serial sweep derivative at a
+supplied root in the accepted box by `14/39`. Both modules are exported by `Vbd.lean`.
+Uniform off-root contraction, invariance and warm-start coverage, component-based commutation,
+and the physical energy/residual identification remain the VB-06–VB-08 obligations.

@@ -35,6 +35,12 @@ regularity for units, with `ContinuousLinearMap.ringInverse_eq_inverse` identify
 inverse. `ContinuousLinearMap.continuous_det` and `ContinuousAt.eventually_lt` keep a strictly
 accepted determinant test valid near the root.
 
+The scalar spring instantiation uses `HasDerivAt.comp_hasFDerivAt`, `HasFDerivAt.sum`,
+and `hasFDerivWithinAt_piLp` from `Mathlib.Analysis.Calculus.FDeriv.WithLp` for its polynomial
+residual derivative. Quantitative state norm conversions use `PiLp.norm_apply_le` and
+`PiLp.lipschitzWith_toLp`; the latter exposes the cardinality power that becomes `sqrt(card ι)`
+for `p = 2`.
+
 # Convexity and extrema
 
 `Mathlib/Analysis/Convex/Strong.lean` provides `StrongConvexOn`, defined through uniform convexity with modulus `m/2 * r²`, plus:

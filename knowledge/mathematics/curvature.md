@@ -77,6 +77,44 @@ A quantitative contraction proof bounds the diagonal inverses and off-diagonal c
 separately, composes them according to the external execution plan, and proves `q < 1` in a stated
 block norm.
 
+For coercivity constants $\mu_i>0$ and off-diagonal bounds $\|H_{ij}\|\le c_{ij}$,
+
+$$
+\sum_{j\ne i}\|H_{ii}^{-1}H_{ij}\|
+\le\mu_i^{-1}\sum_{j\ne i}c_{ij}.
+$$
+
+A common row bound $q\le1$ propagates through a serial Gauss–Seidel error sweep when the
+visit order covers every block. For $q<1$, the sweep's root error operator contracts in the
+block maximum norm. `Integrator/VBDCoupling.lean` implements this inference using the
+Phase-6 changed-row comparison product, including repeated visits and heterogeneous vector blocks.
+The norm conversion constants are explicit:
+
+$$
+\|x\|_{\max}\le\|x\|_2\le\sqrt{n}\,\|x\|_{\max}.
+$$
+
+The maximum-norm factor concerns the conjugated state operator; the conversion to $\ell^2$
+error is a separate estimate.
+
+For the scalar hardening spring law in the accepted radius-$0.1$ box, write
+$w_{ij}=b_{ij}[1+3\eta(u_i-u_j)^2]$ and $s_i=\sum_j w_{ij}$.
+With $0\le\eta\le1$, nonnegative edge coefficients with zero diagonal, $a_i\ge1$, and
+$\sum_j b_{ij}\le a_i/2$,
+
+$$
+s_i\le\frac{14}{25}a_i,
+\qquad
+\sum_{j\ne i}\|H_{ii}^{-1}H_{ij}\|
+\le\frac{s_i}{a_i+s_i}\le\frac{14}{39}<1.
+$$
+
+Degree at most two and $b_{ij}\le\alpha\le1/4$ supply the incident-stiffness condition.
+`Examples/AxialSpring.lean` derives the polynomial residual Jacobian and exact Newton blocks,
+proves production regularity for a threshold below $1$, and gives this bound for the derivative
+of the actual covered serial sweep at a supplied root in the box. Uniform off-root contraction
+and initial-state coverage require the nonlinear-neighborhood estimates below.
+
 # Derivative of a block-Newton update
 
 For differentiable block residuals $R_i(x)$ and differentiable local solve operators $K_i(x)$
@@ -118,7 +156,7 @@ Gauss–Seidel error sweep in the supplied visit order.
 identification under explicit residual and local-Hessian differentiability hypotheses and strict
 acceptance of the production skip test. These are general analytic inputs to the implemented
 Phase 6 comparison interface and CT-04 uniform derivative-to-Lipschitz bridge. Off-root
-inverse-variation bounds and physical coupling estimates remain VB-05–VB-06 obligations. The
+inverse-variation bounds and uniform neighborhood estimates remain VB-06 obligations. The
 [spring-chain example](./axial-spring-contraction.md) calculates concrete values for these bounds.
 
 # Nonlinear neighborhood

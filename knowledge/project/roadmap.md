@@ -21,7 +21,7 @@ The project studies VBD in exact arithmetic, including finite-iteration state an
 | Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
 | Phase 5 — implicit-Euler fixed-point goals | complete | `Integrator/FixedPoint.lean` supplies unbiased fixed-point identification, finite state error, and residual transport |
 | Phase 6 — contraction of composed updates | complete | `Block/Contraction.lean` supplies comparison composition, commuting batches, and maximum-norm sweep certificates; BC-04 remains deferred |
-| Phase 7 — production VBD synthesis | in progress | VB-01–VB-04 supply exact executions, independent consistency, root Gauss–Seidel derivatives, and physical inverse bounds; VB-05 is next |
+| Phase 7 — production VBD synthesis | in progress | VB-01–VB-05 supply exact executions, independent consistency, physical inverse and root coupling bounds; VB-06 is next |
 
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
 
@@ -306,8 +306,16 @@ certificates are Phase 7 obligations.
 
 # Phase 7 — Production VBD synthesis
 
-Status: VB-01–VB-04 implemented; VB-05 is next. Modules: `Vbd/Integrator/VBD.lean`,
-`Vbd/Integrator/VBDDerivative.lean`, and `Vbd/Integrator/VBDCurvature.lean`.
+Status: VB-01–VB-05 implemented; VB-06 is next. Modules: `Vbd/Integrator/VBD.lean`,
+`Vbd/Integrator/VBDDerivative.lean`, `Vbd/Integrator/VBDCurvature.lean`,
+`Vbd/Integrator/VBDCoupling.lean`, and `Vbd/Examples/AxialSpring.lean`.
+
+The scalar spring residual and its exact Newton blocks have a proved root derivative bound
+`14/39 < 1` for covered serial sweeps on the AP-03 degree-two range, conditional on a supplied
+root in the radius-`0.1` box. Explicit maximum/ℓ² state norm conversions have constants `1`
+and `sqrt(card ι)`. Uniform off-root contraction, neighborhood invariance, and warm-start
+coverage are VB-06 obligations; the system-to-energy and end-to-end residual certificates
+remain part of VB-08.
 
 Dependencies: Phases 4, 5, and 6.
 

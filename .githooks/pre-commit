@@ -22,3 +22,4 @@ lake lean tests/FixedPoint.lean
 lake lean tests/VBD.lean
 lake lean tests/VBDDerivative.lean
 lake lean tests/VBDCurvature.lean
+lake lean tests/VBDCoupling.lean

@@ -115,7 +115,9 @@ There is no line search or iteration acceleration.
 `Integrator/VBDCurvature.lean` proves the generic mass-plus-potential coercivity and inverse
 bound, and the scalar implication from a curvature lower bound above the threshold to production
 regularity. The chain formulas supply mass lower bound $a_i$ and nonnegative potential curvature;
-formal derivation of those constitutive formulas is part of the physical chain instantiation.
+`Examples/AxialSpring.lean` proves these Jacobian blocks for the explicit polynomial residual,
+along with exact Newton diagonals and skip-free regularity. Identification of that residual with
+the component energy gradient is an end-to-end physical instantiation obligation.
 
 For quadratic springs, we can see exactly what this step does. Substituting $\eta=0$ and
 cancelling the old value of $u_i$ gives
@@ -301,11 +303,13 @@ the Gauss–Seidel error matrix. This matrix helps explain the observed asymptot
 warm start is not generally the root. To guarantee its progress, we must bound the additional
 term throughout the box.
 
-> **Formal root linearization:** `Integrator/VBDDerivative.lean` proves the local root derivative,
-> its block entries, and the ordered block Gauss–Seidel forward-substitution representation.
-> Residual roots, strict block regularity, and differentiable local Hessian maps are explicit
-> premises. Uniform off-root derivative bounds and the physical chain instantiation are
-> subsequent synthesis obligations.
+> **Formal root coupling:** `Integrator/VBDDerivative.lean` supplies the generic root derivative
+> and ordered block Gauss–Seidel representation. `Integrator/VBDCoupling.lean` turns normalized
+> off-diagonal bounds into a covered serial maximum-norm bound, with explicit maximum/ℓ² state
+> norm conversions. `Examples/AxialSpring.lean` proves the polynomial residual Jacobian, exact
+> Newton blocks, regularity, and the actual serial root derivative estimate `14/39 < 1` on the
+> accepted degree-two range. The root is supplied in the box. Uniform off-root derivative bounds,
+> invariance and warm-start membership are VB-06 obligations.
 
 We now instantiate the [local derivative bounds](./curvature.md#derivative-of-a-block-newton-update)
 with the spring coefficients. The estimate has two parts: sensitivity to neighbors and

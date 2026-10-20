@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-05 completion**: Completed generic normalized-coupling and covered serial root-sweep bounds, explicit maximum/ℓ² norm constants, and the scalar AP-03 root factor `14/39 < 1` for the actual polynomial Newton map. Derived the coefficient condition from degree at most two and `α ≤ 1/4`; added a nonzero-extension nonlinear root check and a two-vector-block check. Marked VB-05 done and advanced VB-06. Root existence, uniform off-root contraction and warm-start coverage remain explicit later obligations; no prerequisite mismatch was encountered.
+
+## 2026-10-20
+
 * **VB-04 completion**: Completed inertia-based block coercivity and inverse-norm bounds on supplied regions, including bounded negative potential curvature, with a scalar positive-threshold regularity certificate. Marked VB-04 done and advanced VB-05. Added physical-scaling, vector-block, and curvature-to-production-consistency checks to pre-commit; no prerequisite mismatch was encountered.
 
 ## 2026-10-20

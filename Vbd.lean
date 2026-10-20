@@ -10,3 +10,5 @@ import Vbd.Integrator.LocalPotential
 import Vbd.Integrator.VBD
 import Vbd.Integrator.VBDDerivative
 import Vbd.Integrator.VBDCurvature
+import Vbd.Integrator.VBDCoupling
+import Vbd.Examples.AxialSpring

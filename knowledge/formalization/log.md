@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-05 implementation**: Added and exported `Integrator/VBDCoupling.lean` and `Examples/AxialSpring.lean`. Composed VB-04 inverse estimates with off-diagonal norms and Phase-6 covered comparison products. Proved the spring residual derivative, exact diagonal/off-diagonal entries, regularity and diagonal-map smoothness, then instantiated VB-03 for the actual serial sweep and bounded its maximum-norm root derivative by `14/39` over the AP-03 degree-two range. Added explicit norm conversion constants and compiled nonlinear/vector integration checks. Kept energy-gradient identification and uniform nonlinear-region certificates as later physical instantiations.
+
+## 2026-10-20
+
 * **VB-04 implementation**: Added and exported `Integrator/VBDCurvature.lean`, composing the Phase-1 diagonal Hessian identity with explicit mass and potential lower bounds and Mathlib finite-dimensional invertibility and operator-norm APIs. The inverse bound supports arbitrary finite-dimensional real Hilbert blocks; scalar determinant comparison supplies skip-free regularity. Checked timestep scaling with negative potential curvature, a two-dimensional anisotropic solve, and physical curvature discharge of VB-02 consistency at the selected positive threshold. Synchronized module boundaries and Mathlib inventory.
 
 ## 2026-10-20

@@ -172,14 +172,15 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Integrator/VBD.lean](Vbd/Integrator/VBD.lean) | Exact block-Newton updates, external serial/buffered plans, and complete regular-sweep fixed-point/root consistency. |
 | [Vbd/Integrator/VBDDerivative.lean](Vbd/Integrator/VBDDerivative.lean) | Production sweep derivatives at regular IE roots and their ordered block Gauss–Seidel error operators. |
 | [Vbd/Integrator/VBDCurvature.lean](Vbd/Integrator/VBDCurvature.lean) | Inertia-based block coercivity and inverse bounds, with scalar skip-threshold certificates. |
+| [Vbd/Integrator/VBDCoupling.lean](Vbd/Integrator/VBDCoupling.lean) | Generic root coupling, covered serial sweep bounds, and explicit maximum/ℓ² norm conversions. |
+| [Vbd/Examples/AxialSpring.lean](Vbd/Examples/AxialSpring.lean) | Polynomial spring residual and exact Newton blocks; serial root derivative bound `14/39` on the accepted degree-two parameter range. |
 
 The following TODOs identify the unfinished pieces required for an end-to-end
 VBD certificate.
 
-- **TODO — production VBD contraction:** Instantiate the block comparison
-  framework with physical coupling and off-root Hessian-variation bounds,
-  certify an invariant nonlinear neighborhood, and prove proper-color
-  commutation and snapshot equivalence.
+- **TODO — production VBD contraction:** Control off-root Hessian variation,
+  certify an invariant nonlinear neighborhood with covered warm starts, and
+  prove proper-color commutation and snapshot equivalence.
 
 - **TODO — end-to-end Lean worked instance:** Instantiate that chain for the
   axial-spring model below, including its explicit 20-sweep residual budget.
@@ -243,6 +244,7 @@ lake lean tests/FixedPoint.lean
 lake lean tests/VBD.lean
 lake lean tests/VBDDerivative.lean
 lake lean tests/VBDCurvature.lean
+lake lean tests/VBDCoupling.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v
