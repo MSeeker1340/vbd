@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-07 completion**: Completed component-energy-to-Newton locality with block-diagonal inertia, proper-color commutation including determinant skips, arbitrary within-color snapshot/serial equivalence, and numbered color execution. Instantiated the arbitrary-length chain even/odd coloring and transported the VB-06 factor `318/625` and invariant box to buffered execution. Added shared-neighbor/reversed-order, mixed skip/regular, nonlinear endpoint, invariant-iterate, fixed-point consistency, and vector-block three-support integration checks. Marked VB-07 done and advanced VB-08. The prepared locality and composition interfaces supported this step without a prerequisite mismatch.
+
+## 2026-10-20
+
 * **VB-06 completion**: Completed generic regular-state derivative and inverse-variation bounds, invariant nonlinear spring box of radius `0.1`, uniform covered serial factor `318/625 = 0.5088 < 0.512`, and membership of the selected cosine predictor and rest-state warm starts. Marked VB-06 done and advanced VB-07. Added endpoint, repeated-order, off-root, and vector-block integration checks to pre-commit. The prepared composition and mean-value interfaces supported the synthesis; no prerequisite mismatch was encountered. Proper-color execution and the physical energy/finite-residual certificate remain VB-07–VB-08.
 
 ## 2026-10-20

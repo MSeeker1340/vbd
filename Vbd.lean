@@ -14,3 +14,5 @@ import Vbd.Integrator.VBDCoupling
 import Vbd.Examples.AxialSpring
 import Vbd.Integrator.VBDNonlinear
 import Vbd.Examples.AxialSpringNeighborhood
+import Vbd.Integrator.VBDColoring
+import Vbd.Examples.AxialSpringColoring

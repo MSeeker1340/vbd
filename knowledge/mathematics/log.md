@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Proper-color synthesis**: Recorded the read neighborhood consisting of a block and all supports containing it. Derived equal block gradients and diagonal Hessians from equal local energy increments, then Newton-input locality for block-diagonal inertia. Recorded same-color commutation on regular and skipped branches, exact buffered/serial equivalence, and inheritance of the `318/625` contraction factor and radius-`0.1` invariant box for arbitrary-length even/odd chains. Kept the physical energy/residual identification and 20-sweep numerical budget as VB-08 obligations.
+
+## 2026-10-20
+
 * **Uniform nonlinear neighborhood**: Recorded the full inverse-variation derivative, static spring comparison with `Aᵢ = aᵢ + Σⱼ bᵢⱼ` and force bound `Fᵢ = (3/20)aᵢ + (26/125)Σⱼ bᵢⱼ`, and row sum `318/625 < 0.512`. Recorded Lean-proved visit invariance of the radius-`0.1` maximum-norm box and coverage of predictors bounded by `0.05`, including the AP-03 cosine predictor and rest-state warm start. Distinguished the uniform comparison factor from the sharper scalar analytic estimate and left proper-color execution and the physical 20-sweep residual conclusion as explicit synthesis obligations.
 
 ## 2026-10-20

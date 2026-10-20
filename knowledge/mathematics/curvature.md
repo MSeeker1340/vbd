@@ -178,8 +178,10 @@ the maximum-norm box centered at zero with radius `0.1`. Predictors bounded by `
 admitted. Static comparison rows retain the incident linear stiffness in the denominator and
 bound the force-dependent inverse variation, giving a uniform covered serial factor
 `318/625 = 0.5088 < 0.512`. The selected cosine predictor and rest-state warm starts belong to
-this box. Proper-color execution and the model's end-to-end physical residual bound are
-separate VB-07 and VB-08 deliverables.
+this box. `Examples/AxialSpringColoring.lean` proves that proper-color buffered execution is
+equal to a covered serial order and inherits the same factor, invariant box, and warm-start
+coverage. The arbitrary-length nearest-neighbor chain uses its proved even/odd coloring.
+The model's end-to-end physical residual bound remains a VB-08 deliverable.
 
 # Worked example
 

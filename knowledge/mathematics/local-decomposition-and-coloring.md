@@ -1,8 +1,8 @@
 ---
 type: Mathematical Specification
 title: Local Decomposition and Coloring
-description: Defines support-indexed components of the implicit-Euler potential, exact local energy bookkeeping, proper coloring, and color-batch execution.
-tags: [locality, sparsity, potential-decomposition, graph-coloring, parallelism, phase-4]
+description: Defines finite-support energy components, Newton read locality, proper coloring, and exact color-batch execution.
+tags: [locality, sparsity, potential-decomposition, graph-coloring, parallelism, phase-4, phase-7]
 timestamp: 2026-10-20T00:00:00Z
 ---
 
@@ -219,6 +219,47 @@ The simultaneous/sequential theorem from
 [block states and operators](./block-states-and-operators.md#theorem-simultaneous-and-sequential-equivalence)
 identifies $P_r$ with every serial ordering of the $U_i$ in a proper color class. Extending a
 support family uses the properness condition above to determine its color batches.
+
+# Newton read locality
+
+For a support family $A$, the read neighborhood of block $i$ is
+
+$$
+N_i=\{i\}\cup\bigcup_{S\in A,\ i\in S}S.
+$$
+
+If $x$ and $z$ agree on $N_i$, exact component cancellation gives, for every block direction $v$,
+
+$$
+E(x+\iota_i v)-E(x)=E(z+\iota_i v)-E(z).
+$$
+
+If $E$ is differentiable, differentiating these equal block-slice functions identifies their
+block gradients. If its gradient is differentiable, differentiating the resulting block-gradient
+equality along $i$ also identifies the diagonal Hessian blocks. Under these hypotheses,
+agreement on $N_i$ gives
+
+$$
+(\nabla E(x))_i=(\nabla E(z))_i,\qquad
+(\nabla^2 E(x))_{ii}=(\nabla^2 E(z))_{ii}.
+$$
+
+With block-diagonal inertia, the implicit-Euler residual row and its exact Newton solve matrix
+therefore read only $N_i$. Proper colors ensure that distinct same-color vertices lie outside
+each other's neighborhoods. Their residual rows, local solve matrices, and determinant-test
+decisions are preserved by the other visit. This proves production commutation on both the
+regular and skipped branches, with no curvature or contraction premise.
+
+`Integrator/VBDColoring.lean` implements these energy-to-Newton and execution conclusions for
+heterogeneous vector blocks and arbitrary finite component supports. It identifies complete
+buffered plans with chronological serial enumerations and proves independent fixed-point/root
+consistency for complete once-per-color plans. The IE specialization assumes block-diagonal
+mass; a coupled mass operator requires a corresponding Newton read-locality certificate.
+
+`Examples/AxialSpringColoring.lean` supplies the scalar polynomial Newton locality certificate
+and a Mathlib even/odd proper coloring for every finite nearest-neighbor chain. Its buffered
+sweeps inherit the [nonlinear contraction and invariant box](./curvature.md#nonlinear-neighborhood)
+from the exact serial interpretation.
 
 # Phase-4 theorem statements
 

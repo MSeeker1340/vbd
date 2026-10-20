@@ -43,6 +43,14 @@ For the full off-root derivative, `hasFDerivAt_ringInverse` gives the explicit m
 The scalar nonlinear neighborhood uses `pi_norm_le_iff_of_nonneg`, `convex_closedBall`, and
 `Real.abs_cos_le_one` for its maximum-norm box and selected predictor membership.
 
+Component-energy locality transfers to block gradients through
+`DifferentiableAt.hasGradientAt.hasFDerivAt`, `HasFDerivAt.comp`, and
+`HasFDerivAt.unique` on equal block-slice functions. `InnerProductSpace.toDual`,
+`PiLp.inner_apply`, and `ext_inner_right` recover the block gradient from its inner products.
+A second use of derivative uniqueness identifies the local diagonal Hessian. Numbered
+color classes use finite filters; `List.mem_flatten`, `List.pairwise_map`, and finite-set
+enumeration lemmas support buffered-plan coverage and disjointness.
+
 The scalar spring instantiation uses `HasDerivAt.comp_hasFDerivAt`, `HasFDerivAt.sum`,
 and `hasFDerivWithinAt_piLp` from `Mathlib.Analysis.Calculus.FDeriv.WithLp` for its polynomial
 residual derivative. Quantitative state norm conversions use `PiLp.norm_apply_le` and

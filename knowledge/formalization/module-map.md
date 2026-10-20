@@ -30,6 +30,8 @@ timestamp: 2026-10-20T00:00:00Z
 | P7 | `Examples/AxialSpring.lean` | Implemented spring residual, Jacobian, exact Newton blocks, and AP-03 serial root derivative factor | `Integrator/VBDCoupling` |
 | P7 | `Integrator/VBDNonlinear.lean` | Implemented generic changed-row variation estimates and uniform serial Lipschitz certificates | `Integrator/VBDCoupling` |
 | P7 | `Examples/AxialSpringNeighborhood.lean` | Implemented invariant nonlinear box, uniform serial factor, and selected warm-start membership | `Examples/AxialSpring`, `Integrator/VBDNonlinear` |
+| P7 | `Integrator/VBDColoring.lean` | Implemented component-energy-to-Newton locality, same-color commutation including skips, buffered/serial equivalence, and numbered color execution | `Integrator/LocalPotential`, `Integrator/VBDNonlinear` |
+| P7 | `Examples/AxialSpringColoring.lean` | Implemented spring Newton read locality, finite-chain even/odd coloring, and proper-color nonlinear contraction and invariance | `Examples/AxialSpringNeighborhood`, `Integrator/VBDColoring` |
 
 These paths are the current module boundaries recorded in the central
 [roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
@@ -159,6 +161,16 @@ Both interfaces retain arbitrary finite-dimensional normed blocks.
 `Examples/AxialSpringNeighborhood.lean` implements VB-06 for the AP-03 degree-two range:
 every visit preserves the radius-`0.1` maximum-norm box, covered serial sweeps have factor
 `318/625 < 0.512`, and the selected cosine predictor and rest-state warm starts belong to the
-box. These modules are exported by `Vbd.lean`. Component-based commutation and snapshot
-equivalence remain VB-07 obligations; the physical energy/residual identification and
-end-to-end finite-sweep certificate remain VB-08 obligations.
+box. These modules are exported by `Vbd.lean`.
+
+`Integrator/VBDColoring.lean` implements VB-07's generic locality and execution bridge.
+Phase-4 component energy increments determine local block gradients and diagonal Hessians;
+block-diagonal inertia gives locality of the actual IE Newton data. Support-wise proper colors
+then supply update commutation on both skip branches, snapshot/serial equality for arbitrary
+within-color enumerations, and complete once-per-color fixed-point consistency.
+`Examples/AxialSpringColoring.lean` proves the polynomial Newton inputs' component locality and
+the nearest-neighbor chain's even/odd Mathlib coloring for arbitrary length. Exact execution
+equality transports the VB-06 factor and invariant box to proper-color sweeps. The generic
+bridge supports vector blocks and higher-arity supports. Both modules are exported by `Vbd.lean`.
+The physical energy/residual identification and end-to-end finite-sweep certificate remain
+VB-08 obligations.

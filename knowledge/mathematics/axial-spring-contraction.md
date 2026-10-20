@@ -24,9 +24,10 @@ the additional neighborhood estimates needed for nonlinear updates.
 The implicit-Euler identities, block algebra, and basic contraction results are formalized.
 The general derivative, comparison-matrix, and coloring bridges are formalized. The scalar
 spring residual, exact Newton blocks, invariant nonlinear box, serial contraction factor, and
-selected warm-start membership are also proved in Lean. Proper-color execution, the physical
-energy/residual identification, and the final numerical residual budget are pending synthesis
-deliverables. The accompanying experiment supplies separate numerical checks.
+selected warm-start membership are also proved in Lean. Proper-color buffered execution has a
+proved serial interpretation and inherits the same nonlinear bound. The physical energy/residual
+identification and final numerical residual budget are pending synthesis deliverables.
+The accompanying experiment supplies separate numerical checks.
 
 The [project decision](/project/applicability-decision.md) records the example's place in the
 roadmap. Here we concentrate on carrying out the application.
@@ -149,9 +150,11 @@ lets us treat each batch as any serial ordering of its members.
 Both executions visit every vertex exactly once; we will use that fact twice below.
 
 > **Supporting coloring material:** [Local decomposition and coloring](./local-decomposition-and-coloring.md)
-> and LI-01–LI-04 formalize the general support and proper-color layer. The physical
-> independence-to-commutation argument remains a production VBD result (VB-07). The even/odd partition here is
-> the concrete path-graph instance; the abstract simultaneous/sequential theorem is already available.
+> and LI-01–LI-04 formalize the general support and proper-color layer.
+> `Integrator/VBDColoring.lean` derives Newton read locality from component energy increments
+> and block-diagonal inertia, then proves production commutation including skips and snapshot/serial
+> equivalence. `Examples/AxialSpringColoring.lean` supplies the actual polynomial Newton locality
+> and the even/odd path coloring for arbitrary finite length.
 
 # Where the iteration should settle
 
@@ -406,9 +409,9 @@ iteration estimate is the one already furnished by fixed-point theory.
 > actual spring update derivative. Every visit preserves the radius-`0.1` box, and every
 > covered serial order, including repeated visits, is Lipschitz there with factor `318/625`.
 > Predictors bounded by `0.05`, including the selected cosine predictor, and the rest-state
-> warm start belong to the box. Proper-color commutation and snapshot equivalence are VB-07
-> obligations. Root identification with the full physical energy and the finite residual
-> budget are VB-08 obligations.
+> warm start belong to the box. VB-07 proves proper-color commutation and snapshot equivalence,
+> so the same factor and invariant box hold for the buffered even/odd execution. Root identification
+> with the full physical energy and the finite residual budget are VB-08 obligations.
 
 # Finite-sweep bounds and physical scales
 
@@ -557,11 +560,11 @@ the ordered derivative estimate and complete-coverage comparison certificate, an
 supplies the passage to metric contraction. The concrete Newton update and spring-specific hypotheses are then instantiated at
 `Integrator/VBD`.
 
-> **TODO — complete the Lean example:** Prove the proper-color execution equivalence,
-> identify the polynomial residual with the physical energy gradient, and instantiate
+> **TODO — complete the Lean example:** Identify the polynomial residual with the physical
+> energy gradient and instantiate
 > IF-01–IF-03 with the model's root bounds and residual scaling to prove the numerical budget.
-> VB-01–VB-06 supply the actual serial update, independent root consistency, inverse and
-> coupling bounds, invariant box, uniform nonlinear contraction, and warm-start membership.
+> VB-01–VB-07 supply actual serial and proper-color execution, independent root consistency,
+> inverse and coupling bounds, invariant box, uniform nonlinear contraction, and warm-start membership.
 
 This places the reusable reasoning where another material model can use it. The chain provides
 the coefficients and proves that they satisfy the hypotheses; it does not specialize the block

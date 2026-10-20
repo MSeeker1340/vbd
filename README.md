@@ -176,15 +176,12 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Examples/AxialSpring.lean](Vbd/Examples/AxialSpring.lean) | Polynomial spring residual and exact Newton blocks; serial root derivative bound `14/39` on the accepted degree-two parameter range. |
 | [Vbd/Integrator/VBDNonlinear.lean](Vbd/Integrator/VBDNonlinear.lean) | Generic nonlinear changed-row bounds and uniform serial Lipschitz certificates. |
 | [Vbd/Examples/AxialSpringNeighborhood.lean](Vbd/Examples/AxialSpringNeighborhood.lean) | Invariant radius-`0.1` box, uniform serial factor `318/625 < 0.512`, and cosine-predictor/rest-state warm-start coverage. |
+| [Vbd/Integrator/VBDColoring.lean](Vbd/Integrator/VBDColoring.lean) | Component-energy-to-Newton locality, same-color commutation including skips, and buffered/serial execution equivalence. |
+| [Vbd/Examples/AxialSpringColoring.lean](Vbd/Examples/AxialSpringColoring.lean) | Arbitrary-length even/odd chain coloring and proper-color inheritance of the nonlinear factor and invariant box. |
 
-The following TODOs identify the unfinished pieces required for an end-to-end
-VBD certificate.
-
-- **TODO — proper-color execution:** Prove component-based commutation and
-  snapshot equivalence for the selected proper colors.
-
-- **TODO — end-to-end Lean worked instance:** Instantiate that chain for the
-  axial-spring model below, including its explicit 20-sweep residual budget.
+The remaining **TODO — end-to-end Lean worked instance** is to identify the
+axial-spring physical energy and residual, then prove the explicit 20-sweep
+residual budget through the fixed-point bridge.
 
 The [module map](knowledge/formalization/module-map.md) records module
 boundaries and dependencies. The internal [roadmap](knowledge/project/roadmap.md)
@@ -216,8 +213,8 @@ $$
 \frac{h^2 k_{max}}{m_{min}}\le\frac14,
 $$
 
-Lean proves an invariant maximum-norm box and a uniform serial sweep factor
-q ≤ 0.5088 < 0.512, with the specified warm start covered. The analytic
+Lean proves an invariant maximum-norm box and a uniform serial or proper-color
+sweep factor q ≤ 0.5088 < 0.512, with the specified warm start covered. The analytic
 end-to-end calculation then gives a scaled
 implicit-Euler residual below 10⁻⁶ in 20 sweeps (the calculation gives
 3.25 × 10⁻⁷). This remains an analytic worked derivation, supported by a
@@ -248,6 +245,7 @@ lake lean tests/VBDDerivative.lean
 lake lean tests/VBDCurvature.lean
 lake lean tests/VBDCoupling.lean
 lake lean tests/VBDNonlinear.lean
+lake lean tests/VBDColoring.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v
