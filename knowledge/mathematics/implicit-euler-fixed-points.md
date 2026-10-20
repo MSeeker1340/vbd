@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Implicit-Euler Solver Consistency and Fixed-Point Convergence
 description: Specifies the unbiasedness condition that identifies contractive solver fixed points with implicit-Euler solutions and transports state error to residual error.
 tags: [implicit-euler, fixed-points, contraction, residual, solver-consistency]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 The [implicit-Euler formulation](./implicit-euler.md) supplies the equation to solve, while
@@ -157,3 +157,9 @@ update formula. `Integrator/VBD` proves it for the regular concrete sweep; its r
 the IF-01 premise. Metric distance stays at the contraction boundary, with `dist_eq_norm` used
 only for the normed residual statement. No block decomposition, coloring, Hessian inverse, chain
 coefficient, or concrete execution order belongs in the generic bridge.
+
+The [physical finite-chain certificate](./axial-spring-contraction.md#instantiating-the-formal-results)
+instantiates this separation with the maximum-norm solver state and a mass-scaled maximum residual,
+while identifying roots through the physical Hilbert-space energy gradient. Its residual regularity
+constant is `53/25`, and its predictor-to-root distance is at most `1/10`; these multiply the
+geometric state factor to give the finite-sweep physical-residual budget.

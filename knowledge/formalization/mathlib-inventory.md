@@ -4,7 +4,7 @@ title: Pinned Mathlib API Inventory
 description: Records calculus, block-product, graph-coloring, and fixed-point APIs confirmed in the repository's pinned Mathlib checkout.
 resource: ../../.lake/packages/mathlib/Mathlib
 tags: [mathlib, lean4, gradient, block-product, graph-coloring, contraction]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 # Audit basis
@@ -50,6 +50,14 @@ Component-energy locality transfers to block gradients through
 A second use of derivative uniqueness identifies the local diagonal Hessian. Numbered
 color classes use finite filters; `List.mem_flatten`, `List.pairwise_map`, and finite-set
 enumeration lemmas support buffered-plan coverage and disjointness.
+
+The end-to-end spring instance uses `HasDerivAt.pow`, `HasDerivAt.div_const`, finite derivative
+sums, and `Finset.sum_comm` to identify the symmetric pair potential's gradient. The diagonal
+mass operator uses `ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric`. Root location uses
+`Finset.exists_max_image` and `Finset.exists_min_image`; nearest-neighbor degree uses finite
+images under the injective `Fin.val`. `Metric.isClosed_closedBall.isComplete` discharges the
+complete-region premise of the prepared Banach wrapper. Exact rational `norm_num` checks
+certify the 20-sweep numerical budget.
 
 The scalar spring instantiation uses `HasDerivAt.comp_hasFDerivAt`, `HasFDerivAt.sum`,
 and `hasFDerivWithinAt_piLp` from `Mathlib.Analysis.Calculus.FDeriv.WithLp` for its polynomial

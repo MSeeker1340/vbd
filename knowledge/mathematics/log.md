@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Physical finite-sweep certificate**: Recorded Lean-proved symmetric energy-gradient identification, root location `‖p‖∞ ≤ 0.05`, global uniqueness of the stationary state, and convergence from the selected predictor. Recorded the residual constant `53/25`, initial error `1/10`, actual factor `318/625`, conservative envelopes `0.1 (0.512)^k` and `0.212 (0.512)^k`, and exact 20-sweep bound `13/40000000 < 10⁻⁶`. Recorded physical IE gradient scaling by `m_min ℓ / h²` and the mass-scaled maximum residual `max_i h² |R_IE,i| / (m_i ℓ)`. Distinguished the formal uniform factor from the sharper analytic scalar estimate and synchronized the article, cross-norm bridge, and current implementation status.
+
+## 2026-10-20
+
 * **Proper-color synthesis**: Recorded the read neighborhood consisting of a block and all supports containing it. Derived equal block gradients and diagonal Hessians from equal local energy increments, then Newton-input locality for block-diagonal inertia. Recorded same-color commutation on regular and skipped branches, exact buffered/serial equivalence, and inheritance of the `318/625` contraction factor and radius-`0.1` invariant box for arbitrary-length even/odd chains. Kept the physical energy/residual identification and 20-sweep numerical budget as VB-08 obligations.
 
 ## 2026-10-20

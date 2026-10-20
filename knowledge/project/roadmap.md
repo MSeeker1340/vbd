@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Defines the current goal-first phase structure, theorem targets, dependencies, and acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 # Project scope
@@ -21,7 +21,7 @@ The project studies VBD in exact arithmetic, including finite-iteration state an
 | Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
 | Phase 5 — implicit-Euler fixed-point goals | complete | `Integrator/FixedPoint.lean` supplies unbiased fixed-point identification, finite state error, and residual transport |
 | Phase 6 — contraction of composed updates | complete | `Block/Contraction.lean` supplies comparison composition, commuting batches, and maximum-norm sweep certificates; BC-04 remains deferred |
-| Phase 7 — production VBD synthesis | in progress | VB-01–VB-07 supply exact executions, independent consistency, physical inverse bounds and invariant nonlinear serial/proper-color contraction with warm starts; VB-08 is next |
+| Phase 7 — production VBD synthesis | complete | VB-01–VB-08 derive serial/proper-color convergence and a physical residual below `10⁻⁶` in 20 sweeps from the accepted finite-chain system assumptions |
 
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
 
@@ -306,11 +306,13 @@ certificates are Phase 7 obligations.
 
 # Phase 7 — Production VBD synthesis
 
-Status: VB-01–VB-07 implemented; VB-08 is next. Modules: `Vbd/Integrator/VBD.lean`,
+Status: VB-01–VB-08 implemented. Modules: `Vbd/Integrator/VBD.lean`,
 `Vbd/Integrator/VBDDerivative.lean`, `Vbd/Integrator/VBDCurvature.lean`,
 `Vbd/Integrator/VBDCoupling.lean`, `Vbd/Integrator/VBDNonlinear.lean`,
 `Vbd/Integrator/VBDColoring.lean`, `Vbd/Examples/AxialSpring.lean`,
-`Vbd/Examples/AxialSpringNeighborhood.lean`, and `Vbd/Examples/AxialSpringColoring.lean`.
+`Vbd/Examples/AxialSpringNeighborhood.lean`, `Vbd/Examples/AxialSpringColoring.lean`,
+`Vbd/Examples/AxialSpringEnergy.lean`, `Vbd/Examples/AxialSpringResidual.lean`,
+`Vbd/Examples/AxialSpringConvergence.lean`, and `Vbd/Examples/AxialSpringChain.lean`.
 
 The scalar spring residual and its exact Newton blocks have a proved root derivative bound
 `14/39 < 1` for covered serial sweeps on the AP-03 degree-two range, conditional on a supplied
@@ -320,8 +322,13 @@ comparison rows give serial factor `318/625 < 0.512` on the invariant radius-`0.
 predictors bounded by `0.05`, including the selected cosine predictor and rest-state warm start.
 Component energy locality and block-diagonal inertia establish the Newton read neighborhoods.
 Proper colors give commutation including skips and buffered/serial equivalence. The arbitrary-length
-chain's even/odd execution inherits the same nonlinear factor and invariant box. The system-to-energy
-and end-to-end residual certificates remain part of VB-08.
+chain's even/odd execution inherits the same nonlinear factor and invariant box.
+Symmetric spring coefficients identify the residual with the actual IE energy gradient and
+the supplied Newton data with the IE constructor. Physical mass, stiffness, timestep, and length
+parameters discharge all analytic premises. Both accepted plans converge to the same unique
+physical stationary point from the selected cosine predictor, with scaled maximum residual
+below `3.25 × 10⁻⁷ < 10⁻⁶` after 20 sweeps. The proof uses the scalar maximum principle,
+residual Lipschitz constant `53/25`, and the prepared Phase-5 finite-iterate transport.
 
 Dependencies: Phases 4, 5, and 6.
 

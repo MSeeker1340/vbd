@@ -3,7 +3,7 @@ type: Project Backlog
 title: VBD Formalization Backlog
 description: Tracks the current goal-first proof program with explicit dependencies and acceptance criteria.
 tags: [backlog, roadmap, lean4, theorem-status]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 # Project scope
@@ -122,7 +122,7 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | VB-05 | done | Serial coupling and contraction factor | VB-03, VB-04, BC-02 | Off-diagonal component bounds produce an explicit `q < 1` for the actual serial execution over the AP-03 parameter range, with norm-conversion constants stated |
 | VB-06 | done | Nonlinear contraction neighborhood | VB-05, CT-04 | Hessian variation produces an explicit invariant radius with a uniform contraction bound and a proved initial-state membership condition instantiated for the selected warm starts |
 | VB-07 | done | Proper-color VBD | LI-04, VB-06, BC-03 | Component separation discharges commutation and snapshot equivalence for the selected proper colors; same-color coupling requires a further applicability decision |
-| VB-08 | next | End-to-end finite-sweep theorem | VB-02, VB-06, VB-07, IF-03 | The AP-03 parameterized coupled family, including its nonlinear case, has Lean-proved system-to-certificate and finite-sweep bounds meeting the selected accuracy budget; quantitative parameter ranges and warm-start coverage are instantiated, conservatism and exclusions are assessed reproducibly, and any non-descent coverage claim has a certified objective-increase example |
+| VB-08 | done | End-to-end finite-sweep theorem | VB-02, VB-06, VB-07, IF-03 | The AP-03 parameterized coupled family, including its nonlinear case, has Lean-proved system-to-certificate and finite-sweep bounds meeting the selected accuracy budget; quantitative parameter ranges and warm-start coverage are instantiated, conservatism and exclusions are assessed reproducibly, and any non-descent coverage claim has a certified objective-increase example |
 
 # Deferred by the current route
 
@@ -136,17 +136,20 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 | DC-01 | deferred | Fully dynamic collision scheduling | The first static/hybrid colored theorem is complete |
 | MM-01 | deferred | Generalized non-diagonal mass specialization | The first accepted production theorem identifies the needed locality assumptions |
 
-# Open decisions
+# Architecture decisions
 
-1. Continuous linear operator versus matrix as the primary mass representation in Phase 7.
+The [mass operator representation](./architecture.md#mass-operator-representation) is a
+continuous linear map on the physical Hilbert state space. Finite scalar coefficients assemble
+the mass operator in the chain specialization.
 
 The [AP-03 decision](./applicability-decision.md) fixes the first certificate to the maximum norm
 and static proper colors. Its scalar nonlinear chain, predictor box, and 20-sweep residual target
-instantiate VB-05–VB-08. CT-04, the exact-execution Phase 6 bridge, and VB-01–VB-07 are implemented;
-VB-08 is next. The nonlinear serial and proper-color factor is `318/625 < 0.512` on the
+instantiate VB-05–VB-08. CT-04, the exact-execution Phase 6 bridge, and VB-01–VB-08 are implemented.
+Both accepted execution plans converge to the same unique physical stationary point and have
+mass-scaled maximum residual below `3.25 × 10⁻⁷ < 10⁻⁶` after 20 sweeps. The nonlinear
+serial and proper-color factor is `318/625 < 0.512` on the
 invariant radius-`0.1` box, with the selected cosine predictor and rest-state warm starts covered.
 BC-04 requires a further applicability assessment for same-color coupling in exact arithmetic.
 
-Every resolved project-wide architecture decision should become an Architecture Decision concept
-and be removed from this list in the same change. Source-local representation choices belong in
-the relevant Lean module documentation.
+Project-wide architecture decisions are maintained as accepted-state Architecture Decision
+concepts. Source-local representation choices belong in the relevant Lean module documentation.

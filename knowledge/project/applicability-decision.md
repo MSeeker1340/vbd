@@ -3,7 +3,7 @@ type: Architecture Decision
 title: First Quantitative VBD Applicability Route
 description: Defines the selected family, guarantee, evaluation contract, and implementation scope for the first VBD convergence example.
 tags: [applicability, theorem-route, maximum-norm, execution]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 # Decision
@@ -14,10 +14,11 @@ quartic springs, using exact serial or static proper-color VBD sweeps.
 The [mathematical article](/mathematics/axial-spring-contraction.md) develops the model, derives
 its bounds, and explains their extension to richer mechanics.
 
-AP-01–AP-03 is complete for this first family. The analytic result supports a scaled physical
+AP-01–AP-03 and the end-to-end Lean instantiation are complete for this first family.
+The proved result gives a scaled physical
 residual below $10^{-6}$ within 20 sweeps when $h^2k_{\max}/m_{\min}\le1/4$,
-$0\le\eta\le1$, and the stated predictor condition holds. VB-08 remains open until its
-Lean instantiation is proved. Applicability to general production materials, contact, and
+$0\le\eta\le1$, and the stated predictor condition holds. Both serial and even/odd plans
+converge to the same unique stationary point. Applicability to general production materials, contact, and
 friction remains a separate physical assessment.
 
 # Model and coverage
@@ -93,10 +94,13 @@ with explicit distance transport where needed. CT-04 remains norm-polymorphic. T
 Python environment is separate from the Lean dependency graph.
 
 CT-04 and the exact-execution Phase 6 bridge are complete. Production VBD synthesis has
-VB-01–VB-07 implemented and VB-08 next. The nonlinear serial and proper-color certificate has factor
+VB-01–VB-08 implemented. The nonlinear serial and proper-color certificate has factor
 `318/625 < 0.512` throughout the invariant radius-`0.1` box and covers the selected cosine
 predictor and rest-state warm starts. Component-local Newton data commute within proper colors,
 and the finite chain has a proved even/odd coloring and buffered/serial equivalence.
+The physical-input theorem derives these premises from masses, nearest-neighbor stiffnesses,
+timestep, length scale, and hardening bounds; it supplies the root rather than assuming one.
+The mass-scaled physical residual is below `3.25 × 10⁻⁷` after 20 sweeps for both plans.
 The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
 physical-residual transport. BC-04 remains deferred until an exact hybrid execution variant
 with same-color coupling has an applicability certificate. The generic

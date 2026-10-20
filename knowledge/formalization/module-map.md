@@ -3,7 +3,7 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 # Foundation modules
@@ -32,6 +32,10 @@ timestamp: 2026-10-20T00:00:00Z
 | P7 | `Examples/AxialSpringNeighborhood.lean` | Implemented invariant nonlinear box, uniform serial factor, and selected warm-start membership | `Examples/AxialSpring`, `Integrator/VBDNonlinear` |
 | P7 | `Integrator/VBDColoring.lean` | Implemented component-energy-to-Newton locality, same-color commutation including skips, buffered/serial equivalence, and numbered color execution | `Integrator/LocalPotential`, `Integrator/VBDNonlinear` |
 | P7 | `Examples/AxialSpringColoring.lean` | Implemented spring Newton read locality, finite-chain even/odd coloring, and proper-color nonlinear contraction and invariance | `Examples/AxialSpringNeighborhood`, `Integrator/VBDColoring` |
+| P7 | `Examples/AxialSpringEnergy.lean` | Implemented symmetric spring energy gradient, normalized IE problem, and exact production Newton-data identification | `Examples/AxialSpring` |
+| P7 | `Examples/AxialSpringResidual.lean` | Implemented mass-scaled residual derivative and Lipschitz bound, and scalar maximum-principle root location | `Examples/AxialSpringEnergy`, `Examples/AxialSpringNeighborhood` |
+| P7 | `Examples/AxialSpringConvergence.lean` | Implemented unique-root convergence and finite-sweep state/residual certificates for serial and proper-color production plans | `Examples/AxialSpringResidual`, `Examples/AxialSpringColoring` |
+| P7 | `Examples/AxialSpringChain.lean` | Implemented physical-input normalization, finite-chain degree bounds, common stationary point, and physical 20-sweep residual guarantees | `Examples/AxialSpringConvergence` |
 
 These paths are the current module boundaries recorded in the central
 [roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
@@ -172,5 +176,15 @@ within-color enumerations, and complete once-per-color fixed-point consistency.
 the nearest-neighbor chain's even/odd Mathlib coloring for arbitrary length. Exact execution
 equality transports the VB-06 factor and invariant box to proper-color sweeps. The generic
 bridge supports vector blocks and higher-arity supports. Both modules are exported by `Vbd.lean`.
-The physical energy/residual identification and end-to-end finite-sweep certificate remain
-VB-08 obligations.
+
+`Examples/AxialSpringEnergy.lean` identifies symmetric quadratic-plus-quartic spring forces
+with the energy gradient, places the normalized model in Phase 1, and identifies the production
+Newton data with its IE constructor. `Examples/AxialSpringResidual.lean` supplies the scalar
+maximum principle and the mass-scaled maximum-residual Lipschitz constant `53/25`.
+`Examples/AxialSpringConvergence.lean` uses Phase-5 Banach existence and finite-iterate transport
+to produce the root, convergence, and state/residual bounds for the actual serial and proper-color
+iterates. `Examples/AxialSpringChain.lean` derives every hypothesis from physical chain data,
+proves the length/timestep force normalization, and certifies both plans at the same unique
+physical stationary point with 20-sweep scaled residual below `3.25 × 10⁻⁷ < 10⁻⁶`.
+These four exported modules implement VB-08. Vector-block reuse remains in the generic
+foundation and synthesis interfaces; the root-location sign argument specializes the scalar chain.

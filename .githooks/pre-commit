@@ -25,3 +25,4 @@ lake lean tests/VBDCurvature.lean
 lake lean tests/VBDCoupling.lean
 lake lean tests/VBDNonlinear.lean
 lake lean tests/VBDColoring.lean
+lake lean tests/VBDFinite.lean

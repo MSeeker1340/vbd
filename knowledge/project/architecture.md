@@ -3,7 +3,7 @@ type: Architecture Decision
 title: Mathematical and Module Architecture
 description: Separates implicit-Euler physics, block-update and operator algebra, contraction theory, and their explicit bridge layers.
 tags: [architecture, dependencies, locality, contraction]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 # Arithmetic and error scope
@@ -91,6 +91,15 @@ block vectors. The [AP-03 decision](./applicability-decision.md) selects the max
 that family for the first chain contraction certificate. The relation from a state-error
 certificate to the physical residual norm is an explicitly stated regularity bound. Scalar-matrix
 and compactness results introduce finite-dimensional block assumptions at their declaration sites.
+
+# Mass operator representation
+
+The primary mass representation is a Mathlib continuous linear operator on the physical Hilbert
+state space. Implicit-Euler identities, heterogeneous block entries, and the production Newton
+constructor use this basis-free representation. The scalar chain assembles its diagonal mass
+operator from per-vertex coefficients; its matrix of spring coefficients specifies the potential
+couplings. Block-diagonal mass is a hypothesis of the component-based IE coloring specialization.
+The generic implicit-Euler foundation retains arbitrary self-adjoint mass operators.
 
 # Notation boundary
 

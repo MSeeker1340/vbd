@@ -1,9 +1,9 @@
 ---
 type: Mathematical Specification
 title: "Worked Example: VBD Convergence for an Elastic Spring Chain"
-description: Applies the project’s implicit-Euler, block-update, and contraction results to a concrete spring-chain solve, with numerical checks and explicit pending prerequisites.
+description: Gives the Lean-proved physical finite-chain convergence and 20-sweep residual certificate, its derivation, and reproducible numerical comparisons.
 tags: [example, vbd, contraction, residual, springs]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 This is a **worked example** of the convergence analysis developed in
@@ -25,9 +25,10 @@ The implicit-Euler identities, block algebra, and basic contraction results are 
 The general derivative, comparison-matrix, and coloring bridges are formalized. The scalar
 spring residual, exact Newton blocks, invariant nonlinear box, serial contraction factor, and
 selected warm-start membership are also proved in Lean. Proper-color buffered execution has a
-proved serial interpretation and inherits the same nonlinear bound. The physical energy/residual
-identification and final numerical residual budget are pending synthesis deliverables.
-The accompanying experiment supplies separate numerical checks.
+proved serial interpretation and inherits the same nonlinear bound. The physical energy-gradient
+identification, unique-root convergence, and 20-sweep physical-residual budget are proved from
+the accepted physical system assumptions. The accompanying experiment supplies separate numerical
+comparisons and assessments beyond the certified range.
 
 The [project decision](/project/applicability-decision.md) records the example's place in the
 roadmap. Here we concentrate on carrying out the application.
@@ -116,8 +117,10 @@ There is no line search or iteration acceleration.
 bound, and the scalar implication from a curvature lower bound above the threshold to production
 regularity. The chain formulas supply mass lower bound $a_i$ and nonnegative potential curvature;
 `Examples/AxialSpring.lean` proves these Jacobian blocks for the explicit polynomial residual,
-along with exact Newton diagonals and skip-free regularity. Identification of that residual with
-the component energy gradient is an end-to-end physical instantiation obligation.
+along with exact Newton diagonals and skip-free regularity. `Examples/AxialSpringEnergy.lean`
+identifies the symmetric spring residual with the actual energy gradient and the Newton data
+with the Phase-1 IE constructor. `Examples/AxialSpringChain.lean` proves the physical force,
+length, mass, and timestep normalization.
 
 For quadratic springs, we can see exactly what this step does. Substituting $\eta=0$ and
 cancelling the old value of $u_i$ gives
@@ -181,6 +184,11 @@ $$
 \min_i y_i\le u_j^*\le\max_i y_i,
 \qquad \|u^*\|_\infty\le Y.
 $$
+
+The Lean certificate obtains existence from the prepared invariant-set Banach theorem and
+proves the predictor bound by this scalar maximum principle. Every residual root lies in the
+certified box and is a sweep fixed point, so fixed-point uniqueness gives global uniqueness of
+the stationary state. Convergence is guaranteed for the admitted warm-start region.
 
 This root is certainly fixed by VBD: every local force imbalance is zero. We also need the
 converse, since convergence to a different fixed point would not solve the timestep.
@@ -411,7 +419,7 @@ iteration estimate is the one already furnished by fixed-point theory.
 > Predictors bounded by `0.05`, including the selected cosine predictor, and the rest-state
 > warm start belong to the box. VB-07 proves proper-color commutation and snapshot equivalence,
 > so the same factor and invariant box hold for the buffered even/odd execution. Root identification
-> with the full physical energy and the finite residual budget are VB-08 obligations.
+> with the full physical energy and the finite residual budget are supplied by VB-08.
 
 # Finite-sweep bounds and physical scales
 
@@ -420,7 +428,7 @@ $Y=0.05$, leave twice that range for intermediate states by setting $B=0.1$, and
 $0\le\eta\le1$ with $\alpha\le1/4$. The box-preservation condition holds, and we obtain
 
 $$
-q\le0.494442<0.512,
+q=\frac{318}{625}=0.5088<0.512,
 \qquad
 L_F=1+4\alpha(1+12\eta B^2)\le2.12.
 $$
@@ -435,6 +443,12 @@ $$
 \qquad
 r_{\mathrm{IE}}(T^s(y))\le0.212(0.512)^s.
 $$
+
+`Examples/AxialSpringResidual.lean` proves the mass-scaled maximum-residual Lipschitz constant
+$53/25=2.12$. `Examples/AxialSpringConvergence.lean` applies the prepared cross-norm Phase-5
+transport and proves both the `0.5088` estimates and the displayed conservative `0.512` envelopes.
+The scalar analytic estimate above also bounds the local sensitivities by `0.494442`; the
+formal static comparison matrix uses `0.5088` throughout the box.
 
 After 20 sweeps the physical-residual bound is below $3.25\times10^{-7}$, meeting the
 $10^{-6}$ target. We do not need to know $u^*$ to check that the warm start is covered:
@@ -560,11 +574,20 @@ the ordered derivative estimate and complete-coverage comparison certificate, an
 supplies the passage to metric contraction. The concrete Newton update and spring-specific hypotheses are then instantiated at
 `Integrator/VBD`.
 
-> **TODO — complete the Lean example:** Identify the polynomial residual with the physical
-> energy gradient and instantiate
-> IF-01–IF-03 with the model's root bounds and residual scaling to prove the numerical budget.
-> VB-01–VB-07 supply actual serial and proper-color execution, independent root consistency,
-> inverse and coupling bounds, invariant box, uniform nonlinear contraction, and warm-start membership.
+`Examples/AxialSpringChain.lean` implements the end-to-end physical-input theorem. Positive
+masses, nonnegative symmetric nearest-neighbor springs, positive timestep and rest spacing,
+$0\le\eta\le1$, and $h^2k_{\max}/m_{\min}\le1/4$ determine the normalized coefficients.
+Finite-chain degree at most two discharges the incident-stiffness bound. The selected predictor
+is $y_i=0.05\cos(1.7i)$ and the normalized skip threshold is $10^{-12}$.
+
+The theorem supplies one unique physical IE stationary state and proves convergence of both
+increasing-index serial and even/odd buffered production iterates to it. Each mass-scaled
+physical maximum residual is below $13/40000000=3.25\times10^{-7}<10^{-6}$ after 20 sweeps.
+The raw physical IE gradient at displacement $\ell u$ equals
+$(m_{\min}\ell/h^2)f(u)$, so the certified residual is exactly
+$\max_i h^2|R_{\mathrm{IE},i}|/(m_i\ell)$. The root and all analytic certificates are derived
+from system assumptions. The [reproducible study](../../experiments/applicability/README.md)
+assesses conservatism and excluded parameter regimes independently of the Lean guarantee.
 
 This places the reusable reasoning where another material model can use it. The chain provides
 the coefficients and proves that they satisfy the hypotheses; it does not specialize the block

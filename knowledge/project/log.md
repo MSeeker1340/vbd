@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-08 completion**: Completed the physical-input finite-chain theorem for increasing-index serial and buffered even/odd execution. Derived energy-gradient/Newton-data identification, root existence and global stationary-point uniqueness, predictor-box root location, residual Lipschitz constant `53/25`, and physical length/timestep normalization. Both plans meet scaled maximum residual `< 3.25 × 10⁻⁷ < 10⁻⁶` after 20 sweeps over the accepted timestep/hardening range, with no supplied root or analytic certificate. Marked VB-08 and the first-family Phase-7 program complete. Recorded the continuous-linear mass representation in the architecture decision and removed its stale open item. Added endpoint/contrast/quadratic/nonlinear and physical-unit integration checks; the prepared interfaces supported the result without a prerequisite mismatch.
+
+## 2026-10-20
+
 * **VB-07 completion**: Completed component-energy-to-Newton locality with block-diagonal inertia, proper-color commutation including determinant skips, arbitrary within-color snapshot/serial equivalence, and numbered color execution. Instantiated the arbitrary-length chain even/odd coloring and transported the VB-06 factor `318/625` and invariant box to buffered execution. Added shared-neighbor/reversed-order, mixed skip/regular, nonlinear endpoint, invariant-iterate, fixed-point consistency, and vector-block three-support integration checks. Marked VB-07 done and advanced VB-08. The prepared locality and composition interfaces supported this step without a prerequisite mismatch.
 
 ## 2026-10-20

@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Curvature, Coupling, and VBD Contraction
 description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
 tags: [curvature, coupling, hessian, contraction]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-20T20:38:44Z
 ---
 
 # Implicit-Euler Hessian
@@ -181,7 +181,9 @@ bound the force-dependent inverse variation, giving a uniform covered serial fac
 this box. `Examples/AxialSpringColoring.lean` proves that proper-color buffered execution is
 equal to a covered serial order and inherits the same factor, invariant box, and warm-start
 coverage. The arbitrary-length nearest-neighbor chain uses its proved even/odd coloring.
-The model's end-to-end physical residual bound remains a VB-08 deliverable.
+VB-08 identifies the energy gradient and derives the physical-input certificate, including
+the residual Lipschitz constant `53/25`, predictor-box root location, and residual below
+`3.25 × 10⁻⁷ < 10⁻⁶` after 20 sweeps for both accepted execution plans.
 
 # Worked example
 

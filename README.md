@@ -178,10 +178,16 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Examples/AxialSpringNeighborhood.lean](Vbd/Examples/AxialSpringNeighborhood.lean) | Invariant radius-`0.1` box, uniform serial factor `318/625 < 0.512`, and cosine-predictor/rest-state warm-start coverage. |
 | [Vbd/Integrator/VBDColoring.lean](Vbd/Integrator/VBDColoring.lean) | Component-energy-to-Newton locality, same-color commutation including skips, and buffered/serial execution equivalence. |
 | [Vbd/Examples/AxialSpringColoring.lean](Vbd/Examples/AxialSpringColoring.lean) | Arbitrary-length even/odd chain coloring and proper-color inheritance of the nonlinear factor and invariant box. |
+| [Vbd/Examples/AxialSpringEnergy.lean](Vbd/Examples/AxialSpringEnergy.lean) | Exact symmetric spring energy gradient, normalized IE problem, and production Newton-data identification. |
+| [Vbd/Examples/AxialSpringResidual.lean](Vbd/Examples/AxialSpringResidual.lean) | Scalar maximum-principle root location and the mass-scaled residual Lipschitz constant `2.12`. |
+| [Vbd/Examples/AxialSpringConvergence.lean](Vbd/Examples/AxialSpringConvergence.lean) | Unique-root convergence, finite state/residual envelopes, and exact 20-sweep numerical bounds. |
+| [Vbd/Examples/AxialSpringChain.lean](Vbd/Examples/AxialSpringChain.lean) | Physical-input serial and even/odd certificates at one common stationary point, with explicit force-unit normalization. |
 
-The remaining **TODO — end-to-end Lean worked instance** is to identify the
-axial-spring physical energy and residual, then prove the explicit 20-sweep
-residual budget through the fixed-point bridge.
+The [physical-chain theorem](Vbd/Examples/AxialSpringChain.lean) derives the full
+certificate from masses, nearest-neighbor spring stiffnesses, timestep, length
+scale, and hardening bounds. It supplies the unique stationary point and proves
+that both serial and even/odd production execution meet the 20-sweep physical
+residual target from the selected predictor.
 
 The [module map](knowledge/formalization/module-map.md) records module
 boundaries and dependencies. The internal [roadmap](knowledge/project/roadmap.md)
@@ -214,13 +220,12 @@ $$
 $$
 
 Lean proves an invariant maximum-norm box and a uniform serial or proper-color
-sweep factor q ≤ 0.5088 < 0.512, with the specified warm start covered. The analytic
-end-to-end calculation then gives a scaled
-implicit-Euler residual below 10⁻⁶ in 20 sweeps (the calculation gives
-3.25 × 10⁻⁷). This remains an analytic worked derivation, supported by a
-reproducible numerical study, until the end-to-end Lean instance is completed.
-The experiments show that the assumptions are meaningful rather than purely
-diagonal or asymptotic, while remaining separate from a uniform proof.
+sweep factor q ≤ 0.5088 < 0.512, with the specified warm start covered. It
+proves that both plans converge to the same unique physical IE stationary state,
+with mass-scaled maximum residual below **3.25 × 10⁻⁷ < 10⁻⁶ after 20 sweeps**.
+The theorem covers arbitrary finite chain length and the full hardening interval,
+including the quadratic and nonlinear cases. The reproducible numerical study
+assesses the bound's conservatism and behavior outside the admitted range.
 
 The example also shows what transfer to another smooth system entails. A new
 model can reuse the generic state, update, coloring, and contraction results,
@@ -246,6 +251,7 @@ lake lean tests/VBDCurvature.lean
 lake lean tests/VBDCoupling.lean
 lake lean tests/VBDNonlinear.lean
 lake lean tests/VBDColoring.lean
+lake lean tests/VBDFinite.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v

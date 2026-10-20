@@ -93,8 +93,11 @@ and local matrix analysis. The terminal state gets a lookahead sweep only to mea
 progress/increase statistics count transitions within the requested budget.
 
 The checked-in study's “within six sweeps” is a measured tolerance hit over its 192 supported
-cases; the analytic 20-sweep guarantee is a distinct neighborhood bound. The module includes
-no contact/friction, vector model, GPU execution or multi-timestep loop.
+cases; the 20-sweep guarantee is a distinct neighborhood bound. The
+[Lean physical-chain certificate](../../Vbd/Examples/AxialSpringChain.lean) proves the selected
+physical-input guarantee with uniform factor `0.5088`; the experiment's `q_bound` uses the
+article's sharper scalar estimate. Both satisfy the common `0.512` finite-sweep envelope.
+The module includes no contact/friction, vector model, GPU execution or multi-timestep loop.
 
 ## Checks
 

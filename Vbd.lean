@@ -16,3 +16,7 @@ import Vbd.Integrator.VBDNonlinear
 import Vbd.Examples.AxialSpringNeighborhood
 import Vbd.Integrator.VBDColoring
 import Vbd.Examples.AxialSpringColoring
+import Vbd.Examples.AxialSpringEnergy
+import Vbd.Examples.AxialSpringResidual
+import Vbd.Examples.AxialSpringConvergence
+import Vbd.Examples.AxialSpringChain
