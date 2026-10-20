@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-04 completion**: Completed inertia-based block coercivity and inverse-norm bounds on supplied regions, including bounded negative potential curvature, with a scalar positive-threshold regularity certificate. Marked VB-04 done and advanced VB-05. Added physical-scaling, vector-block, and curvature-to-production-consistency checks to pre-commit; no prerequisite mismatch was encountered.
+
+## 2026-10-20
+
 * **VB-03 completion**: Completed production root derivatives, their continuous-linear block entries, and identification with the externally ordered block Gauss–Seidel error sweep. The proof reuses Phase-6 ordered differentiation on the root singleton, with the planned diagonal-Hessian differentiability and strict skip-test hypotheses explicit. Added chronological-order and nonlinear cancellation checks to pre-commit. Marked VB-03 done and advanced VB-04; physical inverse, coupling, and neighborhood certificates remain open.
 
 ## 2026-10-20

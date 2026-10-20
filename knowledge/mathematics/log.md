@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Inertia-based inverse bounds**: Recorded the implemented constant `μᵢ = mᵢ / h² − κᵢ`, uniform block inverse bound `1 / μᵢ`, and scalar regularity certificate when the production threshold is strictly below `μᵢ`. Kept positive determinant-threshold acceptance separate from mere invertibility in higher dimensions and the physical spring-law instantiation separate from the generic theorem. Synchronized the curvature specification and chain article.
+
+## 2026-10-20
+
 * **Root linearization**: Recorded implemented VB-03 local and sweep derivatives at regular residual roots, exact Newton diagonal cancellation, normalized off-diagonal couplings, and the ordered Gauss–Seidel forward-substitution equation. Kept the differentiable local-Hessian premise explicit and separated the root result from uniform off-root estimates and physical contraction certificates. Synchronized the curvature specification and axial-chain article.
 
 ## 2026-10-20

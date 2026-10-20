@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-04 implementation**: Added and exported `Integrator/VBDCurvature.lean`, composing the Phase-1 diagonal Hessian identity with explicit mass and potential lower bounds and Mathlib finite-dimensional invertibility and operator-norm APIs. The inverse bound supports arbitrary finite-dimensional real Hilbert blocks; scalar determinant comparison supplies skip-free regularity. Checked timestep scaling with negative potential curvature, a two-dimensional anisotropic solve, and physical curvature discharge of VB-02 consistency at the selected positive threshold. Synchronized module boundaries and Mathlib inventory.
+
+## 2026-10-20
+
 * **VB-03 implementation**: Added and exported `Integrator/VBDDerivative.lean`. Derived production single-block root derivatives through Mathlib inversion and operator/vector calculus, then used the Phase-6 ordered chain rule on the invariant root singleton. Proved normalized changed-row entries, zero diagonal under exact inversion, untouched identity rows, the Gauss–Seidel forward-substitution equation, and the chronological sweep identification. The IE specialization derives the residual derivative from stored Phase-1 assumptions and exposes diagonal-Hessian differentiability separately. Added concrete order-sensitive coupled linear checks and a changing-Hessian cubic-residual check; recorded reused Mathlib APIs and the synthesis module split.
 
 ## 2026-10-20

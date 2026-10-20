@@ -25,6 +25,7 @@ timestamp: 2026-10-20T00:00:00Z
 | P6 | `Block/Contraction.lean` | Implemented derivative-factor comparisons, ordered composition, commuting batches, and covered maximum-norm contraction certificates | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Implemented VB-01–VB-02 exact executions and regular-sweep consistency | `Block/Operator`, `Block/Update`, `Integrator/FixedPoint` |
 | P7 | `Integrator/VBDDerivative.lean` | Implemented VB-03 root derivatives, block entries, and ordered Gauss–Seidel identification | `Integrator/VBD`, `Block/Contraction` |
+| P7 | `Integrator/VBDCurvature.lean` | Implemented VB-04 inertia-based block coercivity, inverse bounds, and scalar regularity certificates | `Integrator/VBD` |
 
 These paths are the current module boundaries recorded in the central
 [roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
@@ -132,5 +133,10 @@ root derivative has the normalized Hessian row, and Phase-6 composition gives th
 in the externally supplied order. Exact diagonal blocks identify it with the block Gauss–Seidel
 error operator, represented by chronological linear row updates with a proved forward-substitution
 equation. The concrete IE specialization derives its residual derivative from Phase 1.
-Physical inverse/coupling bounds, uniform nonlinear-neighborhood estimates, and component-based
-commutation remain subsequent obligations.
+
+`Integrator/VBDCurvature.lean` implements VB-04 and is exported by `Vbd.lean`. Mass and potential
+curvature bounds give explicit coercivity and inverse-norm control of the actual IE Newton blocks
+throughout a supplied region. The inverse result supports heterogeneous finite-dimensional real
+Hilbert blocks. Scalar coercivity above the production threshold supplies regularity for the
+consistency and derivative interfaces. Physical coupling, uniform nonlinear-neighborhood estimates,
+and component-based commutation remain subsequent obligations.

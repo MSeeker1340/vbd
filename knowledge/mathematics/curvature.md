@@ -26,16 +26,40 @@ plan, and selected norm.
 
 # Block inverse bounds
 
-A lower bound
+For every block direction $v$, suppose the mass and potential bounds are
 
 $$
-H_{ii}(x)\succeq \mu_i I,
-\qquad \mu_i>0,
+m_i\|v\|^2\le\langle v,M_{ii}v\rangle,
+\qquad
+-\kappa_i\|v\|^2\le\langle v,(\nabla^2P(x))_{ii}v\rangle.
 $$
 
-establishes invertibility of the local Newton system and controls `‖Hᵢᵢ(x)⁻¹‖`. A sufficiently
-strong inertia contribution may therefore certify a neighborhood where the production update uses
-the regular branch.
+The implicit-Euler identity gives
+
+$$
+\mu_i=\frac{m_i}{h^2}-\kappa_i,
+\qquad
+\mu_i\|v\|^2\le\langle v,H_{ii}(x)v\rangle.
+$$
+
+When $\mu_i>0$, Cauchy–Schwarz gives $\mu_i\|v\|\le\|H_{ii}(x)v\|$.
+For finite-dimensional real Hilbert blocks, this establishes invertibility and
+
+$$
+\|H_{ii}(x)^{-1}\|\le\mu_i^{-1}.
+$$
+
+Uniform mass and potential bounds yield this same explicit estimate throughout any supplied
+state region. Bounded negative potential curvature is allowed; nonnegative potential curvature
+uses $\kappa_i=0$. These inverse estimates do not require sparsity or symmetry assumptions.
+`Integrator/VBDCurvature.lean` implements the quadratic-form, invertibility, and uniform
+inverse-norm conclusions for the actual IE Newton blocks.
+
+In a scalar block, the determinant is the coefficient itself, so
+$\varepsilon<\mu_i$ guarantees the production regular branch throughout the region.
+The implemented scalar certificate supplies the regularity premise of the fixed-point and root
+linearization results. For higher-dimensional blocks, acceptance by a positive determinant
+threshold requires a determinant comparison in addition to invertibility.
 
 # Coupling and the contraction factor
 
@@ -94,7 +118,7 @@ Gauss–Seidel error sweep in the supplied visit order.
 identification under explicit residual and local-Hessian differentiability hypotheses and strict
 acceptance of the production skip test. These are general analytic inputs to the implemented
 Phase 6 comparison interface and CT-04 uniform derivative-to-Lipschitz bridge. Off-root
-inverse-variation bounds and physical estimates remain VB-04–VB-06 obligations. The
+inverse-variation bounds and physical coupling estimates remain VB-05–VB-06 obligations. The
 [spring-chain example](./axial-spring-contraction.md) calculates concrete values for these bounds.
 
 # Nonlinear neighborhood

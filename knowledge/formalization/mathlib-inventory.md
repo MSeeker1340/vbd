@@ -52,6 +52,14 @@ accepted determinant test valid near the root.
 `PosDef` supplies qualitative positivity. Quantitative strong-convexity statements additionally
 use an explicit positive lower bound.
 
+Quantitative finite-dimensional block inverse bounds use `real_inner_le_norm`,
+`LinearMap.ker_eq_bot`, `LinearMap.ker_eq_bot'`, `LinearEquiv.ofInjectiveEndo`, and
+`LinearEquiv.toContinuousLinearEquiv`. The operator-norm step uses
+`ContinuousLinearMap.opNorm_le_bound` and `ContinuousLinearMap.IsInvertible.self_apply_inverse`
+for the totalized inverse. `LinearMap.det_ring` identifies a scalar block determinant with its
+value on `1`, supplying the positive-threshold bridge. These APIs are available through the
+existing Mathlib imports.
+
 # Finite products and sums
 
 The project defines `BlockSum B := PiLp 2 B`, where `B : ι → Type*` is the heterogeneous block

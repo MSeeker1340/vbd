@@ -171,21 +171,15 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Integrator/FixedPoint.lean](Vbd/Integrator/FixedPoint.lean) | Unbiased contractive fixed-point existence and finite residual bounds with separate state and residual norms. |
 | [Vbd/Integrator/VBD.lean](Vbd/Integrator/VBD.lean) | Exact block-Newton updates, external serial/buffered plans, and complete regular-sweep fixed-point/root consistency. |
 | [Vbd/Integrator/VBDDerivative.lean](Vbd/Integrator/VBDDerivative.lean) | Production sweep derivatives at regular IE roots and their ordered block Gauss–Seidel error operators. |
+| [Vbd/Integrator/VBDCurvature.lean](Vbd/Integrator/VBDCurvature.lean) | Inertia-based block coercivity and inverse bounds, with scalar skip-threshold certificates. |
 
 The following TODOs identify the unfinished pieces required for an end-to-end
 VBD certificate.
 
-- **TODO — derivative-to-contraction bridge:** Turn uniform derivative bounds
-  on convex neighborhoods into the normed-space contraction interface.
-
-- **TODO — composed-update contraction theorem:** Assemble block derivative
-  estimates through serial and proper-color execution using ordered comparison
-  matrices in a stated norm.
-
-- **TODO — production VBD synthesis:** Define the actual block-Newton update,
-  including its regular/skip behavior and external execution plan; prove
-  fixed-point consistency, derivative bounds, contraction, and finite-sweep
-  error bounds.
+- **TODO — production VBD contraction:** Instantiate the block comparison
+  framework with physical coupling and off-root Hessian-variation bounds,
+  certify an invariant nonlinear neighborhood, and prove proper-color
+  commutation and snapshot equivalence.
 
 - **TODO — end-to-end Lean worked instance:** Instantiate that chain for the
   axial-spring model below, including its explicit 20-sweep residual budget.
@@ -248,6 +242,7 @@ lake build
 lake lean tests/FixedPoint.lean
 lake lean tests/VBD.lean
 lake lean tests/VBDDerivative.lean
+lake lean tests/VBDCurvature.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v

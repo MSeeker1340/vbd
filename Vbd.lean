@@ -9,3 +9,4 @@ import Vbd.Integrator.FixedPoint
 import Vbd.Integrator.LocalPotential
 import Vbd.Integrator.VBD
 import Vbd.Integrator.VBDDerivative
+import Vbd.Integrator.VBDCurvature

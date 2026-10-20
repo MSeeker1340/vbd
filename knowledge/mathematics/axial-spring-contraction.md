@@ -112,6 +112,11 @@ scalar Hessian threshold $10^{-12}m_{\min}/h^2$ in force/length units.
 Since $D_i\ge a_i\ge1$, every visit follows the nonsingular branch in this family.
 There is no line search or iteration acceleration.
 
+`Integrator/VBDCurvature.lean` proves the generic mass-plus-potential coercivity and inverse
+bound, and the scalar implication from a curvature lower bound above the threshold to production
+regularity. The chain formulas supply mass lower bound $a_i$ and nonnegative potential curvature;
+formal derivation of those constitutive formulas is part of the physical chain instantiation.
+
 For quadratic springs, we can see exactly what this step does. Substituting $\eta=0$ and
 cancelling the old value of $u_i$ gives
 
