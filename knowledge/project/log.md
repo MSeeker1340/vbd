@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-01 implementation**: Implemented exact production block-Newton updates, determinant-threshold skipping, IE gradient/Hessian specialization, and externally controlled chronological serial and buffered plans. Marked VB-01 done and advanced VB-02; added concrete execution checks to pre-commit. At the user's direction, recorded the durable workflow rule to pause at a missing or mismatched synthesis prerequisite and distinguish implementation omissions from mathematical obstacles.
+
+## 2026-10-20
+
 * **Phase-5 specification alignment**: Repaired the Lean implementation to meet the existing cross-norm IF-01/IF-03 plan. Made the selected state metric and independent residual codomain explicit in the backlog and roadmap. Added Phase-5/Phase-6 integration checks to the pre-commit hook and documented their command. Phase 7 remains at VB-01; the mathematical route and applicability targets are unchanged.
 
 ## 2026-10-20

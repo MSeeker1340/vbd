@@ -244,6 +244,7 @@ The checked foundations and spring-chain diagnostics can be built and run with:
 lake exe cache get
 lake build
 lake lean tests/FixedPoint.lean
+lake lean tests/VBD.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v

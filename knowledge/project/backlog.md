@@ -115,8 +115,8 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| VB-01 | next | Production VBD update operators and execution plans | LI-01, BS-03, BS-05 | Supplied block-Newton operators and externally controlled serial or buffered plans match the paper, including singular-block skipping |
-| VB-02 | planned | Regular fixed-point consistency | VB-01, IE-05 | A complete skip-free sweep fixes exactly an IE root in the stated regular region, with block coverage and execution assumptions explicit; the equivalence is proved independently of contraction |
+| VB-01 | done | Production VBD update operators and execution plans | LI-01, BS-03, BS-05 | Supplied block-Newton operators and externally controlled serial or buffered plans match the paper, including singular-block skipping |
+| VB-02 | next | Regular fixed-point consistency | VB-01, IE-05 | A complete skip-free sweep fixes exactly an IE root in the stated regular region, with block coverage and execution assumptions explicit; the equivalence is proved independently of contraction |
 | VB-03 | planned | Execution derivative and block entries | VB-01, BS-06, BC-02 | The derivative at an IE root is derived from the externally ordered operator composition and identified with the corresponding Gauss-Seidel error operator |
 | VB-04 | planned | Inertia-based block inverse bounds | IE-07, VB-01 | `M/h² + ∇²P` yields explicit coercivity and inverse-norm bounds on a neighborhood |
 | VB-05 | planned | Serial coupling and contraction factor | VB-03, VB-04, BC-02 | Off-diagonal component bounds produce an explicit `q < 1` for the actual serial execution over the AP-03 parameter range, with norm-conversion constants stated |
@@ -142,7 +142,8 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 The [AP-03 decision](./applicability-decision.md) fixes the first certificate to the maximum norm
 and static proper colors. Its scalar nonlinear chain, predictor box, and 20-sweep residual target
-instantiate VB-05–VB-08. CT-04 and the exact-execution Phase 6 bridge are complete; VB-01 is next.
+instantiate VB-05–VB-08. CT-04, the exact-execution Phase 6 bridge, and VB-01 are implemented;
+VB-02 is next.
 BC-04 requires a further applicability assessment for same-color coupling in exact arithmetic.
 
 Every resolved project-wide architecture decision should become an Architecture Decision concept

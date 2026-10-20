@@ -7,3 +7,4 @@ import Vbd.Dynamics.Contraction
 import Vbd.Integrator.ImplicitEulerEnergy
 import Vbd.Integrator.FixedPoint
 import Vbd.Integrator.LocalPotential
+import Vbd.Integrator.VBD

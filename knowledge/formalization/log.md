@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-01 implementation**: Added and exported `Integrator/VBD.lean`: finite-dimensional heterogeneous block-Newton data, exact determinant-test branches, invertibility and local solve certificates, singleton write support, chronological serial products, snapshot-merge batches, conditional commuting serial equivalence, and the IE diagonal Hessian identity. Concrete scalar checks distinguish opposite serial orders, buffered coupled writes, and threshold equality. The prepared Phase-1/Phase-2 interfaces support this step without a new mathematical prerequisite.
+
+## 2026-10-20
+
 * **Phase-5 cross-norm implementation**: Checked that the planned result combines metric Banach existence with a Lipschitz residual into a separate normed codomain, without additional mathematics. Added generic `UnbiasedOn.exists_fixedPoint`, `norm_iterate_le`, and algebraic `comp_equiv`; retained the IE same-space APIs as wrappers. Added integration checks using the actual Phase-6 maximum-norm map and a heterogeneous Hilbert IE residual. Replaced the module-map integration-gap claim with the implemented interface. The previous inner-product-instance probe tested an unnecessary requirement; the issue was incomplete implementation of the existing Phase-5 specification. Phase 7 remains at VB-01.
 
 ## 2026-10-20
