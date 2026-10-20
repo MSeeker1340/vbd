@@ -59,6 +59,21 @@ declaration. P6 uses a theorem-local maximum norm or equivalent metric for the a
 with explicit transport to the existing finite `ℓ²` block representation. Generic derivative
 lemmas remain norm-polymorphic; weighted and energy norms are options for later assessments.
 
+# Phase 7 integration prerequisite
+
+`BlockContraction.maxMap` acts on the dependent function space with its maximum norm.
+The Phase-5 state-distance and convergence lemmas are metric-generic, while
+`ImplicitEulerStep.exists_unbiased_fixedPoint` and `norm_energyGradient_iterate_le` use the
+metric of the Hilbert space carrying the implicit-Euler step. An explicit connection between
+these representations remains a prerequisite for applying those IE specializations to the
+maximum-norm certificate. The current library has no such IE transport interface.
+
+The [chain certificate](/mathematics/axial-spring-contraction.md#finite-sweep-bounds-and-physical-scales)
+uses the mass-scaled maximum residual `max_i |f_i| / a_i` and its constant `L_F ≤ 2.12`.
+The implemented IF-03 conclusion bounds the Hilbert norm of `ie.energyGradient`.
+Instantiating the accepted finite-sweep target therefore also requires an explicit connection
+to the scaled residual and its codomain norm; its regularity constant is specific to those norms.
+
 # Reuse acceptance condition
 
 CT-04, IF-01–IF-03 and BC-01–BC-03/BC-05 expose generic norm, residual-regularity and

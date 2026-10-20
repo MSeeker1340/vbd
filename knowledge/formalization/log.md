@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Phase-7 stopping point**: At the user's request to stop at the first preparation problem, stopped the VB-01 entry assessment before adding production definitions. Phase 6's maximum-norm `maxMap` does not directly instantiate the Hilbert-space IE existence and residual specializations in Phase 5. A scratch Lean probe importing `Vbd`, inspecting those declarations, and running `#synth InnerProductSpace ℝ (Fin 2 → ℝ)` reports the missing instance. The chain's mass-scaled maximum residual also differs from the implemented IF-03 Hilbert residual conclusion. Recorded these integration prerequisites in the module map; no transport repair, theorem-route change, or Phase-7 completion is claimed.
+
+## 2026-10-20
+
 * **Scope cleanup**: Removed inexact-iteration and execution-error extension references from the module plan and Mathlib inventory. The dynamics foundation covers CT-01–CT-04; same-color coupling remains a separate exact-arithmetic analysis.
 
 ## 2026-10-20
