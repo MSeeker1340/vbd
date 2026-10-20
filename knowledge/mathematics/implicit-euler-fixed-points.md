@@ -134,15 +134,23 @@ separate model-specific argument.
 # Formalization interface
 
 `Vbd.Integrator.FixedPoint` imports only `Vbd.Integrator.ImplicitEulerEnergy` and
-`Vbd.Dynamics.Contraction`. It defines the generic `UnbiasedOn` predicate and implements:
+`Vbd.Dynamics.Contraction`. Its generic interface takes a metric solver state `Z` and a residual
+`F : Z → Y` with an independently normed codomain. For a representation `e : Z ≃ X`, use
+`F = energyGradient ie ∘ e` and the solver conjugated by `e`. The residual keeps the Hilbert norm
+on `X`, and `Z` carries the selected solver metric. Unbiasedness transports along the equivalence
+without any norm assumption. Completeness and invariance are premises in the selected state metric.
+
+The module implements:
 
 | Backlog item | Premises added at the bridge | Conclusion |
 |---|---|---|
-| IF-01 | Complete nonempty invariant contraction region and `UnbiasedOn (energyGradient ie) T S` | The unique solver fixed point in `S` exists and is an IE stationary solution. |
+| IF-01 | Complete nonempty invariant contraction region and `UnbiasedOn F T S` | The unique solver fixed point in `S` exists and is a residual root; an IE residual identifies its represented state as stationary. |
 | IF-02 | IF-01 and `x₀ ∈ S` | The iterates converge to that solution with the geometric distance bound. |
-| IF-03 | IF-02 and `LipschitzOnWith L (energyGradient ie) S` | The IE residual has the displayed geometric upper bound. |
+| IF-03 | IF-02 and `LipschitzOnWith L F S` between the selected state metric and residual norm | The residual has the displayed geometric upper bound. |
 
-The module exports `energyGradient_eq_zero_of_unbiased_fixedPoint`,
+The generic declarations are `UnbiasedOn.exists_fixedPoint`, `UnbiasedOn.norm_iterate_le`, and
+`UnbiasedOn.comp_equiv`. The module also exports the same-space IE specializations
+`energyGradient_eq_zero_of_unbiased_fixedPoint`,
 `exists_unbiased_fixedPoint`, `dist_iterate_fixedPoint_le`, `tendsto_iterate_fixedPoint`, and
 `norm_energyGradient_iterate_le`. The generic module does not prove unbiasedness for a particular
 update formula. `Integrator/VBD` proves it for the regular concrete sweep; its result discharges

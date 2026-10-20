@@ -168,16 +168,13 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Block/Operator.lean](Vbd/Block/Operator.lean) | Continuous-linear block entries, finite assembly, reconstruction, and arithmetic. |
 | [Vbd/Dynamics/Contraction.lean](Vbd/Dynamics/Contraction.lean) | Invariant-set fixed-point interface, convergence to a supplied fixed point, finite-iterate bounds, and a defect estimate. |
 | [Vbd/Integrator/LocalPotential.lean](Vbd/Integrator/LocalPotential.lean) | Finite-support component potentials, exact local energy cancellation, and bridges from support graphs to Mathlib proper colorings. |
+| [Vbd/Integrator/FixedPoint.lean](Vbd/Integrator/FixedPoint.lean) | Unbiased contractive fixed-point existence and finite residual bounds with separate state and residual norms. |
 
 The following TODOs identify the unfinished pieces required for an end-to-end
 VBD certificate.
 
 - **TODO — derivative-to-contraction bridge:** Turn uniform derivative bounds
   on convex neighborhoods into the normed-space contraction interface.
-
-- **TODO — implicit-Euler fixed-point bridge:** Prove, for an arbitrary solver
-  map with a designated stationary fixed point, the state and residual
-  convergence conclusions used by VBD.
 
 - **TODO — composed-update contraction theorem:** Assemble block derivative
   estimates through serial and proper-color execution using ordered comparison
@@ -246,6 +243,7 @@ The checked foundations and spring-chain diagnostics can be built and run with:
 ```bash
 lake exe cache get
 lake build
+lake lean tests/FixedPoint.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v

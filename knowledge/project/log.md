@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Phase-5 specification alignment**: Repaired the Lean implementation to meet the existing cross-norm IF-01/IF-03 plan. Made the selected state metric and independent residual codomain explicit in the backlog and roadmap. Added Phase-5/Phase-6 integration checks to the pre-commit hook and documented their command. Phase 7 remains at VB-01; the mathematical route and applicability targets are unchanged.
+
+## 2026-10-20
+
 * **Exact-arithmetic scope**: At the user’s direction, removed CT-05 (inexact/perturbed iteration) and FP-01 (floating-point/GPU execution error) from project tasks and removed their roadmap extensions. Execution-error verification is outside project scope; finite-iteration error remains central. Retained BC-04 as deferred exact-arithmetic mathematics for interacting simultaneous updates and synchronized repository guidance, architecture, and the applicability decision.
 
 ## 2026-10-20

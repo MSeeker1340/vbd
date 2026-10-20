@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Phase-5 cross-norm implementation**: Checked that the planned result combines metric Banach existence with a Lipschitz residual into a separate normed codomain, without additional mathematics. Added generic `UnbiasedOn.exists_fixedPoint`, `norm_iterate_le`, and algebraic `comp_equiv`; retained the IE same-space APIs as wrappers. Added integration checks using the actual Phase-6 maximum-norm map and a heterogeneous Hilbert IE residual. Replaced the module-map integration-gap claim with the implemented interface. The previous inner-product-instance probe tested an unnecessary requirement; the issue was incomplete implementation of the existing Phase-5 specification. Phase 7 remains at VB-01.
+
+## 2026-10-20
+
 * **Phase-7 stopping point**: At the user's request to stop at the first preparation problem, stopped the VB-01 entry assessment before adding production definitions. Phase 6's maximum-norm `maxMap` does not directly instantiate the Hilbert-space IE existence and residual specializations in Phase 5. A scratch Lean probe importing `Vbd`, inspecting those declarations, and running `#synth InnerProductSpace ℝ (Fin 2 → ℝ)` reports the missing instance. The chain's mass-scaled maximum residual also differs from the implemented IF-03 Hilbert residual conclusion. Recorded these integration prerequisites in the module map; no transport repair, theorem-route change, or Phase-7 completion is claimed.
 
 ## 2026-10-20

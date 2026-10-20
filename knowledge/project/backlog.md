@@ -97,9 +97,9 @@ acceptance criteria for BC-01–BC-05 and VB-01–VB-08.
 
 | ID | Status | Deliverable | Depends on | Acceptance criteria |
 |---|---|---|---|---|
-| IF-01 | done | Solver-independent unbiased IE fixed-point theorem | IE-05, CT-02 | A contraction on a nonempty complete invariant region whose fixed points are IE roots has a unique solver fixed point, and that point is an IE solution |
+| IF-01 | done | Solver-independent unbiased IE fixed-point theorem | IE-05, CT-02 | A contraction in the selected state metric on a nonempty complete invariant region whose fixed points are IE roots has a unique solver fixed point, and that point represents an IE solution |
 | IF-02 | done | Finite-iteration IE error | IF-01, CT-03 | Iterates have an explicit geometric distance bound to the IE solution selected by IF-01 |
-| IF-03 | done | Distance-to-residual bound | IF-02, quantitative regularity of `R_IE` | A stated Lipschitz bound converts iterate error into an IE residual bound |
+| IF-03 | done | Distance-to-residual bound | IF-02, quantitative regularity of `R_IE` | A stated cross-norm Lipschitz bound converts iterate error in the selected state metric into a residual bound in an independently chosen codomain norm |
 
 # Phase 6 — contraction of composed updates
 

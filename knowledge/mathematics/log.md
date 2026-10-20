@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Cross-norm bridge verification**: Verified the existing Phase-5 argument with a metric solver state and a separate normed residual codomain: unbiasedness supplies zero residual at the Banach fixed point, and the cross-norm Lipschitz estimate multiplies the geometric state bound. Documented the implemented generic interface and algebraic representation transport. The IE Hilbert norm and a scaled maximum residual retain their respective regularity premises; no change to the theorem route or physical constants is required.
+
+## 2026-10-20
+
 * **Scope cleanup**: Removed the optional perturbed-iteration program from the contraction specification and its index description. Replaced the axial-chain extension’s CT-05 dependency with obligations on the actual mathematical map; finite-iteration contraction and residual estimates remain in scope.
 
 ## 2026-10-20

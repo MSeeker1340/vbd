@@ -258,7 +258,10 @@ $$
 
 Where quantitative regularity of `R_IE` is available, it transports distance bounds to residual
 bounds. For a block-product state metric, this regularity has the explicit cross-norm form
-$\lVert R_{\mathrm{IE}}(x)-R_{\mathrm{IE}}(y)\rVert_X \le L\lVert x-y\rVert_p$. The module takes the solver map and unbiasedness proof as
+$\lVert R_{\mathrm{IE}}(x)-R_{\mathrm{IE}}(y)\rVert_X \le L\lVert x-y\rVert_p$.
+The implemented bridge accepts an arbitrary metric solver state and a separately normed residual
+codomain; algebraic equivalence transport connects it to the Hilbert-space IE representation.
+The module takes the solver map and unbiasedness proof as
 parameters. Phase 7 supplies the concrete VBD map and proves unbiasedness on its stated regular
 branch.
 
