@@ -24,10 +24,12 @@ timestamp: 2026-10-20T00:00:00Z
 | P5 | `Integrator/FixedPoint.lean` | Implemented solver-independent [unbiased fixed-point convergence](/mathematics/implicit-euler-fixed-points.md) from a contractive map to an implicit-Euler stationary solution | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
 | P6 | `Block/Contraction.lean` | Implemented derivative-factor comparisons, ordered composition, commuting batches, and covered maximum-norm contraction certificates | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
 | P7 | `Integrator/VBD.lean` | Implemented VB-01–VB-02 exact executions and regular-sweep consistency | `Block/Operator`, `Block/Update`, `Integrator/FixedPoint` |
-| P7 | `Integrator/VBDDerivative.lean` | Implemented VB-03 root derivatives, block entries, and ordered Gauss–Seidel identification | `Integrator/VBD`, `Block/Contraction` |
+| P7 | `Integrator/VBDDerivative.lean` | Implemented regular-state derivatives including inverse variation, root block entries, and ordered Gauss–Seidel identification | `Integrator/VBD`, `Block/Contraction` |
 | P7 | `Integrator/VBDCurvature.lean` | Implemented VB-04 inertia-based block coercivity, inverse bounds, and scalar regularity certificates | `Integrator/VBD` |
 | P7 | `Integrator/VBDCoupling.lean` | Implemented VB-05 normalized coupling, covered root-sweep bounds, and quantitative norm conversions | `Integrator/VBDDerivative`, `Integrator/VBDCurvature` |
 | P7 | `Examples/AxialSpring.lean` | Implemented spring residual, Jacobian, exact Newton blocks, and AP-03 serial root derivative factor | `Integrator/VBDCoupling` |
+| P7 | `Integrator/VBDNonlinear.lean` | Implemented generic changed-row variation estimates and uniform serial Lipschitz certificates | `Integrator/VBDCoupling` |
+| P7 | `Examples/AxialSpringNeighborhood.lean` | Implemented invariant nonlinear box, uniform serial factor, and selected warm-start membership | `Examples/AxialSpring`, `Integrator/VBDNonlinear` |
 
 These paths are the current module boundaries recorded in the central
 [roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
@@ -149,5 +151,14 @@ and reuses Phase-6 comparison multiplication and covered row certificates.
 has its Jacobian, exact Newton diagonal entries, smoothness and skip-free regularity proved.
 The degree-two AP-03 parameter range bounds the actual covered serial sweep derivative at a
 supplied root in the accepted box by `14/39`. Both modules are exported by `Vbd.lean`.
-Uniform off-root contraction, invariance and warm-start coverage, component-based commutation,
-and the physical energy/residual identification remain the VB-06–VB-08 obligations.
+
+`Integrator/VBDDerivative.lean` also supplies the full regular-state derivative through
+Mathlib inversion calculus. `Integrator/VBDNonlinear.lean` bounds the inverse-variation term
+per column and feeds uniform changed-row bounds and per-visit invariance into Phase 6.
+Both interfaces retain arbitrary finite-dimensional normed blocks.
+`Examples/AxialSpringNeighborhood.lean` implements VB-06 for the AP-03 degree-two range:
+every visit preserves the radius-`0.1` maximum-norm box, covered serial sweeps have factor
+`318/625 < 0.512`, and the selected cosine predictor and rest-state warm starts belong to the
+box. These modules are exported by `Vbd.lean`. Component-based commutation and snapshot
+equivalence remain VB-07 obligations; the physical energy/residual identification and
+end-to-end finite-sweep certificate remain VB-08 obligations.

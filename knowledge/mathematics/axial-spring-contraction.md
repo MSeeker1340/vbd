@@ -21,13 +21,12 @@ check those hypotheses for actual spring updates and put physical numbers into t
 Quadratic springs let us see the local averaging mechanism directly; hardening springs exercise
 the additional neighborhood estimates needed for nonlinear updates.
 
-Keep the distinction between the example and its prerequisites in view as we proceed. The
-implicit-Euler identities, block algebra, and basic contraction results are already formalized.
-The general derivative, comparison-matrix, and coloring bridges are described in the supporting
-material and remain pending Lean work; TODO notes below identify the dependencies. The
-spring-specific calculations are mathematical workings for this example, and the accompanying
-experiment supplies numerical checks. Neither is a claim that the end-to-end Lean example is
-already complete.
+The implicit-Euler identities, block algebra, and basic contraction results are formalized.
+The general derivative, comparison-matrix, and coloring bridges are formalized. The scalar
+spring residual, exact Newton blocks, invariant nonlinear box, serial contraction factor, and
+selected warm-start membership are also proved in Lean. Proper-color execution, the physical
+energy/residual identification, and the final numerical residual budget are pending synthesis
+deliverables. The accompanying experiment supplies separate numerical checks.
 
 The [project decision](/project/applicability-decision.md) records the example's place in the
 roadmap. Here we concentrate on carrying out the application.
@@ -308,8 +307,9 @@ term throughout the box.
 > off-diagonal bounds into a covered serial maximum-norm bound, with explicit maximum/ℓ² state
 > norm conversions. `Examples/AxialSpring.lean` proves the polynomial residual Jacobian, exact
 > Newton blocks, regularity, and the actual serial root derivative estimate `14/39 < 1` on the
-> accepted degree-two range. The root is supplied in the box. Uniform off-root derivative bounds,
-> invariance and warm-start membership are VB-06 obligations.
+> accepted degree-two range. The root is supplied in the box.
+> `Integrator/VBDNonlinear.lean` and `Examples/AxialSpringNeighborhood.lean` supply uniform
+> off-root comparison bounds, per-visit invariance, and selected warm-start membership.
 
 We now instantiate the [local derivative bounds](./curvature.md#derivative-of-a-block-newton-update)
 with the spring coefficients. The estimate has two parts: sensitivity to neighbors and
@@ -352,6 +352,35 @@ observe that the derivative of $s(p+rs)/(1+s)^2$ has numerator
 $p+(2r-p)s$, with $p=B+Y$ and $r=2B(1+4\eta B^2)$.
 It is nonnegative because $Y\le B$.
 
+For fixed comparison matrices throughout the accepted box, write
+$t_i=\sum_j b_{ij}$, $A_i=a_i+t_i$, and
+$F_i=(3/20)a_i+(26/125)t_i$. On the selected parameter range,
+
+$$
+D_i\ge A_i>0,\qquad |f_i|\le F_i,\qquad
+|\partial_jD_i|\le\frac65 v_{ij},\qquad
+v_{ij}=\begin{cases}t_i&j=i,\\ b_{ij}&j\ne i.\end{cases}
+$$
+
+A state-independent comparison row is
+
+$$
+C_{ij}=\begin{cases}0&j=i,\\ \frac{28b_{ij}}{25A_i}&j\ne i\end{cases}
+       +\frac{F_i}{A_i^2}\frac65 v_{ij}.
+$$
+
+Since $0\le t_i\le a_i/2$, we have $F_i\le(127/500)a_i$ and
+$a_it_i/A_i^2\le2/9$. Thus
+
+$$
+\sum_j C_{ij}
+\le\frac{28}{75}+\frac{12}{5}\frac{127}{500}\frac29
+=\frac{318}{625}=0.5088<0.512.
+$$
+
+This uniform comparison includes inverse variation and is the Lean-proved nonlinear bound.
+It supplies a common matrix for each visit throughout the box.
+
 There is still a small obstacle: a single vertex update leaves all other positions untouched,
 so it cannot contract the entire state in the maximum norm. The improvement appears after a
 complete sweep. Start with an upper bound on every component of a perturbation. The first
@@ -373,10 +402,13 @@ approach a unique fixed point there, and our earlier consistency argument identi
 with the implicit-Euler solution. The physical model has supplied the hypotheses; the remaining
 iteration estimate is the one already furnished by fixed-point theory.
 
-> **Formal convergence bridges:** CT-04 and BC-01–BC-03/BC-05 are implemented. The calculation
-> here supplies their spring-chain inputs; proving these model-specific premises is part of
-> Phase 7. The generic results combine the [curvature and coupling](./curvature.md) comparison
-> bounds with [contractive fixed-point iteration](./contractive-fixed-point-iteration.md).
+> **Formal nonlinear neighborhood:** VB-06 combines CT-04 and BC-01–BC-03/BC-05 with the
+> actual spring update derivative. Every visit preserves the radius-`0.1` box, and every
+> covered serial order, including repeated visits, is Lipschitz there with factor `318/625`.
+> Predictors bounded by `0.05`, including the selected cosine predictor, and the rest-state
+> warm start belong to the box. Proper-color commutation and snapshot equivalence are VB-07
+> obligations. Root identification with the full physical energy and the finite residual
+> budget are VB-08 obligations.
 
 # Finite-sweep bounds and physical scales
 
@@ -525,10 +557,11 @@ the ordered derivative estimate and complete-coverage comparison certificate, an
 supplies the passage to metric contraction. The concrete Newton update and spring-specific hypotheses are then instantiated at
 `Integrator/VBD`.
 
-> **TODO — complete the Lean example:** Apply those bridges to the coefficients, predictor
-> box, and residual scaling used above, then prove the numerical budget through VB-01–VB-08.
-> The generic IF-01–IF-03 bridge is complete; the remaining obligations instantiate its
-> hypotheses and the implemented Phase 6 certificate for this example.
+> **TODO — complete the Lean example:** Prove the proper-color execution equivalence,
+> identify the polynomial residual with the physical energy gradient, and instantiate
+> IF-01–IF-03 with the model's root bounds and residual scaling to prove the numerical budget.
+> VB-01–VB-06 supply the actual serial update, independent root consistency, inverse and
+> coupling bounds, invariant box, uniform nonlinear contraction, and warm-start membership.
 
 This places the reusable reasoning where another material model can use it. The chain provides
 the coefficients and proves that they satisfy the hypotheses; it does not specialize the block

@@ -170,17 +170,18 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Integrator/LocalPotential.lean](Vbd/Integrator/LocalPotential.lean) | Finite-support component potentials, exact local energy cancellation, and bridges from support graphs to Mathlib proper colorings. |
 | [Vbd/Integrator/FixedPoint.lean](Vbd/Integrator/FixedPoint.lean) | Unbiased contractive fixed-point existence and finite residual bounds with separate state and residual norms. |
 | [Vbd/Integrator/VBD.lean](Vbd/Integrator/VBD.lean) | Exact block-Newton updates, external serial/buffered plans, and complete regular-sweep fixed-point/root consistency. |
-| [Vbd/Integrator/VBDDerivative.lean](Vbd/Integrator/VBDDerivative.lean) | Production sweep derivatives at regular IE roots and their ordered block Gauss–Seidel error operators. |
+| [Vbd/Integrator/VBDDerivative.lean](Vbd/Integrator/VBDDerivative.lean) | Full regular-state update derivatives, including inverse variation, and ordered block Gauss–Seidel root error operators. |
 | [Vbd/Integrator/VBDCurvature.lean](Vbd/Integrator/VBDCurvature.lean) | Inertia-based block coercivity and inverse bounds, with scalar skip-threshold certificates. |
 | [Vbd/Integrator/VBDCoupling.lean](Vbd/Integrator/VBDCoupling.lean) | Generic root coupling, covered serial sweep bounds, and explicit maximum/ℓ² norm conversions. |
 | [Vbd/Examples/AxialSpring.lean](Vbd/Examples/AxialSpring.lean) | Polynomial spring residual and exact Newton blocks; serial root derivative bound `14/39` on the accepted degree-two parameter range. |
+| [Vbd/Integrator/VBDNonlinear.lean](Vbd/Integrator/VBDNonlinear.lean) | Generic nonlinear changed-row bounds and uniform serial Lipschitz certificates. |
+| [Vbd/Examples/AxialSpringNeighborhood.lean](Vbd/Examples/AxialSpringNeighborhood.lean) | Invariant radius-`0.1` box, uniform serial factor `318/625 < 0.512`, and cosine-predictor/rest-state warm-start coverage. |
 
 The following TODOs identify the unfinished pieces required for an end-to-end
 VBD certificate.
 
-- **TODO — production VBD contraction:** Control off-root Hessian variation,
-  certify an invariant nonlinear neighborhood with covered warm starts, and
-  prove proper-color commutation and snapshot equivalence.
+- **TODO — proper-color execution:** Prove component-based commutation and
+  snapshot equivalence for the selected proper colors.
 
 - **TODO — end-to-end Lean worked instance:** Instantiate that chain for the
   axial-spring model below, including its explicit 20-sweep residual budget.
@@ -215,8 +216,9 @@ $$
 \frac{h^2 k_{max}}{m_{min}}\le\frac14,
 $$
 
-it derives an invariant maximum-norm box and a conservative sweep factor
-q ≤ 0.512. With the specified warm start, this implies a scaled
+Lean proves an invariant maximum-norm box and a uniform serial sweep factor
+q ≤ 0.5088 < 0.512, with the specified warm start covered. The analytic
+end-to-end calculation then gives a scaled
 implicit-Euler residual below 10⁻⁶ in 20 sweeps (the calculation gives
 3.25 × 10⁻⁷). This remains an analytic worked derivation, supported by a
 reproducible numerical study, until the end-to-end Lean instance is completed.
@@ -245,6 +247,7 @@ lake lean tests/VBD.lean
 lake lean tests/VBDDerivative.lean
 lake lean tests/VBDCurvature.lean
 lake lean tests/VBDCoupling.lean
+lake lean tests/VBDNonlinear.lean
 
 uv run --locked python -m experiments.applicability.study
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v

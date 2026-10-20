@@ -35,6 +35,14 @@ regularity for units, with `ContinuousLinearMap.ringInverse_eq_inverse` identify
 inverse. `ContinuousLinearMap.continuous_det` and `ContinuousAt.eventually_lt` keep a strictly
 accepted determinant test valid near the root.
 
+For the full off-root derivative, `hasFDerivAt_ringInverse` gives the explicit map
+`-ContinuousLinearMap.mulLeftRight` at a unit. `ContinuousLinearEquiv.toUnit` and
+`ContinuousLinearMap.inverse_equiv` identify its inverse with the production operator inverse.
+`ContinuousLinearMap.opNorm_flip`, `ContinuousLinearMap.le_opNorm`, and
+`ContinuousLinearMap.norm_smulRight_apply` bound the operator-valued stiffness variation.
+The scalar nonlinear neighborhood uses `pi_norm_le_iff_of_nonneg`, `convex_closedBall`, and
+`Real.abs_cos_le_one` for its maximum-norm box and selected predictor membership.
+
 The scalar spring instantiation uses `HasDerivAt.comp_hasFDerivAt`, `HasFDerivAt.sum`,
 and `hasFDerivWithinAt_piLp` from `Mathlib.Analysis.Calculus.FDeriv.WithLp` for its polynomial
 residual derivative. Quantitative state norm conversions use `PiLp.norm_apply_le` and

@@ -152,12 +152,13 @@ off-diagonal entries are $-H_{ii}^{-1}H_{ij}$. Applied to an error vector $v$, t
 is $-H_{ii}^{-1}\sum_{j\ne i}H_{ij}v_j$. Chronological composition is therefore the block
 Gauss–Seidel error sweep in the supplied visit order.
 
-`Integrator/VBDDerivative.lean` implements this root derivative and ordered Gauss–Seidel
-identification under explicit residual and local-Hessian differentiability hypotheses and strict
-acceptance of the production skip test. These are general analytic inputs to the implemented
-Phase 6 comparison interface and CT-04 uniform derivative-to-Lipschitz bridge. Off-root
-inverse-variation bounds and uniform neighborhood estimates remain VB-06 obligations. The
-[spring-chain example](./axial-spring-contraction.md) calculates concrete values for these bounds.
+`Integrator/VBDDerivative.lean` implements the full regular-state derivative, its root
+specialization, and ordered Gauss–Seidel identification under explicit residual and local-Hessian
+differentiability hypotheses and strict acceptance of the production skip test.
+`Integrator/VBDNonlinear.lean` implements the per-column inverse-variation estimate and combines
+uniform changed-row bounds with per-visit invariance through Phase 6 and CT-04. These generic
+interfaces support arbitrary finite-dimensional normed blocks. The
+[spring-chain example](./axial-spring-contraction.md) instantiates the nonlinear bounds.
 
 # Nonlinear neighborhood
 
@@ -171,6 +172,14 @@ $$
 On a convex `N`, the derivative bound gives a Lipschitz contraction. Together with invariance
 and completeness of a nonempty `N`, [contractive fixed-point iteration](./contractive-fixed-point-iteration.md)
 then supplies a unique fixed point in `N`, local convergence, and finite-sweep error bounds.
+
+For the accepted spring range, `Examples/AxialSpringNeighborhood.lean` proves invariance of
+the maximum-norm box centered at zero with radius `0.1`. Predictors bounded by `0.05` are
+admitted. Static comparison rows retain the incident linear stiffness in the denominator and
+bound the force-dependent inverse variation, giving a uniform covered serial factor
+`318/625 = 0.5088 < 0.512`. The selected cosine predictor and rest-state warm starts belong to
+this box. Proper-color execution and the model's end-to-end physical residual bound are
+separate VB-07 and VB-08 deliverables.
 
 # Worked example
 

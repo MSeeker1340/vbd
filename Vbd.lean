@@ -12,3 +12,5 @@ import Vbd.Integrator.VBDDerivative
 import Vbd.Integrator.VBDCurvature
 import Vbd.Integrator.VBDCoupling
 import Vbd.Examples.AxialSpring
+import Vbd.Integrator.VBDNonlinear
+import Vbd.Examples.AxialSpringNeighborhood

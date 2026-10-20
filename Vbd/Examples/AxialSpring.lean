@@ -16,8 +16,8 @@ estimates also hold for directed nonnegative coefficients.
 
 The maximum-norm root estimate uses the accepted box radius `1/10`, hardening at most `1`,
 and incident stiffness at most half the inertial coefficient. The physical chain's degree and
-timestep bound discharge this last condition. Nonlinear neighborhood invariance and off-root
-inverse variation are separate obligations.
+timestep bound discharge this last condition. `AxialSpringNeighborhood` supplies nonlinear
+neighborhood invariance, off-root inverse variation, and warm-start coverage.
 -/
 
 noncomputable section

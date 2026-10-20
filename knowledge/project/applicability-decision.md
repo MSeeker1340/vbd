@@ -93,7 +93,9 @@ with explicit distance transport where needed. CT-04 remains norm-polymorphic. T
 Python environment is separate from the Lean dependency graph.
 
 CT-04 and the exact-execution Phase 6 bridge are complete. Production VBD synthesis has
-VB-01–VB-05 implemented and VB-06 next. The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
+VB-01–VB-06 implemented and VB-07 next. The nonlinear serial certificate has factor
+`318/625 < 0.512` throughout the invariant radius-`0.1` box and covers the selected cosine
+predictor and rest-state warm starts. The [backlog](./backlog.md) carries the proof dependencies, including IF-03 for
 physical-residual transport. BC-04 remains deferred until an exact hybrid execution variant
 with same-color coupling has an applicability certificate. The generic
 higher-arity coloring example in LI-03 remains required, independently of the chain certificate.

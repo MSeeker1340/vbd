@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Uniform nonlinear neighborhood**: Recorded the full inverse-variation derivative, static spring comparison with `Aᵢ = aᵢ + Σⱼ bᵢⱼ` and force bound `Fᵢ = (3/20)aᵢ + (26/125)Σⱼ bᵢⱼ`, and row sum `318/625 < 0.512`. Recorded Lean-proved visit invariance of the radius-`0.1` maximum-norm box and coverage of predictors bounded by `0.05`, including the AP-03 cosine predictor and rest-state warm start. Distinguished the uniform comparison factor from the sharper scalar analytic estimate and left proper-color execution and the physical 20-sweep residual conclusion as explicit synthesis obligations.
+
+## 2026-10-20
+
 * **Quantitative root coupling**: Recorded the normalized block-row bound, propagation through covered chronological Gauss–Seidel sweeps, and separate maximum/ℓ² conversion constants `1` and `sqrt(n)`. Recorded the scalar spring estimate `sᵢ ≤ (14/25) aᵢ`, hence root factor `14/39 < 1`, and the degree-two `α ≤ 1/4` implication. Distinguished this implemented actual root derivative bound from the off-root `0.512` neighborhood and finite-sweep obligations.
 
 ## 2026-10-20

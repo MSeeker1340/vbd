@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-06 implementation**: Extended `VBDDerivative` through Mathlib explicit inversion calculus and added/exported `VBDNonlinear` plus `AxialSpringNeighborhood`. Kept generic finite-dimensional vector-block parameters, bounded changed rows per column, and fed static comparison rows and per-update invariance into the prepared Phase-6 composition theorem. Instantiated the actual polynomial spring derivative, retained incident stiffness in the inverse denominator, and proved box preservation and warm-start membership. Added a nonzero off-root diagonal derivative regression, endpoint chain contraction with repeated visits, invariant warm-start iterates, and a vector-block derivative check. Synchronized module boundaries and Mathlib APIs.
+
+## 2026-10-20
+
 * **VB-05 implementation**: Added and exported `Integrator/VBDCoupling.lean` and `Examples/AxialSpring.lean`. Composed VB-04 inverse estimates with off-diagonal norms and Phase-6 covered comparison products. Proved the spring residual derivative, exact diagonal/off-diagonal entries, regularity and diagonal-map smoothness, then instantiated VB-03 for the actual serial sweep and bounded its maximum-norm root derivative by `14/39` over the AP-03 degree-two range. Added explicit norm conversion constants and compiled nonlinear/vector integration checks. Kept energy-gradient identification and uniform nonlinear-region certificates as later physical instantiations.
 
 ## 2026-10-20

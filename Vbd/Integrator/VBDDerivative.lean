@@ -9,13 +9,16 @@ import Mathlib.Analysis.Calculus.FDeriv.CompCLM
 import Mathlib.Analysis.Calculus.FDeriv.Mul
 
 /-!
-# VBD derivatives at residual roots
+# VBD derivatives on the regular branch
 
 The local derivative uses a differentiable residual, a differentiable local Hessian-block map,
-and strict acceptance by the production determinant test at the root. These hypotheses keep
+and strict acceptance by the production determinant test at the differentiated state. These keep
 the skip branch locally inactive. The inverse-stiffness derivative is multiplied by the residual
 and vanishes at the root. Ordered composition uses the Phase-6 chain rule on the invariant
 singleton containing that root.
+
+Away from a root, the full derivative retains the inverse-variation term. The local solve
+matrix derivative is supplied explicitly, and Mathlib's derivative of inversion justifies it.
 -/
 
 noncomputable section
@@ -59,6 +62,52 @@ private theorem differentiableAt_inverse_diagonal {i : ι} {p : BlockSum B}
     DifferentiableAt ℝ (fun x ↦ (d.diagonal i x).inverse) p := by
   obtain ⟨e, he⟩ := d.isInvertible_of_regular h
   simpa only [ContinuousLinearMap.ringInverse_eq_inverse] using hK.inverse ⟨e.toUnit, he⟩
+
+/-- The full Newton derivative, including local-Hessian variation times the current force. -/
+def updateDerivative (H : BlockSum B →L[ℝ] BlockSum B) (x : BlockSum B) (i : ι)
+    (K' : BlockSum B →L[ℝ] B i →L[ℝ] B i) : BlockSum B →L[ℝ] BlockSum B :=
+  d.rootDerivative H x i + (BlockSum.inclusion i).comp
+    ((d.diagonal i x).inverse.comp (K'.flip ((d.diagonal i x).inverse (d.residual x i))))
+
+omit [DecidableEq ι] in
+private theorem hasFDerivAt_inverse_diagonal {i : ι} {x : BlockSum B}
+    {K' : BlockSum B →L[ℝ] B i →L[ℝ] B i} (hreg : d.Regular i x)
+    (hK : HasFDerivAt (d.diagonal i) K' x) :
+    HasFDerivAt (fun z ↦ (d.diagonal i z).inverse)
+      ((-ContinuousLinearMap.mulLeftRight ℝ (B i →L[ℝ] B i)
+        (d.diagonal i x).inverse (d.diagonal i x).inverse).comp K') x := by
+  obtain ⟨e, he⟩ := d.isInvertible_of_regular hreg
+  have hu : (↑(e.toUnit⁻¹) : B i →L[ℝ] B i) = (d.diagonal i x).inverse := by
+    rw [← he, ContinuousLinearMap.inverse_equiv]
+    rfl
+  have hi : HasFDerivAt (Ring.inverse : (B i →L[ℝ] B i) → (B i →L[ℝ] B i))
+      (-ContinuousLinearMap.mulLeftRight ℝ (B i →L[ℝ] B i)
+        (d.diagonal i x).inverse (d.diagonal i x).inverse) (d.diagonal i x) := by
+    convert hasFDerivAt_ringInverse (𝕜 := ℝ) e.toUnit using 1 <;>
+      first | rfl | exact he.symm | rw [hu]
+  convert hi.comp x hK using 1 <;>
+    first | rfl | (rw [ContinuousLinearMap.ringInverse_eq_inverse]; rfl)
+
+/-- The production update derivative at every regular state, retaining inverse variation. -/
+theorem hasFDerivAt_update {H : BlockSum B →L[ℝ] BlockSum B} {x : BlockSum B} {i : ι}
+    {K' : BlockSum B →L[ℝ] B i →L[ℝ] B i}
+    (hR : HasFDerivAt d.residual H x) (hreg : d.Regular i x)
+    (hK : HasFDerivAt (d.diagonal i) K' x) :
+    HasFDerivAt (d.update i) (d.updateDerivative H x i K') x := by
+  have hInv := d.hasFDerivAt_inverse_diagonal hreg hK
+  have hsolve : HasFDerivAt (fun z ↦ (d.diagonal i z).inverse (d.residual z i))
+      ((d.diagonal i x).inverse.comp ((BlockSum.projection i).comp H) -
+        (d.diagonal i x).inverse.comp (K'.flip ((d.diagonal i x).inverse (d.residual x i)))) x := by
+    convert hInv.clm_apply ((BlockSum.projection (𝕜 := ℝ) i).hasFDerivAt.comp x hR) using 1
+    all_goals first | rfl | (ext v; simp [ContinuousLinearMap.mulLeftRight_apply,
+      ContinuousLinearMap.mul_def, sub_eq_add_neg])
+  have hd := ((hasFDerivAt_id x).sub
+    ((BlockSum.inclusion (𝕜 := ℝ) i).hasFDerivAt.comp x hsolve))
+      |>.congr_of_eventuallyEq ((d.eventually_regular hreg hK.continuousAt).mono
+        fun _ hx ↦ d.update_eq_sub_inclusion hx)
+  refine hd.congr_fderiv ?_
+  ext v j
+  simp [updateDerivative, rootDerivative, sub_eq_add_neg, add_assoc, add_comm]
 
 /-- The full-step production update has the Newton row derivative at a regular residual root.
 Differentiability of the local Hessian-block map is an explicit smoothness premise. -/

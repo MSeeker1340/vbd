@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-06 completion**: Completed generic regular-state derivative and inverse-variation bounds, invariant nonlinear spring box of radius `0.1`, uniform covered serial factor `318/625 = 0.5088 < 0.512`, and membership of the selected cosine predictor and rest-state warm starts. Marked VB-06 done and advanced VB-07. Added endpoint, repeated-order, off-root, and vector-block integration checks to pre-commit. The prepared composition and mean-value interfaces supported the synthesis; no prerequisite mismatch was encountered. Proper-color execution and the physical energy/finite-residual certificate remain VB-07–VB-08.
+
+## 2026-10-20
+
 * **VB-05 completion**: Completed generic normalized-coupling and covered serial root-sweep bounds, explicit maximum/ℓ² norm constants, and the scalar AP-03 root factor `14/39 < 1` for the actual polynomial Newton map. Derived the coefficient condition from degree at most two and `α ≤ 1/4`; added a nonzero-extension nonlinear root check and a two-vector-block check. Marked VB-05 done and advanced VB-06. Root existence, uniform off-root contraction and warm-start coverage remain explicit later obligations; no prerequisite mismatch was encountered.
 
 ## 2026-10-20
