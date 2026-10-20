@@ -169,6 +169,7 @@ foundation modules are exported through [Vbd.lean](Vbd.lean):
 | [Vbd/Dynamics/Contraction.lean](Vbd/Dynamics/Contraction.lean) | Invariant-set fixed-point interface, convergence to a supplied fixed point, finite-iterate bounds, and a defect estimate. |
 | [Vbd/Integrator/LocalPotential.lean](Vbd/Integrator/LocalPotential.lean) | Finite-support component potentials, exact local energy cancellation, and bridges from support graphs to Mathlib proper colorings. |
 | [Vbd/Integrator/FixedPoint.lean](Vbd/Integrator/FixedPoint.lean) | Unbiased contractive fixed-point existence and finite residual bounds with separate state and residual norms. |
+| [Vbd/Integrator/VBD.lean](Vbd/Integrator/VBD.lean) | Exact block-Newton updates, external serial/buffered plans, and complete regular-sweep fixed-point/root consistency. |
 
 The following TODOs identify the unfinished pieces required for an end-to-end
 VBD certificate.

@@ -191,6 +191,12 @@ $\varepsilon=2$, both updates skip despite nonzero force. Our bound $D_i\ge1$ an
 much smaller experiment threshold exclude that behavior. None of this identification of fixed
 points has used contraction.
 
+> **Formal consistency bridge:** `Integrator/VBD.lean` implements this equivalence for complete
+> once-per-block serial plans and complete disjoint buffered passes at regular states. The
+> buffered result permits coupling within a pass. Every execution plan also preserves residual
+> roots, including skipped and repeated visits. The chain's regularity and execution data
+> instantiate these generic production results.
+
 ## Reading progress during a solve
 
 If we know the reference solution, the most direct measure of progress is the state error

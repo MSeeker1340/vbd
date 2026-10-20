@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **VB-02 implementation**: Proved regular block fixed-point equivalence, root preservation for arbitrary serial/buffered plans, and complete regular sweep fixed-point/root equivalence for once-per-block serial orders and pairwise-disjoint buffered passes. The proof uses write preservation and exact local inverse action, independently of contraction and within-pass commutation. Added production `UnbiasedOn` certificates and a cross-norm integration check feeding the concrete IE serial consistency proof into Phase-5 Banach existence. Advanced the module map to VB-03.
+
+## 2026-10-20
+
 * **VB-01 implementation**: Added and exported `Integrator/VBD.lean`: finite-dimensional heterogeneous block-Newton data, exact determinant-test branches, invertibility and local solve certificates, singleton write support, chronological serial products, snapshot-merge batches, conditional commuting serial equivalence, and the IE diagonal Hessian identity. Concrete scalar checks distinguish opposite serial orders, buffered coupled writes, and threshold equality. The prepared Phase-1/Phase-2 interfaces support this step without a new mathematical prerequisite.
 
 ## 2026-10-20

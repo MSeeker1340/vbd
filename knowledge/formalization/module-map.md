@@ -23,7 +23,7 @@ timestamp: 2026-10-20T00:00:00Z
 | P4 | `Integrator/LocalPotential.lean` | Implemented finite-support potential components, exact cancellation, and support-to-Mathlib-graph/coloring bridge lemmas | `ImplicitEulerEnergy`, `Block/Basic` |
 | P5 | `Integrator/FixedPoint.lean` | Implemented solver-independent [unbiased fixed-point convergence](/mathematics/implicit-euler-fixed-points.md) from a contractive map to an implicit-Euler stationary solution | `ImplicitEulerEnergy`, `Dynamics/Contraction` |
 | P6 | `Block/Contraction.lean` | Implemented derivative-factor comparisons, ordered composition, commuting batches, and covered maximum-norm contraction certificates | `Block/Update`, `Block/Operator`, `Dynamics/Contraction` |
-| P7 | `Integrator/VBD.lean` | Implemented VB-01 block-Newton operators and external serial/buffered executions; consistency, derivative bounds, and finite-sweep synthesis are subsequent targets | `Block/Operator`, `Block/Update`, `Integrator/FixedPoint` |
+| P7 | `Integrator/VBD.lean` | Implemented VB-01–VB-02 exact executions and regular-sweep consistency; derivative bounds and finite-sweep synthesis are subsequent targets | `Block/Operator`, `Block/Update`, `Integrator/FixedPoint` |
 
 These paths are the current module boundaries recorded in the central
 [roadmap](/project/roadmap.md) and [backlog](/project/backlog.md).
@@ -116,9 +116,12 @@ continuous-linear equivalence with `BlockSum`. Complete coverage of changed rows
 bound below one gives the sweep certificate. Commuting disjoint-write merges inherit bounds
 and derivatives from their enumerations. Phase 7 supplies the concrete VBD and physical premises.
 
-`Integrator/VBD.lean` implements VB-01 and is exported by `Vbd.lean`. It supplies exact local
+`Integrator/VBD.lean` implements VB-01–VB-02 and is exported by `Vbd.lean`. It supplies exact local
 Newton updates with determinant-threshold skipping and chronological serial or buffered plans.
 The IE specialization uses the energy gradient and exact diagonal Hessian blocks, with the
 inertia-plus-potential identity inherited from Phase 1. Buffered passes retain snapshot semantics
 for coupled updates; conditional equivalence with serial execution uses the Phase-2 commuting
-merge theorem. Regular sweep consistency and physical commutation remain subsequent obligations.
+merge theorem. Complete once-per-block serial and disjoint buffered plans fix exactly the residual
+roots at regular states, independently of contraction or within-pass commutation. All plans
+preserve residual roots. The consistency theorems discharge the Phase-5 unbiasedness premise;
+physical commutation and derivative/contraction certificates remain subsequent obligations.

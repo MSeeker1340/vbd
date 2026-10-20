@@ -21,7 +21,7 @@ The project studies VBD in exact arithmetic, including finite-iteration state an
 | Phase 4 — finite-support potential components and coloring | complete | `Integrator/LocalPotential.lean` provides component locality, exact cancellation, and support-to-Mathlib-graph/coloring bridges |
 | Phase 5 — implicit-Euler fixed-point goals | complete | `Integrator/FixedPoint.lean` supplies unbiased fixed-point identification, finite state error, and residual transport |
 | Phase 6 — contraction of composed updates | complete | `Block/Contraction.lean` supplies comparison composition, commuting batches, and maximum-norm sweep certificates; BC-04 remains deferred |
-| Phase 7 — production VBD synthesis | in progress | VB-01 supplies exact block-Newton updates and externally controlled serial/buffered executions; VB-02 is next |
+| Phase 7 — production VBD synthesis | in progress | VB-01–VB-02 supply exact executions and independent regular-sweep consistency; VB-03 is next |
 
 The [backlog](/project/backlog.md) is authoritative for item-level status and acceptance criteria.
 
@@ -306,7 +306,7 @@ certificates are Phase 7 obligations.
 
 # Phase 7 — Production VBD synthesis
 
-Status: VB-01 implemented; VB-02 is next. Module: `Vbd/Integrator/VBD.lean`.
+Status: VB-01–VB-02 implemented; VB-03 is next. Module: `Vbd/Integrator/VBD.lean`.
 
 Dependencies: Phases 4, 5, and 6.
 

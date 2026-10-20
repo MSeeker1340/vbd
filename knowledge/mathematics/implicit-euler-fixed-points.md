@@ -9,8 +9,8 @@ timestamp: 2026-10-20T00:00:00Z
 The [implicit-Euler formulation](./implicit-euler.md) supplies the equation to solve, while
 [contractive fixed-point iteration](./contractive-fixed-point-iteration.md) supplies convergence
 facts for an arbitrary self-map. This specification identifies the additional solver-consistency
-property that connects those independent layers. It applies to any solver map; the concrete VBD
-proof is a Phase-7 obligation.
+property that connects those independent layers. It applies to any solver map; Phase 7 supplies
+the concrete regular VBD sweep consistency proof.
 
 # Three layers of a solver guarantee
 

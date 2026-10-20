@@ -2,6 +2,10 @@
 
 ## 2026-10-20
 
+* **Production consistency**: Recorded implemented VB-02 equivalence for complete regular once-written serial/buffered sweeps and unconditional preservation of residual roots. Regularity at the candidate fixed point suffices because the write-preservation argument makes every intermediate visit see that state. Buffered consistency needs disjoint output passes and coverage, not within-pass independence or contraction; synchronized the solver-consistency specification and chain article.
+
+## 2026-10-20
+
 * **Cross-norm bridge verification**: Verified the existing Phase-5 argument with a metric solver state and a separate normed residual codomain: unbiasedness supplies zero residual at the Banach fixed point, and the cross-norm Lipschitz estimate multiplies the geometric state bound. Documented the implemented generic interface and algebraic representation transport. The IE Hilbert norm and a scaled maximum residual retain their respective regularity premises; no change to the theorem route or physical constants is required.
 
 ## 2026-10-20

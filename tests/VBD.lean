@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: VBD contributors
 -/
 import Vbd.Integrator.VBD
+import Vbd.Block.Contraction
 
 /-! Concrete checks distinguishing chronological serial execution, coupled snapshot execution,
 and determinant-threshold skipping. Run with `lake lean tests/VBD.lean`. -/
@@ -41,5 +42,36 @@ example : (coupledData 0).batch {0, 1} (0 : TwoBlocks) 1 = -1 := by
 -- Equality with the threshold skips an invertible block despite its nonzero residual.
 example (x : TwoBlocks) : (coupledData 1).update 0 x = x := by
   exact BlockNewtonData.update_of_skip _ (by norm_num [coupledData])
+
+section CrossNorm
+
+variable {ι : Type*} {B : ι → Type*} [Fintype ι] [DecidableEq ι]
+  [∀ i, NormedAddCommGroup (B i)] [∀ i, InnerProductSpace ℝ (B i)]
+  [∀ i, CompleteSpace (B i)] [∀ i, FiniteDimensional ℝ (B i)]
+
+-- The production consistency proof discharges unbiasedness before passing to Phase 5.
+-- Solver existence uses Phase 6's maximum-norm state and yields a physical IE root.
+example (ie : ImplicitEulerStep (BlockSum B)) (threshold : ℝ≥0) (order : List ι)
+    (hn : order.Nodup) (hcover : ∀ i, i ∈ order) {S : Set (BlockSum B)} {q : ℝ≥0}
+    (hreg : ∀ x ∈ S, ∀ i, (ie.blockNewtonData threshold).Regular i x)
+    (hcomplete : IsComplete ((BlockContraction.toMax (B := B)).symm ⁻¹' S))
+    (hne : ((BlockContraction.toMax (B := B)).symm ⁻¹' S).Nonempty)
+    (hS : Set.MapsTo (BlockContraction.maxMap ((ie.blockNewtonData threshold).serial order))
+      ((BlockContraction.toMax (B := B)).symm ⁻¹' S)
+      ((BlockContraction.toMax (B := B)).symm ⁻¹' S))
+    (hT : LipschitzOnWith q
+      (BlockContraction.maxMap ((ie.blockNewtonData threshold).serial order))
+      ((BlockContraction.toMax (B := B)).symm ⁻¹' S)) (hq : q < 1) :
+    ∃ p ∈ (BlockContraction.toMax (B := B)).symm ⁻¹' S,
+      Function.IsFixedPt (BlockContraction.maxMap ((ie.blockNewtonData threshold).serial order)) p ∧
+      ie.energyGradient ((BlockContraction.toMax (B := B)).symm p) = 0 ∧
+      ∀ y ∈ (BlockContraction.toMax (B := B)).symm ⁻¹' S,
+        Function.IsFixedPt
+          (BlockContraction.maxMap ((ie.blockNewtonData threshold).serial order)) y →
+          y = p := by
+  exact (((ie.blockNewtonData threshold).unbiasedOn_serial order hn hcover hreg).comp_equiv
+    (BlockContraction.toMax (B := B)).symm.toEquiv).exists_fixedPoint hcomplete hne hS hT hq
+
+end CrossNorm
 
 end Vbd.Tests
