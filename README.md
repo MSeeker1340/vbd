@@ -1,116 +1,65 @@
 # Verified convergence certificates for Vertex Block Descent
 
-A Lean 4 / Mathlib library for studying **when Vertex Block Descent (VBD)
-converges, what it converges to, and how much error remains after a finite
-number of sweeps**.
+A Lean 4 / Mathlib formalization of **Vertex Block Descent (VBD)**, connecting
+implicit-Euler mechanics, block-Newton execution, and contractive fixed-point
+theory. The library studies when VBD converges, what it converges to, and how
+much state and residual error remains after a finite number of sweeps, in exact
+arithmetic.
 
-VBD solves an implicit-Euler timestep through a sequence of small local Newton
-updates. This repository formalizes those updates and their serial and colored
-execution, then connects them to contraction theory to obtain quantitative
-state-error and physical-residual bounds in exact arithmetic.
-
-The library includes reusable theory for implicit Euler, block operators,
-locality and coloring, and contractive iteration. A nonlinear spring chain
-provides a worked application: under explicit physical and warm-start
-conditions, serial and buffered even/odd sweeps converge to the same unique
-stationary state, with scaled maximum residual **below 3.25 × 10⁻⁷ after
-20 sweeps**. An accompanying numerical study explores the bounds and their
-limits.
-
-- [Spring-chain example and theorem](#example-nonlinear-spring-chain)
-- [Proof architecture](#how-the-proof-works)
+- [Vertex Block Descent](#vertex-block-descent)
+- [Convergence approach](#convergence-through-fixed-points)
+- [Mathematical architecture](#mathematical-architecture)
 - [Module guide](#lean-library-guide)
+- [Spring-chain example and theorem](#example-nonlinear-spring-chain)
 - [Build and inspect the proofs](#build-and-inspect-the-proofs)
 - [Numerical experiments](#numerical-experiments)
 - [Scope and extensions](#scope-and-extensions)
 
-## Example: nonlinear spring chain
-
-Consider a finite chain of masses moving along a line, with free ends and
-nearest-neighbor quadratic-plus-quartic hardening springs. This simple model
-couples neighboring vertices through a state-dependent Hessian while allowing
-explicit estimates for the Newton updates. Let ℓ be the rest spacing, u the
-displacement in units of ℓ, and y the inertia predictor.
-With relative masses aᵢ = mᵢ/m_min and edge coefficients bₑ = h²kₑ/m_min, its
-normalized implicit-Euler objective is
-
-$$
-G(u)=\frac12\sum_i a_i(u_i-y_i)^2+
-\sum_{e=\{i,j\}}b_e\left(\frac{(u_i-u_j)^2}{2}
-+\frac{\eta(u_i-u_j)^4}{4}\right).
-$$
-
-Each VBD visit takes a full local Newton step using the current residual and
-local Hessian. The formal execution includes determinant-threshold skipping;
-the conditions below ensure that no visit skips inside the certified
-box.
-
-The theorem applies under the following conditions:
-
-| Quantity | Condition |
-|---|---|
-| Chain | Arbitrary finite length; symmetric, nonnegative nearest-neighbor stiffnesses |
-| Masses and scales | mᵢ ≥ m_min > 0, timestep h > 0, rest spacing ℓ > 0 |
-| Stiffness and timestep | kₑ ≤ k_max and h²k_max/m_min ≤ 1/4 |
-| Hardening | 0 ≤ η ≤ 1, including the quadratic case η = 0 |
-| Predictor and initial state | yᵢ = 0.05 cos(1.7i), starting at u⁰ = y |
-| Skip threshold | 10⁻¹² in normalized scalar Hessian units |
-| Execution | Increasing-index serial visits, or buffered even vertices followed by odd vertices |
-
-Under these conditions, there is a unique stationary state u*, and both
-execution orders converge to it. Every intermediate visit stays in the maximum-norm box
-‖u‖∞ ≤ 0.1; the root satisfies ‖u*‖∞ ≤ 0.05. Each sweep contracts on the box
-with the chain-length-independent factor
-
-$$
-q=\frac{318}{625}=0.5088<0.512.
-$$
-
-For either execution T, starting at the predictor, the finite-sweep bounds are
-
-$$
-\|T^s(y)-u^*\|_\infty\le 0.1q^s,
-\qquad
-r_{IE}(T^s(y))\le 0.212q^s,
-$$
-
-where the residual has an explicit physical meaning:
-
-$$
-r_{IE}(u)=\max_i\frac{h^2}{m_i\ell}
-\left|\nabla G_{IE}(\ell u)_i\right|.
-$$
-
-Here G_IE is the physical incremental energy on displacements from rest.
-A residual tolerance τ therefore bounds the force imbalance at vertex i by
-mᵢℓτ/h². Using the slightly looser factor 0.512 gives the envelopes
-0.1(0.512)ˢ and 0.212(0.512)ˢ. In particular,
-
-$$
-r_{IE}(T^{20}(y))<3.25\times10^{-7}<10^{-6}.
-$$
-
-In Lean, this result is
-[`Vbd.AxialSpring.ChainSystem.end_to_end`](Vbd/Examples/AxialSpringChain.lean).
-`ChainSystem` packages the physical inputs; `Certificate` contains the common
-physical stationary point, its uniqueness, both convergence certificates, and
-both 20-sweep residual guarantees. The theorem constructs the solution and
-derives the contraction premises from the system data.
-
-More generally, the library supports any predictor satisfying |yᵢ| ≤ 0.05, arbitrary
-complete serial orders and proper support-color plans under their stated
-hypotheses. The neighborhood results also cover the rest-state warm start.
-The theorem above specializes these results to the cosine predictor and the
-two listed plans. The [worked mathematical analysis](knowledge/mathematics/axial-spring-contraction.md)
-explains the estimates and physical scaling in detail.
-
-## How the proof works
+## Vertex Block Descent
 
 [VBD, introduced by Chen, Liu, Yang, and Yuksel](https://arxiv.org/abs/2403.06321),
-solves the variational implicit-Euler problem through vertex-level Gauss–Seidel
-updates. This formalization analyzes the actual ordered sweep as a map T.
-Its convergence argument combines contraction with an independently proved
-identification of fixed points and implicit-Euler roots.
+is a method for solving the variational form of implicit Euler through
+vertex-level Gauss–Seidel iterations. Each visit holds the other vertices fixed
+and takes a local Newton step for one vertex block. The small local systems
+avoid a global linear solve, and a proper coloring groups independent vertex
+updates into parallel batches.
+
+A sweep is therefore an ordered composition of updates. Later serial visits
+read earlier writes; vertices in a buffered color batch read a shared snapshot.
+The local Hessians depend on the state, and the update includes a determinant
+threshold that can skip a nearly singular block. These details determine the
+map whose convergence needs to be analyzed.
+
+A quantitative guarantee must connect that executed map to the implicit-Euler
+equation and control how errors propagate through repeated sweeps. Local
+curvature, coupling between vertices, execution order, and the initial state
+all enter the argument. This repository develops reusable proofs of those
+connections, together with a nonlinear spring-chain application and numerical
+experiments that explore the resulting bounds.
+
+## Convergence through fixed points
+
+The analysis treats a complete VBD sweep as a map T. On a nonempty complete
+region S, a proof that T preserves S and contracts distances by a factor
+0 ≤ q < 1 gives a unique fixed point x* and geometric convergence for x₀ ∈ S:
+
+$$
+\|T^s(x_0)-x^*\|\le q^s\|x_0-x^*\|.
+$$
+
+A separate consistency proof identifies a complete regular sweep's fixed points
+with roots of the implicit-Euler residual. A Lipschitz bound for that residual
+then converts state error into a physical-residual bound. Together, these
+results give an explicit sweep budget for a specified accuracy and
+initial-state region.
+
+To obtain such a certificate for a mechanical model, the library combines
+local inverse and coupling bounds, Hessian variation over a neighborhood,
+region preservation, execution semantics, and warm-start membership. The
+norms and parameter ranges are explicit. The spring-chain example below
+instantiates this argument for both serial and properly colored execution.
+
+## Mathematical architecture
 
 The argument draws on three independent parts of the library:
 
@@ -205,11 +154,93 @@ Lean dependency.
 | [Examples/AxialSpringChain](Vbd/Examples/AxialSpringChain.lean) | Physical-input normalization, common unique stationary state, force-unit scaling, and end-to-end certificates |
 
 The [module map](knowledge/formalization/module-map.md) gives dependencies and
-reuse boundaries. For a first proof read, start with `AxialSpringChain`, inspect
-its `Certificate`, then follow `AxialSpringConvergence` into the relevant generic
-interfaces. The [finite-sweep integration examples](tests/VBDFinite.lean) show
+reuse boundaries. To follow the general argument, start with the three
+foundations above, then read the block-contraction and VBD bridge modules.
+For the concrete theorem, `AxialSpringChain.Certificate` records the conclusions
+and `AxialSpringConvergence` connects them to the generic interfaces.
+The [finite-sweep integration examples](tests/VBDFinite.lean) show
 endpoint parameters, high mass/stiffness contrast, quadratic and nonlinear
 instances, and explicit physical energy/force checks.
+
+## Example: nonlinear spring chain
+
+Consider a finite chain of masses moving along a line, with free ends and
+nearest-neighbor quadratic-plus-quartic hardening springs. This simple model
+couples neighboring vertices through a state-dependent Hessian while allowing
+explicit estimates for the Newton updates. Let ℓ be the rest spacing, u the
+displacement in units of ℓ, and y the inertia predictor.
+With relative masses aᵢ = mᵢ/m_min and edge coefficients bₑ = h²kₑ/m_min, its
+normalized implicit-Euler objective is
+
+$$
+G(u)=\frac12\sum_i a_i(u_i-y_i)^2+
+\sum_{e=\{i,j\}}b_e\left(\frac{(u_i-u_j)^2}{2}
++\frac{\eta(u_i-u_j)^4}{4}\right).
+$$
+
+Each VBD visit takes a full local Newton step using the current residual and
+local Hessian. The formal execution includes determinant-threshold skipping;
+the conditions below ensure that no visit skips inside the certified
+box.
+
+The theorem applies under the following conditions:
+
+| Quantity | Condition |
+|---|---|
+| Chain | Arbitrary finite length; symmetric, nonnegative nearest-neighbor stiffnesses |
+| Masses and scales | mᵢ ≥ m_min > 0, timestep h > 0, rest spacing ℓ > 0 |
+| Stiffness and timestep | kₑ ≤ k_max and h²k_max/m_min ≤ 1/4 |
+| Hardening | 0 ≤ η ≤ 1, including the quadratic case η = 0 |
+| Predictor and initial state | yᵢ = 0.05 cos(1.7i), starting at u⁰ = y |
+| Skip threshold | 10⁻¹² in normalized scalar Hessian units |
+| Execution | Increasing-index serial visits, or buffered even vertices followed by odd vertices |
+
+Under these conditions, there is a unique stationary state u*, and both
+execution orders converge to it. Every intermediate visit stays in the maximum-norm box
+‖u‖∞ ≤ 0.1; the root satisfies ‖u*‖∞ ≤ 0.05. Each sweep contracts on the box
+with the chain-length-independent factor
+
+$$
+q=\frac{318}{625}=0.5088<0.512.
+$$
+
+For either execution T, starting at the predictor, the finite-sweep bounds are
+
+$$
+\|T^s(y)-u^*\|_\infty\le 0.1q^s,
+\qquad
+r_{IE}(T^s(y))\le 0.212q^s,
+$$
+
+where the residual has an explicit physical meaning:
+
+$$
+r_{IE}(u)=\max_i\frac{h^2}{m_i\ell}
+\left|\nabla G_{IE}(\ell u)_i\right|.
+$$
+
+Here G_IE is the physical incremental energy on displacements from rest.
+A residual tolerance τ therefore bounds the force imbalance at vertex i by
+mᵢℓτ/h². Using the slightly looser factor 0.512 gives the envelopes
+0.1(0.512)ˢ and 0.212(0.512)ˢ. In particular,
+
+$$
+r_{IE}(T^{20}(y))<3.25\times10^{-7}<10^{-6}.
+$$
+
+In Lean, this result is
+[`Vbd.AxialSpring.ChainSystem.end_to_end`](Vbd/Examples/AxialSpringChain.lean).
+`ChainSystem` packages the physical inputs; `Certificate` contains the common
+physical stationary point, its uniqueness, both convergence certificates, and
+both 20-sweep residual guarantees. The theorem constructs the solution and
+derives the contraction premises from the system data.
+
+More generally, the library supports any predictor satisfying |yᵢ| ≤ 0.05, arbitrary
+complete serial orders and proper support-color plans under their stated
+hypotheses. The neighborhood results also cover the rest-state warm start.
+The theorem above specializes these results to the cosine predictor and the
+two listed plans. The [worked mathematical analysis](knowledge/mathematics/axial-spring-contraction.md)
+explains the estimates and physical scaling in detail.
 
 ## Build and inspect the proofs
 
