@@ -97,9 +97,9 @@ The argument draws on three independent parts of the library:
 1. **Implicit-Euler mathematics.** For predictor y, self-adjoint mass operator
    M, timestep h > 0, and potential P, define
 
-   $$
+   ```math
    G_{IE}(x)=\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+P(x).
-   $$
+   ```
 
    The library proves its gradient/residual and Hessian identities on an
    abstract real Hilbert space. The generic solution concept is stationarity,

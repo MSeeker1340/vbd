@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **README list math rendering**: Used a fenced `math` block for the implicit-Euler energy formula within the numbered architecture list, preserving its indentation, equation, and explanatory text.
+
 * **GitHub math compatibility**: Applied protected inline notation and fenced displays to the architecture, applicability decision, roadmap, and mathematical entries in scoped logs. Braced the roadmap's fixed-point superscripts without changing project scope or theorem status.
 
 * **GitHub math rendering**: Replaced bare star superscripts with explicit braced `\ast` superscripts in the general and spring-chain error bounds, and braced their iteration exponents to avoid Markdown interference with the LaTeX expressions.
