@@ -3,7 +3,7 @@ type: Tooling Guide
 title: Research Paper Conversion
 description: Selects reproducible tools and quality checks for converting cited mathematical PDFs into agent-readable Markdown.
 tags: [pdf, markdown, research, docling, pandoc, arxiv]
-timestamp: 2026-08-20T00:00:00Z
+timestamp: 2026-10-21T02:02:26Z
 ---
 
 # Decision
@@ -70,6 +70,23 @@ Before adding a generated transcript:
 - omit large figures by default and retain the canonical PDF link for visual verification;
 - add OKF frontmatter and link the transcript from both its curated reference and this directory's index.
 
+# GitHub mathematical rendering
+
+Knowledge concepts and paper transcripts use GitHub's protected inline math syntax
+(`$` followed by a backtick, the expression, a backtick, and `$`) and fenced `math`
+blocks for displayed equations. These delimiters keep Markdown emphasis and code
+processing separate from the LaTeX expression.
+
+Use upright identifiers such as `\mathrm{supp}` and braced star superscripts such as
+`x^{\ast}`. Use `aligned` or `cases` environments for alignment markers and row breaks.
+Equation labels are Markdown anchors outside the math block, with ordinary Markdown
+links for cross-references. Numbered source equations appear as labeled display blocks.
+Lean and shell examples retain their source code.
+
+Validate extracted expressions with MathJax and check that a Markdown parser recognizes
+every display fence. PDF-derived formulas retain their documented transcription limits;
+verify mathematical corrections against the canonical paper.
+
 # Current corpus
 
 | Paper | Conversion route |
@@ -86,3 +103,4 @@ Before adding a generated transcript:
 [4] [Marker official repository](https://github.com/datalab-to/marker)
 [5] [MinerU official repository](https://github.com/opendatalab/MinerU)
 [6] [PyMuPDF4LLM official repository](https://github.com/pymupdf/pymupdf4llm)
+[7] [GitHub mathematical expression syntax](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)

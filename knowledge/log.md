@@ -1,5 +1,9 @@
 # Knowledge Bundle Update Log
 
+## 2026-10-21
+
+* **GitHub mathematical rendering**: Standardized KB math notation across all scopes and the paper corpus, using the [conversion guide's rendering convention](./references/pdf-conversion.md#github-mathematical-rendering). Recorded scope-specific notation and transcript repairs in their local logs.
+
 ## 2026-09-04
 
 * **Governance**: Made affirmative, standalone current-state prose the default for every non-log concept and reserved conversational rationale, corrections, rejected alternatives, and chronology for scoped logs.

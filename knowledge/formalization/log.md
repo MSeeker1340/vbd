@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **GitHub math compatibility**: Updated the Mathlib inventory's graph notation to protected inline math and a fenced display, preserving its API descriptions.
+
 * **Library entry-point cleanup**: Removed the unused `Vbd.Basic` scaffold and its `hello` greeting. The umbrella import exports the 21 mathematical modules. Updated the module map and index to present the implemented library and link its README reading guide.
 
 ## 2026-10-20

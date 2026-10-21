@@ -4,7 +4,7 @@ title: Tseng 2001 Block-Coordinate Convergence
 description: Summarizes the exact-minimization BCD model, regularity bridge, and convergence assumptions relevant to later phases.
 resource: https://doi.org/10.1023/A:1017501703105
 tags: [block-coordinate-descent, convergence, stationary-point, nonsmooth]
-timestamp: 2026-08-20T00:00:00Z
+timestamp: 2026-10-21T02:02:26Z
 ---
 
 # Bibliography
@@ -15,9 +15,9 @@ Paul Tseng. “Convergence of a Block Coordinate Descent Method for Nondifferent
 
 Tseng studies an extended-real objective
 
-$$
+```math
 f(x_1,\ldots,x_N)=f_0(x_1,\ldots,x_N)+\sum_{k=1}^N f_k(x_k),
-$$
+```
 
 where the nonsmooth part is block-separable. At each iteration, one coordinate block is exactly minimized while all other blocks remain fixed. An essentially cyclic rule requires every block to be selected within a bounded window; the cyclic rule is a special case.
 

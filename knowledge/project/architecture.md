@@ -3,7 +3,7 @@ type: Architecture Decision
 title: Mathematical and Module Architecture
 description: Separates implicit-Euler physics, block-update and operator algebra, contraction theory, and their explicit bridge layers.
 tags: [architecture, dependencies, locality, contraction]
-timestamp: 2026-10-21T01:44:41Z
+timestamp: 2026-10-21T02:02:26Z
 ---
 
 # Arithmetic and error scope
@@ -91,9 +91,9 @@ Use `BlockSum B` throughout the block layers. The type exists for an arbitrary b
 Coordinate algebra states its required instances locally. Contraction modules may require finite
 `ι`, complete normed block spaces, and a selected product norm.
 
-For the mathematical block decomposition, $X$ has the Hilbert inner product of the
-implicit-Euler formulation and its induced physical $\ell^2$ norm. The modeler specifies a
-calibrated norm on each block and hence induced product norms $\lVert\cdot\rVert_p$ on the same
+For the mathematical block decomposition, $`X`$ has the Hilbert inner product of the
+implicit-Euler formulation and its induced physical $`\ell^2`$ norm. The modeler specifies a
+calibrated norm on each block and hence induced product norms $`\lVert\cdot\rVert_p`$ on the same
 block vectors. The [AP-03 decision](./applicability-decision.md) selects the maximum member of
 that family for the first chain contraction certificate. The relation from a state-error
 certificate to the physical residual norm is an explicitly stated regularity bound. Scalar-matrix

@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Contractive Fixed-Point Iteration
 description: Contraction on invariant complete sets, geometric iterate bounds, and derivative criteria.
 tags: [fixed-points, contraction, iteration]
-timestamp: 2026-10-20T00:00:00Z
+timestamp: 2026-10-21T02:02:26Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), a timestep is determined
@@ -40,27 +40,27 @@ certified region; practical convergence alone does not establish a contraction c
 Fixed-point iteration applies a self-map repeatedly to solve its fixed-point equation. Let
 `(X, d)` be a metric space, let `S ⊆ X`, and let `T : X → X`. For an initial point `x₀ ∈ S`, set
 
-$$
+```math
 x_{k+1}=T(x_k),\qquad x_k=T^k(x_0),\qquad T^0=\mathrm{id}.
-$$
+```
 
 The set is **forward invariant** when `T(S) ⊆ S`. The map is a **contraction on S** with
 factor `q` when `0 ≤ q < 1` and
 
-$$
+```math
 d(T(x),T(y))\le q\,d(x,y)\qquad(x,y\in S).
-$$
+```
 
 The factor and the metric are part of the certificate. In a normed space the metric is
 `d(x,y) = ‖x-y‖`, using the norm stated by the theorem. These assumptions concern an arbitrary
 map; block structure, an objective, and mechanics enter through the bridge layers of the
 [project architecture](/project/architecture.md).
 
-For a block state $x=(x_i)$, Phase 2 has already defined the induced product metrics
-$d_p(x,y)=\lVert x-y\rVert_p$ from the calibrated block norms specified for the modeled system. This generic
-phase does not choose $p$. The implicit-Euler bridge supplies the Hilbert inner product for the
-energy and measures the vector residual $R_{\mathrm{IE}}$ in the physical norm
-$\lVert\cdot\rVert_X$. A later VBD certificate chooses a block-product metric for its state-error
+For a block state $`x=(x_i)`$, Phase 2 has already defined the induced product metrics
+$`d_p(x,y)=\lVert x-y\rVert_p`$ from the calibrated block norms specified for the modeled system. This generic
+phase does not choose $`p`$. The implicit-Euler bridge supplies the Hilbert inner product for the
+energy and measures the vector residual $`R_{\mathrm{IE}}`$ in the physical norm
+$`\lVert\cdot\rVert_X`$. A later VBD certificate chooses a block-product metric for its state-error
 statement.
 
 # Banach fixed-point theorem on an invariant set
@@ -76,16 +76,16 @@ separate hypotheses.
 
 To see existence, contraction bounds consecutive steps by
 
-$$
+```math
 d(x_k,x_{k+1})\le q^k d(x_0,x_1).
-$$
+```
 
 For `m > n`, the triangle inequality and a geometric sum give
 
-$$
+```math
 d(x_n,x_m)\le\sum_{j=n}^{m-1}q^j d(x_0,x_1)
 \le\frac{q^n}{1-q}d(x_0,x_1).
-$$
+```
 
 Thus the iterates are Cauchy and have a limit in `S`. Lipschitz continuity makes that limit a
 fixed point. Two fixed points in `S` satisfy `d(x*,y*) ≤ q d(x*,y*)`, so their distance is zero.
@@ -97,33 +97,33 @@ without completeness: completeness provides existence when the fixed point is un
 
 For a fixed point `x* ∈ S` and any `x₀ ∈ S`, induction gives the finite-iteration bound
 
-$$
-d(x_k,x^*)\le q^k d(x_0,x^*)\qquad(k\ge0).
-$$
+```math
+d(x_k,x^{\ast})\le q^k d(x_0,x^{\ast})\qquad(k\ge0).
+```
 
 With an available initial error bound `d(x₀,x*) ≤ R`, a budget of `k` iterations therefore
 certifies error at most `q^k R`. For `0 < q < 1` and `0 < ε < R`, it suffices to take
 
-$$
+```math
 k\ge\left\lceil\frac{\log(R/\varepsilon)}{\log(1/q)}\right\rceil.
-$$
+```
 
 If `R ≤ ε`, zero iterations suffice. If `q = 0`, one application reaches the fixed point.
 
 The fixed-point defect also certifies distance: for every `x ∈ S`,
 
-$$
-d(x,x^*)\le\frac{d(x,T(x))}{1-q}.
-$$
+```math
+d(x,x^{\ast})\le\frac{d(x,T(x))}{1-q}.
+```
 
 Indeed, the triangle inequality bounds the left side by `d(x,T(x)) + q d(x,x*)`.
 Consequently the iterates satisfy both an a priori and an a posteriori estimate:
 
-$$
-d(x_k,x^*)\le\frac{q^k}{1-q}d(x_0,x_1),
+```math
+d(x_k,x^{\ast})\le\frac{q^k}{1-q}d(x_0,x_1),
 \qquad
-d(x_k,x^*)\le\frac{d(x_k,x_{k+1})}{1-q}.
-$$
+d(x_k,x^{\ast})\le\frac{d(x_k,x_{k+1})}{1-q}.
+```
 
 A fixed-point defect is a property of the solver map. Identifying it with, or comparing it to,
 a physical equation residual requires an additional bridge. For example, if a residual map `F`
@@ -136,9 +136,9 @@ supplies this connection to [stationarity](/mathematics/implicit-euler.md).
 After `k ≥ 1` exact iterations, let `Δ_k = d(x_k,x_{k-1})`. Applying the defect bound at
 `x_k` and contraction to the pair `x_{k-1}, x_k` gives
 
-$$
-d(x_k,x^*)\le\frac{q}{1-q}\Delta_k.
-$$
+```math
+d(x_k,x^{\ast})\le\frac{q}{1-q}\Delta_k.
+```
 
 Thus `q Δ_k/(1-q) ≤ ε` certifies the current state's error without computing another sweep.
 The formula also covers `q = 0`, when the first sweep reaches the fixed point.
@@ -159,9 +159,9 @@ they do not by themselves prove a uniform contraction bound or fixed-point/root 
 Let `X` be a real normed space and `S` a convex subset. Suppose `T : X → X` is Fréchet
 differentiable at every point of `S` and its continuous-linear derivative satisfies
 
-$$
+```math
 \|DT(x)\|_{\mathrm{op}}\le q\qquad(x\in S),\qquad 0\le q<1.
-$$
+```
 
 The mean-value inequality along segments in `S` gives `‖T(x)-T(y)‖ ≤ q ‖x-y‖` there.
 This statement uses ambient differentiability at boundary points; within-set derivative
@@ -171,15 +171,15 @@ separate premises of the fixed-point theorem.
 A useful invariance certificate takes `S = closedBall(c,r)`, `r ≥ 0`, and assumes the
 contraction bound on `S` together with
 
-$$
+```math
 \|T(c)-c\|\le(1-q)r.
-$$
+```
 
 For `x ∈ S`, the triangle inequality yields
 
-$$
+```math
 \|T(x)-c\|\le q\|x-c\|+\|T(c)-c\|\le r.
-$$
+```
 
 In a Banach space this certifies an invariant complete set. Centering at a known fixed point
 makes the center defect zero.

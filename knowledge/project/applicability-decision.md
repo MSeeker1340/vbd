@@ -3,7 +3,7 @@ type: Architecture Decision
 title: First Quantitative VBD Applicability Route
 description: Defines the selected family, guarantee, evaluation contract, and implementation scope for the first VBD convergence example.
 tags: [applicability, theorem-route, maximum-norm, execution]
-timestamp: 2026-10-20T21:12:52Z
+timestamp: 2026-10-21T02:02:26Z
 ---
 
 # Decision
@@ -16,8 +16,8 @@ its bounds, and explains their extension to richer mechanics.
 
 AP-01–AP-03 and the end-to-end Lean instantiation are complete for this first family.
 The proved result gives a scaled physical
-residual below $10^{-6}$ within 20 sweeps when $h^2k_{\max}/m_{\min}\le1/4$,
-$0\le\eta\le1$, and the stated predictor condition holds. Both serial and even/odd plans
+residual below $`10^{-6}`$ within 20 sweeps when $`h^2k_{\max}/m_{\min}\le1/4`$,
+$`0\le\eta\le1`$, and the stated predictor condition holds. Both serial and even/odd plans
 converge to the same unique stationary point. Applicability to general production materials, contact, and
 friction remains a separate physical assessment.
 
@@ -41,12 +41,12 @@ stress-test context; the quartic-law calibration is the synthetic evaluation con
 State contraction provides a finite-sweep budget across the supported range and permits
 physical-residual transport using a quantitative regularity bound. Strict residual progress
 alone supplies no arbitrary-accuracy budget. Direct quantitative residual reduction is useful
-on the smaller range $h^2k_{\max}/m_{\min}\le0.2$, but the available sufficient estimate
+on the smaller range $`h^2k_{\max}/m_{\min}\le0.2`$, but the available sufficient estimate
 is ineffective at the full-range endpoint. Exact examples also demonstrate that physical
 residuals can increase under a state-contractive sweep.
 
 The block maximum norm follows the componentwise update structure and avoids a
-$\sqrt n$ conversion penalty in the contraction factor. It preserves a per-vertex error
+$`\sqrt n`$ conversion penalty in the contraction factor. It preserves a per-vertex error
 interpretation as chain length grows. Weighted or energy norms and several-sweep contraction
 remain options for a broader stiff-regime assessment.
 
@@ -62,21 +62,21 @@ or a perceptual accuracy standard.
 
 | Quantity | Study value or range | Purpose |
 |---|---|---|
-| Rest spacing $\ell$ | $0.1\,\mathrm m$ | Gives displacements a physical scale |
-| Minimum mass | $0.001\,\mathrm{kg}$ | Sets the inertial scale |
-| Maximum stiffness | $1$–$10^4\,\mathrm{N/m}$ | Exposes timestep restrictions |
-| Timestep calibration | $10^{-4}$–$0.04\,\mathrm s$ | Covers admitted and stress cases |
-| Vertex count | $4,16,64$ | Tests size effects |
-| Normalized stiffness $\alpha$ | $0.01,0.1,0.2,0.25,1,10,100$ | Spans inertia-dominated and stiff solves |
-| Mass ratio | $1,1000$ | Alternating heavy/light vertices |
-| Stiffness ratio | $1,10000$ | Alternating stiff/soft edges |
-| Nonlinearity $\eta$ | $0,1$ | Quadratic baseline and nonlinear case |
-| Predictor | $y_i=0.05\cos(1.7i)$ | Deterministic, nonuniform inertia warm start |
-| Certificate box | $\|u\|_\infty\le0.1$ | Explicit intermediate-state region |
-| Residual tolerance and budget | $10^{-6}$, 20 sweeps | Quantitative evaluation target |
+| Rest spacing $`\ell`$ | $`0.1\,\mathrm m`$ | Gives displacements a physical scale |
+| Minimum mass | $`0.001\,\mathrm{kg}`$ | Sets the inertial scale |
+| Maximum stiffness | $`1`$–$`10^4\,\mathrm{N/m}`$ | Exposes timestep restrictions |
+| Timestep calibration | $`10^{-4}`$–$`0.04\,\mathrm s`$ | Covers admitted and stress cases |
+| Vertex count | $`4,16,64`$ | Tests size effects |
+| Normalized stiffness $`\alpha`$ | $`0.01,0.1,0.2,0.25,1,10,100`$ | Spans inertia-dominated and stiff solves |
+| Mass ratio | $`1,1000`$ | Alternating heavy/light vertices |
+| Stiffness ratio | $`1,10000`$ | Alternating stiff/soft edges |
+| Nonlinearity $`\eta`$ | $`0,1`$ | Quadratic baseline and nonlinear case |
+| Predictor | $`y_i=0.05\cos(1.7i)`$ | Deterministic, nonuniform inertia warm start |
+| Certificate box | $`\|u\|_\infty\le0.1`$ | Explicit intermediate-state region |
+| Residual tolerance and budget | $`10^{-6}`$, 20 sweeps | Quantitative evaluation target |
 
 Every normalized grid value has a realization within the calibration ranges: for example,
-$k_{\max}=100\,\mathrm{N/m}$ and $h=\sqrt{\alpha m_{\min}/k_{\max}}$.
+$`k_{\max}=100\,\mathrm{N/m}`$ and $`h=\sqrt{\alpha m_{\min}/k_{\max}}`$.
 A separate exact large-amplitude example tests objective increase outside the certified range.
 The experiment's [`study` preset](../../experiments/applicability/README.md) reproduces this grid;
 CLI overrides support further inspection without changing the accepted theorem scope.

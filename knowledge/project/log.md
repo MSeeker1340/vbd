@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **GitHub math compatibility**: Applied protected inline notation and fenced displays to the architecture, applicability decision, roadmap, and mathematical entries in scoped logs. Braced the roadmap's fixed-point superscripts without changing project scope or theorem status.
+
 * **GitHub math rendering**: Replaced bare star superscripts with explicit braced `\ast` superscripts in the general and spring-chain error bounds, and braced their iteration exponents to avoid Markdown interference with the LaTeX expressions.
 
 * **OSS licensing**: Added the standard Apache License 2.0 text to match the existing Lean source notices. Declared `Apache-2.0` in Lean and Python metadata, linked the license from the README, and documented the original-work and third-party material boundary in the architecture concept.
@@ -66,7 +68,7 @@
 
 ## 2026-10-20
 
-* **Norm-interface synchronization**: Recorded the Phase-2 calibrated block-product norm family in the roadmap and architecture. The AP-03 maximum-norm choice is the state-error metric for the first contraction certificate; the implicit-Euler residual remains measured in the physical Hilbert norm. Synchronized the Phase-1, Phase-5, and Phase-7 roadmap references and the IF-03 backlog item on the established residual notation $R_{\mathrm{IE}}$.
+* **Norm-interface synchronization**: Recorded the Phase-2 calibrated block-product norm family in the roadmap and architecture. The AP-03 maximum-norm choice is the state-error metric for the first contraction certificate; the implicit-Euler residual remains measured in the physical Hilbert norm. Synchronized the Phase-1, Phase-5, and Phase-7 roadmap references and the IF-03 backlog item on the established residual notation $`R_{\mathrm{IE}}`$.
 
 ## 2026-09-16
 

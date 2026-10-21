@@ -1,5 +1,9 @@
 # Curated References Update Log
 
+## 2026-10-21
+
+* **GitHub transcript rendering**: Normalized math delimiters and macros in reference notes and all three paper transcripts. Converted VBD's source equation tables into labeled displays, repaired nested math delimiters in its piecewise acceleration expression, moved LaTeX labels to Markdown anchors, and translated the unresolved bounded-length theorem reference into a local link. Restored alignment environments in the Tseng transcript and checked its boundary set-difference notation against page 477 of the canonical PDF. Documented the rendering convention in the conversion guide and preserved Lean examples.
+
 ## 2026-09-16
 
 * **Fixed-point consistency assessment**: Checked the paper's local Newton update, singular-Hessian bypass, and buffered color-pass semantics against the new unbiasedness interface. Exact regular serial and buffered sweeps have fixed-point-to-residual consistency; the production skip branch and changing/approximated execution data require explicit boundaries.

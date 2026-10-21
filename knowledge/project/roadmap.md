@@ -3,7 +3,7 @@ type: Project Roadmap
 title: VBD Formalization Roadmap
 description: Records the completed seven-phase theorem program, its dependency structure, and satisfied acceptance gates.
 tags: [roadmap, implicit-euler, block-operators, contraction, vbd]
-timestamp: 2026-10-20T21:12:52Z
+timestamp: 2026-10-21T02:02:26Z
 ---
 
 # Project scope
@@ -145,11 +145,11 @@ Status: complete. Module: `Vbd/Integrator/ImplicitEulerEnergy.lean`.
 
 Phase 1 supplies the incremental objective `G_IE`, its canonical gradient, and its Hessian:
 
-$$
+```math
 R_{IE}(x)=\nabla G_{IE}(x),
 \qquad
 DR_{IE}(x)=\frac{M}{h^2}+\nabla^2P(x).
-$$
+```
 
 Its solution concept is stationarity of `G_IE`, equivalently a root of `R_IE`. Its scope consists of
 the objective and its differential identities.
@@ -178,10 +178,10 @@ Phase 2 develops the objective-independent algebra of block-indexed states and o
    operators and derivatives.
 
 Mathematically, the same block decomposition carries the Hilbert inner product of the
-implicit-Euler formulation and its induced physical norm $\lVert\cdot\rVert_X$. The modeler also
+implicit-Euler formulation and its induced physical norm $`\lVert\cdot\rVert_X`$. The modeler also
 specifies a calibrated norm on each whole block; these induce the finite block-product norms
-$\lVert\cdot\rVert_p$. Phase 2 records this norm family before any contraction theorem chooses a
-particular $p$; its update and support algebra remains norm-independent. The `PiLp 2` declaration
+$`\lVert\cdot\rVert_p`$. Phase 2 records this norm family before any contraction theorem chooses a
+particular $`p`$; its update and support algebra remains norm-independent. The `PiLp 2` declaration
 above is the current Lean representation, not a choice of every later analytic norm.
 
 Write support contains exactly those block indices at which the operator changes some input
@@ -254,13 +254,13 @@ solver map `T : X → X`, `Integrator/FixedPoint.lean` proves that an unbiased f
 local contraction on a nonempty complete region has a unique solver fixed point, that this point
 is an implicit-Euler solution, and that the corresponding finite-iteration bound is
 
-$$
-\|T^{k}(x)-x^*\|\le q^k\|x-x^*\|.
-$$
+```math
+\|T^{k}(x)-x^{\ast}\|\le q^k\|x-x^{\ast}\|.
+```
 
 Where quantitative regularity of `R_IE` is available, it transports distance bounds to residual
 bounds. For a block-product state metric, this regularity has the explicit cross-norm form
-$\lVert R_{\mathrm{IE}}(x)-R_{\mathrm{IE}}(y)\rVert_X \le L\lVert x-y\rVert_p$.
+$`\lVert R_{\mathrm{IE}}(x)-R_{\mathrm{IE}}(y)\rVert_X \le L\lVert x-y\rVert_p`$.
 The implemented bridge accepts an arbitrary metric solver state and a separately normed residual
 codomain; algebraic equivalence transport connects it to the Hilbert-space IE representation.
 The module takes the solver map and unbiasedness proof as
@@ -284,9 +284,9 @@ updated applicability assessment and synchronized theorem targets before impleme
 For an externally ordered differentiable update sequence, block bounds for each derivative
 factor use nonnegative matrices `C⁽ʳ⁾` satisfying
 
-$$
+```math
 \|(DU_r(x_{r-1}))_{ij}v_j\| \le C^{(r)}_{ij}\|v_j\|.
-$$
+```
 
 The exact-execution results comprise:
 
@@ -336,11 +336,11 @@ Dependencies: Phases 4, 5, and 6.
 Define the actual unsafeguarded VBD block-update operators. External serial and buffered colored
 execution plans apply those operators. The block computation is the full block-Newton update
 
-$$
+```math
 H_{ii}(x)p_i=-R_{IE,i}(x),
 \qquad
 U_i(x)=x+\iota_i p_i,
-$$
+```
 
 including the production skip behavior when a block Hessian is judged singular. Each complete
 execution is exposed as a map on `BlockSum B`; controller ordering and buffer semantics remain

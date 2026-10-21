@@ -1,5 +1,9 @@
 # Mathematical Specifications Update Log
 
+## 2026-10-21
+
+* **GitHub math compatibility**: Standardized protected inline math and fenced displays throughout the mathematical concepts. Replaced unsupported operator-name macros with upright identifiers and bare star powers with braced star superscripts, retaining the stated mathematics.
+
 ## 2026-10-20
 
 * **Optional extension boundaries**: Replaced the geometric-material TODO and deferred BC-04 references with constitutive-law and actual simultaneous-map requirements linked to the optional future-work article. Preserved the vector analytic extension and distinguished it from Lean-proved instances.
@@ -46,7 +50,7 @@
 
 ## 2026-10-20
 
-* **Norm interface clarification**: Defined the physical Hilbert block sum and modeler-specified calibrated block norms in the Phase-2 specification. The calibrated norms induce the finite block-product family used for state-error metrics, while the implicit-Euler bridge retains the Hilbert inner-product geometry and physical norm for the vector residual. The Phase-3 through Phase-5 specifications and axial-chain example now use that separation explicitly and consistently name the residual $R_{\mathrm{IE}}$.
+* **Norm interface clarification**: Defined the physical Hilbert block sum and modeler-specified calibrated block norms in the Phase-2 specification. The calibrated norms induce the finite block-product family used for state-error metrics, while the implicit-Euler bridge retains the Hilbert inner-product geometry and physical norm for the vector residual. The Phase-3 through Phase-5 specifications and axial-chain example now use that separation explicitly and consistently name the residual $`R_{\mathrm{IE}}`$.
 
 ## 2026-09-16
 
@@ -78,9 +82,9 @@
 
 * **Logical-flow correction**: Kept the definition of colors purely as numbered block groups, then introduced block updates, batches, and color-number execution order only in the later batch-construction section.
 
-* **Execution-order simplification**: Numbered color classes directly as $C_0,\ldots,C_{m-1}$ and defined the colored sweep as $P_{m-1}\circ\cdots\circ P_0$. The color number now supplies both the conventional color name and the outer sequential order.
+* **Execution-order simplification**: Numbered color classes directly as $`C_0,\ldots,C_{m-1}`$ and defined the colored sweep as $`P_{m-1}\circ\cdots\circ P_0`$. The color number now supplies both the conventional color name and the outer sequential order.
 
-* **Color-label clarification**: Defined a color as the conventional label $c\in K$ indexing one part $C_c$ of the finite partition of blocks. Restored colors and color classes as the primary VBD vocabulary while keeping the partition as their exact mathematical content.
+* **Color-label clarification**: Defined a color as the conventional label $`c\in K`$ indexing one part $`C_c`$ of the finite partition of blocks. Restored colors and color classes as the primary VBD vocabulary while keeping the partition as their exact mathematical content.
 
 * **Partition formulation**: Replaced the coloring-map and arbitrary color-label formulation with a finite partition of the block indices. Its parts are called colors only as conventional parallel-algorithm terminology; an externally supplied ordering turns the partition into an execution plan.
 
@@ -88,15 +92,15 @@
 
 * **Concept consolidation**: Merged the potential-component, induced-graph, proper-coloring, and color-batch specifications into [Local decomposition and coloring](./local-decomposition-and-coloring.md). Removed the separate coloring concept and updated incoming links and indexes.
 
-* **Coloring motivation**: Explained that the induced graph converts the requirement of at most one block of each color per support into ordinary proper vertex coloring. Added the pair-support edge and three-block-support triangle examples, while retaining $A$ as the source of energy-locality information.
+* **Coloring motivation**: Explained that the induced graph converts the requirement of at most one block of each color per support into ordinary proper vertex coloring. Added the pair-support edge and three-block-support triangle examples, while retaining $`A`$ as the source of energy-locality information.
 
-* **Locality interpretation**: Defined a component local on $S$ as a formula containing only the block values indexed by $S$, illustrated by a binary term $\varphi(x_i,x_j)$, before giving the extensional equality formulation.
+* **Locality interpretation**: Defined a component local on $`S`$ as a formula containing only the block values indexed by $`S`$, illustrated by a binary term $`\varphi(x_i,x_j)`$, before giving the extensional equality formulation.
 
-* **Indexing simplification**: Indexed each potential component directly by its finite support $S\subseteq I$, so the finite component family is $A\subseteq\mathcal P(I)$. Combined equal-support summands and removed the separate component-label type and support function.
+* **Indexing simplification**: Indexed each potential component directly by its finite support $`S\subseteq I`$, so the finite component family is $`A\subseteq\mathcal P(I)`$. Combined equal-support summands and removed the separate component-label type and support function.
 
-* **Assumption simplification**: Made the Phase-1 potential $E$ directly a finite sum of component potentials. Removed the auxiliary $E_A$ notation and the conditional bridge between a generic potential and its decomposition.
+* **Assumption simplification**: Made the Phase-1 potential $`E`$ directly a finite sum of component potentials. Removed the auxiliary $`E_A`$ notation and the conditional bridge between a generic potential and its decomposition.
 
-* **Terminology simplification**: Replaced the active-set terminology with the finite component index set $A$. The decomposition now introduces only the labels required to write $E=\sum_{e\in A}E_e$ and its support-based consequences.
+* **Terminology simplification**: Replaced the active-set terminology with the finite component index set $`A`$. The decomposition now introduces only the labels required to write $`E=\sum_{e\in A}E_e`$ and its support-based consequences.
 
 * **Scope simplification**: Recast Phase 4 as a finite-support decomposition of the Phase-1 potential. Replaced interaction, physical-origin, live-set, and physical-conflict terminology with potential components, an active set, and the induced component-overlap graph; retained only the support and update-locality facts needed by later coloring theorems.
 
