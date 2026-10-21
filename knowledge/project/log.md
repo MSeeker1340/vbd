@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **Formal-analysis positioning**: Emphasized kernel-checked definitions, hypotheses, and proofs in the README introduction. Linked the bounded literature-review finding, the spring-chain treatment, and extension boundaries; distinguished numerical observations from the scope of formally proved theorems and presented the project as one contribution to VBD convergence analysis.
+
 * **README explanatory order**: Restored the progression from VBD and its execution semantics to the fixed-point convergence approach, mathematical architecture, module guide, and spring-chain application. Added the general geometric-error estimate before the example and aligned the contents and source-reading guide with that order.
 
 * **README audience and tone**: Reframed the introduction around VBD convergence questions and library contents. Presented the chain as a worked application, removed completion-report and internal acceptance language, and retained the theorem conditions, module guide, and reproduction instructions for independent readers.

@@ -1,10 +1,11 @@
 # Verified convergence certificates for Vertex Block Descent
 
-A Lean 4 / Mathlib formalization of **Vertex Block Descent (VBD)**, connecting
-implicit-Euler mechanics, block-Newton execution, and contractive fixed-point
-theory. The library studies when VBD converges, what it converges to, and how
-much state and residual error remains after a finite number of sweeps, in exact
-arithmetic.
+A **formal mathematical analysis of Vertex Block Descent (VBD)** in Lean 4 /
+Mathlib, connecting implicit-Euler mechanics, block-Newton execution, and
+contractive fixed-point theory. Definitions, assumptions, and proofs are
+expressed in Lean and checked by its kernel. The library studies when VBD
+converges, what it converges to, and how much state and residual error remains
+after a finite number of sweeps, in exact arithmetic.
 
 - [Vertex Block Descent](#vertex-block-descent)
 - [Convergence approach](#convergence-through-fixed-points)
@@ -33,9 +34,26 @@ map whose convergence needs to be analyzed.
 A quantitative guarantee must connect that executed map to the implicit-Euler
 equation and control how errors propagate through repeated sweeps. Local
 curvature, coupling between vertices, execution order, and the initial state
-all enter the argument. This repository develops reusable proofs of those
-connections, together with a nonlinear spring-chain application and numerical
-experiments that explore the resulting bounds.
+all enter the argument. Numerical experiments show how selected instances
+behave; formal analysis establishes statements for every system and initial
+state satisfying the theorem's hypotheses, with the reasoning checked by a
+proof assistant.
+
+Among the sources covered by the project's
+[literature review](knowledge/references/vbd-convergence-landscape.md), no prior
+proof-assistant formalization was identified that establishes convergence of
+actual VBD sweeps under explicit assumptions for specified problem families.
+The reviewed work includes algorithmic formulations, empirical convergence
+studies, and related mathematical analyses.
+
+This repository presents **one such formal treatment**: a contraction-based
+analysis of exact serial and properly colored VBD, instantiated for
+[nonlinear axial spring chains](knowledge/mathematics/axial-spring-contraction.md).
+It supplies reusable proofs and an explicit model-specific certificate, while
+leaving a broader convergence picture open. Other mechanical models, parameter
+regimes, and execution strategies require their own analysis; the
+[extension discussion](knowledge/project/whats-next.md) describes those
+directions. The accompanying experiments explore the bounds and their limits.
 
 ## Convergence through fixed points
 
