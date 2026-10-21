@@ -4,12 +4,12 @@ title: Formalization of Algorithms for Optimization with Block Structures — Ag
 description: LaTeX-source-derived Markdown rendering of the Lean 4 BCD and ADMM formalization paper.
 resource: https://arxiv.org/pdf/2503.18806
 tags: [lean4, optlib, paper, full-text, markdown, block-coordinate-descent]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Conversion provenance
 
-- Mathematics uses protected GitHub inline delimiters and fenced `math` displays; equation labels use Markdown anchors.
+- Mathematics uses protected inline delimiters and `$$` displays; equation labels use Markdown anchors.
 - Canonical source: [arXiv 2503.18806](https://arxiv.org/abs/2503.18806).
 - Downloaded PDF SHA-256: `3a5e8c91b863144e4395deefce96884e2c7130a62c62f0c373ff60b72d3ee2b6`.
 - Rendering: official arXiv LaTeX source converted with Pandoc 3.10.2 and a presentation-cleanup filter.
@@ -46,11 +46,11 @@ In this subsection, we review the definition and properties of subdifferential a
 
 For a function $`f : E  \to \mathbb{R}`$ defined on a Hilbert space $`E`$, and a given point $`x \in E`$, the *Fréchet subdifferential* is defined as
 
-```math
+$$
 \begin{aligned}
     \hat{\partial} f(x) = \left\{u\in\mathbb{R}^n \mid \liminf_{y \to x, y \neq x} \frac{f(y) - f(x) - \langle u, y - x \rangle}{\|y - x\|} \geq 0\right\}.
 \end{aligned}
-```
+$$
 
 For convenience, we introduce the notion of *f-attentive convergence*. The term $`x^n \underset{f}{\to} x`$ denotes that a sequence $`\{x^n\}`$ satisfies that $`x^n \to x`$ with $`f(x^n) \to f(x)`$ as $`n \to \infty`$. The limiting subdifferential is defined as follows.
 
@@ -58,9 +58,9 @@ The *limiting subdifferential* of $`f`$ at $`x\in E`$ is defined as
 
 <a name="def-limit-subdiff1"></a>
 
-```math
+$$
 \partial f(x) = \left\{u \in \mathbb{R}^n  \mid\exists x^k\underset{f}{\to} x, u^k \in \hat{\partial} f(x^k)\to u, \text{ as } k \to \infty\right\},
-```
+$$
 
  where $`u`$ is called a (general) subgradient of $`f`$ at $`x`$.
 
@@ -89,21 +89,21 @@ We can define the active domain of a function $`f(x)`$ using subdifferential, wh
 
 In the above definitions, the regular subgradient uses the concept of `liminf` in Lean. We can get an equal description using little-o notation through mathematical reformulation:
 
-```math
+$$
 \begin{aligned}
     f(y) \geq f(x) + \langle u, y - x \rangle + o(\|y - x\|), \quad \text{as}\; \|y-x\| \to 0.
 \end{aligned}
-```
+$$
 
  We can reformulate the definition using the concept of a filter to avoid explicitly managing Taylor expansions or infinitesimals, which brings convenience in some cases. An equivalent expression for the Fréchet subdifferential is defined in the following statement.
 
 For a given $`x \in \mathrm{dom} f`$, $`u \in \hat{\partial} f(x)`$ if and only if for any $`\varepsilon > 0`$ and every $`y`$ in the neighborhood of x, it holds that
 
-```math
+$$
 \begin{aligned}
     f(y) - f(x) - \langle u, y - x \rangle \geq -\varepsilon \|y - x\|.
 \end{aligned}
-```
+$$
 
 The above theorem is formalized as follows.
 
@@ -112,24 +112,24 @@ The above theorem is formalized as follows.
 
 To state the next theorem, we define:
 
-```math
+$$
 \begin{aligned}
 G (f,\hat{\partial} f) & := \left\{ (x,f(x),u)|x \in \mathbb{R}^n,u \in \hat{\partial} f(x)\right\},\\
 G (\partial f) & := \left\{ (x,u)|x \in \mathbb{R}^n,u \in \partial f(x)\right\}.
 \end{aligned}
-```
+$$
 
  We next introduce a more streamlined description of the subdifferential by leveraging the closure of the subdifferential graph. This reformulation provides an intuitive geometric interpretation by directly relating the subdifferential to the closure of its graph. The following theorem states the closedness of the subdifferential graph. This property is also used in the proof of the KL property.
 
-Let $`(x_k,x_k^{\ast})\in G (\partial f)`$ be a sequence that converges to $`(x,x^{\ast})`$. If $`f(x_k)`$converges to $`f(x)`$, then $`(x,x^{\ast})\in G(\partial f)`$. Or equivalently,
+Let $`(x_k,x_k^{\ast})\in G (\partial f)`$ be a sequence that converges to $`(x,x^{\ast})`$. If $`f(x_k)`$ converges to $`f(x)`$, then $`(x,x^{\ast})\in G(\partial f)`$. Or equivalently,
 
 <a name="eq-subdifferential-definition-2"></a>
 
-```math
+$$
 \begin{aligned}
         \partial f(x) = \left\{ u \in \mathbb{R}^n | (x, f(x), u) \in \overline{G (f, \hat{\partial} f)}  \right\}.
 \end{aligned}
-```
+$$
 
 The theorem is formalized as below.
 
@@ -204,12 +204,12 @@ The *proximal operator* for function $`f`$ at point $`x`$ is given as
 
 <a name="eq-prox-def"></a>
 
-```math
+$$
 \begin{aligned}
 
     \text{prox}_f(x) = \underset{u}{\arg\min} \left\{ f(u) + \frac{1}{2}\|u-x\|^2 \right\}.
 \end{aligned}
-```
+$$
 
 The formalization of the proximal operator can be referred to [@li2024formalization]. The optimality condition of the optimization problem naturally links the proximal operator with the subdifferential. The connection is described in the following theorem.
 
@@ -217,12 +217,12 @@ If $`f(x)`$ is a function from a Hilbert space $`E`$ to $`\mathbb{R}`$, it holds
 
 <a name="eq-proximal-connection"></a>
 
-```math
+$$
 \begin{aligned}
     u \in \text{prox}_f(x) \quad \text{if and only if} \quad x - u \in \partial f(u).
 
 \end{aligned}
-```
+$$
 
 The theorem is formalized as below.
 
@@ -234,9 +234,9 @@ A key step to prove the above propositions is to utilize first order optimality 
 
 In the past few decades, the KL property has emerged as a versatile analytical framework for investigating convergence rates of first-order optimization methods, particularly when dealing with objectives that exhibit both nonsmoothness and nonconvexity, see [@attouch2013convergence; @bolte2014proximal; @bento2024convergence]. It is an extension to the Polyak-Łojasiewicz (PL) inequality developed by Polyak [@polyak1963gradient] and Łojasiewicz [@lojasiewicz1963propriete],
 
-```math
+$$
 \|\nabla f(x) \| \geq \mu \| f(x) - f(\bar x)\|^{\frac{1}{2}}, \quad \mu > 0,
-```
+$$
 
  where $`f`$ is an $`L`$-smooth function, and $`\bar x`$ is a global minimum of $`f`$. The linear convergence of the gradient descent algorithm can be established by this well-known inequality. It illustrates that the sub-optimality can be controlled by the vanishing of gradient norm and a special concave function $`\phi(t) = \mu t^{\frac{1}{2}}`$. Such functions are the so-called desingularizing functions in the context of the KL property.
 
@@ -258,9 +258,9 @@ These desingularizing functions are essential to quantify the behavior of the ob
 
 Let $`f: E \to \mathbb{R}`$ be a lower semicontinuous function. We say that $`f`$ satisfies the KL property at $`u\in \mathrm{dom}\partial f := \{ u \in E : \partial f (u) \neq \emptyset \}`$ if there exist $`\eta \in (0, \infty)`$, a neighborhood $`S`$ of $`u`$ and $`\phi\in \Phi_\eta`$ such that for any $`x \in S \cap [f(u) < f < f(u) + \eta]`$, the following inequality holds:
 
-```math
+$$
 \phi'(f(x)-f(u))\cdot \mathrm{dist}(0, \partial f(x)) \geq 1.
-```
+$$
 
  The point $`u`$ is called a KL point of $`f`$. If $`f`$ satisfies KL property at every point of $`\mathrm{dom} \partial f`$, we say that $`f`$ is a KL function.
 
@@ -282,9 +282,9 @@ The uniformized KL property [@bolte2014proximal] is incorporated to deal with th
 
 Suppose $`\Omega`$ is a compact set and $`f:E \to \mathbb{R}`$ is a lower semicontinuous function. Suppose $`f`$ is constant on $`\Omega`$ and satisfies the KL property at every point of $`\Omega`$. Then there exist $`\epsilon>0, \eta>0`$, and a function $`\phi \in \Phi_\eta`$, such that for all $`u\in \Omega`$ and all $`x`$ satisfying $`\mathrm{dist}(x,\Omega) < \epsilon, f(u) < f (x) < f (u)+ \eta`$, it holds
 
-```math
+$$
 \phi'(f(x) - f(u)) \cdot \mathrm{dist}(0, \partial f (x)) \geq 1.
-```
+$$
 
     theorem uniformized_KL_property {f : E → ℝ} {Ω : Set E} (h_compact : IsCompact Ω) (h_Ω1 : ∀ x ∈ Ω, KL_point f x) (h_Ω2 : is_constant_on f Ω) : ∃ ε ∈ Ioi 0, ∃ η ∈ Ioi 0, ∃ φ ∈ desingularizing_function η, ∀ u ∈ Ω , ∀ x ∈ {y : E | (EMetric.infEdist y Ω).toReal < ε} ∩ {y | f u < f y ∧ f y < f u + η}, (ENNReal.ofReal (deriv φ (f x - f u))) * EMetric.infEdist 0 (subdifferential f x) ≥ 1
 
@@ -296,12 +296,12 @@ In this section, we consider a special form of the BCD algorithm with proximal a
 
 <a name="eq-target-bcd"></a>
 
-```math
+$$
 \begin{aligned}
     \underset{x, y}{\min} \; \Psi(x,y) = f(x) + g(y) + H(x,y),
 
 \end{aligned}
-```
+$$
 
  where $`f(x) : \mathbb{R}^n \to \mathbb{R}`$ and $`g(y) : \mathbb{R}^m \to \mathbb{R}`$ are separated parts for $`x`$ and $`y`$, respectively. $`H(x,y) : \mathbb{R}^n \times \mathbb{R}^m \to \mathbb{R}`$ is the composite part. The basic assumptions for this problem are listed as below.
 
@@ -311,11 +311,11 @@ In this section, we consider a special form of the BCD algorithm with proximal a
 
 2.  *$`H(x,y)`$ is a differentiable function with a Lipschitz continuous gradient. The Lipschitz constant of the gradient is $`l`$, i.e.
 
-    ```math
+    $$
     \begin{aligned}
                     \left\| \left( \nabla_x H(x_1, y_1) - \nabla_x H(x_2, y_2), \nabla_y H(x_1, y_1) - \nabla_y H(x_2, y_2) \right) \right\| \leq l \left\| (x_1 - x_2, y_1 - y_2) \right\|.
         \end{aligned}
-    ```
+    $$
 
 *
 
@@ -323,7 +323,7 @@ The BCD algorithm utilizes an alternating optimization method to update $`x`$ an
 
 <a name="eq-bcd-update-ori"></a>
 
-```math
+$$
 \begin{aligned}
 \begin{aligned}
     x^{k+1} &\in \underset{x}{\arg\min} \left\{f(x)+ \langle \nabla_x H(x^k, y^k), x - x ^k \rangle + \frac{c_k}{2} \|x-x^k\|^2  \right\}, \\
@@ -331,13 +331,13 @@ The BCD algorithm utilizes an alternating optimization method to update $`x`$ an
 \end{aligned}
 
 \end{aligned}
-```
+$$
 
  The set of minimizers of the subproblem may not be a singleton. We select an arbitrary element to continue the iterations. The parameters $`c_k`$ and $`d_k`$ control the step sizes. Through the definition of the proximal operator [\[eq: prox_def\]](#eq-prox-def), the subproblems can be rewritten as
 
 <a name="eq-bcd-update"></a>
 
-```math
+$$
 \begin{aligned}
 \begin{aligned}
     x^{k+1} &\in \text{prox}_{c_k f} \left( x^k - c_k \nabla_x H(x^k, y^k) \right), \\
@@ -345,7 +345,7 @@ The BCD algorithm utilizes an alternating optimization method to update $`x`$ an
 \end{aligned}
 
 \end{aligned}
-```
+$$
 
 ## Formalization of the Update Scheme
 
@@ -391,15 +391,15 @@ Suppose that Assumption [1](#assumption: BCD) holds. Under the condition that th
 
 1.  At each iteration, the decrement property holds:
 
-    ```math
+    $$
     (\gamma - 1)l \|z^{k+1} - z^k\|^2 \leq H(z^k) - H(z^{k+1}), \quad \forall k \geq 0.
-    ```
+    $$
 
 2.  The sequence $`\{\|z^{k+1} - z^k\|\}_{k=1}^\infty`$ is square summable:
 
-    ```math
+    $$
     \sum_{k=1}^\infty \|z^{k+1} - z^k\|^2 < \infty,
-    ```
+    $$
 
  ensuring that $`\lim\limits_{k \to \infty} \|z^{k+1} - z^k\| = 0.`$
 
@@ -417,20 +417,20 @@ To gain a deeper understanding of the analysis, it is crucial to examine the beh
 
 Suppose that Assumptions [1](#assumption: BCD) holds. Suppose $`\{z^k\}`$ generated by scheme [\[eq : BCD update\]](#eq-bcd-update) is bounded and the step sizes satisfy $`c_k = d_k = \frac{1}{\gamma l}`$ for $`\gamma > 1`$. For each positive integer k, define
 
-```math
+$$
 \begin{aligned}
     A_x^k := c_{k-1} (x^{k-1} - x^k) + \nabla_x H(x^k, y^k) - \nabla_x H(x^{k-1}, y^k), \\
     A_y^k := d_{k-1} (y^{k-1} - y^k) + \nabla_y H(x^k, y^k) - \nabla_y H(x^k, y^{k-1}).
 \end{aligned}
-```
+$$
 
  Then $`(A_x^k, A_y^k) \in \hat{\partial} \Psi(x^k, y^k)`$ and there exists $`M = (2\gamma+2)l > 0`$ such that
 
-```math
+$$
 \begin{aligned}
     \left\| (A_x^k, A_y^k) \right\| \leq \left\| A_x^k \right\| + \left\| A_y^k \right\| \leq M \left\| z^k - z^{k-1} \right\|, \quad \forall k \geq 1,
 \end{aligned}
-```
+$$
 
 The specific values of $`A_x^k`$ and $`A_y^k`$ for the Fréchet subdifferentials are not essential to the continuation of the proof. What matters is their existence and norm bound. Therefore, for simplicity, our formalized version of Lemma [\[lemma: BCD subdifferential\]](#lemma: BCD subdifferential) omits the explicit values of the subdifferentials and focuses solely on their existence and bound. In our proof, the values of $`A_x^k`$ and $`A_y^k`$ are used, and the membership relation is established by the calculation rule in Theorem [\[thm: f_subdifferential rule\]](#thm: f_subdifferential rule). One of the most difficult problem in formalization is to deal with the subdifferential with the product space. We establish calculation rules for block-wise subdifferential. The formalized version is provided below.
 
@@ -455,9 +455,9 @@ Suppose that Assumption [1](#assumption: BCD) holds. If $`\Psi(x,y)`$ is a KL fu
 
 1.  The sequence $`\{z^k\}`$ possesses a finite total variation:
 
-    ```math
+    $$
     \sum_{k=1}^\infty \|z^{k+1} - z^k\| < +\infty,
-    ```
+    $$
 
 2.  $`\{z^k\}`$ converges to a critical point $`z^{\ast} = (x^{\ast}, y^{\ast})`$ of $`\Psi`$.
 
@@ -477,12 +477,12 @@ The ADMM method is frequently used to solve optimization problems comprising mul
 
 <a name="eq-admm-form"></a>
 
-```math
+$$
 \begin{aligned}
         \min_{x_1, x_2} & \quad f_1(x_1) + f_2(x_2), \\
         \text{s.t.} & \quad A_1 x_1 + A_2 x_2 = b,
     \end{aligned}
-```
+$$
 
  where $`f_1(x_1) : \mathbb{R}^n \to \mathbb{R}`$ and $`f_2(x_2) : \mathbb{R}^m \to \mathbb{R}`$ are two separated parts of the objective function. The matrices $`A_1 \in \mathbb{R}^{p \times n}`$ and $`A_2 \in \mathbb{R}^{p \times m}`$ link the variables via linear constraints, with $`b \in \mathbb{R}^p`$ representing a given vector. Our analysis of this algorithm mainly follows [@Fazel2013hankelmatrix; @chen2017note]. The assumptions of this problem are given below.
 
@@ -492,11 +492,11 @@ The ADMM method is frequently used to solve optimization problems comprising mul
 
 2.  *The solution set of problem [\[eq: admm form\]](#eq-admm-form) is nonempty and satisfies Slater's condition, i.e. there exists a feasible solution in the interior of the domain:
 
-    ```math
+    $$
     \begin{aligned}
                     \exists (\tilde{x}_1, \tilde{x}_2) \in \text{int} ( \text{dom} f_1 \times \text{dom} f_2 ) \quad \text{s.t.} \quad A_1 \tilde{x}_1 + A_2 \tilde{x}_2 = b.
         \end{aligned}
-    ```
+    $$
 
 *
 
@@ -504,12 +504,12 @@ The augmented Lagrangian function of problem [\[eq: admm form\]](#eq-admm-form) 
 
 <a name="eq-augmented-lagrangian"></a>
 
-```math
+$$
 \begin{aligned}
     L_{\rho}(x_1, x_2, y) = f_1(x_1) + f_2(x_2) + \left<y, A_1x_1 + A_2x_2 - b\right> + \frac {\rho} 2  \left\lVert A_1x_1 + A_2x_2 - b\right \rVert^2,
 
 \end{aligned}
-```
+$$
 
  where $`\rho`$ is the penalty parameter. To solve the constraint optimization problem [\[eq: admm form\]](#eq-admm-form), the ADMM method sequentially minimizes the augmented Lagrangian function with respect to each variable, then updates the Lagrange multipliers. Based on [\[eq: augmented lagrangian\]](#eq-augmented-lagrangian), the iterative scheme of ADMM is as follows:
 
@@ -519,13 +519,13 @@ The augmented Lagrangian function of problem [\[eq: admm form\]](#eq-admm-form) 
 
 <a name="eq-admm-update-3"></a>
 
-```math
+$$
 \begin{aligned}
         x_{1}^{k+1} &= \underset{x_1}{\arg \min}\; L_{\rho}(x_1,x_2^k,y^k), \\
         x_{2}^{k+1} &= \underset{x_2}{\arg \min}\; L_{\rho}(x_1^{k+1},x_2,y^k), \\
         y^{k+1} &= y^k + \tau \rho (A_1x_1^{k+1} + A_2x_2^{k+1} - b),
 \end{aligned}
-```
+$$
 
  where $`\tau`$ is a step size. The alternating minimization steps for $`x_1`$ and $`x_2`$ are followed by the iteration for the dual variable $`y`$. We have an additional assumption on the scheme [\[eq: admm update 1\]](#eq-admm-update-1)-[\[eq: admm update 3\]](#eq-admm-update-3) as below.
 
@@ -567,7 +567,7 @@ The Karush-Kuhn-Tucker (KKT) conditions are necessary for optimality, given cert
 
 <a name="eq-admm-kkt"></a>
 
-```math
+$$
 \begin{aligned}
   \begin{cases}
       &-A_1^Ty \in \nabla f_1(x_1), \\
@@ -575,7 +575,7 @@ The Karush-Kuhn-Tucker (KKT) conditions are necessary for optimality, given cert
     &A_1x_1 + A_2x_2 = b.
   \end{cases}
   \end{aligned}
-```
+$$
 
  The formalization of the KKT conditions adheres to the structure of natural language and is presented below using the type `class`.
 
@@ -588,7 +588,7 @@ The Karush-Kuhn-Tucker (KKT) conditions are necessary for optimality, given cert
 
 This subsection describes the convergence of ADMM, with the convergence proof primarily based on [@Fazel2013hankelmatrix]. The proof is divided into two components: a lemma that verifies the descending property of an auxiliary sequence, and a theorem that establishes the convergence of the ADMM iterative sequence. We denote $`(x_1^{\ast}, x_2^{\ast}, y^{\ast})`$ as the KKT pair for the original problem and define the error vectors and auxiliary functions as follows:
 
-```math
+$$
 \begin{aligned}
     (e_1^k,e_2^k,e_y^k) &= (x_1^k,x_2^k,y^k) - (x_1^{\ast}, x_2^{\ast}, y^{\ast}),\\
     u^k &= -A_1^T[y^k + (1-\tau)\rho(A_1e_1^k + A_2e_2^k) + \rho A_2(x_2^{k-1} - x_2^k)],\\
@@ -596,7 +596,7 @@ This subsection describes the convergence of ADMM, with the convergence proof pr
     \Psi_k &= \frac{1}{\tau\rho}\|e_y^k\|^2 + \rho\|A_2e_2^k\|^2,\\
     \Phi_k &= \Psi_k + \max(1-\tau, 1-\tau^{-1})\rho\|A_1e_1^k + A_2e_2^k\|^2.
 \end{aligned}
-```
+$$
 
  The functions $`u^k`$ and $`v^k`$ are related to the optimality conditions of each subproblem, $`\Psi_k`$ and $`\Phi_k`$ measure the errors $`(e_1^k, e_2^k, y^k)`$. All of these auxiliary variables are formalized using the `ADMM` namespace.
 
@@ -604,22 +604,22 @@ Our first step is to prove the descent of $`\Phi_k`$, implying the limits of the
 
 Suppose that Assumptions [2](#assumption: ADMM) and [3](#assumption: ADMM 2) hold. Let $`\{(x_1^k,x_2^k,y^k)\}`$ be a sequence generated by the ADMM iterations [\[eq: admm update 1\]](#eq-admm-update-1) - [\[eq: admm update 3\]](#eq-admm-update-3). For each $`k \geqslant 1`$, it holds
 
-```math
+$$
 u^k \in \partial f_1(x_1^k),\quad v^k \in \partial f_2(x_2^k).
-```
+$$
 
  The error obtains a decrease as
 
 <a name="eq-admm-theorem-1"></a>
 
-```math
+$$
 \begin{aligned}
 
     \begin{aligned}
         \Phi_k - \Phi_{k+1} \geqslant & \min(\tau, 1+\tau-\tau^2)\rho\|A_2(x_2^k - x_2^{k+1})\|^2 \\&+ \min(1, 1+\tau^{-1}-\tau)\rho\|A_1e_1^{k+1} + A_2e_2^{k+1}\|^2.
     \end{aligned}
 \end{aligned}
-```
+$$
 
 This lemma is formalized in Lean as below.
 
@@ -629,24 +629,24 @@ We then outline the proof of this lemma, structured as follows:
 
 1.  We prove that $`u^k`$ and $`v^k`$ belong to the subdifferentials of $`f_1`$ and $`f_2`$, respectively:
 
-    ```math
+    $$
     \begin{aligned}
             u^{k+1} \in \partial f_1(x_1^{k+1}),  \quad  v^{k+1} \in \partial f_2(x_2^{k+1}).
           \end{aligned}
-    ```
+    $$
 
  This establishes that $`u^k, v^k`$ approximate the KKT pair and converge to it, due to the closed property of subgradients. The relevant proofs are provided in `uvBelongsToSubgradient`, `u_inthesubgradient`, and `v_inthesubgradient`.
 
 2.  We establish an inequality that describes the lower bound of the difference in $`\Phi_k`$:
 
-    ```math
+    $$
     \begin{aligned}
             &\frac{1}{\tau\rho} \left(\Vert e_y^k\Vert^2 - \Vert e_y^{k+1}\Vert^2\right)
             -(2 - \tau)\rho \Vert A_1x_1^{k+1} + A_2x_2^{k+1} - b\Vert^2\\
             &+2 M_{k+1} - \rho \Vert A_2(x_2^{k+1} - x_2^k)\Vert^2
             -\rho \Vert A_2e_2^{k+1}\Vert^2 + \rho \Vert A_2e_2^k\Vert ^2 \geqslant 0.
             \end{aligned}
-    ```
+    $$
 
 3.  For cases where $`0<\tau<1`$ and $`\tau > 1`$, we categorize and discuss their properties. Finally, we can get the desired inequality [\[eq: admm theorem 1\]](#eq-admm-theorem-1).
 
@@ -664,15 +664,15 @@ We hereby outline the key aspects of the proof, structured as follows:
 
 1.  By Lemma [\[lemma: Lemma 20\]](#lemma: Lemma 20), the sequence $`\{(x_1^k, x_2^k, y^k)\}`$ is bounded. We can demonstrate that each of the sequences $`x_1^k, x_2^k, y^k, u^k, v^k`$ admits a convergent subsequence satisfying:
 
-    ```math
+    $$
     \left(x_1^{\phi(k)}, x_2^{\phi(k)}, y^{\phi(k)}, u^{\phi(k)}, v^{\phi(k)}\right) \to (x_1'',x_2'',y'', -A_1^Ty'',-A_2^Ty''), \; \text{as} \; k \to \infty.
-    ```
+    $$
 
  Using monotonicity, we then prove the convergence of the entire sequence.
 
 2.  The KKT conditions for problem [\[eq: admm form\]](#eq-admm-form) are given by [\[eq : ADMM KKT\]](#eq-admm-kkt). Based on the boundedness of the iterates and the diminishing residuals, we can conclude that the sequence $`\{x_1^k, x_2^k, y^k\}`$ converges to a point satisfying the KKT conditions:
 
-    ```math
+    $$
     \begin{aligned}
           \begin{cases}
             &-A_1^Ty'' \in \partial f_1(x_1''),\\
@@ -680,7 +680,7 @@ We hereby outline the key aspects of the proof, structured as follows:
             &A_1(x_1'') + A_2(x_2'') = b.
           \end{cases}
           \end{aligned}
-    ```
+    $$
 
 3.  We derive the convergence of the entire sequences $`x_1^k, x_2^k, y^k, u^k, v^k`$ from the descending property of $`\Phi^k`$.
 

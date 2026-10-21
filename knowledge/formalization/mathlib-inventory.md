@@ -4,7 +4,7 @@ title: Pinned Mathlib API Inventory
 description: Records calculus, block-product, graph-coloring, and fixed-point APIs confirmed in the repository's pinned Mathlib checkout.
 resource: ../../.lake/packages/mathlib/Mathlib
 tags: [mathlib, lean4, gradient, block-product, graph-coloring, contraction]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Audit basis
@@ -116,9 +116,9 @@ foundation. `SimpleGraph.fromRel` constructs a simple undirected graph from a bi
 automatically symmetrizing it and removing loops. The support-induced graph is therefore a project
 definition only at the boundary from a finite family of supports to the relation
 
-```math
+$$
 i,j\longmapsto\exists S\in A,\;\{i,j\}\subseteq S.
-```
+$$
 
 For a graph $`G`$, `G.Coloring (Fin m)` is Mathlib's proper vertex-coloring type with the numbered
 colors required by a VBD sweep. `SimpleGraph.Coloring.mk` constructs a coloring from a vertex-to-

@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **Shared preview syntax**: Changed reference and transcript displays to `$$`, retained their macro, alignment, and cross-reference repairs, and updated rendering provenance. Added spaces around two inline expressions that VS Code's delimiter rules missed. Revised the conversion guide to require Markdown-it/KaTeX preview checks alongside MathJax syntax validation and document table-safe norm delimiters.
+
 * **GitHub transcript rendering**: Normalized math delimiters and macros in reference notes and all three paper transcripts. Converted VBD's source equation tables into labeled displays, repaired nested math delimiters in its piecewise acceleration expression, moved LaTeX labels to Markdown anchors, and translated the unresolved bounded-length theorem reference into a local link. Restored alignment environments in the Tseng transcript and checked its boundary set-difference notation against page 477 of the canonical PDF. Documented the rendering convention in the conversion guide and preserved Lean examples.
 
 ## 2026-09-16

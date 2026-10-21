@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: "Worked Example: VBD Convergence for an Elastic Spring Chain"
 description: Gives the Lean-proved physical finite-chain convergence and 20-sweep residual certificate, its derivation, and reproducible numerical comparisons.
 tags: [example, vbd, contraction, residual, springs]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 This is a **worked example** of the convergence analysis developed in
@@ -49,10 +49,10 @@ Let the rest spacing be $`\ell>0`$, and write the physical position of mass $`i`
 $`x_i=x_i^{\mathrm{rest}}+\ell u_i`$. The signed extension of an adjacent spring is
 $`\ell(u_i-u_j)`$, up to orientation. For stiffness $`k_e>0`$, use the physical spring energy
 
-```math
+$$
 E_e(s)=\frac{k_e}{2}s^2+\frac{k_e\eta}{4\ell^2}s^4,
 \qquad \eta\ge0.
-```
+$$
 
 Setting $`\eta=0`$ gives a linear spring force. With $`\eta>0`$, the force grows more rapidly
 as the segment stretches or compresses, and so does its stiffness. The two models share the same
@@ -62,23 +62,23 @@ This keeps the distinction between locality and curvature concrete.
 To compare stiffness with inertia, it helps to express displacement in units of the rest spacing
 and energy in units set by the timestep. For $`h>0`$, write
 
-```math
+$$
 y_i=\frac{x_i^{\mathrm{old}}+h v_i^{\mathrm{old}}+h^2a_i^{\mathrm{ext}}
                  -x_i^{\mathrm{rest}}}{\ell},
 \qquad a_i=\frac{m_i}{m_{\min}}\ge1,
 \qquad b_e=\frac{h^2k_e}{m_{\min}}.
-```
+$$
 
 Here $`y`$ is the inertia prediction from the old state. The coefficient $`a_i`$ compares each mass
 to the lightest one, while $`b_e`$ compares spring stiffness to the inertial scale $`m_{\min}/h^2`$.
 In particular, reducing the timestep reduces every $`b_e`$. Dividing the implicit-Euler incremental
 energy by $`m_{\min}\ell^2/h^2`$ gives
 
-```math
+$$
 G(u)=\frac12\sum_i a_i(u_i-y_i)^2
  +\sum_{e=\{i,j\}}b_e\left(\frac{d_e^2}{2}+\frac{\eta d_e^4}{4}\right),
 \qquad d_e=u_i-u_j.
-```
+$$
 
 The first term pulls each candidate position toward its prediction; the second couples it to
 its neighbors. At $`u=y`$ the inertia contribution to the gradient is zero, but spring forces
@@ -91,22 +91,22 @@ Hold every bead except bead $`i`$ fixed. VBD takes one Newton step for this sing
 variable, using the current force imbalance and local stiffness. Write $`f=\nabla G`$,
 $`H=Df`$, and $`D_i=H_{ii}`$. Differentiating the energy gives, for neighbors $`j\sim i`$,
 
-```math
+$$
 f_i(u)=a_i(u_i-y_i)+\sum_{j\sim i}b_{ij}(d_{ij}+\eta d_{ij}^3),
 \qquad
 D_i(u)=a_i+\sum_{j\sim i}b_{ij}(1+3\eta d_{ij}^2).
-```
+$$
 
 The ratio $`-f_i/D_i`$ is the displacement that balances the local quadratic approximation.
 Applying it to bead $`i`$, while preserving every other position, gives
 
-```math
+$$
 (U_i(u))_j=
 \begin{cases}
 u_i-f_i(u)/D_i(u),&j=i\text{ and }|D_i(u)|>\varepsilon,\\
 u_j,&\text{otherwise}.
 \end{cases}
-```
+$$
 
 The normalized experiment threshold is $`\varepsilon=10^{-12}`$, corresponding to a physical
 scalar Hessian threshold $`10^{-12}m_{\min}/h^2`$ in force/length units.
@@ -125,10 +125,10 @@ length, mass, and timestep normalization.
 For quadratic springs, we can see exactly what this step does. Substituting $`\eta=0`$ and
 cancelling the old value of $`u_i`$ gives
 
-```math
+$$
 (U_i(u))_i=\frac{a_i y_i+\sum_{j\sim i}b_{ij}u_j}
                   {a_i+\sum_{j\sim i}b_{ij}}.
-```
+$$
 
 The new position is a weighted average of the prediction and the neighboring candidates.
 Compare two candidate configurations with the same prediction: only the neighbors contribute
@@ -140,9 +140,9 @@ nonlinear spring law.
 A visit to the next bead must use the position we just computed. A serial sweep therefore
 visits vertices $`0,\ldots,n-1`$ through the composition
 
-```math
+$$
 T_{\mathrm{serial}}=U_{n-1}\circ\cdots\circ U_0.
-```
+$$
 
 For parallel execution, notice that updating an even bead cannot change the data needed by
 another even bead: its neighbors are odd. We may update all even beads from one snapshot, then
@@ -165,10 +165,10 @@ Before estimating the speed of the iteration, we should identify its destination
 in this example has enough curvature to give a unique force-balanced configuration. Its Hessian
 is a positive diagonal inertia matrix plus a weighted path Laplacian:
 
-```math
+$$
 H(u)=\mathrm{diag}(a)+L_{w(u)},
 \qquad w_e(u)=b_e(1+3\eta d_e^2)>0.
-```
+$$
 
 The spring Laplacian is positive semidefinite, and the inertia diagonal is bounded below by
 the identity. Consequently $`G`$ is coercive and strongly convex, with a unique stationary point
@@ -180,10 +180,10 @@ Every spring contribution to its gradient is nonnegative. Its inertia contributi
 that sum, so this displacement cannot exceed its own prediction. Applying the same argument to
 the smallest displacement gives
 
-```math
+$$
 \min_i y_i\le u_j^{\ast}\le\max_i y_i,
 \qquad \|u^{\ast}\|_\infty\le Y.
-```
+$$
 
 The Lean certificate obtains existence from the prepared invariant-set Banach theorem and
 proves the predictor bound by this scalar maximum principle. Every residual root lies in the
@@ -197,9 +197,9 @@ its update must have been zero. The second visit therefore sees the original sta
 also make a zero update. Continuing through the order shows that every component of $`f`$ is zero.
 The same reasoning applies to the proper-color order. Thus, on the skip-free branch,
 
-```math
+$$
 T(u)=u\quad\Longleftrightarrow\quad f(u)=0.
-```
+$$
 
 The once-per-vertex condition rules out a later write undoing an earlier one. The skip-free
 condition rules out a bead staying still merely because its solve was bypassed. For example,
@@ -220,10 +220,10 @@ If we know the reference solution, the most direct measure of progress is the st
 $`e(u)=\|u-u^{\ast}\|_\infty`$. A practical solve usually does not know that solution. It can,
 however, evaluate the remaining force imbalance. We measure it with
 
-```math
+$$
 r_{\mathrm{IE}}(u)=\max_i\frac{|f_i(u)|}{a_i}
  =\max_i\frac{h^2|R_{\mathrm{IE},i}(x)|}{m_i\ell}.
-```
+$$
 
 This scaling puts the residual in displacement units relative to $`\ell`$: a tolerance $`\tau`$
 means $`|R_{\mathrm{IE},i}|\le m_i\ell\tau/h^2`$ for every mass. It gives us a physical
@@ -231,9 +231,9 @@ quantity to control after a prescribed number of sweeps.
 
 We can also measure how far a sweep moves the candidate,
 
-```math
+$$
 r_T(u)=\|T(u)-u\|_\infty,
-```
+$$
 
 and track the objective $`G(u)`$. These measurements answer different questions. A small movement
 can reflect a weak update as well as a small force imbalance; the skipped example above makes
@@ -251,35 +251,35 @@ need not be an average, so we must establish a replacement for this property.
 Leave some room around the predictor by taking $`0\le Y\le B`$ and
 $`\|y\|_\infty\le Y`$. With $`b_e\le\alpha=h^2k_{\max}/m_{\min}`$, consider the box
 
-```math
+$$
 \mathcal C=\{u:\|u\|_\infty\le B\}.
-```
+$$
 
 The margin $`B-Y`$ is the room available for the spring correction. We want every individual
 visit to remain in this box: each visit's output is where the next derivative will be evaluated.
 On the box, spring extensions satisfy $`|d_{ij}|\le2B`$. Expanding the Newton numerator makes
 the departure from the quadratic average explicit:
 
-```math
+$$
 (U_i(u))_i=
 \frac{a_i y_i+\sum_{j\sim i}b_{ij}
  [u_j+\eta d_{ij}^2(2u_i+u_j)]}
  {a_i+\sum_{j\sim i}b_{ij}(1+3\eta d_{ij}^2)}.
-```
+$$
 
 The extra term contains three displacement factors. Bounding them by the box radius gives
 
-```math
+$$
 |(U_i(u))_i|\le\frac{a_iY+\sum_{j\sim i}b_{ij}(B+12\eta B^3)}
      {a_i+\sum_{j\sim i}b_{ij}}.
-```
+$$
 
 Each bead has at most two neighbors, so their total contribution fits into the available
 margin whenever
 
-```math
+$$
 24\alpha\eta B^3\le B-Y.
-```
+$$
 
 Under this condition every visit preserves $`\mathcal C`$, and the same is true coordinatewise
 for a proper-color batch. Smaller timesteps or weaker hardening reduce the required margin.
@@ -294,10 +294,10 @@ passes to the updated bead only through its neighbors. In the nonlinear case, ch
 candidate also changes the stiffness used to divide the force imbalance. Differentiating the
 actual Newton step captures both effects:
 
-```math
+$$
 (DU_i(u))_{ij}=\delta_{ij}-\frac{H_{ij}(u)}{D_i(u)}
               +\frac{f_i(u)\,\partial_jD_i(u)}{D_i(u)^2}.
-```
+$$
 
 The first two terms give the familiar Newton cancellation on the diagonal and normalized
 coupling off the diagonal. The final term measures the change in the local inverse stiffness,
@@ -305,9 +305,9 @@ multiplied by the force imbalance still present. It vanishes at the root, which 
 the root linearization is especially simple. Decomposing $`H(u^{\ast})=D+L+R`$ into diagonal,
 strictly lower, and strictly upper parts in visit order gives
 
-```math
+$$
 DT(u^{\ast})=-(D+L)^{-1}R,
-```
+$$
 
 the Gauss–Seidel error matrix. This matrix helps explain the observed asymptotic rate, but our
 warm start is not generally the root. To guarantee its progress, we must bound the additional
@@ -326,13 +326,13 @@ We now instantiate the [local derivative bounds](./curvature.md#derivative-of-a-
 with the spring coefficients. The estimate has two parts: sensitivity to neighbors and
 sensitivity to changing stiffness. For compactness, write
 
-```math
+$$
 \begin{aligned}
 \nu&=2\alpha,& S&=\nu(1+12\eta B^2),\\
 P&=B+Y+2B\nu(1+4\eta B^2),&
 q&=\frac{S}{1+S}+\frac{24\eta B\nu P}{(1+\nu)^2}.
 \end{aligned}
-```
+$$
 
 Here $`\nu`$ bounds incident spring stiffness relative to inertia; $`S`$ also allows for the
 largest hardening in the box. The first term of $`q`$, $`S/(1+S)`$, bounds the neighboring
@@ -342,20 +342,20 @@ term is the allowance for nonlinear variation. It is zero when $`\eta=0`$.
 To see where that allowance comes from, use the actual local ratio
 $`\nu_i=\sum_j b_{ij}/a_i\le\nu`$. The three quantities in the variation term satisfy
 
-```math
+$$
 \begin{aligned}
 D_i&\ge a_i(1+\nu_i),\\
 |f_i|&\le a_i[B+Y+2B\nu_i(1+4\eta B^2)],\\
 \sum_j|\partial_jD_i|&\le24\eta B a_i\nu_i.
 \end{aligned}
-```
+$$
 
 Consequently the variation row sum is at most
 
-```math
+$$
 \frac{24\eta B\nu_i[B+Y+2B\nu_i(1+4\eta B^2)]}{(1+\nu_i)^2}
 \le \frac{24\eta B\nu P}{(1+\nu)^2}.
-```
+$$
 
 Keeping the denominator here matters: increasing spring stiffness increases the numerator,
 but also the local stiffness by which we divide. To replace $`\nu_i`$ by its uniform bound,
@@ -367,27 +367,27 @@ For fixed comparison matrices throughout the accepted box, write
 $`t_i=\sum_j b_{ij}`$, $`A_i=a_i+t_i`$, and
 $`F_i=(3/20)a_i+(26/125)t_i`$. On the selected parameter range,
 
-```math
+$$
 D_i\ge A_i>0,\qquad |f_i|\le F_i,\qquad
 |\partial_jD_i|\le\frac65 v_{ij},\qquad
 v_{ij}=\begin{cases}t_i&j=i,\\ b_{ij}&j\ne i.\end{cases}
-```
+$$
 
 A state-independent comparison row is
 
-```math
+$$
 C_{ij}=\begin{cases}0&j=i,\\ \frac{28b_{ij}}{25A_i}&j\ne i\end{cases}
        +\frac{F_i}{A_i^2}\frac65 v_{ij}.
-```
+$$
 
 Since $`0\le t_i\le a_i/2`$, we have $`F_i\le(127/500)a_i`$ and
 $`a_it_i/A_i^2\le2/9`$. Thus
 
-```math
+$$
 \sum_j C_{ij}
 \le\frac{28}{75}+\frac{12}{5}\frac{127}{500}\frac29
 =\frac{318}{625}=0.5088<0.512.
-```
+$$
 
 This uniform comparison includes inverse variation and is the Lean-proved nonlinear bound.
 It supplies a common matrix for each visit throughout the box.
@@ -403,10 +403,10 @@ This is the ordered comparison-matrix argument expressed in terms of the perturb
 tracks. It applies to the proper-color ordering too. Integrating the derivative estimate
 between any two points of the convex box gives
 
-```math
+$$
 \|T(u)-T(v)\|_\infty\le q\|u-v\|_\infty,
 \qquad u,v\in\mathcal C.
-```
+$$
 
 We can now apply the generic contraction theorem on the complete closed box. Its iterates
 approach a unique fixed point there, and our earlier consistency argument identifies that point
@@ -427,22 +427,22 @@ We can put numbers into the estimate without first running the solver. Take a pr
 $`Y=0.05`$, leave twice that range for intermediate states by setting $`B=0.1`$, and allow
 $`0\le\eta\le1`$ with $`\alpha\le1/4`$. The box-preservation condition holds, and we obtain
 
-```math
+$$
 q=\frac{318}{625}=0.5088<0.512,
 \qquad
 L_F=1+4\alpha(1+12\eta B^2)\le2.12.
-```
+$$
 
 The constant $`L_F`$ translates state error into force imbalance: integrating the Hessian from
 the root to the candidate gives $`r_{\mathrm{IE}}(u)\le L_F\|u-u^{\ast}\|_\infty`$.
 Both the predictor and the root lie within $`Y`$ of the rest configuration, so their initial
 separation is at most $`2Y=0.1`$. Using the convenient common factor $`0.512`$, we get
 
-```math
+$$
 \|T^s(y)-u^{\ast}\|_\infty\le0.1(0.512)^s,
 \qquad
 r_{\mathrm{IE}}(T^s(y))\le0.212(0.512)^s.
-```
+$$
 
 `Examples/AxialSpringResidual.lean` proves the mass-scaled maximum-residual Lipschitz constant
 $`53/25=2.12`$. `Examples/AxialSpringConvergence.lean` applies the prepared cross-norm Phase-5
@@ -461,9 +461,9 @@ states permit 10 mm. A dimensionless state error of $`10^{-6}`$ is 0.1 micromete
 the force-residual tolerance retains its mass and timestep scaling above.
 The timestep condition is
 
-```math
+$$
 h\le\frac12\sqrt{\frac{m_{\min}}{k_{\max}}}.
-```
+$$
 
 For $`m_{\min}=0.001\,\mathrm{kg}`$, stiffnesses of $`1`$, $`100`$, and
 $`10^4\,\mathrm{N/m}`$ permit approximately 15.81, 1.581, and 0.1581 ms, respectively.
@@ -478,10 +478,10 @@ state error as well: at a coordinate of largest absolute error, the signed Lapla
 to $`f(u)-f(u^{\ast})`$ is nonnegative. Thus $`\|u-u^{\ast}\|_\infty\le r_{\mathrm{IE}}(u)`$.
 Combining the two directions of comparison with contraction gives
 
-```math
+$$
 r_{\mathrm{IE}}(T(u))\le\theta r_{\mathrm{IE}}(u),
 \qquad \theta=L_Fq.
-```
+$$
 
 For $`\alpha\le0.2`$, $`\eta\le1`$, this gives $`\theta\le0.804<1`$.
 At $`\alpha=0.25`$, the sufficient bound is approximately 1.0482 and does not establish
@@ -506,7 +506,7 @@ These floating-point observations complement the uniform analytic estimate.
 [run configuration](../../experiments/applicability/summary.json) make the results inspectable.
 For 16 vertices, equal masses and stiffnesses, and $`\eta=1`$:
 
-| $`\alpha`$ | Order | $`\rho(DT(u^{\ast}))`$ | $`\|DT(u^{\ast})\|_\infty`$ | $`\|DT(u^{\ast})\|_2`$ | Sweeps to tolerance |
+| $`\alpha`$ | Order | $`\rho(DT(u^{\ast}))`$ | $`\lVert DT(u^{\ast})\rVert_\infty`$ | $`\lVert DT(u^{\ast})\rVert_2`$ | Sweeps to tolerance |
 |---|---|---|---|---|---|
 | 0.25 | serial | 0.10825 | 0.20094 | 0.21061 | 6 |
 | 0.25 | proper color | 0.10825 | 0.33420 | 0.34660 | 4 |
@@ -529,9 +529,9 @@ so taking absolute values of the factors loses no cancellation in this model. Of
 and independent maxima then introduce conservatism. The maximum-norm bound is independent
 of chain length, but depends on incident coupling. Euclidean transport obeys
 
-```math
+$$
 \|v\|_\infty\le\|v\|_2\le\sqrt n\,\|v\|_\infty.
-```
+$$
 
 A one-step norm conversion can therefore destroy contraction (already at $`n=16`$ for the
 endpoint bound), whereas conversion of the final state-error estimate costs only $`\sqrt n`$.
@@ -544,19 +544,19 @@ it also becomes slow at large $`\alpha`$.
 Two exact examples distinguish convergence properties. For two quadratic vertices with
 $`a_i=1`$, $`b=10`$, $`y=0`$, and $`u=(r,r)`$, a serial sweep gives
 
-```math
+$$
 T(u)=\left(\frac{10r}{11},\frac{100r}{121}\right),
 \qquad r_{\mathrm{IE}}(u)=r,
 \qquad r_{\mathrm{IE}}(T(u))=\frac{210r}{121}>r\quad(r>0).
-```
+$$
 
 Thus global state contraction can coexist with physical-residual increases. For an
 objective-increasing example, take $`a_i=b=1`$, $`\eta=100`$, $`y=(1,-1)`$, and
 $`u=(0,0)`$. The first update gives $`U_0(u)=(1/2,0)`$, with
 
-```math
+$$
 G(u)=1,\qquad G(U_0(u))=\frac{37}{16}>1.
-```
+$$
 
 This second example is outside the certified box and nonlinear parameter range. The local
 convergence result makes no claim about convergent objective-increasing trajectories.
@@ -609,11 +609,11 @@ We can test this reuse with a concrete extension before tackling general materia
 vertex displacement to be a vector $`u_i\in\mathbb R^d`$, and connect vertices by any finite
 simple graph. Using the length of the displacement difference in the same spring energy gives
 
-```math
+$$
 G(u)=\frac12\sum_i a_i\|u_i-y_i\|^2
  +\sum_{e=\{i,j\}}b_e\left(\frac{\|u_i-u_j\|^2}{2}
                            +\frac{\eta\|u_i-u_j\|^4}{4}\right).
-```
+$$
 
 The quartic term now couples the components within a vertex as well as neighboring vertices.
 It therefore exercises an actual block solve. This energy measures differences of displacements;
@@ -623,38 +623,38 @@ and a nonzero rest length.
 The path's degree-two bound has to change. A vertex with more incident springs receives more
 coupling during its update. The corresponding parameter is
 
-```math
+$$
 z=\max_i\frac{\sum_{e\ni i}b_e}{a_i}
  =\max_i\frac{h^2\sum_{e\ni i}k_e}{m_i}
  \le\Delta\frac{h^2k_{\max}}{m_{\min}},
-```
+$$
 
 where $`\Delta`$ is maximum graph degree. This shows how the same estimate can cover a larger
 graph: control total incident stiffness relative to each mass, rather than counting the total
 number of vertices. For an edge displacement $`d_e`$, the derivatives we need are
 
-```math
+$$
 H_e=b_e[(1+\eta\|d_e\|^2)I+2\eta d_ed_e^\mathsf T],
 \qquad
 \|DH_e[\delta d_e]\|\le6b_e\eta\|d_e\|\,\|\delta d_e\|.
-```
+$$
 
 On the product of radius-$`B`$ balls, local inverse and variation bounds give
 
-```math
+$$
 \begin{aligned}
 P(z)&=B+Y+2Bz(1+4\eta B^2),\\
 q_{\mathrm{vec}}&\le\frac{z(1+12\eta B^2)}{1+z}
              +\frac{24\eta BzP(z)}{(1+z)^2}.
 \end{aligned}
-```
+$$
 
 For intermediate-state invariance, expand
 
-```math
+$$
 K_iu_i-R_i=a_iy_i+\sum_{j\sim i}b_{ij}
  [(1+\eta\|d_{ij}\|^2)u_j+2\eta d_{ij}\langle d_{ij},u_i\rangle].
-```
+$$
 
 The numerator norm is at most $`a_iY+\sum_jb_{ij}(B+12\eta B^3)`$, while
 $`K_i\succeq(a_i+\sum_jb_{ij})I`$. Hence $`12\eta B^3z\le B-Y`$ suffices.
@@ -662,10 +662,10 @@ Strong convexity gives a unique root; taking the inner product of its equation w
 largest-norm coordinate gives $`\max_i\|u_i^{\ast}\|\le Y`$.
 At $`B=0.1`$, $`Y=0.05`$, $`\eta\le1`$, and $`z\le0.5`$,
 
-```math
+$$
 q_{\mathrm{vec}}\le0.5088<0.512,
 \qquad L_F\le1+2z(1+12\eta B^2)\le2.12.
-```
+$$
 
 We therefore recover the same 20-sweep physical-residual bound, now with
 $`r_{\mathrm{IE}}(u)=\max_i\|R_i(u)\|/a_i`$. Nothing in these constants depends on whether
@@ -687,10 +687,10 @@ and variation estimates from the element's constitutive law.
 Inertia can still help even when some potential curvature is negative. For example, a lower
 bound $`-\kappa_i I`$ on the local potential curvature gives
 
-```math
+$$
 H_{ii}(x)\succeq\left(\frac{m_i}{h^2}-\kappa_i\right)I,
 \qquad \frac{m_i}{h^2}>\kappa_i.
-```
+$$
 
 This controls the inverse local solve, but says nothing yet about the influence of neighboring
 vertices. That influence needs mixed-block bounds. Likewise, a neighborhood that includes a

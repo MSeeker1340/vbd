@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Implicit-Euler Solver Consistency and Fixed-Point Convergence
 description: Specifies the unbiasedness condition that identifies contractive solver fixed points with implicit-Euler solutions and transports state error to residual error.
 tags: [implicit-euler, fixed-points, contraction, residual, solver-consistency]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 The [implicit-Euler formulation](./implicit-euler.md) supplies the equation to solve, while
@@ -16,10 +16,10 @@ the concrete regular VBD sweep consistency proof.
 
 Let `X` be a real normed space, let `ie` be an implicit-Euler step, and write
 
-```math
+$$
 F(x)=R_{\mathrm{IE}}(x)=\nabla G_{\mathrm{IE}}(x)
 =\mathrm{energyGradient}_{ie}(x).
-```
+$$
 
 The Phase-1 gradient identity gives the displayed equality. An implicit-Euler solution is a point
 `p` with `F(p) = 0`; it is a stationary point of `G_IE`. No minimization or uniqueness of such
@@ -47,19 +47,19 @@ is connected to the equation it is intended to solve.
 The map `T` is **unbiased for `F` on `S`** when every fixed point in its certified region solves
 the equation:
 
-```math
+$$
 \mathrm{UnbiasedOn}(F,T,S)
 \quad\Longleftrightarrow\quad
 \forall x\in S,\quad T(x)=x\ \Longrightarrow\ F(x)=0.
-```
+$$
 
 This is a consistency condition, not a convergence condition. It says that the solver has no
 spurious fixed point in `S`; it does not say that a solution exists, that `T` is continuous, or
 that the iteration converges. The converse,
 
-```math
+$$
 F(x)=0\ \Longrightarrow\ T(x)=x,
-```
+$$
 
 is **root preservation**. It is useful when describing all roots and fixed points, but it is not
 needed to identify the Banach fixed point as a solution. A later concrete solver theorem may
@@ -69,25 +69,25 @@ establish either or both directions; the generic Phase-5 theorem requires only u
 
 Suppose `S` is nonempty and complete in its induced metric, `T(S) ⊆ S`, and
 
-```math
+$$
 \lVert T(x)-T(y)\rVert\le q\lVert x-y\rVert
 \qquad(x,y\in S),\qquad 0\le q<1.
-```
+$$
 
 If `T` is unbiased for `F` on `S`, then there is a point `p ∈ S` such that
 
-```math
+$$
 T(p)=p,
 \qquad F(p)=0,
-```
+$$
 
 and `p` is the unique **solver fixed point** in `S`. For every `x₀ ∈ S`, with
 `x_k = T^k(x₀)`,
 
-```math
+$$
 \lVert x_k-p\rVert\le q^k\lVert x_0-p\rVert,
 \qquad x_k\longrightarrow p.
-```
+$$
 
 The conclusion does not claim that `p` is the unique implicit-Euler stationary point in `S`.
 That requires root preservation as well, or an independent uniqueness theorem for the residual.
@@ -99,18 +99,18 @@ equation-solving interpretation.
 
 Suppose in addition that `F` is `L`-Lipschitz on `S`:
 
-```math
+$$
 \lVert F(x)-F(y)\rVert\le L\lVert x-y\rVert
 \qquad(x,y\in S).
-```
+$$
 
 Unbiasedness gives `F(p)=0`, so the contraction estimate yields
 
-```math
+$$
 \lVert F(x_k)\rVert
 \le L\lVert x_k-p\rVert
 \le Lq^k\lVert x_0-p\rVert.
-```
+$$
 
 Thus `Lq^kR ≤ ε` certifies residual at most `ε` whenever the initial state error is at most `R`.
 A physically scaled residual requires its own Lipschitz bound. A derivative operator-norm bound
@@ -119,10 +119,10 @@ for `F` on a convex region is one route to the required Lipschitz premise.
 When the contraction state metric is an induced block norm $`\lVert\cdot\rVert_p`$, the corresponding
 residual-regularity premise is explicitly
 
-```math
+$$
 \lVert R_{\mathrm{IE}}(x)-R_{\mathrm{IE}}(y)\rVert_X
 \le L\lVert x-y\rVert_p.
-```
+$$
 
 It is a cross-norm residual-regularity condition. It does not assert that contraction in
 $`\lVert\cdot\rVert_p`$ is contraction in $`\lVert\cdot\rVert_X`$.

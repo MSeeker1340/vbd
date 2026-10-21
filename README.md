@@ -94,27 +94,27 @@ hypotheses for the selected norm, region, and execution plan.
 
 The argument draws on three independent parts of the library:
 
-1. **Implicit-Euler mathematics.** For predictor y, self-adjoint mass operator
-   M, timestep h > 0, and potential P, define
+**Implicit-Euler mathematics.** For predictor y, self-adjoint mass operator
+M, timestep h > 0, and potential P, define
 
-   ```math
-   G_{IE}(x)=\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+P(x).
-   ```
+$$
+G_{IE}(x)=\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+P(x).
+$$
 
-   The library proves its gradient/residual and Hessian identities on an
-   abstract real Hilbert space. The generic solution concept is stationarity,
-   ∇G_IE(x) = 0; stronger conclusions carry their own assumptions.
+The library proves its gradient/residual and Hessian identities on an
+abstract real Hilbert space. The generic solution concept is stationarity,
+∇G_IE(x) = 0; stronger conclusions carry their own assumptions.
 
-2. **Block states, updates, and operators.** Heterogeneous block spaces support
-   access, replacement, write support, composition, simultaneous snapshot
-   merging, and continuous-linear block matrices. Disjoint writes and read
-   independence are separate properties; commutation supplies the link between
-   simultaneous and sequential execution.
+**Block states, updates, and operators.** Heterogeneous block spaces support
+access, replacement, write support, composition, simultaneous snapshot
+merging, and continuous-linear block matrices. Disjoint writes and read
+independence are separate properties; commutation supplies the link between
+simultaneous and sequential execution.
 
-3. **Contractive fixed-point iteration.** Mathlib's fixed-point theory yields
-   existence, uniqueness, geometric convergence, finite-iterate bounds, and
-   defect-based estimates on complete invariant sets. A derivative bound on a
-   convex region supplies the required Lipschitz estimate.
+**Contractive fixed-point iteration.** Mathlib's fixed-point theory yields
+existence, uniqueness, geometric convergence, finite-iterate bounds, and
+defect-based estimates on complete invariant sets. A derivative bound on a
+convex region supplies the required Lipschitz estimate.
 
 The VBD analysis connects these foundations as follows:
 

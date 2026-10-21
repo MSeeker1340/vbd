@@ -3,7 +3,7 @@ type: Tooling Guide
 title: Research Paper Conversion
 description: Selects reproducible tools and quality checks for converting cited mathematical PDFs into agent-readable Markdown.
 tags: [pdf, markdown, research, docling, pandoc, arxiv]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Decision
@@ -72,20 +72,24 @@ Before adding a generated transcript:
 
 # GitHub mathematical rendering
 
-Knowledge concepts and paper transcripts use GitHub's protected inline math syntax
-(`$` followed by a backtick, the expression, a backtick, and `$`) and fenced `math`
-blocks for displayed equations. These delimiters keep Markdown emphasis and code
-processing separate from the LaTeX expression.
+Knowledge concepts and paper transcripts use protected inline math syntax
+(`$` followed by a backtick, the expression, a backtick, and `$`) and `$$` on
+separate lines for displayed equations. These forms support GitHub and VS Code's
+built-in math preview. Display blocks have blank lines before and after them;
+list continuations retain the indentation of their enclosing item.
 
-Use upright identifiers such as `\mathrm{supp}` and braced star superscripts such as
-`x^{\ast}`. Use `aligned` or `cases` environments for alignment markers and row breaks.
+Use `\lVert` and `\rVert` for norms in Markdown tables, and separate inline math
+from adjacent words with spaces. Use upright identifiers such as `\mathrm{supp}`
+and braced star superscripts such as `x^{\ast}`. Use `aligned` or `cases`
+environments for alignment markers and row breaks.
 Equation labels are Markdown anchors outside the math block, with ordinary Markdown
 links for cross-references. Numbered source equations appear as labeled display blocks.
 Lean and shell examples retain their source code.
 
-Validate extracted expressions with MathJax and check that a Markdown parser recognizes
-every display fence. PDF-derived formulas retain their documented transcription limits;
-verify mathematical corrections against the canonical paper.
+Validate extracted expressions with MathJax and render the Markdown with VS Code's
+Markdown-it/KaTeX plugin, checking that every display is recognized as math rather than
+code. PDF-derived formulas retain their documented transcription limits; verify
+mathematical corrections against the canonical paper.
 
 # Current corpus
 
@@ -104,3 +108,4 @@ verify mathematical corrections against the canonical paper.
 [5] [MinerU official repository](https://github.com/opendatalab/MinerU)
 [6] [PyMuPDF4LLM official repository](https://github.com/pymupdf/pymupdf4llm)
 [7] [GitHub mathematical expression syntax](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/writing-mathematical-expressions)
+[8] [VS Code math preview syntax](https://code.visualstudio.com/docs/languages/markdown#_math-formula-rendering)

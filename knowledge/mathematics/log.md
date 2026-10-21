@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **Shared preview syntax**: Used `$$` display delimiters throughout the mathematical concepts for GitHub and VS Code preview compatibility, retaining upright operator identifiers, braced star superscripts, and the same formulas. Used table-safe norm delimiters in the spring-chain comparison table.
+
 * **GitHub math compatibility**: Standardized protected inline math and fenced displays throughout the mathematical concepts. Replaced unsupported operator-name macros with upright identifiers and bare star powers with braced star superscripts, retaining the stated mathematics.
 
 ## 2026-10-20

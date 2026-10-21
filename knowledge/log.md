@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **Shared preview syntax**: Adopted `$$` display delimiters across the KB for both GitHub and VS Code's built-in preview, with the [rendering convention](./references/pdf-conversion.md#github-mathematical-rendering) covering both renderers. Retained the prior macro and superscript normalization.
+
 * **GitHub mathematical rendering**: Standardized KB math notation across all scopes and the paper corpus, using the [conversion guide's rendering convention](./references/pdf-conversion.md#github-mathematical-rendering). Recorded scope-specific notation and transcript repairs in their local logs.
 
 ## 2026-09-04

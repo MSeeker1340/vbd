@@ -3,23 +3,23 @@ type: Mathematical Specification
 title: Implicit Euler as Optimization
 description: Derives the implicit-Euler incremental potential and specifies its derivatives, stationarity equation, and numerical character.
 tags: [implicit-euler, classical-mechanics, gradient, hessian, stationary-point, numerical-analysis]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Data
 
 Let `X` be a real Hilbert space, `h > 0` a timestep, `y : X` a predicted position, `M : X → X` a self-adjoint mass operator, and `E : X → ℝ` a potential energy. Define the weighted quadratic form by
 
-```math
+$$
 \lVert z\rVert_M^2 = \langle z, Mz\rangle
-```
+$$
 
 and the incremental objective
 
-```math
+$$
 G_{\mathrm{IE}}(x)
 =\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+E(x).
-```
+$$
 
 Self-adjointness of `M` simplifies the derivative of the quadratic term to `M(x-y)/h²`.
 Quantitative positive lower bounds enter later in the
@@ -32,38 +32,38 @@ mechanics. For a conservative mechanical system with configuration `q`, velocity
 mass operator `M`, and potential energy `E`, Hamilton's principle makes the action of the
 Lagrangian
 
-```math
+$$
 L(q,v)=\frac12\langle v,Mv\rangle-E(q)
-```
+$$
 
 stationary. Its differential form is the Euler–Lagrange equation, which here reduces to Newton's
 equation
 
-```math
+$$
 M\ddot q=-\nabla E(q).
-```
+$$
 
 Write this second-order equation as the first-order system
 
-```math
+$$
 \dot q=v,
 \qquad
 M\dot v=-\nabla E(q).
-```
+$$
 
 One backward-Euler step evaluates both right-hand sides at the new state:
 
-```math
+$$
 q_{n+1}=q_n+h v_{n+1},
 \qquad
 M(v_{n+1}-v_n)=-h\nabla E(q_{n+1}).
-```
+$$
 
 Eliminating `v_{n+1}` and defining the inertial prediction `y=q_n+h v_n` gives
 
-```math
+$$
 \frac1{h^2}M(q_{n+1}-y)+\nabla E(q_{n+1})=0.
-```
+$$
 
 This is exactly the stationarity equation `∇G_IE(q_{n+1})=0`. Thus `G_IE` is an *incremental
 potential* whose critical points encode a backward-Euler step. If external acceleration is treated
@@ -97,33 +97,33 @@ point require separate hypotheses.
 
 Under differentiability of `E` at `x`, prove
 
-```math
+$$
 \nabla G_{\mathrm{IE}}(x)
 =\frac{1}{h^2}M(x-y)+\nabla E(x).
-```
+$$
 
 Define the implicit-Euler residual by
 
-```math
+$$
 R_{\mathrm{IE}}(x)=\frac{1}{h^2}M(x-y)+\nabla E(x),
-```
+$$
 
 then prove the pointwise equivalence
 
-```math
+$$
 R_{\mathrm{IE}}(x)=0
 \iff
 \nabla G_{\mathrm{IE}}(x)=0.
-```
+$$
 
 This equivalence identifies stationarity. Global minimization requires additional curvature and
 existence hypotheses.
 
 Under twice differentiability, represent and prove
 
-```math
+$$
 \nabla^2G_{\mathrm{IE}}(x)=\frac{1}{h^2}M+\nabla^2E(x).
-```
+$$
 
 # Assumption ledger
 

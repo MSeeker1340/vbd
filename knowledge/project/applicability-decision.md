@@ -3,7 +3,7 @@ type: Architecture Decision
 title: First Quantitative VBD Applicability Route
 description: Defines the selected family, guarantee, evaluation contract, and implementation scope for the first VBD convergence example.
 tags: [applicability, theorem-route, maximum-norm, execution]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Decision
@@ -72,7 +72,7 @@ or a perceptual accuracy standard.
 | Stiffness ratio | $`1,10000`$ | Alternating stiff/soft edges |
 | Nonlinearity $`\eta`$ | $`0,1`$ | Quadratic baseline and nonlinear case |
 | Predictor | $`y_i=0.05\cos(1.7i)`$ | Deterministic, nonuniform inertia warm start |
-| Certificate box | $`\|u\|_\infty\le0.1`$ | Explicit intermediate-state region |
+| Certificate box | $`\lVert u\rVert_\infty\le0.1`$ | Explicit intermediate-state region |
 | Residual tolerance and budget | $`10^{-6}`$, 20 sweeps | Quantitative evaluation target |
 
 Every normalized grid value has a realization within the calibration ranges: for example,

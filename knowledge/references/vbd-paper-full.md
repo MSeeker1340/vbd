@@ -4,12 +4,12 @@ title: Vertex Block Descent — Agent-readable Full Text
 description: Source-derived Markdown rendering of the VBD paper with prose, sections, references, and TeX mathematics.
 resource: https://arxiv.org/pdf/2403.06321
 tags: [vbd, paper, full-text, markdown, implicit-euler]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Conversion provenance
 
-- Mathematics uses protected GitHub inline delimiters and fenced `math` displays; equation labels use Markdown anchors.
+- Mathematics uses protected inline delimiters and `$$` displays; equation labels use Markdown anchors.
 - Canonical source: [arXiv 2403.06321](https://arxiv.org/abs/2403.06321).
 - Downloaded PDF SHA-256: `39af3d03de69ca2f4c87e7d8d613214ee47855c573c3e8de67390bff79e8e5ee`.
 - Rendering: ar5iv source-derived HTML converted with Pandoc 3.10.2 and a presentation-cleanup filter.
@@ -76,9 +76,9 @@ Our vertex block descent method is formulated based on the optimization form of 
 
 **(1)**
 
-```math
+$$
 \vec{x}^{t+1} =\underset{\vec{x}}{\mathrm{argmin}}\;G(\vec{x})\;,
-```
+$$
 
 for evaluating the positions at the end of the time step $`\vec{x}^{t+1}`$ that minimizes the *variational energy* $`G(\vec{x})`$ in the form of
 
@@ -86,9 +86,9 @@ for evaluating the positions at the end of the time step $`\vec{x}^{t+1}`$ that 
 
 **(2)**
 
-```math
+$$
 G(\vec{x}) =\frac{1}{2h^{2}}\lVert\vec{x}-\vec{y}\rVert_{M}^{2}+E(\vec{x})\;.
-```
+$$
 
 The first term here is the *inertia potential*, which contains the time step size $`h`$, the mass-weighted norm $`\lVert\cdot\rVert_{M}`$, and
 
@@ -96,9 +96,9 @@ The first term here is the *inertia potential*, which contains the time step siz
 
 **(3)**
 
-```math
+$$
 \vec{y} =\vec{x}^{t}+h\vec{v}^{t}+h^{2}\vec{a}_{\text{ext}}
-```
+$$
 
 with a fixed external acceleration $`\vec{a}_{\text{ext}}`$, such as gravity. The second term $`E(\vec{x})`$ is the *total potential energy* evaluated at $`\vec{x}`$.
 
@@ -108,9 +108,9 @@ We propose an optimization technique that falls under the category of coordinate
 
 **(4)**
 
-```math
+$$
 G_{i}(\vec{x}) =\frac{m_{i}}{2h^{2}}\lVert\vec{x}_{i}-\vec{y}_{i}\rVert^{2}+\sum_{j\in\mathcal{F}_{i}}E_{j}(\vec{x})\;,
-```
+$$
 
 where $`m_{i}`$ is the mass of the vertex and $`E_{j}`$ is the energy of force element $`j`$ in $`\mathcal{F}_{i}`$.
 
@@ -122,9 +122,9 @@ Based on this observation, our method operates on a single vertex at a time and 
 
 **(5)**
 
-```math
+$$
 \vec{x}_{i} \leftarrow\underset{\vec{x}_{i}}{\mathrm{argmin}}\;G_{i}(\vec{x})
-```
+$$
 
 and solves the global system using Gauss-Seidel iterations. Each local minimization for a vertex effectively finds a descent step for $`G`$ using the degrees of freedom (DoF) for the vertex as a block of coordinates, hence the name *vertex block descent* (VBD). After each iteration, the total reduction in $`G`$ is equal to the sum of all reductions in $`G_{i}`$. In other words, the energy change of each vertex position adjustment is accumulated to the system energy. Consequently, if we can make sure that each local energy drops $`G_{i}`$ when we are adjusting vertex $`i`$, we can guarantee that we are descending the system energy $`G`$.
 
@@ -134,9 +134,9 @@ Thus, our system directly operates on vertex positions and the resulting velocit
 
 **(6)**
 
-```math
+$$
 \vec{v}^{t+1}=\frac{1}{h}\big(\vec{x}^{t+1}-\vec{x}^{t}\big)\;.
-```
+$$
 
 ### 3.2. Local System Solver
 
@@ -146,9 +146,9 @@ The position updates per vertex (in [Equation 5](#S3.E5 "5 ‣ 3.1. Global Opti
 
 **(7)**
 
-```math
+$$
 \vec{H}_{i}\,\Delta\vec{x}_{i} =\mathbf{f}_{i}\;,
-```
+$$
 
 where $`\Delta\mathbf{x}_{i}`$ is the change in position, $`\mathbf{f}_{i}`$ is the total force acting on the vertex, calculated using
 
@@ -156,9 +156,9 @@ where $`\Delta\mathbf{x}_{i}`$ is the change in position, $`\mathbf{f}_{i}`$ is 
 
 **(8)**
 
-```math
+$$
 \mathbf{f}_{i} =-\frac{\partial G_{i}(\vec{x})}{\partial\vec{x}_{i}}=-\frac{m_{i}}{h^{2}}\left(\mathbf{x}_{i}-\mathbf{y}_{i}\right)\;-\sum_{j\in\mathcal{F}_{i}}\frac{\partial E_{j}(\vec{x})}{\partial\vec{x}_{i}}\;,
-```
+$$
 
 and $`\vec{H}_{i}\in\mathbb{R}^{3\times 3}`$ is the Hessian of $`G_{i}`$ with respect to the DoF of vertex $`i`$, such that
 
@@ -166,9 +166,9 @@ and $`\vec{H}_{i}\in\mathbb{R}^{3\times 3}`$ is the Hessian of $`G_{i}`$ with re
 
 **(9)**
 
-```math
+$$
 \vec{H}_{i} =\frac{\partial^{2}G_{i}(\vec{x})}{\partial\vec{x}_{i}\partial\vec{x}_{i}}=\frac{m_{i}}{h^{2}}\mathbf{I}\;+\sum_{j\in\mathcal{F}_{i}}\frac{\partial^{2}E_{j}(\vec{x})}{\partial\vec{x}_{i}\partial\vec{x}_{i}}\;.
-```
+$$
 
 Here, the first term is a diagonal matrix and the second one is the sum of Hessians of the force elements with respect to vertex $`i`$. Intuitively, the solution of this linear system is the extreme point of the quadratic approximation for the localized energy $`G_{i}`$. By reducing $`G_{i}`$ with each iteration, we can guarantee a reduction in $`G`$, thereby iteratively solving the global system in [Equation 2](#S3.E2 "2 ‣ 3.1. Global Optimization ‣ 3. Vertex Block Descent for Elastic Bodies ‣ Vertex Block Descent").
 
@@ -192,9 +192,9 @@ Since we are relying on implicit Euler, we can represent the velocity as positio
 
 **(10)**
 
-```math
+$$
 \vec{H}_{i} =\frac{m_{i}}{h^{2}}\mathbf{I}\;+\sum_{j\in\mathcal{F}_{i}}\frac{\partial^{2}E_{j}(\vec{x})}{\partial\vec{x}_{i}\partial\vec{x}_{i}}+\left(\sum_{j\in\mathcal{F}_{i}}\frac{k_{d}}{h}\frac{\partial^{2}E_{j}(\vec{x})}{\partial\vec{x}_{i}\partial\vec{x}_{i}}\right)\;,
-```
+$$
 
 where $`k_{d}`$ is the damping coefficient. Finally, we add the damping force to [Equation 8](#S3.E8 "8 ‣ 3.2. Local System Solver ‣ 3. Vertex Block Descent for Elastic Bodies ‣ Vertex Block Descent") using the same damping term, such that
 
@@ -202,9 +202,9 @@ where $`k_{d}`$ is the damping coefficient. Finally, we add the damping force to
 
 **(11)**
 
-```math
+$$
 \mathbf{f}_{i} =-\frac{m_{i}}{h^{2}}\left(\mathbf{x}_{i}-\mathbf{y}_{i}\right)-\!\!\sum_{j\in\mathcal{F}_{i}}\frac{\partial E_{j}(\vec{x})}{\partial\vec{x}_{i}}-\left(\sum_{j\in\mathcal{F}_{i}}\frac{k_{d}}{h}\frac{\partial^{2}E_{j}(\vec{x})}{\partial\vec{x}_{i}\partial\vec{x}_{i}}\right)\left(\vec{x}_{i}-\vec{x}_{i}^{t}\right).
-```
+$$
 
 ### 3.4. Constraints
 
@@ -218,9 +218,9 @@ Collisions can be handled by simply introducing a quadratic collision energy per
 
 **(12)**
 
-```math
+$$
 E_{c}(\vec{x}) =\frac{1}{2}\,k_{c}\,d^{2} \qquad\text{with}\quad d =\max\Big(0,(\vec{x}_{b}-\vec{x}_{a})\cdot\vec{\hat{n}}\Big)\;,
-```
+$$
 
 where $`k_{c}`$ is the collision stiffness parameter, $`\mathbf{x}_{a}`$ and $`\mathbf{x}_{b}`$ are the two *contact points* on either side of the collision, and $`\mathbf{\hat{n}}`$ is the contact normal.
 
@@ -243,9 +243,9 @@ To compute friction for collision $`c`$, we must consider the relative motion of
 
 **(13)**
 
-```math
+$$
 \delta\mathbf{x}_{c}=\big(\mathbf{x}_{a}-\mathbf{x}_{a}^{t}\big)-\big(\mathbf{x}_{b}-\mathbf{x}_{b}^{t}\big)\;,
-```
+$$
 
 where $`\mathbf{x}_{a}^{t}`$ and $`\mathbf{x}_{b}^{t}`$ are the positions of $`\mathbf{x}_{a}`$ and $`\mathbf{x}_{b}`$ at the beginning of the time step.
 
@@ -255,19 +255,19 @@ With this $`\delta\mathbf{x}_{c}`$, we can use the friction model of *incrementa
 
 **(14)**
 
-```math
+$$
 \mathbf{f}_{c,i} =-\mu_{c}\,\lambda_{c,i}\,\frac{\partial\delta\vec{x}_{c}}{\partial\vec{x}_{i}}\,\vec{T}_{c}\,f_{1}(\|\vec{u}_{c}\|)\frac{\vec{u}_{c}}{\|\vec{u}_{c}\|}\;\text{, where}
-```
+$$
 
 
 <a name="S3.E15"></a>
 
 **(15)**
 
-```math
+$$
 f_{1}(u) =\begin{cases}2\left(\frac{u}{\epsilon_{v}h}\right)-\left(\frac{u}{\epsilon_{v}h}\right)^{2},&u\in(0,h\epsilon_{v})\\
                                                 1,&u\geq h\epsilon_{v}\end{cases}.
-```
+$$
 
 Here, $`f_{1}`$ serves as a smooth transition function between static and dynamic friction. When the relative velocity exceeds a small threshold $`\epsilon_{v}`$, dynamic friction is applied. Conversely, if the relative velocity is below this threshold, static friction is applied, scaling between the range of $`[0,1]`$.
 
@@ -277,9 +277,9 @@ In our formulation, we need the Hessian of the friction term, which is the deriv
 
 **(16)**
 
-```math
+$$
 \frac{\partial\mathbf{f}_{c,i}}{\partial\mathbf{x}_{i}} \approx-\mu_{c}\,\lambda_{c,i}\,\frac{\partial\delta\mathbf{x}_{c}}{\partial\mathbf{x}_{i}}\,\vec{T}_{c}\,\frac{f_{1}(\|\vec{u}_{c}\|)}{\|\vec{u}_{c}\|}\vec{T}_{c}^{T}\,\left(\frac{\partial\delta\mathbf{x}_{c}}{\partial\mathbf{x}_{i}}\right)^{T}\;.
-```
+$$
 
 Without this approximation, PSD projection and line search might be needed to ensure stability. Finally, all friction forces $`\mathbf{f}_{c,i}`$ and their derivatives $`\partial\mathbf{f}_{c,i}/\partial\mathbf{x}_{i}`$ are added to $`\mathbf{f}_{i}`$ and $`\mathbf{H}_{i}`$, respectively.
 
@@ -293,23 +293,23 @@ We begin with considering three simple options for initialization:
 
 **(a) Previous position**
 
-```math
+$$
 \vec{x} =\vec{x}^{t}
-```
+$$
 
 
 **(b) Inertia**
 
-```math
+$$
 \vec{x} =\vec{x}^{t}+h\mathbf{v}^{t}
-```
+$$
 
 
 **(c) Inertia and acceleration**
 
-```math
+$$
 \vec{x} =\mathbf{x}^{t}+h\mathbf{v}^{t}+h^{2}\mathbf{a}_{\text{ext}}=\vec{y}
-```
+$$
 
 Option (a) struggles with substantially stiff materials. As we adjust each vertex separately, assuming the others remain fixed, our method must lean on the inertia potential's gradient (i.e. $`{m_{i}(\mathbf{x}_{i}-\mathbf{y}_{i})/2h^{2}}`$) to march toward the local minimum. With stiff materials, this method results in notably slower convergence rates due to the inertia potential being considerably less stiff. Consequently, it encounters challenges in simulating scenarios that resemble free fall, like a swinging elastic pendulum at its maximum height, as shown in [5(a)](#S3.F5.sf1 "5(a) ‣ Figure 5 ‣ 3.7. Initialization ‣ 3. Vertex Block Descent for Elastic Bodies ‣ Vertex Block Descent").
 
@@ -321,9 +321,9 @@ We propose an adaptive initialization scheme that combines options (b) and (c), 
 
 **(d) Adaptive**
 
-```math
+$$
 \vec{x} =\mathbf{x}^{t}+h\mathbf{v}^{t}+h^{2}\mathbf{\tilde{a}}
-```
+$$
 
 replacing the external acceleration $`\mathbf{a}_{\text{ext}}`$ in (c) with an estimated acceleration term $`\mathbf{\tilde{a}}`$, determined by exploiting the typical similarity between two consecutive time steps. We begin with the acceleration of the previous frame $`{\vec{a}^{t}=(\mathbf{v}^{t}-\mathbf{v}^{t-1})/h}`$ and compute its component $`a^{t}_{\text{ext}}`$ along the external acceleration direction $`{\mathbf{\hat{a}}_{\text{ext}}=\mathbf{a}_{\text{ext}}/\|\mathbf{a}_{\text{ext}}\|}`$, such that $`{a^{t}_{\text{ext}}=\mathbf{a}^{t}\cdot\mathbf{\hat{a}}_{\text{ext}}}`$. Then, we simply make sure that the estimated acceleration does not exceed the external acceleration, using
 
@@ -331,11 +331,11 @@ replacing the external acceleration $`\mathbf{a}_{\text{ext}}`$ in (c) with an e
 
 **(17)**
 
-```math
+$$
 \mathbf{\tilde{a}} =\tilde{a}\,\mathbf{a}_{\text{ext}}\;, \qquad\text{where}\quad \tilde{a} =\begin{cases}1\;,&\text{if }a^{t}_{\text{ext}}>\|\mathbf{a}_{\text{ext}}\|\\
                                                                                                                                                 0\;,&\text{if }a^{t}_{\text{ext}}<0\\
                                                                                                                                                 a^{t}_{\text{ext}}/\|\mathbf{a}_{\text{ext}}\|\;,&\text{otherwise.}\end{cases}
-```
+$$
 
 This adaptive approach includes external acceleration in the initialization when the motion of a vertex resembles free fall. When an object is stationary, however, as in rest-in-contact, it maintains the previous position in the initialization, preventing undesired penetrations before the first iteration. It also successfully avoids excessive stretching, as can be seen in [5(d)](#S3.F5.sf4 "5(d) ‣ Figure 5 ‣ 3.7. Initialization ‣ 3. Vertex Block Descent for Elastic Bodies ‣ Vertex Block Descent"). Visualizations of different $`\tilde{a}`$ values in this simulation are shown in [Figure 6](#S3.F6 "Figure 6 ‣ 3.7. Initialization ‣ 3. Vertex Block Descent for Elastic Bodies ‣ Vertex Block Descent"). In short, our adaptive initialization is a simple but effective strategy and it is possible because VBD does not dictate a particular initialization (unlike XPBD, for example).
 
@@ -347,9 +347,9 @@ We use the Chebyshev semi-iterative approach ([Wang 2015](#bib.bib64)) to improv
 
 **(18)**
 
-```math
+$$
 \mathbf{x}^{(n)} =\omega_{n}({\mathbf{\bar{x}}}^{(n)}-\mathbf{x}^{(n-2)})+\mathbf{x}^{(n-2)}\;,
-```
+$$
 
 where $`\omega_{n}`$ is the acceleration ratio that changes at each iteration as
 
@@ -357,9 +357,9 @@ where $`\omega_{n}`$ is the acceleration ratio that changes at each iteration as
 
 **(19)**
 
-```math
+$$
 \omega_{n} =\frac{4}{4-\rho^{2}\omega_{n-1}} \qquad\text{with}\quad \omega_{1} =1 \qquad\text{and}\quad \omega_{2} =\frac{2}{2-\rho^{2}}\;,
-```
+$$
 
 where $`\rho\in(0,1)`$ is the estimated spectral radius, which can be set manually, or automatically tuned using the technique introduced in ([Wang and Yang 2016](#bib.bib65)). Note that this position recomputation procedure is performed globally after each Gauss-Seidel iteration is completed, not after each local solver step.
 
@@ -461,7 +461,7 @@ Particle-based simulations can easily use VBD by simply replacing the vertices i
 
 Parallelizing particle-based simulations also involves additional considerations. Mass-spring type simulations, such as peridynamics ([Levine et al. 2015](#bib.bib31)), can use our parallelization approach with vertex coloring. However, simulations involving disjoint or loosely-joined particles, such as particle-based fluid simulation ([Müller et al. 2003](#bib.bib44); [Takahashi et al. 2015](#bib.bib56); [Peer et al. 2015](#bib.bib50)), would not only require recoloring at each time step but also using a conservative neighborhood definition (including potential position change within a time step) for coloring, since position updates can alter the set of neighboring particles that interact with each particle.
 
-[Figure 21](#S6.F21 "Figure 21 ‣ 6.1. Particle-Based Simulations ‣ 6. VBD for Other Simulation Systems ‣ Vertex Block Descent")shows a simple example where 20 particles, including one that is 1000$`\times`$ heavier, are connected with springs of two different stiffness, simulated using VBD.
+[Figure 21](#S6.F21 "Figure 21 ‣ 6.1. Particle-Based Simulations ‣ 6. VBD for Other Simulation Systems ‣ Vertex Block Descent")shows a simple example where 20 particles, including one that is 1000 $`\times`$ heavier, are connected with springs of two different stiffness, simulated using VBD.
 
 ### 6.2. Rigid Body Simulation
 

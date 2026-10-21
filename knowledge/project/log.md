@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **Shared preview syntax**: Changed README and roadmap displays to `$$`, and presented the README's three foundations as independent paragraphs so the energy formula has no list nesting. Used table-safe norm delimiters in the applicability decision. Verified rendering with VS Code's Markdown-it/KaTeX plugin while retaining the superscript repairs.
+
 * **README list math rendering**: Used a fenced `math` block for the implicit-Euler energy formula within the numbered architecture list, preserving its indentation, equation, and explanatory text.
 
 * **GitHub math compatibility**: Applied protected inline notation and fenced displays to the architecture, applicability decision, roadmap, and mathematical entries in scoped logs. Braced the roadmap's fixed-point superscripts without changing project scope or theorem status.

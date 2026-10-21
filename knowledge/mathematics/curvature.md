@@ -3,22 +3,22 @@ type: Mathematical Specification
 title: Curvature, Coupling, and VBD Contraction
 description: Records how the implicit-Euler Hessian controls block inverses, cross-block sensitivity, and local sweep contraction.
 tags: [curvature, coupling, hessian, contraction]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Implicit-Euler Hessian
 
 For
 
-```math
+$$
 G(x)=\frac12\langle x-y,A(x-y)\rangle+P(x),
-```
+$$
 
 Phase 1 gives
 
-```math
+$$
 \nabla^2G(x)=A+\nabla^2P(x).
-```
+$$
 
 In the standard implicit-Euler specialization, `A = M / h²`. VBD analysis combines this identity
 with the concrete block-update operators, potential-component supports, externally supplied execution
@@ -28,26 +28,26 @@ plan, and selected norm.
 
 For every block direction $`v`$, suppose the mass and potential bounds are
 
-```math
+$$
 m_i\|v\|^2\le\langle v,M_{ii}v\rangle,
 \qquad
 -\kappa_i\|v\|^2\le\langle v,(\nabla^2P(x))_{ii}v\rangle.
-```
+$$
 
 The implicit-Euler identity gives
 
-```math
+$$
 \mu_i=\frac{m_i}{h^2}-\kappa_i,
 \qquad
 \mu_i\|v\|^2\le\langle v,H_{ii}(x)v\rangle.
-```
+$$
 
 When $`\mu_i>0`$, Cauchy–Schwarz gives $`\mu_i\|v\|\le\|H_{ii}(x)v\|`$.
 For finite-dimensional real Hilbert blocks, this establishes invertibility and
 
-```math
+$$
 \|H_{ii}(x)^{-1}\|\le\mu_i^{-1}.
-```
+$$
 
 Uniform mass and potential bounds yield this same explicit estimate throughout any supplied
 state region. Bounded negative potential curvature is allowed; nonnegative potential curvature
@@ -65,9 +65,9 @@ threshold requires a determinant comparison in addition to invertibility.
 
 The derivative of a block-Newton update contains normalized off-diagonal blocks such as
 
-```math
+$$
 H_{ii}(x)^{-1}H_{ij}(x).
-```
+$$
 
 The contraction factor of a serial or colored execution depends on these terms and on the actual
 ordered-composition or simultaneous-batch semantics. A Gauss–Seidel contraction theorem combines
@@ -79,10 +79,10 @@ block norm.
 
 For coercivity constants $`\mu_i>0`$ and off-diagonal bounds $`\|H_{ij}\|\le c_{ij}`$,
 
-```math
+$$
 \sum_{j\ne i}\|H_{ii}^{-1}H_{ij}\|
 \le\mu_i^{-1}\sum_{j\ne i}c_{ij}.
-```
+$$
 
 A common row bound $`q\le1`$ propagates through a serial Gauss–Seidel error sweep when the
 visit order covers every block. For $`q<1`$, the sweep's root error operator contracts in the
@@ -90,9 +90,9 @@ block maximum norm. `Integrator/VBDCoupling.lean` implements this inference usin
 Phase-6 changed-row comparison product, including repeated visits and heterogeneous vector blocks.
 The norm conversion constants are explicit:
 
-```math
+$$
 \|x\|_{\max}\le\|x\|_2\le\sqrt{n}\,\|x\|_{\max}.
-```
+$$
 
 The maximum-norm factor concerns the conjugated state operator; the conversion to $`\ell^2`$
 error is a separate estimate.
@@ -102,12 +102,12 @@ $`w_{ij}=b_{ij}[1+3\eta(u_i-u_j)^2]`$ and $`s_i=\sum_j w_{ij}`$.
 With $`0\le\eta\le1`$, nonnegative edge coefficients with zero diagonal, $`a_i\ge1`$, and
 $`\sum_j b_{ij}\le a_i/2`$,
 
-```math
+$$
 s_i\le\frac{14}{25}a_i,
 \qquad
 \sum_{j\ne i}\|H_{ii}^{-1}H_{ij}\|
 \le\frac{s_i}{a_i+s_i}\le\frac{14}{39}<1.
-```
+$$
 
 Degree at most two and $`b_{ij}\le\alpha\le1/4`$ supply the incident-stiffness condition.
 `Examples/AxialSpring.lean` derives the polynomial residual Jacobian and exact Newton blocks,
@@ -121,17 +121,17 @@ For differentiable block residuals $`R_i(x)`$ and differentiable local solve ope
 that are invertible on the region under consideration, the update replaces $`x_i`$ by
 $`x_i-K_i(x)^{-1}R_i(x)`$. Differentiating this expression in block direction $`v_j`$ gives
 
-```math
+$$
 (DU_i)_{ij}[v_j]=\delta_{ij}v_j-K_i^{-1}D_jR_i[v_j]
  +K_i^{-1}\bigl(D_jK_i[v_j]\bigr)K_i^{-1}R_i.
-```
+$$
 
 For exact Newton blocks, $`K_i=D_iR_i`$, the diagonal cancellation gives the sufficient bound
 
-```math
+$$
 \sum_{j\ne i}\|K_i^{-1}D_jR_i\|
  +\|K_i^{-1}\|\,\|K_i^{-1}R_i\|\sum_j\|D_jK_i\|\le q<1.
-```
+$$
 
 These are operator and block-vector norms, with state norm $`\max_i\|x_i\|`$.
 Uniform estimates and intermediate-state invariance let the same ordered-composition proof
@@ -143,9 +143,9 @@ requires exact derivative blocks.
 At a regular residual root, the inverse-variation term vanishes. With $`H=DR(x^{\ast})`$ and exact
 diagonal blocks, the local derivative is
 
-```math
+$$
 DU_i(x^{\ast})=I-\iota_i H_{ii}^{-1}\pi_i H.
-```
+$$
 
 Its unchanged rows are identity rows; its changed diagonal entry is zero, and its changed
 off-diagonal entries are $`-H_{ii}^{-1}H_{ij}`$. Applied to an error vector $`v`$, the changed block
@@ -165,9 +165,9 @@ interfaces support arbitrary finite-dimensional normed blocks. The
 A certified radius in the original norm follows from a pointwise derivative bound together with
 control of Hessian or sweep-derivative variation on a neighborhood:
 
-```math
+$$
 \sup_{x\in N}\|DS(x)\|\le q<1.
-```
+$$
 
 On a convex `N`, the derivative bound gives a Lipschitz contraction. Together with invariance
 and completeness of a nonempty `N`, [contractive fixed-point iteration](./contractive-fixed-point-iteration.md)

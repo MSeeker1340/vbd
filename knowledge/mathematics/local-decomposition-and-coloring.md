@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Local Decomposition and Coloring
 description: Defines finite-support energy components, Newton read locality, proper coloring, and exact color-batch execution.
 tags: [locality, sparsity, potential-decomposition, graph-coloring, parallelism, phase-4, phase-7]
-timestamp: 2026-10-21T02:02:26Z
+timestamp: 2026-10-21T02:29:26Z
 ---
 
 # Purpose and scope
@@ -24,38 +24,38 @@ locality or coloring result in this phase depends on a choice among them.
 Let $`I`$ be a finite set of block indices, let $`X_i`$ be the configuration space of block $`i`$, and
 write
 
-```math
+$$
 X=\bigoplus_{i\in I}^{\ell^2}X_i
-```
+$$
 
 for the candidate-configuration space, as in
 [block states and operators](./block-states-and-operators.md#block-states). Assume that
 
-```math
+$$
 A\subseteq\mathcal P(I)
-```
+$$
 
 is a finite family of supports. For every $`S\in A`$, let $`E_S:X\to\mathbb R`$ be a component
 potential. To say that $`E_S`$ is **local on $`S`$** means that its formula uses only the block values
 $`x_i`$ with $`i\in S`$. For example, a binary component on $`\{i,j\}`$ has the form
 
-```math
+$$
 E_{\{i,j\}}(x)=\varphi(x_i,x_j),
-```
+$$
 
 and its value is determined by $`x_i`$ and $`x_j`$. Equivalently,
 
-```math
+$$
 x_i=z_i\quad(i\in S)
 \quad\Longrightarrow\quad
 E_S(x)=E_S(z).
-```
+$$
 
 The implicit-Euler potential is directly assumed to be
 
-```math
+$$
 E(x)=\sum_{S\in A}E_S(x).
-```
+$$
 
 Thus a component is one summand indexed by the set of blocks on which it may depend. The
 support-indexed family combines summands with the same support. Smoothness assumptions needed for
@@ -66,27 +66,27 @@ the results here.
 
 For a block set $`J\subseteq I`$, define
 
-```math
+$$
 A[J]=\{S\in A\mid S\cap J\ne\varnothing\}.
-```
+$$
 
 If two states agree outside $`J`$, every component outside $`A[J]`$ has the same value at both states.
 Therefore
 
-```math
+$$
 E(z)-E(x)
 =\sum_{S\in A[J]}\bigl(E_S(z)-E_S(x)\bigr)
 \quad\text{whenever}\quad
 z_i=x_i\quad(i\notin J).
-```
+$$
 
 In particular, replacing only block $`i`$ by $`b`$ gives
 
-```math
+$$
 E(R_i(x,b))-E(x)
 =\sum_{S\in A[\{i\}]}
   \bigl(E_S(R_i(x,b))-E_S(x)\bigr).
-```
+$$
 
 Components can occur in the energy changes of several blocks. The equality identifies exactly which
 summands are reevaluated for a proposed block replacement.
@@ -96,11 +96,11 @@ summands are reevaluated for a proposed block replacement.
 The support family $`A`$ determines an undirected graph $`G_A`$ with vertex set $`I`$. Distinct blocks
 $`i`$ and $`j`$ are joined by an edge exactly when they occur together in one component support:
 
-```math
+$$
 i\sim_A j
 \quad\Longleftrightarrow\quad
 i\ne j\ \land\ \exists S\in A,\;\{i,j\}\subseteq S.
-```
+$$
 
 The graph $`G_A`$ is the **component interaction graph**. It records which pairs of blocks can
 interact through a common component: a component containing $`i`$ and $`j`$ can enter both associated
@@ -118,9 +118,9 @@ application supplies its geometry and its components.
 
 Choose a number $`m`$ and nonempty block sets
 
-```math
+$$
 C_0,\ldots,C_{m-1}
-```
+$$
 
 that are pairwise disjoint and whose union is $`I`$. This is a graph coloring: the number $`r`$ is
 called **color $`r`$**, and $`C_r`$ is its **color class**. The color labels are conventional names for
@@ -129,16 +129,16 @@ the parts of this partition.
 A coloring is **proper for $`A`$** when the endpoints of every edge have different colors. In terms
 of its color classes, this is
 
-```math
+$$
 \forall r\in\{0,\ldots,m-1\},\;\forall i,j\in C_r,\quad i\sim_A j\quad\Longrightarrow\quad i=j.
-```
+$$
 
 Thus properness is exactly the traditional notion of proper vertex coloring for $`G_A`$. Equivalently,
 every support meets every color class in at most one block:
 
-```math
+$$
 \forall S\in A,\;\forall r\in\{0,\ldots,m-1\},\qquad |S\cap C_r|\le 1.
-```
+$$
 
 Indeed, two distinct blocks in $`S\cap C_r`$ form an edge with one color, and every same-color edge
 arises from a support containing both endpoints. The graph supplies the standard coloring language,
@@ -150,9 +150,9 @@ while the support family $`A`$ supplies the component potentials and energy book
 
 For the four-block chain
 
-```math
+$$
 A=\bigl\{\{0,1\},\{1,2\},\{2,3\}\bigr\},
-```
+$$
 
 the graph is the path $`0\text{—}1\text{—}2\text{—}3`$. The classes
 $`C_0=\{0,2\}`$ and $`C_1=\{1,3\}`$ give its even/odd two-coloring. The same construction applies to
@@ -160,18 +160,18 @@ every finite nearest-neighbor chain.
 
 For a rectangular grid
 
-```math
+$$
 I=\{0,\ldots,p-1\}\times\{0,\ldots,q-1\},
-```
+$$
 
 take $`A`$ to contain the horizontal and vertical nearest-neighbor supports. Its interaction graph
 has the checkerboard coloring
 
-```math
+$$
 C_0=\{(a,b)\in I\mid a+b\text{ is even}\},
 \qquad
 C_1=\{(a,b)\in I\mid a+b\text{ is odd}\}.
-```
+$$
 
 For $`A=\{\{a,b,c\}\}`$, the one three-block support induces a triangle. Its three vertices have
 the singleton color classes $`C_0=\{a\}`$, $`C_1=\{b\}`$, and $`C_2=\{c\}`$.
@@ -193,9 +193,9 @@ the new $`i`$-block value is independent of $`x_j`$, and symmetrically the new $
 independent of $`x_i`$. Each update writes only its own block, so applying either update first leaves
 the other update's computed value unchanged:
 
-```math
+$$
 U_i\circ U_j=U_j\circ U_i.
-```
+$$
 
 If an edge joined two blocks in one color class, a common component could let the first serial
 update change data read by the second. The two serial orderings could then give different state
@@ -208,9 +208,9 @@ The snapshot batch $`P_r`$ for color $`r`$ evaluates all $`U_i`$ for $`i\in C_r`
 and writes their selected block outputs simultaneously. The colored sweep executes the batches in
 color-number order:
 
-```math
+$$
 T_{C_0,\ldots,C_{m-1}}=P_{m-1}\circ\cdots\circ P_0.
-```
+$$
 
 This definition supplies the buffered semantics of a parallel color class. The VBD locality and
 properness results identify it with every serial ordering within that class.
@@ -224,25 +224,25 @@ support family uses the properness condition above to determine its color batche
 
 For a support family $`A`$, the read neighborhood of block $`i`$ is
 
-```math
+$$
 N_i=\{i\}\cup\bigcup_{S\in A,\ i\in S}S.
-```
+$$
 
 If $`x`$ and $`z`$ agree on $`N_i`$, exact component cancellation gives, for every block direction $`v`$,
 
-```math
+$$
 E(x+\iota_i v)-E(x)=E(z+\iota_i v)-E(z).
-```
+$$
 
 If $`E`$ is differentiable, differentiating these equal block-slice functions identifies their
 block gradients. If its gradient is differentiable, differentiating the resulting block-gradient
 equality along $`i`$ also identifies the diagonal Hessian blocks. Under these hypotheses,
 agreement on $`N_i`$ gives
 
-```math
+$$
 (\nabla E(x))_i=(\nabla E(z))_i,\qquad
 (\nabla^2 E(x))_{ii}=(\nabla^2 E(z))_{ii}.
-```
+$$
 
 With block-diagonal inertia, the implicit-Euler residual row and its exact Newton solve matrix
 therefore read only $`N_i`$. Proper colors ensure that distinct same-color vertices lie outside
