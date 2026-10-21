@@ -7,6 +7,10 @@ expressed in Lean and checked by its kernel. The library studies when VBD
 converges, what it converges to, and how much state and residual error remains
 after a finite number of sweeps, in exact arithmetic.
 
+The core is a reusable framework of parameterized theorems for block updates,
+execution semantics, and convergence under explicit mathematical hypotheses.
+Concrete mechanical models supply the bounds needed to apply those theorems.
+
 - [Vertex Block Descent](#vertex-block-descent)
 - [Convergence approach](#convergence-through-fixed-points)
 - [Mathematical architecture](#mathematical-architecture)
@@ -46,14 +50,21 @@ actual VBD sweeps under explicit assumptions for specified problem families.
 The reviewed work includes algorithmic formulations, empirical convergence
 studies, and related mathematical analyses.
 
-This repository presents **one such formal treatment**: a contraction-based
-analysis of exact serial and properly colored VBD, instantiated for
-[nonlinear axial spring chains](knowledge/mathematics/axial-spring-contraction.md).
-It supplies reusable proofs and an explicit model-specific certificate, while
-leaving a broader convergence picture open. Other mechanical models, parameter
-regimes, and execution strategies require their own analysis; the
-[extension discussion](knowledge/project/whats-next.md) describes those
-directions. The accompanying experiments explore the bounds and their limits.
+This repository presents **one such formal treatment**, organized as a reusable
+framework for analyzing exact serial and properly colored VBD. Its
+[general theory](knowledge/project/architecture.md#generic-theory-and-worked-instances)
+is parameterized by block spaces, potential components, execution plans, and
+quantitative bounds. It supports heterogeneous vector blocks and arbitrary
+finite component supports; each application supplies its own curvature,
+coupling, and neighborhood estimates.
+
+The [nonlinear axial spring chain](knowledge/mathematics/axial-spring-contraction.md)
+is a worked application demonstrating the full route from physical inputs to a
+finite-sweep certificate. The framework develops one contraction-based account
+of VBD convergence, with a broader picture still open. The
+[extension discussion](knowledge/project/whats-next.md) describes further
+models, parameter regimes, and execution strategies. The accompanying
+experiments explore the worked application's bounds and their limits.
 
 ## Convergence through fixed points
 
@@ -74,8 +85,10 @@ initial-state region.
 To obtain such a certificate for a mechanical model, the library combines
 local inverse and coupling bounds, Hessian variation over a neighborhood,
 region preservation, execution semantics, and warm-start membership. The
-norms and parameter ranges are explicit. The spring-chain example below
-instantiates this argument for both serial and properly colored execution.
+norms and parameter ranges are explicit. These are inputs to
+[generic theorem interfaces](knowledge/formalization/module-map.md#reuse-acceptance-condition):
+a smooth mechanical model can reuse the argument by establishing its own
+hypotheses for the selected norm, region, and execution plan.
 
 ## Mathematical architecture
 
@@ -181,6 +194,10 @@ endpoint parameters, high mass/stiffness contrast, quadratic and nonlinear
 instances, and explicit physical energy/force checks.
 
 ## Example: nonlinear spring chain
+
+This application instantiates the general framework with explicit physical
+parameters and numerical error bounds. The scalar chain geometry and spring
+constants enter through the model-specific lemmas in `Vbd/Examples/`.
 
 Consider a finite chain of masses moving along a line, with free ends and
 nearest-neighbor quadratic-plus-quartic hardening springs. This simple model
