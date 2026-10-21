@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Block States and Operators
 description: Describes block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
-timestamp: 2026-10-21T02:29:26Z
+timestamp: 2026-10-21T02:44:14Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), the unknown `x ∈ X` is the
@@ -251,11 +251,11 @@ outputs block by block. Using the four-block operator `U` above, let `V` update 
 simultaneous batch has the block-vector form
 
 $$
-U(x)=\begin{bmatrix}u_1(x)\\x_2\\u_3(x)\\x_4\end{bmatrix},
+U(x)=\begin{bmatrix}u_1(x)\cr x_2\cr u_3(x)\cr x_4\end{bmatrix},
 \qquad
-V(x)=\begin{bmatrix}x_1\\v_2(x)\\x_3\\x_4\end{bmatrix},
+V(x)=\begin{bmatrix}x_1\cr v_2(x)\cr x_3\cr x_4\end{bmatrix},
 \qquad
-P(x)=\begin{bmatrix}u_1(x)\\v_2(x)\\u_3(x)\\x_4\end{bmatrix}.
+P(x)=\begin{bmatrix}u_1(x)\cr v_2(x)\cr u_3(x)\cr x_4\end{bmatrix}.
 $$
 
 The batch selects blocks 1 and 3 from `U(x)`, block 2 from `V(x)`, and preserves block 4.
@@ -264,26 +264,27 @@ combine as
 
 $$
 P(x)=x+
-\begin{bmatrix}u_1(x)-x_1\\0\\u_3(x)-x_3\\0\end{bmatrix}
-+\begin{bmatrix}0\\v_2(x)-x_2\\0\\0\end{bmatrix}.
+\begin{bmatrix}u_1(x)-x_1\cr 0\cr u_3(x)-x_3\cr 0\end{bmatrix}
++\begin{bmatrix}0\cr v_2(x)-x_2\cr 0\cr 0\end{bmatrix}.
 $$
 
 In general, let `K` be a finite set indexing the operators `Uᵣ : X → X`. For each
 `r ∈ K`, choose a write-support bound `Wᵣ ⊆ I`, with
 
 $$
-\mathrm{supp}_{\mathrm w}(U_r)\subseteq W_r,
+\mathrm{supp_w}(U_r)\subseteq W_r,
 \qquad
 W_r\cap W_s=\varnothing\quad(r\ne s).
 $$
 
 Here `r,s ∈ K` index operators, while `i ∈ I` indexes blocks. Disjointness assigns at most one
-operator to each block. Define the **simultaneous batch map** `P_K : X → X` by
+operator to each block. Using the block projections, define the **simultaneous batch map**
+`P_K : X → X` by
 
 $$
-(P_K(x))_i=
+\pi_i(P_K(x))=
 \begin{cases}
-(U_r(x))_i,&\text{if }i\in W_r\text{ for the unique such }r\in K,\\
+\pi_i(U_r(x)),&\text{if }i\in W_r\text{ for the unique such }r\in K,\cr
 x_i,&\text{if }i\notin\displaystyle\bigcup_{r\in K}W_r.
 \end{cases}
 $$
@@ -302,8 +303,8 @@ $$
 The exact write support is
 
 $$
-\mathrm{supp}_{\mathrm w}(P_K)
-=\bigcup_{r\in K}\mathrm{supp}_{\mathrm w}(U_r)
+\mathrm{supp_w}(P_K)
+=\bigcup_{r\in K}\mathrm{supp_w}(U_r)
 \subseteq\bigcup_{r\in K}W_r.
 $$
 

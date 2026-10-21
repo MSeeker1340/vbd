@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **Simultaneous-batch rendering**: Reproduced Markdown-first loss of matrix row separators and emphasis parsing of punctuation-adjacent subscripts. Used `\cr` row separators, grouped upright write-support notation, and the existing block projections in this subsection. Checked all six displays through both Markdown-first and math-first paths; the two matrix equations retain identical rendered MathML.
+
 * **Shared preview syntax**: Used `$$` display delimiters throughout the mathematical concepts for GitHub and VS Code preview compatibility, retaining upright operator identifiers, braced star superscripts, and the same formulas. Used table-safe norm delimiters in the spring-chain comparison table.
 
 * **GitHub math compatibility**: Standardized protected inline math and fenced displays throughout the mathematical concepts. Replaced unsupported operator-name macros with upright identifiers and bare star powers with braced star superscripts, retaining the stated mathematics.
