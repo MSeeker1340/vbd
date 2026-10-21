@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **README audience and tone**: Reframed the introduction around VBD convergence questions and library contents. Presented the chain as a worked application, removed completion-report and internal acceptance language, and retained the theorem conditions, module guide, and reproduction instructions for independent readers.
+
 * **Completed-project README**: Rewrote the first-read guide around the physical-input theorem, its exact assumptions and residual scaling, all 21 mathematical modules, proof architecture, build and integration checks, reproducible study, and scope. Distinguished the concrete cosine-predictor certificate from generic warm-start/order interfaces and the measured six-sweep result from the proved 20-sweep budget. Replaced the extended literature introduction with links into the curated reference bundle.
 
 ## 2026-10-20

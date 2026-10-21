@@ -1,32 +1,36 @@
 # Verified convergence certificates for Vertex Block Descent
 
-A Lean 4 / Mathlib formalization of **Vertex Block Descent (VBD) in exact
-arithmetic**, from implicit-Euler energy identities to quantitative convergence
-of actual serial and properly colored block-Newton sweeps.
+A Lean 4 / Mathlib library for studying **when Vertex Block Descent (VBD)
+converges, what it converges to, and how much error remains after a finite
+number of sweeps**.
 
-**The accepted seven-phase formalization program is complete.** The library
-provides reusable foundations and an end-to-end nonlinear spring-chain theorem:
-under explicit physical and warm-start assumptions, serial and buffered even/odd
-execution converge to the same unique implicit-Euler stationary state, with
-scaled maximum residual **below 3.25 × 10⁻⁷ after 20 sweeps**.
+VBD solves an implicit-Euler timestep through a sequence of small local Newton
+updates. This repository formalizes those updates and their serial and colored
+execution, then connects them to contraction theory to obtain quantitative
+state-error and physical-residual bounds in exact arithmetic.
 
-This project is for simulation researchers and engineers who want to understand
-what a convergence certificate requires, and Lean users who want to inspect or
-reuse its proofs. The main deliverables are the checked mathematics, the
-concrete certificate, and a reproducible applicability study.
+The library includes reusable theory for implicit Euler, block operators,
+locality and coloring, and contractive iteration. A nonlinear spring chain
+provides a worked application: under explicit physical and warm-start
+conditions, serial and buffered even/odd sweeps converge to the same unique
+stationary state, with scaled maximum residual **below 3.25 × 10⁻⁷ after
+20 sweeps**. An accompanying numerical study explores the bounds and their
+limits.
 
-- [Main theorem and assumptions](#the-completed-spring-chain-theorem)
+- [Spring-chain example and theorem](#example-nonlinear-spring-chain)
 - [Proof architecture](#how-the-proof-works)
-- [Complete module guide](#lean-library-guide)
+- [Module guide](#lean-library-guide)
 - [Build and inspect the proofs](#build-and-inspect-the-proofs)
-- [Numerical study](#reproduce-the-applicability-study)
+- [Numerical experiments](#numerical-experiments)
 - [Scope and extensions](#scope-and-extensions)
 
-## The completed spring-chain theorem
+## Example: nonlinear spring chain
 
-The worked model is a finite chain of masses moving along a line, with free
-ends and nearest-neighbor quadratic-plus-quartic hardening springs. Let ℓ be
-the rest spacing, u the displacement in units of ℓ, and y the inertia predictor.
+Consider a finite chain of masses moving along a line, with free ends and
+nearest-neighbor quadratic-plus-quartic hardening springs. This simple model
+couples neighboring vertices through a state-dependent Hessian while allowing
+explicit estimates for the Newton updates. Let ℓ be the rest spacing, u the
+displacement in units of ℓ, and y the inertia predictor.
 With relative masses aᵢ = mᵢ/m_min and edge coefficients bₑ = h²kₑ/m_min, its
 normalized implicit-Euler objective is
 
@@ -38,12 +42,12 @@ $$
 
 Each VBD visit takes a full local Newton step using the current residual and
 local Hessian. The formal execution includes determinant-threshold skipping;
-the accepted chain assumptions prove that no visit skips inside the certified
+the conditions below ensure that no visit skips inside the certified
 box.
 
-The physical-input theorem assumes:
+The theorem applies under the following conditions:
 
-| Input | Covered range |
+| Quantity | Condition |
 |---|---|
 | Chain | Arbitrary finite length; symmetric, nonnegative nearest-neighbor stiffnesses |
 | Masses and scales | mᵢ ≥ m_min > 0, timestep h > 0, rest spacing ℓ > 0 |
@@ -53,9 +57,8 @@ The physical-input theorem assumes:
 | Skip threshold | 10⁻¹² in normalized scalar Hessian units |
 | Execution | Increasing-index serial visits, or buffered even vertices followed by odd vertices |
 
-From these inputs, Lean proves existence of a stationary state u*, uniqueness
-among all stationary states of this model, and convergence of both plans to
-that same state. Every intermediate visit stays in the maximum-norm box
+Under these conditions, there is a unique stationary state u*, and both
+execution orders converge to it. Every intermediate visit stays in the maximum-norm box
 ‖u‖∞ ≤ 0.1; the root satisfies ‖u*‖∞ ≤ 0.05. Each sweep contracts on the box
 with the chain-length-independent factor
 
@@ -80,24 +83,24 @@ $$
 
 Here G_IE is the physical incremental energy on displacements from rest.
 A residual tolerance τ therefore bounds the force imbalance at vertex i by
-mᵢℓτ/h². The proof also provides the convenient conservative envelopes
-0.1(0.512)ˢ and 0.212(0.512)ˢ, and checks exactly that
+mᵢℓτ/h². Using the slightly looser factor 0.512 gives the envelopes
+0.1(0.512)ˢ and 0.212(0.512)ˢ. In particular,
 
 $$
 r_{IE}(T^{20}(y))<3.25\times10^{-7}<10^{-6}.
 $$
 
-The entry point is
+In Lean, this result is
 [`Vbd.AxialSpring.ChainSystem.end_to_end`](Vbd/Examples/AxialSpringChain.lean).
 `ChainSystem` packages the physical inputs; `Certificate` contains the common
 physical stationary point, its uniqueness, both convergence certificates, and
 both 20-sweep residual guarantees. The theorem constructs the solution and
 derives the contraction premises from the system data.
 
-The lower-level results cover any predictor satisfying |yᵢ| ≤ 0.05, arbitrary
+More generally, the library supports any predictor satisfying |yᵢ| ≤ 0.05, arbitrary
 complete serial orders and proper support-color plans under their stated
 hypotheses. The neighborhood results also cover the rest-state warm start.
-The specific physical-input theorem above fixes the cosine predictor and the
+The theorem above specializes these results to the cosine predictor and the
 two listed plans. The [worked mathematical analysis](knowledge/mathematics/axial-spring-contraction.md)
 explains the estimates and physical scaling in detail.
 
@@ -109,7 +112,7 @@ updates. This formalization analyzes the actual ordered sweep as a map T.
 Its convergence argument combines contraction with an independently proved
 identification of fixed points and implicit-Euler roots.
 
-Three foundations remain independent and reusable:
+The argument draws on three independent parts of the library:
 
 1. **Implicit-Euler mathematics.** For predictor y, self-adjoint mass operator
    M, timestep h > 0, and potential P, define
@@ -133,7 +136,7 @@ Three foundations remain independent and reusable:
    defect-based estimates on complete invariant sets. A derivative bound on a
    convex region supplies the required Lipschitz estimate.
 
-The bridge layers then establish the complete result chain:
+The VBD analysis connects these foundations as follows:
 
 - Finite-support potential components give exact local energy cancellation,
   an interaction graph, and proper support colorings.
@@ -161,7 +164,7 @@ contraction and residual transport.
 
 ## Lean library guide
 
-All 21 mathematical modules are exported by [`Vbd.lean`](Vbd.lean). The project
+[`Vbd.lean`](Vbd.lean) exports the full mathematical library. The project
 is pinned to **Lean and Mathlib v4.34.0-rc1**, with Mathlib as its sole direct
 Lean dependency.
 
@@ -193,7 +196,7 @@ Lean dependency.
 
 | Module | Proved content |
 |---|---|
-| [Examples/AxialSpring](Vbd/Examples/AxialSpring.lean) | Polynomial residual, Jacobian, exact Newton blocks, and serial root derivative bound 14/39 on the accepted degree-two range |
+| [Examples/AxialSpring](Vbd/Examples/AxialSpring.lean) | Polynomial residual, Jacobian, exact Newton blocks, and serial root derivative bound 14/39 under degree-two coupling and timestep bounds |
 | [Examples/AxialSpringNeighborhood](Vbd/Examples/AxialSpringNeighborhood.lean) | Invariant radius-0.1 box, uniform factor 318/625, and predictor/rest-state warm-start membership |
 | [Examples/AxialSpringColoring](Vbd/Examples/AxialSpringColoring.lean) | Arbitrary-length even/odd chain coloring and proper-color inheritance of contraction and invariance |
 | [Examples/AxialSpringEnergy](Vbd/Examples/AxialSpringEnergy.lean) | Exact spring energy gradient, normalized implicit-Euler problem, and production Newton-data identification |
@@ -253,12 +256,12 @@ To enable it in a fresh checkout, install `okflint` with `uv tool install okflin
 and run `git config core.hooksPath .githooks`. Run the same checks manually with
 `bash .githooks/pre-commit`.
 
-## Reproduce the applicability study
+## Numerical experiments
 
-The accompanying Python study evaluates actual serial and even/odd Newton
+The Python study evaluates serial and even/odd Newton
 sweeps, their derivatives, and the conservatism of the analytic bounds. It
 records state error, physical residual, sweep defect, and objective separately,
-including stress cases beyond the Lean theorem's admitted range.
+including stress cases beyond the theorem's parameter range.
 
 With Python 3.11 or newer and `uv`, run from the repository root:
 
@@ -277,7 +280,7 @@ uv run --locked python -m unittest discover -s experiments/applicability/tests -
 The checked-in [report](experiments/applicability/report.md),
 [plot](experiments/applicability/convergence.png),
 [summary](experiments/applicability/summary.json), and CSV data document the
-baseline. All 192 cases in the accepted parameter range reached the residual
+baseline. All 192 cases within the theorem's parameter range reached the residual
 target within six measured sweeps. That observation is separate from the
 uniform Lean-proved 20-sweep guarantee. The experiment uses floating-point
 arithmetic and supplies diagnostic evidence rather than proof premises.
@@ -304,10 +307,8 @@ proof.
 
 Richer vector and geometric materials, contact and friction, dynamic or coupled
 batches, accelerated solvers, and error across timesteps require additional
-mathematics. [What’s next](knowledge/project/whats-next.md) describes these
-optional extensions and their obligations. The
-[backlog](knowledge/project/backlog.md) records the completed program and its
-acceptance criteria; there are no outstanding obligations for that program.
+mathematics. [What’s next](knowledge/project/whats-next.md) discusses possible
+extensions and the results needed to support them.
 
 ## Project documentation and references
 
@@ -316,7 +317,7 @@ Open Knowledge Format bundle:
 
 - [Mathematics](knowledge/mathematics/index.md): reusable theory and the worked chain derivation.
 - [Formalization](knowledge/formalization/index.md): module boundaries, pinned Mathlib APIs, and dependency assessment.
-- [Project](knowledge/project/index.md): architecture, completed roadmap and backlog, applicability decision, and optional extensions.
+- [Project](knowledge/project/index.md): architecture, research decisions, development history, and possible extensions.
 - [References](knowledge/references/index.md): VBD papers, related formalizations, and contraction literature.
 
 The original algorithm is described in A. H. Chen, Z. Liu, Y. Yang, and
