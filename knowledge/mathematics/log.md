@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **Write-support and linear-block rendering**: Preserved matrix rows with `\cr`, set braces with `\lbrace`/`\rbrace`, and subscripts with grouped upright support notation and existing block projections. Omitted the redundant identity-domain subscript in the linear support formula to avoid Markdown emphasis. Verified all eight displays in these two sections with the VS Code math plugin, KaTeX, and MathJax, including Markdown-first structure checks.
+
 * **Simultaneous-batch rendering**: Reproduced Markdown-first loss of matrix row separators and emphasis parsing of punctuation-adjacent subscripts. Used `\cr` row separators, grouped upright write-support notation, and the existing block projections in this subsection. Checked all six displays through both Markdown-first and math-first paths; the two matrix equations retain identical rendered MathML.
 
 * **Shared preview syntax**: Used `$$` display delimiters throughout the mathematical concepts for GitHub and VS Code preview compatibility, retaining upright operator identifiers, braced star superscripts, and the same formulas. Used table-safe norm delimiters in the spring-chain comparison table.

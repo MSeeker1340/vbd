@@ -3,7 +3,7 @@ type: Mathematical Specification
 title: Block States and Operators
 description: Describes block states, operator composition and reordering, write support, simultaneous batches, and continuous-linear block representation.
 tags: [write-support, block-updates, block-operators, block-matrices, coloring]
-timestamp: 2026-10-21T02:44:14Z
+timestamp: 2026-10-21T02:51:02Z
 ---
 
 In [implicit Euler as optimization](/mathematics/implicit-euler.md), the unknown `x ∈ X` is the
@@ -184,11 +184,11 @@ specifies how to combine outputs and when that combination equals sequential com
 Consider a state with four blocks and an operator that may change blocks 1 and 3:
 
 $$
-x=\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix},
+x=\begin{bmatrix}x_1\cr x_2\cr x_3\cr x_4\end{bmatrix},
 \qquad
-U(x)=\begin{bmatrix}u_1(x)\\x_2\\u_3(x)\\x_4\end{bmatrix},
+U(x)=\begin{bmatrix}u_1(x)\cr x_2\cr u_3(x)\cr x_4\end{bmatrix},
 \qquad
-U(x)-x=\begin{bmatrix}u_1(x)-x_1\\0\\u_3(x)-x_3\\0\end{bmatrix}.
+U(x)-x=\begin{bmatrix}u_1(x)-x_1\cr 0\cr u_3(x)-x_3\cr 0\end{bmatrix}.
 $$
 
 The zero blocks in the change vector show that blocks 2 and 4 are preserved. The component maps
@@ -199,8 +199,8 @@ For a state-update operator `U : X → X`, its **write support** is the set of b
 at which it changes some input state:
 
 $$
-\mathrm{supp}_{\mathrm w}(U)
-=\{i\in I\mid \exists x\in X,\ (U(x))_i\ne x_i\}.
+\mathrm{supp_w}(U)
+=\lbrace i\in I\mid \exists x\in X,\ \pi_i(U(x))\ne x_i\rbrace.
 $$
 
 Membership means that the block changes for at least one input; for another input, the same
@@ -211,9 +211,9 @@ entire input state.
 A supplied set `W ⊆ I` is a **write-support bound** when it contains the support. Equivalently,
 
 $$
-\mathrm{supp}_{\mathrm w}(U)\subseteq W
+\mathrm{supp_w}(U)\subseteq W
 \quad\Longleftrightarrow\quad
-\forall x\in X,\ \forall i\notin W,\ (U(x))_i=x_i.
+\forall x\in X,\ \forall i\notin W,\ \pi_i(U(x))=x_i.
 $$
 
 Such bounds may include additional block indices and can be enlarged freely. They let operators,
@@ -221,10 +221,10 @@ multi-block batches, and complete executions share the same support calculus. Id
 composition satisfy
 
 $$
-\mathrm{supp}_{\mathrm w}(\mathrm{id}_X)=\varnothing,
+\mathrm{supp_w}(\mathrm{id}_X)=\varnothing,
 \qquad
-\mathrm{supp}_{\mathrm w}(V\circ U)
-\subseteq\mathrm{supp}_{\mathrm w}(U)\cup\mathrm{supp}_{\mathrm w}(V).
+\mathrm{supp_w}(V\circ U)
+\subseteq\mathrm{supp_w}(U)\cup\mathrm{supp_w}(V).
 $$
 
 The inclusion allows changes to cancel during composition. In particular, write-support bounds
@@ -233,8 +233,8 @@ The inclusion allows changes to cancel during composition. In particular, write-
 For a sequence `𝓔 = (U₁, …, Uₘ)`, this gives the bound
 
 $$
-\mathrm{supp}_{\mathrm w}(S_{\mathcal E})
-\subseteq\bigcup_{r=1}^{m}\mathrm{supp}_{\mathrm w}(U_r).
+\mathrm{supp_w}(S_{\mathcal E})
+\subseteq\bigcup_{r=1}^{m}\mathrm{supp_w}(U_r).
 $$
 
 Any supplied bounds `Wᵣ` therefore give the execution a bound `⋃ᵣ Wᵣ`.
@@ -400,8 +400,8 @@ of that choice.
 The write support of `A` consists of the block rows in which it differs from the identity:
 
 $$
-\mathrm{supp}_{\mathrm w}(A)
-=\{i\in I\mid \exists j\in I,\ [A-\mathrm{id}_X]_{ij}\ne 0\}.
+\mathrm{supp_w}(A)
+=\lbrace i\in I\mid \exists j\in I,\ [A-\mathrm{id}]_{ij}\ne 0\rbrace.
 $$
 
 Thus block rows outside the write support are identity block rows. For a simultaneous batch of
@@ -414,12 +414,12 @@ example, the batch is the operator block matrix
 $$
 P(x)=
 \begin{bmatrix}
-A_{11}&A_{12}&A_{13}&A_{14}\\
-B_{21}&B_{22}&B_{23}&B_{24}\\
-A_{31}&A_{32}&A_{33}&A_{34}\\
+A_{11}&A_{12}&A_{13}&A_{14}\cr
+B_{21}&B_{22}&B_{23}&B_{24}\cr
+A_{31}&A_{32}&A_{33}&A_{34}\cr
 0&0&0&\mathrm{id}_{X_4}
 \end{bmatrix}
-\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}.
+\begin{bmatrix}x_1\cr x_2\cr x_3\cr x_4\end{bmatrix}.
 $$
 
 This displays the same selection of output blocks as the nonlinear block-vector example.
