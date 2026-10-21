@@ -1,5 +1,9 @@
 # Project Management Update Log
 
+## 2026-10-21
+
+* **Completed-project README**: Rewrote the first-read guide around the physical-input theorem, its exact assumptions and residual scaling, all 21 mathematical modules, proof architecture, build and integration checks, reproducible study, and scope. Distinguished the concrete cosine-predictor certificate from generic warm-start/order interfaces and the measured six-sweep result from the proved 20-sweep budget. Replaced the extended literature introduction with links into the curated reference bundle.
+
 ## 2026-10-20
 
 * **Project conclusion and backlog cleanup**: Recorded completion of the accepted Phase 1–7 program with no outstanding obligations. Removed BC-04 and the deferred EN-01, PR-01, GL-01, ER-01, ER-02, DC-01, and MM-01 task rows rather than marking unimplemented extensions done. Added “What’s next” for optional model, certificate, coupled-execution, multi-timestep, and tooling projects. Retained descent/global arguments only as conditional routes for a named extension and dropped the unmotivated probabilistic placeholder. Synchronized the roadmap, applicability decision, project index, README, and always-on guidance; corrected the stale LI-03 wording to its implemented status.

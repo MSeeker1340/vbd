@@ -1,5 +1,9 @@
 # Lean Formalization Update Log
 
+## 2026-10-21
+
+* **Library entry-point cleanup**: Removed the unused `Vbd.Basic` scaffold and its `hello` greeting. The umbrella import exports the 21 mathematical modules. Updated the module map and index to present the implemented library and link its README reading guide.
+
 ## 2026-10-20
 
 * **Completed-program scope**: Replaced deferred-work language in the module map with the implemented serial/commuting-color contraction boundary and a link to the optional coupled-batch extension. Preserved all module and dependency interfaces.

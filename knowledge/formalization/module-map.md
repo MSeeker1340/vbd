@@ -3,10 +3,13 @@ type: Module Plan
 title: Lean Module Map
 description: Maps the goal-first roadmap to small Lean modules and explicit dependency boundaries.
 tags: [lean4, modules, architecture, implementation-plan]
-timestamp: 2026-10-20T21:12:52Z
+timestamp: 2026-10-21T00:43:55Z
 ---
 
 # Foundation modules
+
+`Vbd.lean` exports all 21 mathematical modules listed below. The root
+[README](../../README.md) introduces the completed result and provides the library reading guide.
 
 | Phase | Module | Responsibility | Direct project dependencies |
 |---|---|---|---|

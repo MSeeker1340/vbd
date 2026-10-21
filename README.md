@@ -1,253 +1,238 @@
 # Verified convergence certificates for Vertex Block Descent
 
-This repository is a Lean 4 formalization of one practical route to
-**quantified local convergence guarantees for Vertex Block Descent (VBD)**. It
-does not introduce a new simulator or an improved VBD algorithm. It provides a
-reusable proof framework for establishing that a stated mechanical model,
-timestep, execution order, and warm-start region make a prescribed VBD sweep
-converge to the intended implicit-Euler solve at a stated geometric rate.
+A Lean 4 / Mathlib formalization of **Vertex Block Descent (VBD) in exact
+arithmetic**, from implicit-Euler energy identities to quantitative convergence
+of actual serial and properly colored block-Newton sweeps.
 
-## Intended audience
+**The accepted seven-phase formalization program is complete.** The library
+provides reusable foundations and an end-to-end nonlinear spring-chain theorem:
+under explicit physical and warm-start assumptions, serial and buffered even/odd
+execution converge to the same unique implicit-Euler stationary state, with
+scaled maximum residual **below 3.25 × 10⁻⁷ after 20 sweeps**.
 
-The intended audience consists of simulation engineers and researchers seeking
-explicit stability and accuracy guarantees for systems solved by VBD, together
-with formalization researchers studying modular Lean developments of
-numerical-analysis arguments.
+This project is for simulation researchers and engineers who want to understand
+what a convergence certificate requires, and Lean users who want to inspect or
+reuse its proofs. The main deliverables are the checked mathematics, the
+concrete certificate, and a reproducible applicability study.
 
-## Background
+- [Main theorem and assumptions](#the-completed-spring-chain-theorem)
+- [Proof architecture](#how-the-proof-works)
+- [Complete module guide](#lean-library-guide)
+- [Build and inspect the proofs](#build-and-inspect-the-proofs)
+- [Numerical study](#reproduce-the-applicability-study)
+- [Scope and extensions](#scope-and-extensions)
 
-VBD was introduced by Chen, Liu, Yang, and Yuksel as a vertex-block
-Gauss–Seidel method for the variational form of implicit Euler [1]. At every
-vertex it forms a small local Newton solve while holding the other vertices
-fixed. This makes each update cheap, exposes vertex-level parallelism through
-coloring, and avoids a global linear solve. The paper reports large-scale
-simulation results, stability in bounded-iteration use, and numerical
-convergence; its production evaluation generally uses the full local Newton
-step without the optional line search [1].
+## The completed spring-chain theorem
 
-The VBD literature also contains algorithmic extensions and alternative
-formulations. Augmented VBD introduces multiplier, penalty, and regularization
-updates for difficult constraints and stiffness contrast [3]; higher-order VBD
-extends the discretization to isoparametric elements and uses sub-stepping to
-improve observed convergence behavior [4]. Solver-level differentiation work
-also represents a finite VBD solve as an ordered composition of updates and
-proves an exact discrete-adjoint result for that executed solve [5]. These
-results broaden the range of VBD formulations and applications without making
-their convergence questions interchangeable: their state, local update, and
-execution semantics differ.
-
-The literature review recorded in
-[VBD formalization and convergence literature](knowledge/references/vbd-convergence-landscape.md)
-has not identified a proof-assistant formalization of VBD or a quantitative
-convergence theorem for an actual VBD forward sweep. This is a bounded review
-finding, not a claim that no such result exists. The identified VBD sources
-provide algorithmic formulations, empirical convergence comparisons, or an
-exact adjoint theorem, but not a model-specific finite-sweep
-convergence-check framework for the unsafeguarded sweep. In particular,
-local/global energy bookkeeping does not alone establish a unique solution,
-convergence of the iterates, a rate, or an error after a fixed number of
-sweeps. A full Newton step can also fail to decrease its local energy away
-from the solution; the original paper explicitly presents line search as the
-mechanism that would make that descent conclusion available [1]. Classical
-block-coordinate convergence theory likewise has assumptions and conclusions
-that need not match a nonlinear, ordered, block-Newton VBD sweep with its
-chosen execution semantics [2].
-
-## Our approach
-
-This repository closes a precise part of that gap by treating the actual VBD
-sweep as a map T. Rather than infer a global optimization conclusion from the
-method's mechanics, the formalization proves contraction directly on a
-complete, forward-invariant region. Banach's fixed-point theorem then provides
-a unique fixed point and geometric convergence. A separate consistency proof
-identifies that fixed point with the root of the implicit-Euler residual. This
-separation is important: contraction can permit intermediate increases in
-objective value or physical residual while still forcing convergence to the
-correct state.
-
-The central tool is contractive fixed-point iteration. In a certified instance,
-the framework proves
-
-$$
-\|T^s(x_0)-x^*\| \le q^s\|x_0-x^*\|,\qquad 0\le q<1,
-$$
-
-where T is the *actual* serial or properly colored VBD sweep and x* is an
-implicit-Euler stationary state. The norm, invariant neighborhood, and
-physical parameter range are explicit. This yields a finite sweep budget for
-a chosen state-error or residual tolerance, rather than an empirical judgment
-that several simulated trajectories settle or a fixed iteration count selected
-only to meet a runtime budget.
-
-For a smooth, block-structured implicit-Euler model with an exact serial or
-static proper-color VBD execution, the framework states a theorem with the
-following shape.
-
-> Given explicit local block-inverse bounds, cross-block coupling and Hessian
-> variation bounds, a proved invariant region, a valid execution plan, and a
-> covered warm start, the VBD sweep is a contraction in a stated block norm.
-> Its unique regional fixed point is an implicit-Euler stationary solution;
-> after s sweeps the theorem bounds state error and, where residual regularity
-> is supplied, physical residual error.
-
-The inputs are mass and timestep scales, local stiffness or inverse-Hessian
-bounds, incident coupling, constitutive-law variation over a state region, a
-coloring/order, and a warm-start bound. The output is a certificate of the
-form “this execution is covered in this region, with this factor and this
-sweep budget.” The proof does not replace physical modelling or numerical
-testing; it makes the assumptions behind a quantitative claim visible and
-machine-checked.
-
-The initial guarantee is a one-timestep theorem. Extending it to a full simulation
-requires an additional argument that the next timestep's input remains in a
-certified region and that accumulated solver and discretization errors are
-controlled.
-
-The guarantees are deliberately conditional and local. They do not claim that
-all VBD systems contract, that every stationary point minimizes an energy, or
-that a one-timestep guarantee proves long-horizon simulation stability.
-Collision activation, friction, floating-point/GPU error, approximate local
-solves, accelerated iterations, and dynamic buffered execution each require
-their own analysis. The library does not attempt a catch-all formalization of
-numerical mechanics; it presents one coherent, reusable route whose
-hypotheses can be tested on a concrete system.
-
-## Mathematical architecture
-
-The formalization preserves three foundations that are useful independently,
-then joins them only in explicit bridge layers.
-
-1. **[Implicit Euler as stationarity](knowledge/mathematics/implicit-euler.md).**
-   With predictor y, mass operator M, timestep h, and potential P, the
-   incremental objective is
-
-   $$
-   G_{IE}(x)=\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+P(x),
-   \qquad F_{IE}(x)=\nabla G_{IE}(x).
-   $$
-
-   A timestep solution is, in the general theory, a stationary point
-   F_IE(x)=0. This avoids accidentally assuming convexity, minimization,
-   uniqueness, or a rate where the model has not supplied them.
-
-2. **[Block updates and execution semantics](knowledge/mathematics/block-states-and-operators.md).**
-   A state is a heterogeneous family of vertex blocks. The library represents
-   single-block writes, supports under composition, simultaneous disjoint
-   updates, and continuous linear block operators. This provides a precise
-   language for what a serial order changes and when a same-color batch is
-   equivalent to any sequential ordering. Read dependencies remain a separate
-   physical fact; write support alone does not prove that updates commute.
-
-3. **[Contractive dynamics](knowledge/mathematics/contractive-fixed-point-iteration.md).**
-   On a nonempty complete invariant set S, if T(S) ⊆ S and T has factor q < 1,
-   then T has a unique fixed point in S and its iterates converge
-   geometrically. The framework also supplies a priori and defect-based error
-   estimates. A derivative/operator bound on a convex region is the usual way
-   to establish the required Lipschitz factor.
-
-The synthesis is specified in
-[curvature, coupling, and VBD contraction](knowledge/mathematics/curvature.md),
-[local decomposition and coloring](knowledge/mathematics/local-decomposition-and-coloring.md).
-It differentiates the actual local Newton updates, bounds their block effects
-by a nonnegative comparison matrix, propagates those bounds through the real
-execution order, and proves q < 1 in an appropriate block norm. It then
-connects the sweep's fixed point back to implicit-Euler stationarity and
-transports state error to a physical residual when the model supplies the
-needed regularity.
-
-## Lean library status and result chain
-
-The package is pinned to Lean and Mathlib v4.34.0-rc1. The implemented
-foundation modules are exported through [Vbd.lean](Vbd.lean):
-
-| Module | Present result |
-|---|---|
-| [Vbd/Integrator/ImplicitEulerEnergy.lean](Vbd/Integrator/ImplicitEulerEnergy.lean) | Basis-free incremental energy, gradient/residual, and Hessian identities. |
-| [Vbd/Block/Basic.lean](Vbd/Block/Basic.lean) | Heterogeneous block states, access, injection, and replacement. |
-| [Vbd/Block/Update.lean](Vbd/Block/Update.lean) | Write support under composition and simultaneous merging of disjoint writes. |
-| [Vbd/Block/Operator.lean](Vbd/Block/Operator.lean) | Continuous-linear block entries, finite assembly, reconstruction, and arithmetic. |
-| [Vbd/Dynamics/Contraction.lean](Vbd/Dynamics/Contraction.lean) | Invariant-set fixed-point interface, convergence to a supplied fixed point, finite-iterate bounds, and a defect estimate. |
-| [Vbd/Integrator/LocalPotential.lean](Vbd/Integrator/LocalPotential.lean) | Finite-support component potentials, exact local energy cancellation, and bridges from support graphs to Mathlib proper colorings. |
-| [Vbd/Integrator/FixedPoint.lean](Vbd/Integrator/FixedPoint.lean) | Unbiased contractive fixed-point existence and finite residual bounds with separate state and residual norms. |
-| [Vbd/Integrator/VBD.lean](Vbd/Integrator/VBD.lean) | Exact block-Newton updates, external serial/buffered plans, and complete regular-sweep fixed-point/root consistency. |
-| [Vbd/Integrator/VBDDerivative.lean](Vbd/Integrator/VBDDerivative.lean) | Full regular-state update derivatives, including inverse variation, and ordered block Gauss–Seidel root error operators. |
-| [Vbd/Integrator/VBDCurvature.lean](Vbd/Integrator/VBDCurvature.lean) | Inertia-based block coercivity and inverse bounds, with scalar skip-threshold certificates. |
-| [Vbd/Integrator/VBDCoupling.lean](Vbd/Integrator/VBDCoupling.lean) | Generic root coupling, covered serial sweep bounds, and explicit maximum/ℓ² norm conversions. |
-| [Vbd/Examples/AxialSpring.lean](Vbd/Examples/AxialSpring.lean) | Polynomial spring residual and exact Newton blocks; serial root derivative bound `14/39` on the accepted degree-two parameter range. |
-| [Vbd/Integrator/VBDNonlinear.lean](Vbd/Integrator/VBDNonlinear.lean) | Generic nonlinear changed-row bounds and uniform serial Lipschitz certificates. |
-| [Vbd/Examples/AxialSpringNeighborhood.lean](Vbd/Examples/AxialSpringNeighborhood.lean) | Invariant radius-`0.1` box, uniform serial factor `318/625 < 0.512`, and cosine-predictor/rest-state warm-start coverage. |
-| [Vbd/Integrator/VBDColoring.lean](Vbd/Integrator/VBDColoring.lean) | Component-energy-to-Newton locality, same-color commutation including skips, and buffered/serial execution equivalence. |
-| [Vbd/Examples/AxialSpringColoring.lean](Vbd/Examples/AxialSpringColoring.lean) | Arbitrary-length even/odd chain coloring and proper-color inheritance of the nonlinear factor and invariant box. |
-| [Vbd/Examples/AxialSpringEnergy.lean](Vbd/Examples/AxialSpringEnergy.lean) | Exact symmetric spring energy gradient, normalized IE problem, and production Newton-data identification. |
-| [Vbd/Examples/AxialSpringResidual.lean](Vbd/Examples/AxialSpringResidual.lean) | Scalar maximum-principle root location and the mass-scaled residual Lipschitz constant `2.12`. |
-| [Vbd/Examples/AxialSpringConvergence.lean](Vbd/Examples/AxialSpringConvergence.lean) | Unique-root convergence, finite state/residual envelopes, and exact 20-sweep numerical bounds. |
-| [Vbd/Examples/AxialSpringChain.lean](Vbd/Examples/AxialSpringChain.lean) | Physical-input serial and even/odd certificates at one common stationary point, with explicit force-unit normalization. |
-
-The [physical-chain theorem](Vbd/Examples/AxialSpringChain.lean) derives the full
-certificate from masses, nearest-neighbor spring stiffnesses, timestep, length
-scale, and hardening bounds. It supplies the unique stationary point and proves
-that both serial and even/odd production execution meet the 20-sweep physical
-residual target from the selected predictor.
-
-The [module map](knowledge/formalization/module-map.md) records module
-boundaries and dependencies. The internal [roadmap](knowledge/project/roadmap.md)
-records implementation sequencing; this README explains the result, whereas
-the roadmap explains its build order.
-
-The accepted seven-phase theorem program is complete.
-[What’s next](knowledge/project/whats-next.md) describes optional projects extending
-the library and the additional mathematics they require.
-
-## Worked applicability example: nonlinear axial spring chains
-
-The first application is deliberately modest but nontrivial: masses move on a
-line and adjacent masses are coupled by quadratic-plus-hardening springs. It
-contains genuine cross-block coupling, nonlinear local Hessians, serial
-Gauss–Seidel execution, and an even/odd proper-color execution. It is not a
-calibration of a general 3D elastic material.
-
-For normalized displacement u, predictor y, relative mass a_i, and edge
-coefficient b_e=h²k_e/m_min, the model uses
+The worked model is a finite chain of masses moving along a line, with free
+ends and nearest-neighbor quadratic-plus-quartic hardening springs. Let ℓ be
+the rest spacing, u the displacement in units of ℓ, and y the inertia predictor.
+With relative masses aᵢ = mᵢ/m_min and edge coefficients bₑ = h²kₑ/m_min, its
+normalized implicit-Euler objective is
 
 $$
 G(u)=\frac12\sum_i a_i(u_i-y_i)^2+
 \sum_{e=\{i,j\}}b_e\left(\frac{(u_i-u_j)^2}{2}
-+\frac{\eta(u_i-u_j)^4}{4}\right),\qquad \eta\ge0.
++\frac{\eta(u_i-u_j)^4}{4}\right).
 $$
 
-The accompanying [axial-spring analysis](knowledge/mathematics/axial-spring-contraction.md)
-derives explicit, model-specific hypotheses. In particular, for the stated
-predictor box, 0 ≤ η ≤ 1, and
+Each VBD visit takes a full local Newton step using the current residual and
+local Hessian. The formal execution includes determinant-threshold skipping;
+the accepted chain assumptions prove that no visit skips inside the certified
+box.
+
+The physical-input theorem assumes:
+
+| Input | Covered range |
+|---|---|
+| Chain | Arbitrary finite length; symmetric, nonnegative nearest-neighbor stiffnesses |
+| Masses and scales | mᵢ ≥ m_min > 0, timestep h > 0, rest spacing ℓ > 0 |
+| Stiffness and timestep | kₑ ≤ k_max and h²k_max/m_min ≤ 1/4 |
+| Hardening | 0 ≤ η ≤ 1, including the quadratic case η = 0 |
+| Predictor and initial state | yᵢ = 0.05 cos(1.7i), starting at u⁰ = y |
+| Skip threshold | 10⁻¹² in normalized scalar Hessian units |
+| Execution | Increasing-index serial visits, or buffered even vertices followed by odd vertices |
+
+From these inputs, Lean proves existence of a stationary state u*, uniqueness
+among all stationary states of this model, and convergence of both plans to
+that same state. Every intermediate visit stays in the maximum-norm box
+‖u‖∞ ≤ 0.1; the root satisfies ‖u*‖∞ ≤ 0.05. Each sweep contracts on the box
+with the chain-length-independent factor
 
 $$
-\frac{h^2 k_{max}}{m_{min}}\le\frac14,
+q=\frac{318}{625}=0.5088<0.512.
 $$
 
-Lean proves an invariant maximum-norm box and a uniform serial or proper-color
-sweep factor q ≤ 0.5088 < 0.512, with the specified warm start covered. It
-proves that both plans converge to the same unique physical IE stationary state,
-with mass-scaled maximum residual below **3.25 × 10⁻⁷ < 10⁻⁶ after 20 sweeps**.
-The theorem covers arbitrary finite chain length and the full hardening interval,
-including the quadratic and nonlinear cases. The reproducible numerical study
-assesses the bound's conservatism and behavior outside the admitted range.
+For either execution T, starting at the predictor, the finite-sweep bounds are
 
-The example also shows what transfer to another smooth system entails. A new
-model can reuse the generic state, update, coloring, and contraction results,
-but must establish local inverse bounds, mixed-block coupling, Hessian
-variation, an invariant region, execution semantics, fixed-point/root
-consistency, and warm-start coverage. Vector-valued spring blocks and general
-finite graphs fit the same pattern. Geometric elasticity, contact, and friction
-need additional material- and execution-specific hypotheses; dynamic contacts
-can invalidate a static coloring, and nonsmooth laws can require a different
-solution interface.
+$$
+\|T^s(y)-u^*\|_\infty\le 0.1q^s,
+\qquad
+r_{IE}(T^s(y))\le 0.212q^s,
+$$
 
-## Using the repository
+where the residual has an explicit physical meaning:
 
-The checked foundations and spring-chain diagnostics can be built and run with:
+$$
+r_{IE}(u)=\max_i\frac{h^2}{m_i\ell}
+\left|\nabla G_{IE}(\ell u)_i\right|.
+$$
 
-```bash
+Here G_IE is the physical incremental energy on displacements from rest.
+A residual tolerance τ therefore bounds the force imbalance at vertex i by
+mᵢℓτ/h². The proof also provides the convenient conservative envelopes
+0.1(0.512)ˢ and 0.212(0.512)ˢ, and checks exactly that
+
+$$
+r_{IE}(T^{20}(y))<3.25\times10^{-7}<10^{-6}.
+$$
+
+The entry point is
+[`Vbd.AxialSpring.ChainSystem.end_to_end`](Vbd/Examples/AxialSpringChain.lean).
+`ChainSystem` packages the physical inputs; `Certificate` contains the common
+physical stationary point, its uniqueness, both convergence certificates, and
+both 20-sweep residual guarantees. The theorem constructs the solution and
+derives the contraction premises from the system data.
+
+The lower-level results cover any predictor satisfying |yᵢ| ≤ 0.05, arbitrary
+complete serial orders and proper support-color plans under their stated
+hypotheses. The neighborhood results also cover the rest-state warm start.
+The specific physical-input theorem above fixes the cosine predictor and the
+two listed plans. The [worked mathematical analysis](knowledge/mathematics/axial-spring-contraction.md)
+explains the estimates and physical scaling in detail.
+
+## How the proof works
+
+[VBD, introduced by Chen, Liu, Yang, and Yuksel](https://arxiv.org/abs/2403.06321),
+solves the variational implicit-Euler problem through vertex-level Gauss–Seidel
+updates. This formalization analyzes the actual ordered sweep as a map T.
+Its convergence argument combines contraction with an independently proved
+identification of fixed points and implicit-Euler roots.
+
+Three foundations remain independent and reusable:
+
+1. **Implicit-Euler mathematics.** For predictor y, self-adjoint mass operator
+   M, timestep h > 0, and potential P, define
+
+   $$
+   G_{IE}(x)=\frac{1}{2h^2}\langle x-y,M(x-y)\rangle+P(x).
+   $$
+
+   The library proves its gradient/residual and Hessian identities on an
+   abstract real Hilbert space. The generic solution concept is stationarity,
+   ∇G_IE(x) = 0; stronger conclusions carry their own assumptions.
+
+2. **Block states, updates, and operators.** Heterogeneous block spaces support
+   access, replacement, write support, composition, simultaneous snapshot
+   merging, and continuous-linear block matrices. Disjoint writes and read
+   independence are separate properties; commutation supplies the link between
+   simultaneous and sequential execution.
+
+3. **Contractive fixed-point iteration.** Mathlib's fixed-point theory yields
+   existence, uniqueness, geometric convergence, finite-iterate bounds, and
+   defect-based estimates on complete invariant sets. A derivative bound on a
+   convex region supplies the required Lipschitz estimate.
+
+The bridge layers then establish the complete result chain:
+
+- Finite-support potential components give exact local energy cancellation,
+  an interaction graph, and proper support colorings.
+- Block derivative bounds form nonnegative comparison matrices. Their products
+  follow the actual execution order, evaluating derivatives at intermediate
+  states; covered changed-row bounds yield a maximum-norm sweep certificate.
+- Exact Newton updates include the determinant skip branch. Complete regular
+  sweeps fix exactly residual roots, independently of contraction.
+- At a root, the sweep derivative is the ordered block Gauss–Seidel error
+  operator. Away from the root, the derivative includes variation of the
+  inverse local Hessian.
+- Inertia and potential curvature give coercivity and inverse bounds; coupling
+  and Hessian variation give uniform nonlinear contraction on an invariant
+  neighborhood, with explicit norm conversions.
+- Component-local Newton data commute within proper colors, including skips.
+  Buffered color execution equals serial enumeration within each color and
+  inherits its certificate.
+- The solver-independent implicit-Euler fixed-point bridge turns these facts
+  into a stationary solution and finite state-error bounds. Cross-norm residual
+  regularity converts state error into the stated physical-residual budget.
+
+This route does not require each visit or sweep to decrease energy or physical
+residual. The finite-budget guarantee follows from the certified state
+contraction and residual transport.
+
+## Lean library guide
+
+All 21 mathematical modules are exported by [`Vbd.lean`](Vbd.lean). The project
+is pinned to **Lean and Mathlib v4.34.0-rc1**, with Mathlib as its sole direct
+Lean dependency.
+
+### Independent foundations
+
+| Module | Proved content |
+|---|---|
+| [Integrator/ImplicitEulerEnergy](Vbd/Integrator/ImplicitEulerEnergy.lean) | Basis-free incremental energy, gradient/residual, and Hessian identities |
+| [Block/Basic](Vbd/Block/Basic.lean) | Heterogeneous block states, access, injection, and replacement |
+| [Block/Update](Vbd/Block/Update.lean) | Write support, finite composition, disjoint snapshot merging, and commuting sequential equivalence |
+| [Block/Operator](Vbd/Block/Operator.lean) | Continuous-linear block entries, assembly, reconstruction, and matrix arithmetic |
+| [Dynamics/Contraction](Vbd/Dynamics/Contraction.lean) | Invariant-set fixed points, convergence, finite-iterate and defect estimates, and the derivative-to-Lipschitz bridge |
+
+### Bridges and general VBD results
+
+| Module | Proved content |
+|---|---|
+| [Integrator/LocalPotential](Vbd/Integrator/LocalPotential.lean) | Finite-support energies, exact local cancellation, support graphs, and Mathlib proper-coloring bridges |
+| [Integrator/FixedPoint](Vbd/Integrator/FixedPoint.lean) | Solver unbiasedness, contractive implicit-Euler solutions, finite state error, and residual transport with independent norms |
+| [Block/Contraction](Vbd/Block/Contraction.lean) | Block-entry comparisons, intermediate-state chain rules, ordered matrix products, commuting-batch derivatives, and covered maximum-norm contraction |
+| [Integrator/VBD](Vbd/Integrator/VBD.lean) | Exact block-Newton updates, determinant skipping, external serial/buffered plans, and regular fixed-point/root consistency |
+| [Integrator/VBDDerivative](Vbd/Integrator/VBDDerivative.lean) | Regular-state inverse-variation derivatives, root block entries, and ordered Gauss–Seidel identification |
+| [Integrator/VBDCurvature](Vbd/Integrator/VBDCurvature.lean) | Inertia-based block coercivity, uniform inverse bounds, and scalar skip-threshold certificates |
+| [Integrator/VBDCoupling](Vbd/Integrator/VBDCoupling.lean) | Root coupling and covered sweep bounds, with explicit maximum/ℓ² norm conversions |
+| [Integrator/VBDNonlinear](Vbd/Integrator/VBDNonlinear.lean) | Nonlinear changed-row variation bounds and uniform serial Lipschitz certificates |
+| [Integrator/VBDColoring](Vbd/Integrator/VBDColoring.lean) | Energy-to-Newton read locality, same-color commutation, buffered/serial equivalence, and complete color-plan consistency |
+
+### The nonlinear spring-chain instance
+
+| Module | Proved content |
+|---|---|
+| [Examples/AxialSpring](Vbd/Examples/AxialSpring.lean) | Polynomial residual, Jacobian, exact Newton blocks, and serial root derivative bound 14/39 on the accepted degree-two range |
+| [Examples/AxialSpringNeighborhood](Vbd/Examples/AxialSpringNeighborhood.lean) | Invariant radius-0.1 box, uniform factor 318/625, and predictor/rest-state warm-start membership |
+| [Examples/AxialSpringColoring](Vbd/Examples/AxialSpringColoring.lean) | Arbitrary-length even/odd chain coloring and proper-color inheritance of contraction and invariance |
+| [Examples/AxialSpringEnergy](Vbd/Examples/AxialSpringEnergy.lean) | Exact spring energy gradient, normalized implicit-Euler problem, and production Newton-data identification |
+| [Examples/AxialSpringResidual](Vbd/Examples/AxialSpringResidual.lean) | Maximum-principle root location and mass-scaled maximum-residual Lipschitz constant 53/25 = 2.12 |
+| [Examples/AxialSpringConvergence](Vbd/Examples/AxialSpringConvergence.lean) | Unique-root convergence, finite state/residual envelopes, and exact 20-sweep arithmetic for serial and proper-color plans |
+| [Examples/AxialSpringChain](Vbd/Examples/AxialSpringChain.lean) | Physical-input normalization, common unique stationary state, force-unit scaling, and end-to-end certificates |
+
+The [module map](knowledge/formalization/module-map.md) gives dependencies and
+reuse boundaries. For a first proof read, start with `AxialSpringChain`, inspect
+its `Certificate`, then follow `AxialSpringConvergence` into the relevant generic
+interfaces. The [finite-sweep integration examples](tests/VBDFinite.lean) show
+endpoint parameters, high mass/stiffness contrast, quadratic and nonlinear
+instances, and explicit physical energy/force checks.
+
+## Build and inspect the proofs
+
+Install Lean's toolchain manager through the [Lean setup instructions](https://lean-lang.org/install/).
+From the repository root, fetch the pinned Mathlib cache and build:
+
+```sh
 lake exe cache get
 lake build
+```
+
+The checkout's `lean-toolchain` selects Lean v4.34.0-rc1. `lake build` checks the
+entire exported library. Import it in Lean with `import Vbd`, or import a single
+module for a focused development. For example:
+
+```lean
+import Vbd.Examples.AxialSpringChain
+
+example {n : ℕ} (s : Vbd.AxialSpring.ChainSystem n) :
+    ∃ p, s.Certificate p :=
+  s.end_to_end
+```
+
+The integration checks live in [`tests/`](tests/) and compile separately:
+
+```sh
 lake lean tests/FixedPoint.lean
 lake lean tests/VBD.lean
 lake lean tests/VBDDerivative.lean
@@ -256,41 +241,90 @@ lake lean tests/VBDCoupling.lean
 lake lean tests/VBDNonlinear.lean
 lake lean tests/VBDColoring.lean
 lake lean tests/VBDFinite.lean
+```
 
+While editing, use `lake build Vbd.Examples.AxialSpringChain` or
+`lake lean path/to/file.lean` for focused checks, and `lake lint` for the
+configured package linter.
+
+The versioned [pre-commit hook](.githooks/pre-commit) validates the knowledge
+bundle, builds the full library, and compiles all eight integration files.
+To enable it in a fresh checkout, install `okflint` with `uv tool install okflint`
+and run `git config core.hooksPath .githooks`. Run the same checks manually with
+`bash .githooks/pre-commit`.
+
+## Reproduce the applicability study
+
+The accompanying Python study evaluates actual serial and even/odd Newton
+sweeps, their derivatives, and the conservatism of the analytic bounds. It
+records state error, physical residual, sweep defect, and objective separately,
+including stress cases beyond the Lean theorem's admitted range.
+
+With Python 3.11 or newer and `uv`, run from the repository root:
+
+```sh
+# Quick diagnostic grid; outputs go to an ignored runs directory.
 uv run --locked python -m experiments.applicability.study
+
+# Reproduce the full 336-case study in a separate directory.
+uv run --locked python -m experiments.applicability.study \
+  --preset study --output experiments/applicability/runs/study
+
+# Check the experiment implementation.
 uv run --locked python -m unittest discover -s experiments/applicability/tests -v
 ```
 
-The Python experiment is evidence and a diagnostic aid; it is not part of the
-Lean proof chain. Its [README](experiments/applicability/README.md) documents
-parameters and outputs. The [development architecture](knowledge/project/architecture.md)
-and [backlog](knowledge/project/backlog.md) govern further formalization work.
+The checked-in [report](experiments/applicability/report.md),
+[plot](experiments/applicability/convergence.png),
+[summary](experiments/applicability/summary.json), and CSV data document the
+baseline. All 192 cases in the accepted parameter range reached the residual
+target within six measured sweeps. That observation is separate from the
+uniform Lean-proved 20-sweep guarantee. The experiment uses floating-point
+arithmetic and supplies diagnostic evidence rather than proof premises.
+Its [README](experiments/applicability/README.md) documents parameters, output
+columns, and custom runs; the [mathematical analysis](knowledge/mathematics/axial-spring-contraction.md#numerical-behavior-and-limits-of-the-bounds)
+also gives exact examples separating state contraction, residual progress,
+and energy descent.
 
-## References
+## Scope and extensions
 
-1. A. H. Chen, Z. Liu, Y. Yang, and C. Yuksel, “Vertex Block Descent,” *ACM
-   Transactions on Graphics* 43(4), Article 116, 2024.
-   [DOI](https://doi.org/10.1145/3658179),
-   [open preprint](https://arxiv.org/abs/2403.06321).
+The formal guarantees concern a finite solve of **one implicit-Euler timestep
+in exact arithmetic**. Finite-iteration state and residual errors are included.
+Floating-point rounding, approximate local solves, and GPU implementation
+verification are outside the proved scope.
 
-2. P. Tseng, “Convergence of a Block Coordinate Descent Method for
-   Nondifferentiable Minimization,” *SIAM Journal on Optimization* 11(2),
-   2001. [DOI](https://doi.org/10.1137/S1052623498336933).
+The generic library keeps locality separate from curvature, accepts
+heterogeneous vector blocks and finite-support potential components, and states
+convergence assumptions explicitly. Its concrete physical certificate covers
+the scalar chain and parameter range above. Contraction on a certified region
+does not establish global convergence for arbitrary VBD systems or initial
+states; generic stationarity results do not imply minimization. The chain's
+stationary-point uniqueness has an additional model-specific root-location
+proof.
 
-3. C. Giles, E. Diaz, and C. Yuksel, “Augmented Vertex Block Descent,” *ACM
-   Transactions on Graphics* 44(4), Article 90, 2025.
-   [DOI](https://doi.org/10.1145/3731195).
+Richer vector and geometric materials, contact and friction, dynamic or coupled
+batches, accelerated solvers, and error across timesteps require additional
+mathematics. [What’s next](knowledge/project/whats-next.md) describes these
+optional extensions and their obligations. The
+[backlog](knowledge/project/backlog.md) records the completed program and its
+acceptance criteria; there are no outstanding obligations for that program.
 
-4. B. Saillant, F. Zara, F. Jaillet, and G. Damiand, “Going Further With
-   Vertex Block Descent,” *Computer Animation and Virtual Worlds* 36(3),
-   e70039, 2025. [DOI](https://doi.org/10.1002/cav.70039).
+## Project documentation and references
 
-5. L. Shu, Y. Jiang, K. Wu, Y. Yang, L. Guibas, and C. Jiang, “Differentiate
-   the Solver, Not the Equation: Reverse-Sweep Adjoints for Block Implicit
-   Simulation,” arXiv:2608.08559, 2026.
-   [Preprint](https://arxiv.org/abs/2608.08559).
+The [`knowledge/` index](knowledge/index.md) is the entry point to the project's
+Open Knowledge Format bundle:
 
-6. S. Banach, “Sur les opérations dans les ensembles abstraits et leur
-   application aux équations intégrales,” *Fundamenta Mathematicae* 3, 1922.
-   The formal fixed-point infrastructure is provided by
-   [Mathlib’s contraction library](https://github.com/leanprover-community/mathlib4/blob/de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11/Mathlib/Topology/MetricSpace/Contracting.lean).
+- [Mathematics](knowledge/mathematics/index.md): reusable theory and the worked chain derivation.
+- [Formalization](knowledge/formalization/index.md): module boundaries, pinned Mathlib APIs, and dependency assessment.
+- [Project](knowledge/project/index.md): architecture, completed roadmap and backlog, applicability decision, and optional extensions.
+- [References](knowledge/references/index.md): VBD papers, related formalizations, and contraction literature.
+
+The original algorithm is described in A. H. Chen, Z. Liu, Y. Yang, and
+C. Yuksel, “Vertex Block Descent,” *ACM Transactions on Graphics* 43(4),
+Article 116, 2024 ([DOI](https://doi.org/10.1145/3658179),
+[open preprint](https://arxiv.org/abs/2403.06321)). The
+[curated literature review](knowledge/references/vbd-convergence-landscape.md)
+places the project alongside classical block-coordinate theory, Augmented VBD,
+higher-order VBD, and solver-level differentiation. Fixed-point existence and
+iteration infrastructure build on
+[Mathlib's contraction library](https://github.com/leanprover-community/mathlib4/blob/de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11/Mathlib/Topology/MetricSpace/Contracting.lean).
