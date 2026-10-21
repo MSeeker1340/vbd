@@ -73,7 +73,7 @@ region S, a proof that T preserves S and contracts distances by a factor
 0 ≤ q < 1 gives a unique fixed point x* and geometric convergence for x₀ ∈ S:
 
 $$
-\|T^s(x_0)-x^*\|\le q^s\|x_0-x^*\|.
+\|T^{s}(x_0)-x^{\ast}\|\le q^{s}\|x_0-x^{\ast}\|.
 $$
 
 A separate consistency proof identifies a complete regular sweep's fixed points
@@ -242,9 +242,9 @@ $$
 For either execution T, starting at the predictor, the finite-sweep bounds are
 
 $$
-\|T^s(y)-u^*\|_\infty\le 0.1q^s,
+\|T^{s}(y)-u^{\ast}\|_\infty\le 0.1q^{s},
 \qquad
-r_{IE}(T^s(y))\le 0.212q^s,
+r_{IE}(T^{s}(y))\le 0.212q^{s},
 $$
 
 where the residual has an explicit physical meaning:

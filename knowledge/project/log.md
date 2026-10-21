@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **GitHub math rendering**: Replaced bare star superscripts with explicit braced `\ast` superscripts in the general and spring-chain error bounds, and braced their iteration exponents to avoid Markdown interference with the LaTeX expressions.
+
 * **OSS licensing**: Added the standard Apache License 2.0 text to match the existing Lean source notices. Declared `Apache-2.0` in Lean and Python metadata, linked the license from the README, and documented the original-work and third-party material boundary in the architecture concept.
 
 * **Reusable-framework emphasis**: Clarified the README's project-wide scope as parameterized block, execution, and convergence theory supporting heterogeneous vector blocks and finite component supports. Presented the axial chain as a worked application supplying model-specific hypotheses and constants, and preserved the VBD-first explanatory order.
