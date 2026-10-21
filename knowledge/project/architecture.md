@@ -3,12 +3,19 @@ type: Architecture Decision
 title: Mathematical and Module Architecture
 description: Separates implicit-Euler physics, block-update and operator algebra, contraction theory, and their explicit bridge layers.
 tags: [architecture, dependencies, locality, contraction]
-timestamp: 2026-10-20T20:38:44Z
+timestamp: 2026-10-21T01:44:41Z
 ---
 
 # Arithmetic and error scope
 
 The project studies VBD in exact arithmetic, including finite-iteration state and residual errors. Floating-point rounding, errors from approximate local solves, and GPU implementation verification are outside its scope.
+
+# Licensing
+
+Original project code and documentation use the Apache License 2.0, provided in the
+repository-root [LICENSE](../../LICENSE). The Lean and Python package metadata declare
+`Apache-2.0`. Third-party dependencies and reference material, including reproduced papers,
+retain their original licenses and attribution.
 
 # Independent foundations
 

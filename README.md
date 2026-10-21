@@ -395,3 +395,10 @@ places the project alongside classical block-coordinate theory, Augmented VBD,
 higher-order VBD, and solver-level differentiation. Fixed-point existence and
 iteration infrastructure build on
 [Mathlib's contraction library](https://github.com/leanprover-community/mathlib4/blob/de5ce8a9a66a4aa68a9bdbb35b63a06d34d9ca11/Mathlib/Topology/MetricSpace/Contracting.lean).
+
+## License
+
+Original project code and documentation are licensed under the
+[Apache License 2.0](LICENSE). Third-party dependencies and reference material,
+including reproduced papers in `knowledge/references/`, retain their original
+licenses and attribution.

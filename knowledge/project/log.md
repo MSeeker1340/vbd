@@ -2,6 +2,8 @@
 
 ## 2026-10-21
 
+* **OSS licensing**: Added the standard Apache License 2.0 text to match the existing Lean source notices. Declared `Apache-2.0` in Lean and Python metadata, linked the license from the README, and documented the original-work and third-party material boundary in the architecture concept.
+
 * **Reusable-framework emphasis**: Clarified the README's project-wide scope as parameterized block, execution, and convergence theory supporting heterogeneous vector blocks and finite component supports. Presented the axial chain as a worked application supplying model-specific hypotheses and constants, and preserved the VBD-first explanatory order.
 
 * **Formal-analysis positioning**: Emphasized kernel-checked definitions, hypotheses, and proofs in the README introduction. Linked the bounded literature-review finding, the spring-chain treatment, and extension boundaries; distinguished numerical observations from the scope of formally proved theorems and presented the project as one contribution to VBD convergence analysis.
