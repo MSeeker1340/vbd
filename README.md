@@ -1,6 +1,6 @@
 # Verified convergence certificates for Vertex Block Descent
 
-A **formal mathematical analysis of Vertex Block Descent (VBD)** in Lean 4 /
+This repo contains a **formal mathematical analysis of Vertex Block Descent (VBD)** in Lean 4 /
 Mathlib, connecting implicit-Euler mechanics, block-Newton execution, and
 contractive fixed-point theory. Definitions, assumptions, and proofs are
 expressed in Lean and checked by its kernel. The library studies when VBD
@@ -45,7 +45,7 @@ proof assistant.
 
 Among the sources covered by the project's
 [literature review](knowledge/references/vbd-convergence-landscape.md), no prior
-proof-assistant formalization was identified that establishes convergence of
+formalization was identified that establishes convergence of
 actual VBD sweeps under explicit assumptions for specified problem families.
 The reviewed work includes algorithmic formulations, empirical convergence
 studies, and related mathematical analyses.
